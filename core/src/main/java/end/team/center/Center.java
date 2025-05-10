@@ -1,34 +1,35 @@
 package end.team.center;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
+import end.team.center.screens.MainMenuScreen;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class Center extends ApplicationAdapter {
-    private SpriteBatch batch;
-    private Texture image;
+public class Center extends Game {
+
+    public SpriteBatch batch;
 
     @Override
     public void create() {
+        // Создание спрайт-объекта, который будет использоваться для отрисовки
         batch = new SpriteBatch();
-        image = new Texture("libgdx.png");
+
+        // Устанавливаем начальный экран
+        this.setScreen(new MainMenuScreen());
     }
 
     @Override
     public void render() {
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-        batch.begin();
-        batch.draw(image, 140, 210);
-        batch.end();
+        super.render(); // Рендерит текущий экран
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
     }
 
     @Override
     public void dispose() {
+        super.dispose();
         batch.dispose();
-        image.dispose();
     }
 }
