@@ -1,77 +1,73 @@
 package end.team.center.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.Screen;
+
 import end.team.center.Center;
 
 public class MainMenuScreen implements Screen {
-
     private Stage stage;
-    private BitmapFont font;
-    private Button playButton;
     private Skin skin;
 
-    @Override
-    public void show() {
-        // Создаем stage для UI
+    public MainMenuScreen() {
+        // Создаем сцену
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(stage); // Устанавливаем обработчик ввода
 
-        skin = new Skin(Gdx.files.internal("skinPlayButton.json"));
-        playButton = new Button(skin);
-        playButton.setSize(640, 180);
-        playButton.setPosition(Gdx.graphics.getWidth() / 2 - playButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - playButton.getHeight() / 2);
+        skin = new Skin(Gdx.files.internal("recourse/MenuUI/button.json"));
 
-        playButton.addListener(new ClickListener() {
+        // Создаем кнопки
+        TextButton buttonStart     = new TextButton("Играть", skin);
+        TextButton buttonSetting   = new TextButton("Настройки", skin);
+        TextButton buttonAboutGame = new TextButton("Об игре", skin);
+
+        // Создаем таблицу
+        Table table = new Table();
+        table.setFillParent(true);
+        table.center();
+
+        // Добавляем кнопки в таблицу с отступами
+        table.add(buttonStart).height(150).width(320); // pad - отступ между кнопками
+        table.row(); // Переход на следующую строку
+        table.add(buttonSetting).height(150).width(320);
+        table.row();
+        table.add(buttonAboutGame).height(150).width(320);
+
+        // Добавляем кнопку на сцену
+        stage.addActor(table);
+
+        // Добавляем обработчик нажатия на кнопку
+        buttonSetting.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
             }
         });
+    }
 
-        stage.addActor(playButton);
+    @Override
+    public void show() {
+
     }
 
     @Override
     public void render(float delta) {
-        // Очищаем экран
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Рисуем stage (кнопки, текст и т. д.)
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        // Обновляем размер stage при изменении размеров экрана
         stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void hide() {
-
-        stage.dispose();
-    }
-
-    @Override
-    public void dispose() {
-
     }
 
     @Override
@@ -79,4 +75,13 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void resume() {}
+
+    @Override
+    public void hide() {}
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+        skin .dispose();
+    }
 }
