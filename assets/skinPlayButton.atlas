@@ -1,21 +1,30 @@
 
 skinPlayButton.png
-size: 64, 32
+size: 512, 512
 format: RGBA8888
-filter: Linear, Linear
 repeat: none
-play_button
+PlayTextButtonDown.9
   rotate: false
-  xy: 1, 22
+  xy: 1, 479
   size: 32, 9
   split: 0, 0, 0, 0
+  pad: 3, 3, 3, 3
   orig: 32, 9
   offset: 0, 0
   index: -1
-play_button2
+PlayTextButtonUP.9
   rotate: false
-  xy: 1, 11
+  xy: 1, 468
   size: 32, 9
+  split: 0, 0, 0, 0
+  pad: 3, 3, 3, 3
   orig: 32, 9
+  offset: 0, 0
+  index: -1
+Tiny5-Regular(2)
+  rotate: false
+  xy: 1, 490
+  size: 506, 15
+  orig: 506, 15
   offset: 0, 0
   index: -1

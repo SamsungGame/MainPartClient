@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.Screen;
 import end.team.center.Center;
@@ -33,14 +34,12 @@ public class MainMenuScreen implements Screen {
 
         skin = new Skin(Gdx.files.internal("skinPlayButton.json"));
         playButton = new Button(skin);
-        playButton.setWidth(320);
-        playButton.setHeight(90);
+        playButton.setSize(640, 180);
         playButton.setPosition(Gdx.graphics.getWidth() / 2 - playButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - playButton.getHeight() / 2);
 
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Переход к экрану игры (например, GameScreen)
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
             }
         });
@@ -66,7 +65,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void hide() {
-        // Освобождаем ресурсы
+
         stage.dispose();
     }
 
