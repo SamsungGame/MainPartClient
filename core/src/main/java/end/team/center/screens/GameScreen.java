@@ -8,7 +8,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        // Настроить экран игры
+
     }
 
     @Override

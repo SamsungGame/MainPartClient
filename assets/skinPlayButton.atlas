@@ -1,0 +1,21 @@
+
+skinPlayButton.png
+size: 64, 32
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+play_button
+  rotate: false
+  xy: 1, 22
+  size: 32, 9
+  split: 0, 0, 0, 0
+  orig: 32, 9
+  offset: 0, 0
+  index: -1
+play_button2
+  rotate: false
+  xy: 1, 11
+  size: 32, 9
+  orig: 32, 9
+  offset: 0, 0
+  index: -1
