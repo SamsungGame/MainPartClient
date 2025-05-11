@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -21,12 +22,12 @@ public class MainMenuScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage); // Устанавливаем обработчик ввода
 
-        skin = new Skin(Gdx.files.internal("recourse/MenuUI/button.json"));
+        skin = new Skin(Gdx.files.internal("UI/MainMenu/skinPlayButton.json"));
 
         // Создаем кнопки
-        TextButton buttonStart     = new TextButton("Играть", skin);
-        TextButton buttonSetting   = new TextButton("Настройки", skin);
-        TextButton buttonAboutGame = new TextButton("Об игре", skin);
+        Button buttonStart     = new Button(skin);
+        Button buttonSetting   = new Button(skin);
+        Button buttonAboutGame = new Button(skin);
 
         // Создаем таблицу
         Table table = new Table();
@@ -71,13 +72,19 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override
-    public void pause() {}
+    public void pause() {
+
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+
+    }
 
     @Override
-    public void hide() {}
+    public void hide() {
+
+    }
 
     @Override
     public void dispose() {
