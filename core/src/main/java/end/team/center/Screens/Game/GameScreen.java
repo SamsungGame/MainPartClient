@@ -1,4 +1,4 @@
-package end.team.center.screens;
+package end.team.center.Screens.Game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
