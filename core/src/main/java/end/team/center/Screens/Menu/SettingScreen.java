@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import io.github.samsunggame.Screens.ProgramSetting.Config;
+import end.team.center.ProgramSetting.Config;
 
 public class SettingScreen implements Screen {
     private Stage stage;

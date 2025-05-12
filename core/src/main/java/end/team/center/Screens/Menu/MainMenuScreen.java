@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import end.team.center.Center;
 import end.team.center.Screens.Game.GameScreen;
+import end.team.center.Screens.Game.PowerSelectScreen;
 
 public class MainMenuScreen implements Screen {
     private Stage stage;
@@ -45,10 +46,22 @@ public class MainMenuScreen implements Screen {
         stage.addActor(table);
 
         // Добавляем обработчик нажатия на кнопку
-        buttonSetting.addListener(new ClickListener() {
+        buttonStart.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
+            }
+        });
+        buttonSetting.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                // hello
+            }
+        });
+        buttonAboutGame.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                ((Center) Gdx.app.getApplicationListener()).setScreen(new PowerSelectScreen());
             }
         });
     }

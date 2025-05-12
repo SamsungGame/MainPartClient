@@ -2,10 +2,7 @@ package end.team.center.Screens.Menu;
 
 import com.badlogic.gdx.Screen;
 
-import io.github.samsunggame.EntraceGame;
-
 public class AboutGameScreen implements Screen {
-    private EntraceGame game;
 
     public AboutGameScreen() {
 
