@@ -1,10 +1,14 @@
-package end.team.center.screens;
+package end.team.center.Screens.Game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.Screen;
 
 public class GameScreen implements Screen {
+
+    public GameScreen() {
+        
+    }
 
     @Override
     public void show() {
@@ -35,8 +39,12 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void pause() {}
+    public void pause() {
+
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+
+    }
 }
