@@ -1,3 +1,4 @@
+
 package end.team.center.Screens.Game;
 
 import com.badlogic.gdx.Gdx;
@@ -27,7 +28,10 @@ public class TouchpadClass implements Screen {
     private float rectX, rectY;
     private float rectWidth = 100;
     private float rectHeight = 100;
-    private float speed = 200;
+    private float speed = 1000;
+    private float touchX = 50;
+    private float touchY = 50;
+    private boolean touch = false;
 
     public TouchpadClass() {
         // Создаем сцену с вьюпортом, который автоматически адаптируется к экрану
@@ -39,24 +43,29 @@ public class TouchpadClass implements Screen {
 
         // Создаем скин для джойстика
         skin = new Skin();
-        Texture bgTexture = new Texture("joystick_bg.png");
-        Texture knobTexture = new Texture("joystick_knob.png");
+        Texture bgTexture = new Texture("UI/GameUI/Direction/backTouch.png");
+        Texture knobTexture = new Texture("UI/GameUI/Direction/knobIMG.png");
         skin.add("touchBackground", bgTexture);
         skin.add("touchKnob", knobTexture);
 
         // Создаем стиль джойстика
         touchpadStyle = new Touchpad.TouchpadStyle();
-        touchpadStyle.background = new TextureRegionDrawable(skin.getDrawable("touchBackground"));
-        touchpadStyle.knob = new TextureRegionDrawable(skin.getDrawable("touchKnob"));
+        touchpadStyle.background = skin.getDrawable("touchBackground");
+        touchpadStyle.knob = skin.getDrawable("touchKnob");
+
+        touchpadStyle.knob.setMinHeight(100);
+        touchpadStyle.knob.setMinWidth(100);
+
 
         // Создаем джойстик с мертвой зоной 10 пикселей
-        touchpad = new Touchpad(10, touchpadStyle);
-        touchpad.setBounds(50, 50, 150, 150);
+        touchpad = new Touchpad(20, touchpadStyle);
         stage.addActor(touchpad);
 
         // Начальная позиция прямоугольника
         rectX = Gdx.graphics.getWidth() / 2f - rectWidth / 2;
         rectY = Gdx.graphics.getHeight() / 2f - rectHeight / 2;
+
+
     }
 
     @Override
@@ -66,6 +75,15 @@ public class TouchpadClass implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if (Gdx.input.isTouched()) {
+            touchX = Gdx.input.getX()-150;
+            touchY = Gdx.graphics.getHeight()-Gdx.input.getY()-150;
+            touch = false;
+        }
+        if(touch)
+            touchpad.setBounds(touchX, touchY, 300, 300);
+
 
         float moveX = touchpad.getKnobPercentX();
         float moveY = touchpad.getKnobPercentY();
