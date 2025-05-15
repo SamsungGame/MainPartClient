@@ -1,8 +1,8 @@
 {
 com.badlogic.gdx.scenes.scene2d.ui.Touchpad$TouchpadStyle: {
 	default: {
-		background: pixil-frame-0 (4)
-		knob: pixil-frame-0 (5)
+		background: backTouch
+		knob: knobIMG
 	}
 }
 }

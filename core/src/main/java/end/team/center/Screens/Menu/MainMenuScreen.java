@@ -23,7 +23,7 @@ public class MainMenuScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage); // Устанавливаем обработчик ввода
 
-        skin = new Skin(Gdx.files.internal("UI/MainMenu/skinPlayButton.json"));
+        skin = new Skin(Gdx.files.internal("UI/MainMenu/PlayButton.json"));
 
         // Создаем кнопки
         Button buttonStart     = new Button(skin);

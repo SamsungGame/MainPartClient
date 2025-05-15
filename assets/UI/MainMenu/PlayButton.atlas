@@ -1,0 +1,19 @@
+
+PlayButton.png
+size: 128, 64
+format: RGBA8888
+repeat: none
+PlayUP
+  rotate: false
+  xy: 1, 25
+  size: 64, 18
+  orig: 64, 18
+  offset: 0, 0
+  index: -1
+PlayDown
+  rotate: false
+  xy: 1, 45
+  size: 64, 18
+  orig: 64, 18
+  offset: 0, 0
+  index: -1
