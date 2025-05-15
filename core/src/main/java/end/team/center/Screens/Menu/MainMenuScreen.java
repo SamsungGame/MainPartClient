@@ -23,7 +23,7 @@ public class MainMenuScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage); // Устанавливаем обработчик ввода
 
-        skin = new Skin(Gdx.files.internal("UI/MainMenu/PlayButton.json"));
+        skin = new Skin(Gdx.files.internal("UI/MainMenu/skinPlayButton.json"));
 
         // Создаем кнопки
         Button buttonStart     = new Button(skin);
@@ -36,11 +36,11 @@ public class MainMenuScreen implements Screen {
         table.center();
 
         // Добавляем кнопки в таблицу с отступами
-        table.add(buttonStart).height(150).width(320); // pad - отступ между кнопками
+        table.add(buttonStart).height(180).width(640); // pad - отступ между кнопками
         table.row(); // Переход на следующую строку
-        table.add(buttonSetting).height(150).width(320);
+        table.add(buttonSetting).height(180).width(640);
         table.row();
-        table.add(buttonAboutGame).height(150).width(320);
+        table.add(buttonAboutGame).height(180).width(640);
 
         // Добавляем кнопку на сцену
         stage.addActor(table);
