@@ -1,0 +1,34 @@
+
+newGameButton.png
+size: 2048, 2048
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+button_down
+  rotate: false
+  xy: 1, 993
+  size: 960, 480
+  orig: 960, 480
+  offset: 0, 0
+  index: -1
+button_up
+  rotate: false
+  xy: 1, 511
+  size: 960, 480
+  orig: 960, 480
+  offset: 0, 0
+  index: -1
+pixel_font1
+  rotate: false
+  xy: 963, 1345
+  size: 512, 128
+  orig: 512, 128
+  offset: 0, 0
+  index: -1
+pixel_font2
+  rotate: false
+  xy: 1, 381
+  size: 512, 128
+  orig: 512, 128
+  offset: 0, 0
+  index: -1

@@ -7,4 +7,8 @@ dependencies {
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
   }
+
+  implementation group: 'com.badlogicgames.gdx', name: 'gdx', version: '1.13.1'
+  implementation group: 'com.badlogicgames.gdx', name: 'gdx-box2d', version: '1.13.1'
+  implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
 }

@@ -10,47 +10,31 @@ buildscript {
   }
   dependencies {
     classpath "com.android.tools.build:gradle:8.6.1"
-
   }
 }
 
 allprojects {
-  apply plugin: 'eclipse'
-  apply plugin: 'idea'
-
-  // This allows you to "Build and run using IntelliJ IDEA", an option in IDEA's Settings.
-  idea {
-    module {
-      outputDir file('build/classes/java/main')
-      testOutputDir file('build/classes/java/test')
-    }
+  repositories {
+    mavenCentral()
+    google()
   }
+
+  apply plugin: 'eclipse'
 }
 
 configure(subprojects - project(':android')) {
   apply plugin: 'java-library'
   sourceCompatibility = 17
-
-  // From https://lyze.dev/2021/04/29/libGDX-Internal-Assets-List/
-  // The article can be helpful when using assets.txt in your project.
   tasks.register('generateAssetList') {
     inputs.dir("${project.rootDir}/assets/")
-    // projectFolder/assets
     File assetsFolder = new File("${project.rootDir}/assets/")
-    // projectFolder/assets/assets.txt
     File assetsFile = new File(assetsFolder, "assets.txt")
-    // delete that file in case we've already created it
     assetsFile.delete()
-
-    // iterate through all files inside that folder
-    // convert it to a relative path
-    // and append it to the file assets.txt
     fileTree(assetsFolder).collect { assetsFolder.relativePath(it) }.sort().each {
       assetsFile.append(it + "\n")
     }
   }
   processResources.dependsOn 'generateAssetList'
-
   compileJava {
     options.incremental = true
   }
@@ -58,11 +42,10 @@ configure(subprojects - project(':android')) {
 
 subprojects {
   version = "$projectVersion"
-  ext.appName = 'ProbablyЕTheEnd'
+  ext.appName = 'Field'
   repositories {
     mavenCentral()
     maven { url 'https://s01.oss.sonatype.org' }
-    // You may want to remove the following line if you have errors downloading dependencies.
     mavenLocal()
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
@@ -70,4 +53,43 @@ subprojects {
   }
 }
 
-eclipse.project.name = 'ProbablyЕTheEnd' + '-parent'
+project(':android') {
+  apply plugin: 'com.android.application'
+  android {
+    compileSdkVersion 35
+    defaultConfig {
+      applicationId "com.yourname.field"
+      minSdkVersion 34
+      targetSdkVersion 35
+      versionCode 1
+      versionName "1.0"
+      javaCompileOptions {
+        annotationProcessorOptions {
+          arguments = ["key": "value"]
+        }
+      }
+    }
+    buildTypes {
+      release {
+        minifyEnabled false
+        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+      }
+      debug {
+        applicationIdSuffix ".debug"
+        versionNameSuffix "-debug"
+      }
+    }
+    sourceSets.main.java.srcDirs += 'src/main/java'
+    dependencies {
+      implementation group: 'com.badlogicgames.gdx', name: 'gdx', version: '1.13.1'
+      implementation group: 'com.badlogicgames.gdx', name: 'gdx-box2d', version: '1.13.1'
+      implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+    }
+    compileOptions {
+      sourceCompatibility = JavaVersion.VERSION_17
+      targetCompatibility = JavaVersion.VERSION_17
+    }
+  }
+}
+
+eclipse.project.name = 'Field' + '-parent'

@@ -1,82 +1,80 @@
 package end.team.center.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.Screen;
-import end.team.center.Center;
+
+import end.team.center.MyGame;
 
 public class MainMenuScreen implements Screen {
-
-    private Stage stage;
-    private BitmapFont font;
-    private Button playButton;
-    private Skin skin;
-
-    @Override
-    public void show() {
-        // Создаем stage для UI
+    private final Stage stage;
+    private final Skin skin;
+    public MainMenuScreen(MyGame game) {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        skin = new Skin(Gdx.files.internal("skinPlayButton.json"));
-        playButton = new Button(skin);
-        playButton.setSize(640, 180);
-        playButton.setPosition(Gdx.graphics.getWidth() / 2 - playButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - playButton.getHeight() / 2);
+        // Создание стиля кнопки
+        skin = new Skin(Gdx.files.internal("newGameButton/newGameButton.json"));
 
-        playButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                ((Center) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
+        // Создание кнопки
+        TextButton newGameButton = new TextButton("Новая игра", skin);
+        newGameButton.setSize(320, 150);
+        newGameButton.setPosition(Gdx.graphics.getWidth() / 2 - newGameButton.getWidth() / 2,
+            Gdx.graphics.getHeight() / 2 - newGameButton.getHeight() / 2);
+
+        // Добавление слушателя нажатия на кнопку
+        newGameButton.addListener(event -> {
+            if(event.isHandled()){
+                game.setScreen(new FieldScreen(game));
+                newGameButton.remove();
+                return true;
             }
+            return false;
         });
 
-        stage.addActor(playButton);
+        stage.addActor(newGameButton);
+    }
+
+    @Override
+    public void show() {
+
     }
 
     @Override
     public void render(float delta) {
-        // Очищаем экран
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        // Рисуем stage (кнопки, текст и т. д.)
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.act();
         stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        // Обновляем размер stage при изменении размеров экрана
-        stage.getViewport().update(width, height, true);
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
     }
 
     @Override
     public void hide() {
 
-        stage.dispose();
     }
 
     @Override
     public void dispose() {
-
+        stage.dispose();
+        skin.dispose();
     }
-
-    @Override
-    public void pause() {}
-
-    @Override
-    public void resume() {}
 }
