@@ -32,14 +32,14 @@ public class FieldScreen implements Screen {
 
     @Override
     public void show() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             seeds.add(globalRandom.nextLong());
         }
         sizes.add(200);
         sizes.add(400);
         sizes.add(500);
         symbols.add('@');
-        symbols.add('S');
+        symbols.add('$');
         symbols.add('#');
     }
 
@@ -50,7 +50,7 @@ public class FieldScreen implements Screen {
 
         batch.begin();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             long seed = seeds.get(i);
             generateAndDrawField(batch, seed, i);
         }
@@ -86,6 +86,7 @@ public class FieldScreen implements Screen {
     private void generateAndDrawField(SpriteBatch batch, long seed, int index) {
         Random localRandom = new Random(seed);
         int offsetX = index * fieldX * cellSize;
+        int offsetY = index * fieldY * cellSize;
 
         char[][] field = new char[fieldX][fieldY];
         for (int x = 0; x < field.length; x++) {
@@ -146,7 +147,7 @@ public class FieldScreen implements Screen {
         for (int x = 0; x < fieldX; x++) {
             for (int y = 0; y < fieldY; y++) {
                 int drawX = offsetX + x * cellSize;
-                int drawY = y * cellSize;
+                int drawY = offsetY + y * cellSize;
                 if (field[x][y] == '.') {
                     batch.draw(grassTexture, drawX, drawY, cellSize, cellSize);
                 }
