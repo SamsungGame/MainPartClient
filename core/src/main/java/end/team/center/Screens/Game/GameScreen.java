@@ -3,21 +3,32 @@ package end.team.center.Screens.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class GameScreen implements Screen {
 
     private Stage stage;
+    private OrthographicCamera camera;
+    private Viewport viewport;
     private TouchpadClass touchpadMove, touchpadAttack;
-    private Hero hero;  // Добавляем героя
+    private Hero hero;
 
 
     public GameScreen() {
+
+        camera = new OrthographicCamera();
+        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+
+
 
         touchpadMove = new TouchpadClass(200, 200, false, "move");
         stage.addActor(touchpadMove);
@@ -40,7 +51,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(256, 256, 256, 3);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act(delta);
