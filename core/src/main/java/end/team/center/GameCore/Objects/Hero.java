@@ -17,7 +17,7 @@ public class Hero extends Entity {
     private TextureRegion currentRegion;
 
     public Hero(float x, float y, float width, float height, int hp, int defence, int damage, float speed, String rightTexturePath, String leftTexturePath) {
-        super(new Texture(Gdx.files.internal("rightTexturePath")), hp, defence, damage, speed);
+        super(new Texture(Gdx.files.internal(rightTexturePath)), hp, defence, damage, speed);
         this.heroX = x;
         this.heroY = y;
         this.heroWidth = width;

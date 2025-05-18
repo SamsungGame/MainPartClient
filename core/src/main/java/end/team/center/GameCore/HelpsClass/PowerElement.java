@@ -15,19 +15,27 @@ public class PowerElement extends Actor {
     private Sprite portal;
     private String name, description;
     private boolean animated = false, sAnimated = false;
-    private float scale = 1f, elapsedTime = 0;
+    private float scale = 1f, startScaleX, startScaleY, elapsedTime = 0;
     private int rotation = 3, duration = 2;
 
     public PowerElement(Texture texture, Sprite portal) {
         this.texture = texture;
         this.portal = portal;
         setSize(texture.getWidth(), texture.getHeight());
+        setHeight(texture.getHeight());
+        setWidth(texture.getWidth());
+        setOrigin((getX() + getWidth()) / 2, (getY() + getHeight()) / 2);
+        startScaleX = getScaleX();
+        startScaleY = getScaleY();
     }
     public PowerElement(Texture texture, Sprite portal, String name) {
         this.texture = texture;
         this.name = name;
         this.portal = portal;
         setSize(texture.getWidth(), texture.getHeight());
+        setHeight(texture.getHeight());
+        setWidth(texture.getWidth());
+        setOrigin((getX() + getWidth()) / 2, (getY() + getHeight()) / 2);
     }
     public PowerElement(Texture texture, Sprite portal, String name, String description) {
         this.texture = texture;
@@ -35,6 +43,9 @@ public class PowerElement extends Actor {
         this.description = description;
         this.portal = portal;
         setSize(texture.getWidth(), texture.getHeight());
+        setHeight(texture.getHeight());
+        setWidth(texture.getWidth());
+        setOrigin((getX() + getWidth()) / 2, (getY() + getHeight()) / 2);
     }
 
     public void setDescription(String description) {
@@ -68,22 +79,23 @@ public class PowerElement extends Actor {
         if (animated) {
             elapsedTime += deltaTime; // Обновляем время
 
-            System.out.println(elapsedTime);
+            System.out.println("Пройденное время: " + elapsedTime);
 
             // Вычисляем прогресс анимации (от 0 до 1)
             float progress = Math.min(elapsedTime / duration, 1f);
 
-            System.out.println(progress);
+            System.out.println("Прогресс: " + progress);
 
             // Обновляем позицию спрайта
-            float currentX = (portal.getX() - getX()) * progress;
-            float currentY = (portal.getY() - getY()) * progress;
-            setX(currentX);
-            setY(currentY);
+            float currentX = getX() + (portal.getX() - getX()) * progress;
+            float currentY = getY() + (portal.getY() - getY()) * progress;
+            setPosition(currentX, currentY);
 
             // Обновляем размер спрайта
-            float currentSize = (1 - progress) * getWidth(); // Уменьшаем размер до конечного размера
-            setSize(currentSize * scale, currentSize * scale);
+            float currentSize = (scale - startScaleX) * progress; // Уменьшаем размер до конечного размера
+            setSize(startScaleX * currentSize, startScaleY * currentSize);
+
+            System.out.println("Размер: " + currentSize);
 
             // Обновляем угол вращения спрайта
             setOrigin((getX() + getWidth()) / 2, (getY() + getHeight()) / 2);
@@ -107,7 +119,6 @@ public class PowerElement extends Actor {
             setSize(currentSize * scale, currentSize * scale);
 
             // Обновляем угол вращения спрайта
-            setOrigin((getX() + getWidth()) / 2, (getY() + getHeight()) / 2);
             setRotation((rotation - 1) * 360 * progress); // Вращаем на заданное количество градусов
 
             if (progress >= 1) return true;
