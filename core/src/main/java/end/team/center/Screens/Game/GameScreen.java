@@ -3,7 +3,9 @@ package end.team.center.Screens.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class GameScreen implements Screen {
@@ -18,17 +20,18 @@ public class GameScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        touchpad = new TouchpadClass(400, 400, false);
+        touchpad = new TouchpadClass(200, 200, false);
         stage.addActor(touchpad);
 
         // Создаём героя с нужными параметрами и добавляем на сцену
         hero = new Hero(
-            Gdx.graphics.getWidth() / 2f - 50,   // x (центр, учитывая ширину 100)
-            Gdx.graphics.getHeight() / 2f - 50,  // y (центр)
-            100, 100,                           // ширина и высота
-            100,                               // hp
-            speed,                             // скорость
-            "UI/GameUI/Hero/heroRight.png"                        // путь к текстуре (замени на свой файл)
+            Gdx.graphics.getWidth() / 2f - 50,
+            Gdx.graphics.getHeight() / 2f - 50,
+            140, 160,
+            100,
+            speed,
+            "UI/GameUI/Hero/heroRight.png",
+            "UI/GameUI/Hero/heroLeft.png"
         );
         stage.addActor(hero);
     }
@@ -46,10 +49,8 @@ public class GameScreen implements Screen {
         float moveX = touchpad.getKnobPercentX();
         float moveY = touchpad.getKnobPercentY();
 
-        // Передвижение героя через метод move
-        hero.move(moveX, moveY, delta);
 
-        // Обновляем позицию самого Image (важно, чтобы Image отображался правильно)
+        hero.move(moveX, moveY, delta);
         hero.setPosition(hero.heroX, hero.heroY);
 
         stage.draw();

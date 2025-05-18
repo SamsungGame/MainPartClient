@@ -3,11 +3,10 @@ package end.team.center.Screens.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-public class Hero extends Image {
+public class Hero extends Actor {
 
     private int hp;
     private float speed;
@@ -15,18 +14,27 @@ public class Hero extends Image {
     private float heroHeight;
     public float heroX;
     public float heroY;
-    private Image playerImage;
 
-    public Hero(float x, float y, float width, float height, int hp, float speed, String texturePath) {
+    private Texture playerRightTexture;
+    private Texture playerLeftTexture;
+    private TextureRegion currentRegion;
+
+    public Hero(float x, float y, float width, float height, int hp, float speed, String rightTexturePath, String leftTexturePath) {
         this.hp = hp;
         this.speed = speed;
         this.heroX = x;
         this.heroY = y;
         this.heroWidth = width;
         this.heroHeight = height;
-        this.playerImage = new Image(new Texture(texturePath));
-        playerImage.setSize(width, height);
-        playerImage.setPosition(x, y);
+
+        playerRightTexture = new Texture(Gdx.files.internal(rightTexturePath));
+        playerLeftTexture = new Texture(Gdx.files.internal(leftTexturePath));
+
+        currentRegion = new TextureRegion(playerRightTexture);
+
+        setSize(width, height);
+        setPosition(x, y);
+        setBounds(x, y, width, height);
     }
 
     public void move(float deltaX, float deltaY, float delta) {
@@ -36,14 +44,22 @@ public class Hero extends Image {
         heroX = Math.max(0, Math.min(heroX, Gdx.graphics.getWidth() - heroWidth));
         heroY = Math.max(0, Math.min(heroY, Gdx.graphics.getHeight() - heroHeight));
 
-        playerImage.setPosition(heroX, heroY);
+        setPosition(heroX, heroY);
+
+        if (deltaX > 0) {
+            currentRegion.setRegion(playerRightTexture);
+        } else if (deltaX < 0) {
+            currentRegion.setRegion(playerLeftTexture);
+        }
     }
 
-    public void draw(Batch batch) {
-        playerImage.draw(batch, 1);
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        batch.draw(currentRegion, getX(), getY(), getWidth(), getHeight());
     }
 
     public void dispose() {
-        ((TextureRegionDrawable) playerImage.getDrawable()).getRegion().getTexture().dispose();
+        playerRightTexture.dispose();
+        playerLeftTexture.dispose();
     }
 }
