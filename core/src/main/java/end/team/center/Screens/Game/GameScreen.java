@@ -2,9 +2,7 @@ package end.team.center.Screens.Game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -12,26 +10,27 @@ public class GameScreen implements Screen {
 
     private Stage stage;
     private TouchpadClass touchpad;
-    private ShapeRenderer shapeRenderer;
+    private Hero hero;  // Добавляем героя
 
-    private float rectX, rectY;
-    private float rectWidth = 100;
-    private float rectHeight = 100;
     private float speed = 500;
-    private float touchSize = 300;
-    private float x = 150, y = 150;
-    private boolean isTouchpadActive = false;
 
     public GameScreen() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        shapeRenderer = new ShapeRenderer();
-
-        rectX = Gdx.graphics.getWidth() / 2f - rectWidth / 2;
-        rectY = Gdx.graphics.getHeight() / 2f - rectHeight / 2;
-        touchpad = new TouchpadClass(x, y, touchSize);
+        touchpad = new TouchpadClass(400, 400, false);
         stage.addActor(touchpad);
+
+        // Создаём героя с нужными параметрами и добавляем на сцену
+        hero = new Hero(
+            Gdx.graphics.getWidth() / 2f - 50,   // x (центр, учитывая ширину 100)
+            Gdx.graphics.getHeight() / 2f - 50,  // y (центр)
+            100, 100,                           // ширина и высота
+            100,                               // hp
+            speed,                             // скорость
+            "UI/GameUI/Hero/heroRight.png"                        // путь к текстуре (замени на свой файл)
+        );
+        stage.addActor(hero);
     }
 
     @Override
@@ -41,37 +40,17 @@ public class GameScreen implements Screen {
 
         stage.act(delta);
 
-        if (Gdx.input.isTouched()) {
-            float touchX = Gdx.input.getX();
-            float touchY = Gdx.graphics.getHeight() - Gdx.input.getY();
-
-            if (!isTouchpadActive) {
-                if (touchX >= x - touchSize / 2 && touchX <= x + touchSize / 2 &&
-                        touchY >= y - touchSize / 2 && touchY <= y + touchSize / 2) {
-                    isTouchpadActive = true;
-                } else {
-                    x = touchX;
-                    y = touchY;
-                    touchpad.setBounds(x - touchSize / 2, y - touchSize / 2, touchSize, touchSize);
-                }
-            }
-        } else {
-            isTouchpadActive = false;
-        }
+        touchpad.TouchpadLogic();
+        touchpad.touchpadSetBounds(touchpad);
 
         float moveX = touchpad.getKnobPercentX();
         float moveY = touchpad.getKnobPercentY();
 
-        rectX += moveX * speed * delta;
-        rectY += moveY * speed * delta;
+        // Передвижение героя через метод move
+        hero.move(moveX, moveY, delta);
 
-        rectX = Math.max(0, Math.min(rectX, Gdx.graphics.getWidth() - rectWidth));
-        rectY = Math.max(0, Math.min(rectY, Gdx.graphics.getHeight() - rectHeight));
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(rectX, rectY, rectWidth, rectHeight);
-        shapeRenderer.end();
+        // Обновляем позицию самого Image (важно, чтобы Image отображался правильно)
+        hero.setPosition(hero.heroX, hero.heroY);
 
         stage.draw();
     }
@@ -84,19 +63,16 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        shapeRenderer.dispose();
         touchpad.dispose();
+        hero.dispose();
     }
 
     @Override
     public void show() {}
-
     @Override
     public void pause() {}
-
     @Override
     public void resume() {}
-
     @Override
     public void hide() {}
 }
