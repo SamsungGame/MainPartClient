@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class GameScreen implements Screen {
 
     private Stage stage;
-    private TouchpadClass touchpad;
+    private TouchpadClass touchpadMove, touchpadAttack;
     private Hero hero;  // Добавляем героя
 
 
@@ -19,13 +19,15 @@ public class GameScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        touchpad = new TouchpadClass(200, 200, false);
-        stage.addActor(touchpad);
+        touchpadMove = new TouchpadClass(200, 200, false, "move");
+        stage.addActor(touchpadMove);
+        touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth()-500, 200, false, "attack");
+        stage.addActor(touchpadAttack);
 
         // Создаём героя с нужными параметрами и добавляем на сцену
         hero = new Hero(
-            Gdx.graphics.getWidth() / 2f - 50,
-            Gdx.graphics.getHeight() / 2f - 50,
+            Gdx.graphics.getWidth() / 2f - 70,
+            Gdx.graphics.getHeight() / 2f - 80,
             140, 160,
             100,
             500,
@@ -42,11 +44,14 @@ public class GameScreen implements Screen {
 
         stage.act(delta);
 
-        touchpad.TouchpadLogic();
-        touchpad.touchpadSetBounds(touchpad);
+        touchpadMove.TouchpadLogic();
+        touchpadMove.touchpadSetBounds();
 
-        float moveX = touchpad.getKnobPercentX();
-        float moveY = touchpad.getKnobPercentY();
+        touchpadAttack.TouchpadLogic();
+        touchpadAttack.touchpadSetBounds();
+
+        float moveX = touchpadMove.getKnobPercentX();
+        float moveY = touchpadMove.getKnobPercentY();
 
 
         hero.move(moveX, moveY, delta);
@@ -63,7 +68,7 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        touchpad.dispose();
+        touchpadMove.dispose();
         hero.dispose();
     }
 
