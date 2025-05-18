@@ -19,14 +19,14 @@ public class GameScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        touchpadMove = new TouchpadClass(200, 200, false, "move");
+        touchpadMove   = new TouchpadClass(200, 200, false, "move");
+        touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth() - 500, 200, false, "attack");
         stage.addActor(touchpadMove);
-        touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth()-500, 200, false, "attack");
         stage.addActor(touchpadAttack);
 
         // Создаём героя с нужными параметрами и добавляем на сцену
         hero = new Hero(
-            Gdx.graphics.getWidth() / 2f - 70,
+            Gdx.graphics.getWidth()  / 2f - 70,
             Gdx.graphics.getHeight() / 2f - 80,
             140, 160,
             100,
@@ -34,7 +34,7 @@ public class GameScreen implements Screen {
             5,
             500,
             "UI/GameUI/Hero/heroRight.png",
-            "UI/GameUI/Hero/heroLeft.png"
+             "UI/GameUI/Hero/heroLeft.png"
         );
         stage.addActor(hero);
     }

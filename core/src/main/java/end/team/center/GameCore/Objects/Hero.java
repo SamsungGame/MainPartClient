@@ -41,11 +41,8 @@ public class Hero extends Entity {
 
         setPosition(heroX, heroY);
 
-        if (deltaX > 0) {
-            currentRegion.setRegion(playerRightTexture);
-        } else if (deltaX < 0) {
-            currentRegion.setRegion(playerLeftTexture);
-        }
+        if      (deltaX > 0) currentRegion.setRegion(playerRightTexture);
+        else if (deltaX < 0) currentRegion.setRegion(playerLeftTexture);
     }
 
     @Override

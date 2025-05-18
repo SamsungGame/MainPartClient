@@ -46,18 +46,15 @@ public class TouchpadClass extends Touchpad {
     }
     public void TouchpadLogic() {
         if(touchpads.get(0).type.equals("move")) {
-
             if (Gdx.input.isTouched()) {
-
                 float touchX = Gdx.input.getX();
                 float touchY = Gdx.graphics.getHeight() - Gdx.input.getY();
 
                 if (!touchpads.get(0).isTouchpadActive) {
-
                     if (touchX >= this.x - touchSize / 2 && touchX <= this.x + touchSize / 2 &&
                         touchY >= this.y - touchSize / 2 && touchY <= this.y + touchSize / 2) {
                         touchpads.get(0).isTouchpadActive = true;
-                    } else if(touchX < (float) Gdx.graphics.getWidth() / 2 - touchSize / 2){
+                    } else if (touchX < (float) Gdx.graphics.getWidth() / 2 - touchSize / 2){
                         touchpads.get(0).x = touchX;
                         touchpads.get(0).y = touchY;
                     }
@@ -89,11 +86,10 @@ public class TouchpadClass extends Touchpad {
     }
 
     public void touchpadSetBounds() {
-
         if(xp != this.x && yp != this.y) {
-            setBounds(this.x-touchSize/2, this.y-touchSize/2, touchSize, touchSize);
-            xp = x+1;
-            yp = y+1;
+            setBounds(this.x - touchSize / 2, this.y - touchSize / 2, touchSize, touchSize);
+            xp = x + 1;
+            yp = y + 1;
         }
     }
     @Override

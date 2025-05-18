@@ -96,9 +96,9 @@ public class PowerSelectScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 
         batch.begin();
-        for (PowerElement pe: buffs) {
-            pe.draw(batch, 1);
-        }
+//        for (PowerElement pe: buffs) {
+//            pe.draw(batch, 1);
+//        }
         portal.draw(batch);
         batch.end();
         stage.draw();

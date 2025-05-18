@@ -15,8 +15,8 @@ public class PowerElement extends Actor {
     private Sprite portal;
     private String name, description;
     private boolean animated = false, sAnimated = false;
-    private float scale = 0.01f, elapsedTime = 0;
-    private int rotation = 3, duration = 5000;
+    private float scale = 1f, elapsedTime = 0;
+    private int rotation = 3, duration = 2;
 
     public PowerElement(Texture texture, Sprite portal) {
         this.texture = texture;
@@ -68,12 +68,16 @@ public class PowerElement extends Actor {
         if (animated) {
             elapsedTime += deltaTime; // Обновляем время
 
+            System.out.println(elapsedTime);
+
             // Вычисляем прогресс анимации (от 0 до 1)
             float progress = Math.min(elapsedTime / duration, 1f);
 
+            System.out.println(progress);
+
             // Обновляем позицию спрайта
-            float currentX = getX() + (portal.getX() - getX()) * progress;
-            float currentY = -(getY() + (portal.getY() - getY()) * progress);
+            float currentX = (portal.getX() - getX()) * progress;
+            float currentY = (portal.getY() - getY()) * progress;
             setX(currentX);
             setY(currentY);
 
@@ -82,6 +86,7 @@ public class PowerElement extends Actor {
             setSize(currentSize * scale, currentSize * scale);
 
             // Обновляем угол вращения спрайта
+            setOrigin((getX() + getWidth()) / 2, (getY() + getHeight()) / 2);
             setRotation(rotation * 360 * progress); // Вращаем на заданное количество градусов
 
             if (progress >= 1) return true;
