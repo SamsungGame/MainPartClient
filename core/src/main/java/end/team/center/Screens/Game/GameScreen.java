@@ -33,6 +33,7 @@ public class GameScreen implements Screen {
             500,
             "UI/GameUI/Hero/heroRight.png",
             "UI/GameUI/Hero/heroLeft.png"
+
         );
         stage.addActor(hero);
     }
