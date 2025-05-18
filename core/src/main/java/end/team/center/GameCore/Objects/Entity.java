@@ -4,9 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Entity extends GameObject {
     protected int health;
-    protected int dameg, defence, speed;
+    protected int dameg, defence;
+    protected float speed;
     protected boolean isLive = true;
-    public Entity(Texture texture, int health, int defence, int damage, int speed) {
+    public Entity(Texture texture, int health, int defence, int damage, float speed) {
         super(texture);
         this.health = health;
         this.defence = defence;

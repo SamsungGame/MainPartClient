@@ -1,29 +1,40 @@
 package end.team.center.GameCore.HelpsClass;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
-public class PowerElement extends ImageButton {
+public class PowerElement extends Actor {
     public boolean isSelected = false;
+    private Texture texture;
+    private Sprite portal;
     private String name, description;
     private boolean animated = false, sAnimated = false;
     private float scale = 0.01f, elapsedTime = 0;
-    private int rotation = 3, duration = 2;
+    private int rotation = 3, duration = 5000;
 
-    public PowerElement(Skin skin) {
-        super(skin);
+    public PowerElement(Texture texture, Sprite portal) {
+        this.texture = texture;
+        this.portal = portal;
+        setSize(texture.getWidth(), texture.getHeight());
     }
-    public PowerElement(Skin skin, String name) {
-        super(skin);
+    public PowerElement(Texture texture, Sprite portal, String name) {
+        this.texture = texture;
         this.name = name;
+        this.portal = portal;
+        setSize(texture.getWidth(), texture.getHeight());
     }
-    public PowerElement(Skin skin, String name, String description) {
-        super(skin);
+    public PowerElement(Texture texture, Sprite portal, String name, String description) {
+        this.texture = texture;
         this.name = name;
         this.description = description;
+        this.portal = portal;
+        setSize(texture.getWidth(), texture.getHeight());
     }
 
     public void setDescription(String description) {
@@ -40,6 +51,19 @@ public class PowerElement extends ImageButton {
         sAnimated = true;
     }
 
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        if (animated) {
+            boolean finished = goAnimation(portal, delta);
+            if (finished) animated = false;
+        }
+        if (sAnimated) {
+            boolean finished = goSmallAnimation(delta);
+            if (finished) sAnimated = false;
+        }
+    }
+
     public boolean goAnimation(Sprite portal, float deltaTime) {
         if (animated) {
             elapsedTime += deltaTime; // Обновляем время
@@ -49,7 +73,9 @@ public class PowerElement extends ImageButton {
 
             // Обновляем позицию спрайта
             float currentX = getX() + (portal.getX() - getX()) * progress;
-            float currentY = getY() + (portal.getY() - getY()) * progress;
+            float currentY = -(getY() + (portal.getY() - getY()) * progress);
+            setX(currentX);
+            setY(currentY);
 
             // Обновляем размер спрайта
             float currentSize = (1 - progress) * getWidth(); // Уменьшаем размер до конечного размера
@@ -76,11 +102,26 @@ public class PowerElement extends ImageButton {
             setSize(currentSize * scale, currentSize * scale);
 
             // Обновляем угол вращения спрайта
+            setOrigin((getX() + getWidth()) / 2, (getY() + getHeight()) / 2);
             setRotation((rotation - 1) * 360 * progress); // Вращаем на заданное количество градусов
 
             if (progress >= 1) return true;
             else return false;
         }
         return false;
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        batch.draw(new TextureRegion(texture),
+            getX(), getY(),
+            getOriginX(), getOriginY(),
+            getWidth(), getHeight(),
+            getScaleX(), getScaleY(),
+            getRotation());
     }
 }

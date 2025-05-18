@@ -7,10 +7,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import end.team.center.GameCore.HelpsClass.PowerElement;
@@ -22,7 +26,7 @@ public class PowerSelectScreen implements Screen {
     private Stage stage;
     private SpriteBatch batch;
     private PowerElement[] buffs = new PowerElement[3];
-    private Skin selectBuff, unSelectBuff;
+    private Texture selectBuff, unSelectBuff;
     private Sprite portal;
     private Table table;
     private boolean buffSelected = false;
@@ -33,42 +37,48 @@ public class PowerSelectScreen implements Screen {
         // Создаем сцену
         stage = new Stage(new ScreenViewport());
 
-        selectBuff   = new Skin(Gdx.files.internal("UI/GameUI/SelectPowerUI/selectPower.json"));
-        unSelectBuff = new Skin(Gdx.files.internal("UI/GameUI/SelectPowerUI/power.json"));
+        selectBuff   = new Texture(Gdx.files.internal("UI/GameUI/SelectPowerUI/selectPower.png"));
+        unSelectBuff = new Texture(Gdx.files.internal("UI/GameUI/SelectPowerUI/power.png"));
 
         portal = new Sprite(new Texture(Gdx.files.internal("UI/GameUI/SelectPowerUI/portal.png")));
         portal.setPosition((float) (Gdx.graphics.getWidth() / 2) - (portal.getWidth() / 2),
             (float) Gdx.graphics.getHeight() / 2.5f);
 
         batch = new SpriteBatch();
-        buffs[0] = new PowerElement(unSelectBuff);
-        buffs[1] = new PowerElement(unSelectBuff);
-        buffs[2] = new PowerElement(unSelectBuff);
+        buffs[0] = new PowerElement(unSelectBuff, portal);
+        buffs[1] = new PowerElement(unSelectBuff, portal);
+        buffs[2] = new PowerElement(unSelectBuff, portal);
 
-        buffs[0].addListener(new ChangeListener() {
+        buffs[0].setTouchable(Touchable.enabled);
+        buffs[1].setTouchable(Touchable.enabled);
+        buffs[2].setTouchable(Touchable.enabled);
+
+        buffs[0].addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
                 selectBuff(0);
             }
         });
-        buffs[1].addListener(new ChangeListener() {
+        buffs[1].addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                 selectBuff(1);
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                selectBuff(1);
             }
         });
-        buffs[2].addListener(new ChangeListener() {
+        buffs[2].addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
                 selectBuff(2);
             }
         });
 
         // Создаем таблицу
         table = new Table();
-        table.setFillParent(true); //setScale(buffs[0].getWidth() * 3 + (distance * 3), buffs[0].getHeight());
-        table.center().bottom(); // setPosition((float) Gdx.graphics.getWidth() / 2,
-            //Gdx.graphics.getHeight() - (Gdx.graphics.getHeight() * 0.7f));
+        table.setFillParent(true);
+        table.center().bottom();
 
         // Добавляем изображения в таблицу с отступами
         table.add(buffs[0]).padRight(distance).height(180).width(180); // Отступ справа от первого спрайта
@@ -87,8 +97,6 @@ public class PowerSelectScreen implements Screen {
 
         batch.begin();
         for (PowerElement pe: buffs) {
-            pe.goAnimation(portal, Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-            pe.goSmallAnimation(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
             pe.draw(batch, 1);
         }
         portal.draw(batch);
@@ -127,8 +135,7 @@ public class PowerSelectScreen implements Screen {
         if (!buffSelected) { // Если не был выбран ни один бафф - мы выделяем текущий
             buffSelected = true;
             buffs[id].isSelected = true;
-            buffs[id].setSkin(selectBuff);
-            buffs[id].invalidate();
+            buffs[id].setTexture(selectBuff);
         }
         else if (buffs[id].isSelected) { // Если мы нажимаем на бафф второй раз - мы выбираем его
             buffs[id].startAnimation();
@@ -141,14 +148,12 @@ public class PowerSelectScreen implements Screen {
             for (int i = 0; i < buffs.length; i++) {
                 if (buffs[i].isSelected) {
                     buffs[i].isSelected = false;
-                    buffs[i].setSkin(unSelectBuff);
-                    buffs[i].invalidate();
+                    buffs[i].setTexture(unSelectBuff);
                 }
             }
             buffSelected = true;
             buffs[id].isSelected = true;
-            buffs[id].setSkin(selectBuff);
-            buffs[id].invalidate();
+            buffs[id].setTexture(selectBuff);
         }
         table.invalidate();
     }

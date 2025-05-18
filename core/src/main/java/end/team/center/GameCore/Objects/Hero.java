@@ -1,4 +1,4 @@
-package end.team.center.Screens.Game;
+package end.team.center.GameCore.Objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -6,10 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class Hero extends Actor {
-
-    private int hp;
-    private float speed;
+public class Hero extends Entity {
     private float heroWidth;
     private float heroHeight;
     public float heroX;
@@ -19,9 +16,8 @@ public class Hero extends Actor {
     private Texture playerLeftTexture;
     private TextureRegion currentRegion;
 
-    public Hero(float x, float y, float width, float height, int hp, float speed, String rightTexturePath, String leftTexturePath) {
-        this.hp = hp;
-        this.speed = speed;
+    public Hero(float x, float y, float width, float height, int hp, int defence, int damage, float speed, String rightTexturePath, String leftTexturePath) {
+        super(new Texture(Gdx.files.internal("rightTexturePath")), hp, defence, damage, speed);
         this.heroX = x;
         this.heroY = y;
         this.heroWidth = width;
@@ -36,7 +32,6 @@ public class Hero extends Actor {
         setPosition(x, y);
         setBounds(x, y, width, height);
     }
-
     public void move(float deltaX, float deltaY, float delta) {
         heroX += deltaX * speed * delta;
         heroY += deltaY * speed * delta;

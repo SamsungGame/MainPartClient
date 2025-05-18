@@ -3,10 +3,10 @@ package end.team.center.Screens.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import end.team.center.GameCore.Objects.Hero;
 
 public class GameScreen implements Screen {
 
@@ -30,6 +30,8 @@ public class GameScreen implements Screen {
             Gdx.graphics.getHeight() / 2f - 80,
             140, 160,
             100,
+            0,
+            5,
             500,
             "UI/GameUI/Hero/heroRight.png",
             "UI/GameUI/Hero/heroLeft.png"

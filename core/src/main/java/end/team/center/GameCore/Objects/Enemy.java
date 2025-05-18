@@ -1,6 +1,7 @@
 package end.team.center.GameCore.Objects;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 public class Enemy extends Entity {
 
@@ -15,5 +16,10 @@ public class Enemy extends Entity {
     @Override
     public void move() {
         super.move();
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
     }
 }
