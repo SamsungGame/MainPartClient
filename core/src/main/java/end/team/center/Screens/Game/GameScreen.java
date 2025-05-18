@@ -14,7 +14,6 @@ public class GameScreen implements Screen {
     private TouchpadClass touchpad;
     private Hero hero;  // Добавляем героя
 
-    private float speed = 500;
 
     public GameScreen() {
         stage = new Stage(new ScreenViewport());
@@ -29,7 +28,7 @@ public class GameScreen implements Screen {
             Gdx.graphics.getHeight() / 2f - 50,
             140, 160,
             100,
-            speed,
+            500,
             "UI/GameUI/Hero/heroRight.png",
             "UI/GameUI/Hero/heroLeft.png"
         );
