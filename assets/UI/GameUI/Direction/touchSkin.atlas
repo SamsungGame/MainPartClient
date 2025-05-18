@@ -4,14 +4,14 @@ size: 32, 32
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
-pixil-frame-0 (4)
+backTouch
   rotate: false
   xy: 1, 10
   size: 17, 17
   orig: 17, 17
   offset: 0, 0
   index: -1
-pixil-frame-0 (5)
+knobIMG
   rotate: false
   xy: 1, 1
   size: 7, 7
