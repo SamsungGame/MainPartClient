@@ -1,4 +1,4 @@
-package end.team.center.Screens.Game;
+package end.team.center.GameCore.UIElements;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

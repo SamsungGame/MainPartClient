@@ -1,13 +1,18 @@
 package end.team.center.GameCore.Objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 
 public class Enemy extends Entity {
+    protected int level;
 
-    public Enemy(Texture texture, int health, int defence, int damage, int speed) {
-        super(texture, health, defence, damage, speed);
+    public Enemy(Texture rightTurn, Texture leftTurn, Vector2 vector, int health, int damage, int defence, float speed, int level) {
+        super(rightTurn, leftTurn, vector, health, damage, defence, speed);
+        this.level = level;
     }
+
 
     public void attack() {
 

@@ -4,9 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class Hero extends Entity {
+public class Hero extends Friendly {
     private float heroWidth;
     private float heroHeight;
     public float heroX;
@@ -16,15 +17,15 @@ public class Hero extends Entity {
     private Texture playerLeftTexture;
     private TextureRegion currentRegion;
 
-    public Hero(float x, float y, float width, float height, int hp, int defence, int damage, float speed, String rightTexturePath, String leftTexturePath) {
-        super(new Texture(Gdx.files.internal(rightTexturePath)), hp, defence, damage, speed);
-        this.heroX = x;
-        this.heroY = y;
+    public Hero(Texture rightTurn, Texture leftTurn, Vector2 vector, float width, float height, int health, int defence, int damage, float speed) {
+        super(rightTurn, leftTurn, vector, health, damage, defence, speed);
+        this.heroX = vector.x;
+        this.heroY = vector.y;
         this.heroWidth = width;
         this.heroHeight = height;
 
-        playerRightTexture = new Texture(Gdx.files.internal(rightTexturePath));
-        playerLeftTexture = new Texture(Gdx.files.internal(leftTexturePath));
+        playerRightTexture = rightTurn;
+        playerLeftTexture = leftTurn;
 
         currentRegion = new TextureRegion(playerRightTexture);
 

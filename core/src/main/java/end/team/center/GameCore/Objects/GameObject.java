@@ -1,13 +1,18 @@
 package end.team.center.GameCore.Objects;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class GameObject extends Actor {
-    Texture texture;
+    protected Vector2 vector;
+    public GameObject(Vector2 vector) {
 
-    public GameObject(Texture texture) {
-        this.texture = texture;
     }
-    protected int x, y;
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+    }
 }
