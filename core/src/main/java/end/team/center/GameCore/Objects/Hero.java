@@ -1,13 +1,15 @@
-package end.team.center.GameCore.Objects;
+package end.team.center.Screens.Game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class Hero extends Friendly {
+public class Hero extends Actor {
+
+    private int hp;
+    private float speed;
     private float heroWidth;
     private float heroHeight;
     public float heroX;
@@ -17,15 +19,16 @@ public class Hero extends Friendly {
     private Texture playerLeftTexture;
     private TextureRegion currentRegion;
 
-    public Hero(Texture rightTurn, Texture leftTurn, Vector2 vector, float width, float height, int health, int defence, int damage, float speed) {
-        super(rightTurn, leftTurn, vector, health, damage, defence, speed);
-        this.heroX = vector.x;
-        this.heroY = vector.y;
+    public Hero(float x, float y, float width, float height, int hp, float speed, String rightTexturePath, String leftTexturePath) {
+        this.hp = hp;
+        this.speed = speed;
+        this.heroX = x;
+        this.heroY = y;
         this.heroWidth = width;
         this.heroHeight = height;
 
-        playerRightTexture = rightTurn;
-        playerLeftTexture = leftTurn;
+        playerRightTexture = new Texture(Gdx.files.internal(rightTexturePath));
+        playerLeftTexture = new Texture(Gdx.files.internal(leftTexturePath));
 
         currentRegion = new TextureRegion(playerRightTexture);
 
@@ -33,6 +36,7 @@ public class Hero extends Friendly {
         setPosition(x, y);
         setBounds(x, y, width, height);
     }
+
     public void move(float deltaX, float deltaY, float delta) {
         heroX += deltaX * speed * delta;
         heroY += deltaY * speed * delta;
@@ -42,8 +46,11 @@ public class Hero extends Friendly {
 
         setPosition(heroX, heroY);
 
-        if      (deltaX > 0) currentRegion.setRegion(playerRightTexture);
-        else if (deltaX < 0) currentRegion.setRegion(playerLeftTexture);
+        if (deltaX > 0) {
+            currentRegion.setRegion(playerRightTexture);
+        } else if (deltaX < 0) {
+            currentRegion.setRegion(playerLeftTexture);
+        }
     }
 
     @Override
