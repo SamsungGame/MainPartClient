@@ -13,8 +13,8 @@ import end.team.center.Zone;
 import end.team.center.MyGame;
 
 public class FieldScreen implements Screen {
-    private static final int fieldX = 2000; // Размер поля по X
-    private static final int fieldY = 2000; // Размер поля по Y
+    private static final int fieldX = 20000; // Размер поля по X
+    private static final int fieldY = 20000; // Размер поля по Y
     private static final int cellSize = 1; // Размер клетки для отображения
     private final float centerX = fieldX / 2f;
     private final float centerY = fieldY / 2f;
@@ -123,8 +123,8 @@ public class FieldScreen implements Screen {
                 int x;
                 int y;
                 while (true) {
-                    x = random.nextInt(20000 - size);
-                    y = random.nextInt(20000 - size);
+                    x = random.nextInt(fieldX - size);
+                    y = random.nextInt(fieldY - size);
                     boolean correct = true;
                     for (Zone zone : zones) {
                         if (x < zone.x + zone.size && x + size > zone.x && y < zone.y + zone.size && y + size > zone.y) {
@@ -150,8 +150,8 @@ public class FieldScreen implements Screen {
             int x;
             int y;
             while (true) {
-                x = random.nextInt(20000 - size);
-                y = random.nextInt(20000 - size);
+                x = random.nextInt(fieldX - size);
+                y = random.nextInt(fieldY - size);
                 boolean correct = true;
                 for (Zone zone : zones) {
                     if (x < zone.x + zone.size && x + size > zone.x && y < zone.y + zone.size && y + size > zone.y) {
