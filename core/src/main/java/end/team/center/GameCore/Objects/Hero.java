@@ -9,9 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 public class Hero extends Friendly {
     private float heroWidth;
     private float heroHeight;
-
-    private Texture playerRightTexture;
-    private Texture playerLeftTexture;
     private TextureRegion currentRegion;
 
     public Hero(Texture rightTurn, Texture leftTurn, Vector2 vector, float width, float height, int health, int damage, int defence, float speed) {
@@ -19,10 +16,7 @@ public class Hero extends Friendly {
         this.heroWidth = width;
         this.heroHeight = height;
 
-        playerRightTexture = rightTurn;
-        playerLeftTexture = leftTurn;
-
-        currentRegion = new TextureRegion(playerRightTexture);
+        currentRegion = new TextureRegion(rightTurn);
 
         setSize(width, height);
         setPosition(vector.x, vector.y);
@@ -39,9 +33,9 @@ public class Hero extends Friendly {
         setPosition(vector.x, vector.y);
 
         if (deltaX > 0) {
-            currentRegion.setRegion(playerRightTexture);
+            currentRegion.setRegion(rightTurn);
         } else if (deltaX < 0) {
-            currentRegion.setRegion(playerLeftTexture);
+            currentRegion.setRegion(leftTurn);
         }
     }
 
@@ -51,7 +45,7 @@ public class Hero extends Friendly {
     }
 
     public void dispose() {
-        playerRightTexture.dispose();
-        playerLeftTexture.dispose();
+        rightTurn.dispose();
+        leftTurn.dispose();
     }
 }

@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class GameObject extends Actor {
     protected Vector2 vector;
     public GameObject(Vector2 vector) {
-
+        this.vector = vector;
     }
 
     @Override
