@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -21,13 +22,13 @@ import end.team.center.GameCore.HelpsClass.PowerElement;
 
 public class PowerSelectScreen implements Screen {
     /*
-    Предпологается что png у PowerElements равен 180 на 180 пикселей
+    Предпологается что png у PowerElements равен 130 на 130 пикселей (картинка (.png) может быть ЛЮБОГО КВАДРАТНОГО размера)
      */
     private Stage stage;
     private SpriteBatch batch;
     private PowerElement[] buffs = new PowerElement[3];
     private Texture selectBuff, unSelectBuff;
-    private Sprite portal;
+    private Image portal;
     private Table table;
     private boolean buffSelected = false;
     private int distance = 30;
@@ -40,9 +41,7 @@ public class PowerSelectScreen implements Screen {
         selectBuff   = new Texture(Gdx.files.internal("UI/GameUI/SelectPowerUI/selectPower.png"));
         unSelectBuff = new Texture(Gdx.files.internal("UI/GameUI/SelectPowerUI/power.png"));
 
-        portal = new Sprite(new Texture(Gdx.files.internal("UI/GameUI/SelectPowerUI/portal.png")));
-        portal.setPosition((float) (Gdx.graphics.getWidth() / 2) - (portal.getWidth() / 2),
-            (float) Gdx.graphics.getHeight() / 2.5f);
+        portal = new Image(new Texture(Gdx.files.internal("UI/GameUI/SelectPowerUI/portal.png")));
 
         batch = new SpriteBatch();
         buffs[0] = new PowerElement(unSelectBuff, portal);
@@ -75,17 +74,42 @@ public class PowerSelectScreen implements Screen {
             }
         });
 
+        buffs[0].setSize(130, 130);
+        buffs[1].setSize(130, 130);
+        buffs[2].setSize(130, 130);
+
         // Создаем таблицу
         table = new Table();
         table.setFillParent(true);
-        table.center().bottom();
+        table.center();
 
         // Добавляем изображения в таблицу с отступами
-        table.add(buffs[0]).padRight(distance).height(180).width(180); // Отступ справа от первого спрайта
-        table.add(buffs[1]).padRight(distance).height(180).width(180); // Отступ справа от второго спрайта
-        table.add(buffs[2]).height(180).width(180); // Последний спрайт без отступа
+        table.add(new Actor())
+            .padRight(0)
+            .height(portal.getHeight()).width(portal.getWidth());
+
+        table.add(portal)
+            .padRight(0)
+            .height(portal.getHeight()).width(portal.getWidth())
+            .pad(60);
+
+        table.add(new Actor())
+            .padRight(0)
+            .height(portal.getHeight()).width(portal.getWidth())
+            .row();
+
+        table.add(buffs[0])
+            .height(130).width(130);
+
+        table.add(buffs[1])
+            .height(130).width(130)
+            .fillX().center();
+
+        table.add(buffs[2])
+            .height(130).width(130);
 
         stage.addActor(table);
+
         Gdx.input.setInputProcessor(stage); // Устанавливаем обработчик ввода
     }
 
@@ -96,10 +120,6 @@ public class PowerSelectScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 
         batch.begin();
-//        for (PowerElement pe: buffs) {
-//            pe.draw(batch, 1);
-//        }
-        portal.draw(batch);
         batch.end();
         stage.draw();
     }
