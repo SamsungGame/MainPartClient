@@ -15,4 +15,12 @@ public class GameObject extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
     }
+
+    public float getX() {
+        return vector.x;
+    }
+
+    public float getY() {
+        return vector.y;
+    }
 }

@@ -4,9 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import end.team.center.GameCore.Objects.Hero;
+import end.team.center.GameCore.UIElements.TouchpadClass;
 
 public class GameScreen implements Screen {
 
@@ -26,13 +30,14 @@ public class GameScreen implements Screen {
 
         // Создаём героя с нужными параметрами и добавляем на сцену
         hero = new Hero(
-            Gdx.graphics.getWidth() / 2f - 70,
-            Gdx.graphics.getHeight() / 2f - 80,
+            new Texture("UI/GameUI/Hero/heroRight.png"),
+            new Texture("UI/GameUI/Hero/heroLeft.png"),
+            new Vector2(Gdx.graphics.getWidth() / 2f - 70, Gdx.graphics.getHeight() / 2f - 80),
             140, 160,
             100,
-            500,
-            "UI/GameUI/Hero/heroRight.png",
-            "UI/GameUI/Hero/heroLeft.png"
+            1,
+            0,
+            500
         );
         stage.addActor(hero);
     }
@@ -55,7 +60,7 @@ public class GameScreen implements Screen {
 
 
         hero.move(moveX, moveY, delta);
-        hero.setPosition(hero.heroX, hero.heroY);
+        hero.setPosition(hero.getX(), hero.getY());
 
         stage.draw();
     }
