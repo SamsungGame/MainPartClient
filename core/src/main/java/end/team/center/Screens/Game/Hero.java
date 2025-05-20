@@ -79,6 +79,64 @@ public class Hero extends Actor {
         "UI/GameUI/Hero/heroRight_down.png",
     };
 
+    private  String[] rightFramesAttackKnife = {
+
+
+        "UI/GameUI/Hero/heroRight1.png",
+        "UI/GameUI/Hero/heroRight_down.png",
+        "UI/GameUI/Hero/heroRight_down.png",
+
+        "UI/GameUI/Hero/heroRight.png",
+        "UI/GameUI/Hero/heroRight2_down.png",
+        "UI/GameUI/Hero/heroRight2_down.png",
+
+        "UI/GameUI/Hero/heroRight2.png",
+        "UI/GameUI/Hero/heroRight_down.png",
+        "UI/GameUI/Hero/heroRight_down.png",
+
+        "UI/GameUI/Hero/heroRight.png",
+        "UI/GameUI/Hero/heroRight1_down.png",
+        "UI/GameUI/Hero/heroRight1_down.png",
+
+
+    };
+
+    private String[] leftFramesKnife = {
+
+        "UI/GameUI/Hero/heroLeftKnife1.png",
+        "UI/GameUI/Hero/heroLeftKnife_down.png",
+        "UI/GameUI/Hero/heroLeftKnife_down.png",
+
+        "UI/GameUI/Hero/heroLeftKnife.png",
+        "UI/GameUI/Hero/heroLeftKnife2_down.png",
+        "UI/GameUI/Hero/heroLeftKnife2_down.png",
+
+        "UI/GameUI/Hero/heroLeftKnife2.png",
+        "UI/GameUI/Hero/heroLeftKnife_down.png",
+        "UI/GameUI/Hero/heroLeftKnife_down.png",
+
+        "UI/GameUI/Hero/heroLeftKnife.png",
+        "UI/GameUI/Hero/heroLeftKnife1_down.png",
+        "UI/GameUI/Hero/heroLeftKnife1_down.png",
+
+
+    };
+    private String[] leftStayKnife = {
+        "UI/GameUI/Hero/heroLeftKnife.png",
+        "UI/GameUI/Hero/heroLeftKnife_down.png",
+    };
+    private String[] rightStayKnife = {
+        "UI/GameUI/Hero/heroRightKnife.png",
+        "UI/GameUI/Hero/heroRightKnife_down.png",
+    };
+    private String[] leftStayAttackKnife = {
+        "UI/GameUI/Hero/heroLeftAttackKnife.png"
+    };
+
+    private String[] rightStayAttackKnife = {
+        "UI/GameUI/Hero/heroRightAttackKnife.png"
+    };
+
 
     public Hero(float x, float y, float width, float height, int hp, float speed,
                 String rightTexturePath, String leftTexturePath) {

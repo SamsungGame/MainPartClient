@@ -13,8 +13,7 @@ public class Center extends Game {
         // Создание спрайт-объекта, который будет использоваться для отрисовки
         batch = new SpriteBatch();
 
-        // Устанавливаем начальный экран
-        this.setScreen(new MainMenuScreen());
+
     }
 
     @Override
