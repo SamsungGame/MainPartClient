@@ -35,7 +35,6 @@ public class GameScreen implements Screen {
         touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth()-500, 200, false, "attack");
         stage.addActor(touchpadAttack);
 
-        // Создаём героя с нужными параметрами и добавляем на сцену
         hero = new Hero(
             Gdx.graphics.getWidth() / 2f - 70,
             Gdx.graphics.getHeight() / 2f - 80,
