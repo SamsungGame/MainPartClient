@@ -141,11 +141,11 @@ public class FieldScreen implements Screen {
         }
 
         for (int i = 0; i < 200; i++) {
-            int size = random.nextInt(50);
+            int size = random.nextInt(100);
             if (size == 0) {
-                size = 50;
+                size = 100;
             }
-            size += 50;
+            size += 100;
             char symbol = '?';
             int x;
             int y;
