@@ -7,14 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-import end.team.center.animations.HeroAnimations;
-
 public class Hero extends Actor {
 
-
-    private static final float BOUNDARY_PADDING = 100f;
-    private float WORLD_WIDTH;
-    private float WORLD_HEIGHT;
     private int hp;
     private float speed;
     private float heroWidth;
@@ -33,11 +27,61 @@ public class Hero extends Actor {
     private float stateTime;
     private boolean movingRight = true;
     private boolean isMoving = false;
+    private  String[] rightFrames = {
 
-    private HeroAnimations heroAnimations = new HeroAnimations();
+
+        "UI/GameUI/Hero/heroRight1.png",
+        "UI/GameUI/Hero/heroRight_down.png",
+        "UI/GameUI/Hero/heroRight_down.png",
+
+        "UI/GameUI/Hero/heroRight.png",
+        "UI/GameUI/Hero/heroRight2_down.png",
+        "UI/GameUI/Hero/heroRight2_down.png",
+
+        "UI/GameUI/Hero/heroRight2.png",
+        "UI/GameUI/Hero/heroRight_down.png",
+        "UI/GameUI/Hero/heroRight_down.png",
+
+        "UI/GameUI/Hero/heroRight.png",
+        "UI/GameUI/Hero/heroRight1_down.png",
+        "UI/GameUI/Hero/heroRight1_down.png",
+
+
+    };
+
+    private String[] leftFrames = {
+
+        "UI/GameUI/Hero/heroLeft1.png",
+        "UI/GameUI/Hero/heroLeft_down.png",
+        "UI/GameUI/Hero/heroLeft_down.png",
+
+        "UI/GameUI/Hero/heroLeft.png",
+        "UI/GameUI/Hero/heroLeft2_down.png",
+        "UI/GameUI/Hero/heroLeft2_down.png",
+
+        "UI/GameUI/Hero/heroLeft2.png",
+        "UI/GameUI/Hero/heroLeft_down.png",
+        "UI/GameUI/Hero/heroLeft_down.png",
+
+        "UI/GameUI/Hero/heroLeft.png",
+        "UI/GameUI/Hero/heroLeft1_down.png",
+        "UI/GameUI/Hero/heroLeft1_down.png",
+
+
+    };
+    private String[] leftStay = {
+        "UI/GameUI/Hero/heroLeft.png",
+        "UI/GameUI/Hero/heroLeft_down.png",
+    };
+
+    private String[] rightStay = {
+        "UI/GameUI/Hero/heroRight.png",
+        "UI/GameUI/Hero/heroRight_down.png",
+    };
+
 
     public Hero(float x, float y, float width, float height, int hp, float speed,
-                String rightTexturePath, String leftTexturePath, float WORLD_WIDTH, float WORLD_HEIGHT) {
+                String rightTexturePath, String leftTexturePath) {
         this.hp = hp;
         this.speed = speed;
         this.heroX = x;
@@ -45,8 +89,6 @@ public class Hero extends Actor {
         this.heroWidth = width;
         this.heroHeight = height;
         this.stateTime = 0f;
-        this.WORLD_WIDTH = WORLD_WIDTH;
-        this.WORLD_HEIGHT = WORLD_HEIGHT;
 
         playerRightTexture = new Texture(Gdx.files.internal(rightTexturePath));
         playerLeftTexture = new Texture(Gdx.files.internal(leftTexturePath));
@@ -57,21 +99,21 @@ public class Hero extends Actor {
         setPosition(x, y);
         setBounds(x, y, width, height);
 
-        TextureRegion[] rightFramesArray = new TextureRegion[heroAnimations.rightFrames.length];
-        TextureRegion[] leftFramesArray = new TextureRegion[heroAnimations.leftFrames.length];
+        TextureRegion[] rightFramesArray = new TextureRegion[rightFrames.length];
+        TextureRegion[] leftFramesArray = new TextureRegion[leftFrames.length];
 
-        TextureRegion[] rightStayArray = new TextureRegion[heroAnimations.rightStay.length];
-        TextureRegion[] leftStayArray = new TextureRegion[heroAnimations.leftStay.length];
+        TextureRegion[] rightStayArray = new TextureRegion[rightStay.length];
+        TextureRegion[] leftStayArray = new TextureRegion[leftStay.length];
 
 
-        for (int i = 0; i < heroAnimations.rightFrames.length; i++) {
-            rightFramesArray[i] = new TextureRegion(new Texture(heroAnimations.rightFrames[i]));
-            leftFramesArray[i] = new TextureRegion(new Texture(heroAnimations.leftFrames[i]));
+        for (int i = 0; i < rightFrames.length; i++) {
+            rightFramesArray[i] = new TextureRegion(new Texture(rightFrames[i]));
+            leftFramesArray[i] = new TextureRegion(new Texture(leftFrames[i]));
         }
 
-        for (int i = 0; i < heroAnimations.rightStay.length; i++) {
-            rightStayArray[i] = new TextureRegion(new Texture(heroAnimations.rightStay[i]));
-            leftStayArray[i] = new TextureRegion(new Texture(heroAnimations.leftStay[i]));
+        for (int i = 0; i < rightStay.length; i++) {
+            rightStayArray[i] = new TextureRegion(new Texture(rightStay[i]));
+            leftStayArray[i] = new TextureRegion(new Texture(leftStay[i]));
         }
 
 
@@ -85,32 +127,25 @@ public class Hero extends Actor {
     public void move(float deltaX, float deltaY, float delta) {
         isMoving = deltaX != 0 || deltaY != 0;
 
-        float potentialX = heroX + deltaX * speed * delta;
-        float potentialY = heroY + deltaY * speed * delta;
+        heroX += deltaX * speed * delta;
+        heroY += deltaY * speed * delta;
 
-        if (potentialX < BOUNDARY_PADDING) {
-            potentialX = BOUNDARY_PADDING;
-        } else if (potentialX + heroWidth > WORLD_WIDTH - BOUNDARY_PADDING) {
-            potentialX = WORLD_WIDTH - BOUNDARY_PADDING - heroWidth;
-        }
+        heroX = Math.max(0, Math.min(heroX, Gdx.graphics.getWidth() - heroWidth));
+        heroY = Math.max(0, Math.min(heroY, Gdx.graphics.getHeight() - heroHeight));
 
-        if (potentialY < BOUNDARY_PADDING) {
-            potentialY = BOUNDARY_PADDING;
-        } else if (potentialY + heroHeight > WORLD_HEIGHT - BOUNDARY_PADDING) {
-            potentialY = WORLD_HEIGHT - BOUNDARY_PADDING - heroHeight;
-        }
-
-        heroX = potentialX;
-        heroY = potentialY;
         setPosition(heroX, heroY);
 
         if (deltaX > 0) {
             movingRight = true;
-        } else if (deltaX < 0) {
+
+        } else if(deltaX < 0){
             movingRight = false;
         }
 
+
         stateTime += delta;
+
+
     }
 
     @Override
