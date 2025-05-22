@@ -3,96 +3,105 @@ package end.team.center.Screens.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import end.team.center.GameCore.Objects.Hero;
-import end.team.center.Screens.Game.TouchpadClass;
+import end.team.center.GameCore.UIElements.TouchpadClass;
+import end.team.center.logic.GameCamera;
 
 public class GameScreen implements Screen {
 
-    private Stage stage;
-    private OrthographicCamera camera;
-    private Viewport viewport;
     private TouchpadClass touchpadMove, touchpadAttack;
     private Hero hero;
+    private Stage worldStage;
+    private Stage uiStage;
+    private Viewport worldViewport;
+    private Viewport uiViewport;
+
+    private GameCamera gameCamera;
+    private static final float WORLD_WIDTH = 5000;
+    private static final float WORLD_HEIGHT = 5000;
+
 
 
     public GameScreen() {
 
-        camera = new OrthographicCamera();
-        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
+        gameCamera = new GameCamera(WORLD_WIDTH, WORLD_HEIGHT);
 
-        stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
+        worldViewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCamera.getCamera());
+        worldStage = new Stage(worldViewport);
 
+        uiViewport = new ScreenViewport();
+        uiStage = new Stage(uiViewport);
+        Gdx.input.setInputProcessor(uiStage);
 
 
         touchpadMove = new TouchpadClass(200, 200, false, "move");
-        stage.addActor(touchpadMove);
-        touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth()-500, 200, false, "attack");
-        stage.addActor(touchpadAttack);
+        uiStage.addActor(touchpadMove);
 
-        // Создаём героя с нужными параметрами и добавляем на сцену
+        touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth()-500, 200, false, "attack");
+        uiStage.addActor(touchpadAttack);
+
         hero = new Hero(
-            new Texture("UI/GameUI/Hero/heroRight.png"),
-            new Texture("UI/GameUI/Hero/heroLeft.png"),
-            new Vector2(Gdx.graphics.getWidth() / 2f - 70, Gdx.graphics.getHeight() / 2f - 80),
+            new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
             140, 160,
-            100,
-            5,
-            0,
-            500
+                3, 300,
+                "UI/GameUI/Hero/heroRight.png",
+                WORLD_WIDTH, WORLD_HEIGHT
+
         );
-        stage.addActor(hero);
+        worldStage.addActor(hero);
+
+        // Устанавливаем изначальную позицию камеры
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(256, 256, 256, 3);
+        Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        stage.act(delta);
-
-        touchpadMove.TouchpadLogic();
-        touchpadMove.touchpadSetBounds();
-
-        touchpadAttack.TouchpadLogic();
-        touchpadAttack.touchpadSetBounds();
 
         float moveX = touchpadMove.getKnobPercentX();
         float moveY = touchpadMove.getKnobPercentY();
 
-
         hero.move(moveX, moveY, delta);
 
-        stage.draw();
+        gameCamera.updateCameraPosition(hero.getX(), hero.getY(), hero.getWidth(), hero.getHeight());
+
+        worldStage.act(delta);
+        worldStage.draw();
+
+
+
+        touchpadMove.TouchpadLogic(uiStage);
+        touchpadAttack.TouchpadLogic(uiStage);
+
+        touchpadMove.touchpadSetBounds();
+        touchpadAttack.touchpadSetBounds();
+
+        uiStage.act(delta);
+        uiStage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+        // Сообщаем об изменении размеров камере и вьюпортам
     }
 
     @Override
     public void dispose() {
-        stage.dispose();
+        worldStage.dispose();
+        uiStage.dispose();
         touchpadMove.dispose();
+        touchpadAttack.dispose();
         hero.dispose();
     }
 
-    @Override
-    public void show() {}
-    @Override
-    public void pause() {}
-    @Override
-    public void resume() {}
-    @Override
-    public void hide() {}
+    @Override public void show() {}
+    @Override public void pause() {}
+    @Override public void resume() {}
+    @Override public void hide() {}
 }

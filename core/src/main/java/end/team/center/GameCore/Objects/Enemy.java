@@ -1,6 +1,5 @@
 package end.team.center.GameCore.Objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
@@ -9,6 +8,7 @@ import end.team.center.Screens.Game.GameScreen;
 
 public class Enemy extends Entity {
     protected int level;
+    private Hero hero;
 
     public Enemy(Texture rightTurn, Texture leftTurn, Vector2 vector, int health, int damage, int defence, float speed, int level) {
         super(rightTurn, leftTurn, vector, health, damage, defence, speed);
@@ -24,8 +24,7 @@ public class Enemy extends Entity {
     public void move(float delta) {
         super.move(delta);
 
-        // Вычисляем вектор направления
-        Vector2 direction = GameScreen.hero.vector.sub(vector);
+        Vector2 direction = hero.position.sub(vector);
 
         // Нормализуем вектор, чтобы сделать его единичной длины
         if (direction.len() > 0) {
