@@ -23,7 +23,11 @@ public class Entity extends GameObject {
         this.speed = speed;
     }
 
-    public void move() {
+    public void act(float delta) {
+        move(delta);
+    }
+
+    public void move(float delta) {
 
     }
 

@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
+import end.team.center.Screens.Game.GameScreen;
+
 public class Enemy extends Entity {
     protected int level;
 
@@ -19,8 +21,22 @@ public class Enemy extends Entity {
     }
 
     @Override
-    public void move() {
-        super.move();
+    public void move(float delta) {
+        super.move(delta);
+
+        // Вычисляем вектор направления
+        Vector2 direction = GameScreen.hero.vector.sub(vector);
+
+        // Нормализуем вектор, чтобы сделать его единичной длины
+        if (direction.len() > 0) {
+            direction.nor(); // Нормализуем
+
+            // Обновляем позицию врага
+            vector.add(direction.scl(speed * delta));
+        }
+
+        // Устанавливаем новую позицию врага
+        setPosition(vector.x, vector.y);
     }
 
     @Override

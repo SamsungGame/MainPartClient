@@ -9,8 +9,4 @@ public class Friendly extends Entity {
         super(rightTurn, leftTurn, vector, health, damage, defence, speed);
     }
 
-    @Override
-    public void move() {
-        super.move();
-    }
 }
