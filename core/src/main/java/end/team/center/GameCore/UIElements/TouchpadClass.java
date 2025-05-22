@@ -1,4 +1,4 @@
-package end.team.center.GameCore.UIElements;
+package end.team.center.Screens.Game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -45,24 +45,27 @@ public class TouchpadClass extends Touchpad {
         return style;
     }
     public void TouchpadLogic() {
-        if(touchpads.get(0).type.equals("move")) {
-            if (Gdx.input.isTouched()) {
-                float touchX = Gdx.input.getX();
-                float touchY = Gdx.graphics.getHeight() - Gdx.input.getY();
 
-                if (!touchpads.get(0).isTouchpadActive) {
-                    if (touchX >= this.x - touchSize / 2 && touchX <= this.x + touchSize / 2 &&
-                        touchY >= this.y - touchSize / 2 && touchY <= this.y + touchSize / 2) {
-                        touchpads.get(0).isTouchpadActive = true;
-                    } else if (touchX < (float) Gdx.graphics.getWidth() / 2 - touchSize / 2){
-                        touchpads.get(0).x = touchX;
-                        touchpads.get(0).y = touchY;
+
+                if(touchpads.get(0).type.equals("move")) {
+                    if (Gdx.input.isTouched()) {
+                        float touchX = Gdx.input.getX();
+                        float touchY = Gdx.graphics.getHeight() - Gdx.input.getY();
+
+                        if (!touchpads.get(0).isTouchpadActive) {
+                            if (touchX >= this.x - touchSize / 2 && touchX <= this.x + touchSize / 2 &&
+                                touchY >= this.y - touchSize / 2 && touchY <= this.y + touchSize / 2) {
+                                touchpads.get(0).isTouchpadActive = true;
+                            } else if(touchX < (float) Gdx.graphics.getWidth() /2-touchSize/2){
+                                touchpads.get(0).x = touchX;
+                                touchpads.get(0).y = touchY;
+                            }
+                        }
+                    }else {
+                        touchpads.get(0).isTouchpadActive = false;
                     }
+
                 }
-            } else {
-                touchpads.get(0).isTouchpadActive = false;
-            }
-        }
 
         if(touchpads.get(1).type.equals("attack")) {
             if (Gdx.input.isTouched()) {
@@ -73,24 +76,27 @@ public class TouchpadClass extends Touchpad {
                     if (touchX >= this.x - touchSize / 2 && touchX <= this.x + touchSize / 2 &&
                         touchY >= this.y - touchSize / 2 && touchY <= this.y + touchSize / 2) {
                         touchpads.get(1).isTouchpadActive = true;
-                    } else if (touchX > (float) Gdx.graphics.getWidth() / 2 + touchSize / 2){
+                    } else if(touchX > (float) Gdx.graphics.getWidth() /2+touchSize/2){
                         touchpads.get(1).x = touchX;
                         touchpads.get(1).y = touchY;
                     }
                 }
-            } else {
+            }else {
                 touchpads.get(1).isTouchpadActive = false;
             }
 
         }
-    }
+        }
 
     public void touchpadSetBounds() {
+
         if(xp != this.x && yp != this.y) {
-            setBounds(this.x - touchSize / 2, this.y - touchSize / 2, touchSize, touchSize);
-            xp = x + 1;
-            yp = y + 1;
+            setBounds(this.x-touchSize/2, this.y-touchSize/2, touchSize, touchSize);
+            xp = x+1;
+            yp = y+1;
         }
+
+
     }
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -98,6 +104,5 @@ public class TouchpadClass extends Touchpad {
     }
 
     public void dispose() {
-
     }
 }
