@@ -7,7 +7,7 @@ import end.team.center.GameCore.Animations.CharacterAnimation;
 
 public enum EnemyType {
     // Типы существующих врагов
-    Owl(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png")), CharacterAnimation.Owl, 5, 120, 140, 0, 1, 1, 200f);
+    Owl(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png")), CharacterAnimation.Owl, 120, 140, 5, 0, 1, 1, 200f);
 
     private final Texture texture;
     private final CharacterAnimation anim;

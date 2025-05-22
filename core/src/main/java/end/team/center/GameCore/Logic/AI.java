@@ -6,7 +6,8 @@ import end.team.center.GameCore.Objects.Hero;
 
 public class AI {
     public static Vector2 MoveToPlayer(Hero hero, Vector2 vector, float speed, float delta) {
-        Vector2 direction = hero.getVector().sub(vector);
+        Vector2 target = new Vector2(hero.getVector().x, hero.getVector().y);
+        Vector2 direction = target.sub(vector);
 
         // Нормализуем вектор, чтобы сделать его единичной длины
         if (direction.len() > 0) {

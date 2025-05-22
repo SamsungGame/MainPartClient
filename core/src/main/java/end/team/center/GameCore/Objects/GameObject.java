@@ -24,6 +24,12 @@ public class GameObject extends Actor {
     public Vector2 getVector() {
         return vector;
     }
+    public float getHeight() {
+        return height;
+    }
+    public float getWidth() {
+        return width;
+    }
     public Vector2 getCenterPosition() {
         return new Vector2(vector.x + width / 2f, vector.y + height / 2f);
     }

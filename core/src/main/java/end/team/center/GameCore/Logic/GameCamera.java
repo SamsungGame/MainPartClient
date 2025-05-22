@@ -3,9 +3,11 @@ package end.team.center.GameCore.Logic;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 
 
 public class GameCamera {
+    private Vector2 pos;
 
     private OrthographicCamera camera;
 
@@ -38,7 +40,9 @@ public class GameCamera {
         float cameraX = MathUtils.clamp(heroCenterX, halfScreenWidth, worldWidth - halfScreenWidth);
         float cameraY = MathUtils.clamp(heroCenterY, halfScreenHeight, worldHeight - halfScreenHeight);
 
-        camera.position.set(cameraX, cameraY, 0);
+        pos = new Vector2(cameraX, cameraY);
+
+        camera.position.set(pos.x, pos.y, 0);
         camera.update();
     }
 
@@ -55,5 +59,9 @@ public class GameCamera {
         camera.viewportWidth = width;
         camera.viewportHeight = height;
         camera.update();
+    }
+
+    public Vector2 getVector() {
+        return pos;
     }
 }

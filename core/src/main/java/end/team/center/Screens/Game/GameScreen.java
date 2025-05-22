@@ -98,7 +98,7 @@ public class GameScreen implements Screen {
 
         hero.move(moveX, moveY, delta, false);
 
-        gameCamera.updateCameraPosition(hero.getX(), hero.getY(), hero.getWidth(), hero.getHeight());
+        gameCamera.updateCameraPosition(hero.getVector().x, hero.getVector().y, hero.getWidth(), hero.getHeight());
 
         worldStage.act(delta);
         worldStage.draw();
