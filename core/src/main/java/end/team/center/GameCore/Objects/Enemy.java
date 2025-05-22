@@ -24,7 +24,7 @@ public class Enemy extends Entity {
     public void move(float delta) {
         super.move(delta);
 
-        Vector2 direction = hero.position.sub(vector);
+        Vector2 direction = hero.vector.sub(vector);
 
         // Нормализуем вектор, чтобы сделать его единичной длины
         if (direction.len() > 0) {

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public enum EnemyType {
     // Типы существующих врагов
-    fogFrog(new Texture(Gdx.files.internal("")), new Texture(Gdx.files.internal("")), 5, 0, 1, 1, 400f);
+    Owl(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png")), new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlRight_down.png")), 5, 0, 1, 1, 400f);
 
     private final Texture leftTurn, rightTurn;
     private final int health, defense, damage, level; // Базовые

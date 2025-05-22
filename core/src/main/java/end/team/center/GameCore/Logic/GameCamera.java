@@ -1,8 +1,9 @@
-package end.team.center.logic;
+package end.team.center.GameCore.Logic;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.Gdx;
+
 
 public class GameCamera {
 

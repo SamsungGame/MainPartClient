@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import end.team.center.GameCore.Library.EnemyType;
 import end.team.center.GameCore.Library.Mobs.ForFrog;
@@ -22,7 +23,7 @@ public class Spawner {
         this.poster = poster;
 
         if (countLocation == 0) {
-            canSpawn.add(EnemyType.fogFrog);
+            canSpawn.add(EnemyType.Owl);
 
             timeSpawn = 10 * 1000;
         } // Добавить больше врагов в список, по мере продвижении по локациям
@@ -39,6 +40,7 @@ public class Spawner {
                 }
 
                 poster.post(enemies);
+                System.out.println("Отправка мобов: " + Arrays.toString(enemies));
 
                 try {
                     Thread.sleep(timeSpawn);
@@ -50,7 +52,7 @@ public class Spawner {
     }
 
     private Enemy spawn(EnemyType type) {
-        if (type == EnemyType.fogFrog) {
+        if (type == EnemyType.Owl) {
             return new ForFrog(type, randomCord());
         } else return null;
     }

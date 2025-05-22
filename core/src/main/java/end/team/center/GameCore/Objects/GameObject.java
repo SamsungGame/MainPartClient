@@ -7,10 +7,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class GameObject extends Actor {
     protected Vector2 vector;
-    public GameObject(Vector2 vector) {
+    protected float height, width;
+    public GameObject(Vector2 vector, float height, float width) {
         this.vector = vector;
+        this.width = width;
+        this.height = height;
     }
 
+    public void act(float delta){}
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
