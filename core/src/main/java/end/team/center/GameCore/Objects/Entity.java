@@ -9,12 +9,12 @@ import com.badlogic.gdx.math.Vector2;
 import org.w3c.dom.Text;
 
 import end.team.center.GameCore.Animations.AnimationsHero;
+import end.team.center.GameCore.Animations.CharacterAnimation;
 
 public class Entity extends GameObject {
 
     private static final float BOUNDARY_PADDING = 100f;
 
-    Texture rightTurn, leftTurn;
     protected int health;
     protected int damage, defence;
     protected float speed;
@@ -28,22 +28,22 @@ public class Entity extends GameObject {
     private Animation<TextureRegion> stayRightAnimation;
     private Animation<TextureRegion> stayLeftAnimation;
 
-    public Entity(Texture rightTurn, Texture leftTurn, Vector2 vector, float width, float height, int health, int damage, int defence, float speed) {
-        super(vector, width, height);
-        this.rightTurn = rightTurn;
-        this.leftTurn = leftTurn;
+    public Entity(Texture texture, CharacterAnimation anim, Vector2 vector, float width, float height, int health, int damage, int defence, float speed, float worldHeight, float worldWidth) {
+        super(texture, vector, width, height);
         this.health = health;
         this.damage = damage;
         this.defence = defence;
         this.speed = speed;
+        this.worldWidth = worldWidth;
+        this.worldHeight = worldHeight;
 
         stateTime = 0;
 
         // Загрузка кадров анимации
-        TextureRegion[] rightFramesArray = new TextureRegion[AnimationsHero.rightFrames.length];
-        TextureRegion[] leftFramesArray  = new TextureRegion[heroAnimations.leftFrames.length];
-        TextureRegion[] rightStayArray   = new TextureRegion[heroAnimations.rightStay.length];
-        TextureRegion[] leftStayArray    = new TextureRegion[heroAnimations.leftStay.length];
+        TextureRegion[] rightFramesArray = anim.getRightWalk();
+        TextureRegion[] leftFramesArray  = anim.getLeftWalk();
+        TextureRegion[] rightStayArray   = anim.getRightStay();
+        TextureRegion[] leftStayArray    = anim.getLeftStay();
 
         walkRightAnimation = new Animation<>(0.13f, rightFramesArray);
         walkLeftAnimation = new Animation<>(0.13f, leftFramesArray);
@@ -53,23 +53,27 @@ public class Entity extends GameObject {
 
     @Override
     public void act(float delta) {
-        move();
     }
 
-    public void move(float deltaX, float deltaY, float delta) {
+    public void move(float deltaX, float deltaY, float delta, boolean isMob) {
         isMoving = deltaX != 0 || deltaY != 0;
 
-        Vector2 potentialPosition = new Vector2(vector.x + deltaX * speed * delta,
-                vector.y + deltaY * speed * delta);
+        if (!isMob) {
+            Vector2 potentialPosition = new Vector2(vector.x + deltaX * speed * delta,
+                    vector.y + deltaY * speed * delta);
 
-        // Ограничения по границам мира
-        potentialPosition.x = Math.max(BOUNDARY_PADDING,
-                Math.min(potentialPosition.x, worldWidth - BOUNDARY_PADDING - width));
-        potentialPosition.y = Math.max(BOUNDARY_PADDING,
-                Math.min(potentialPosition.y, worldHeight - BOUNDARY_PADDING - height));
+            // Ограничения по границам мира
+            potentialPosition.x = Math.max(BOUNDARY_PADDING,
+                    Math.min(potentialPosition.x, worldWidth - BOUNDARY_PADDING - width));
+            potentialPosition.y = Math.max(BOUNDARY_PADDING,
+                    Math.min(potentialPosition.y, worldHeight - BOUNDARY_PADDING - height));
 
-        vector.set(potentialPosition);
-        setPosition(vector.x, vector.y);
+            vector.set(potentialPosition);
+            setPosition(vector.x, vector.y);
+        } else {
+            vector.set(new Vector2(deltaX, deltaY));
+            setPosition(vector.x, vector.y);
+        }
 
         if (deltaX > 0) {
             mRight = true;
@@ -78,6 +82,10 @@ public class Entity extends GameObject {
         }
 
         stateTime += delta;
+    }
+
+    public float getSpeed() {
+        return speed;
     }
 
     @Override
@@ -96,5 +104,23 @@ public class Entity extends GameObject {
         }
 
         batch.draw(currentFrame, vector.x, vector.y, getWidth(), getHeight());
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        for (TextureRegion region : walkRightAnimation.getKeyFrames()) {
+            region.getTexture().dispose();
+        }
+        for (TextureRegion region : walkLeftAnimation.getKeyFrames()) {
+            region.getTexture().dispose();
+        }
+        for (TextureRegion region : stayRightAnimation.getKeyFrames()) {
+            region.getTexture().dispose();
+        }
+        for (TextureRegion region : stayLeftAnimation.getKeyFrames()) {
+            region.getTexture().dispose();
+        }
     }
 }

@@ -6,13 +6,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class AnimationsOwl {
 
-    public TextureRegion[] leftTurn = new TextureRegion[] {
+    public static final TextureRegion[] leftTurn = new TextureRegion[] {
         new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png"))),
         new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_midle.png"))),
         new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_up.png")))
     };
 
-    public TextureRegion[] rightTurn = new TextureRegion[] {
+    public static final TextureRegion[] rightTurn = new TextureRegion[] {
         new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlRight_down.png"))),
         new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlRight_midle.png"))),
         new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlRight_up.png")))

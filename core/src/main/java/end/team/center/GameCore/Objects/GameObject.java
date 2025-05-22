@@ -2,29 +2,41 @@ package end.team.center.GameCore.Objects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class GameObject extends Actor {
+    protected Texture texture;
     protected Vector2 vector;
     protected float height, width;
-    public GameObject(Vector2 vector, float height, float width) {
+    public GameObject(Texture texture, Vector2 vector, float height, float width) {
+        this.texture = texture;
         this.vector = vector;
         this.width = width;
         this.height = height;
+
+        setSize(width, height);
+        setPosition(vector.x, vector.y);
+        setBounds(vector.x, vector.y, width, height);
     }
 
-    public void act(float delta){}
+    public Vector2 getVector() {
+        return vector;
+    }
+    public Vector2 getCenterPosition() {
+        return new Vector2(vector.x + width / 2f, vector.y + height / 2f);
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+    }
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
     }
+    public void dispose() {
 
-    public float getX() {
-        return vector.x;
-    }
-
-    public float getY() {
-        return vector.y;
     }
 }

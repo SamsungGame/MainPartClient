@@ -4,14 +4,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
+import end.team.center.GameCore.Animations.CharacterAnimation;
 import end.team.center.Screens.Game.GameScreen;
 
 public class Enemy extends Entity {
     protected int level;
-    private Hero hero;
 
-    public Enemy(Texture rightTurn, Texture leftTurn, Vector2 vector, int health, int damage, int defence, float speed, int level) {
-        super(rightTurn, leftTurn, vector, health, damage, defence, speed);
+    public Enemy(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, float worldHeight, float worldWidth) {
+        super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
         this.level = level;
     }
 
@@ -21,25 +21,22 @@ public class Enemy extends Entity {
     }
 
     @Override
-    public void move(float delta) {
-        super.move(delta);
+    public void move(float deltaX, float deltaY, float delta, boolean isMob) {
+        super.move(deltaX, deltaY, delta, isMob);
+    }
 
-        Vector2 direction = hero.vector.sub(vector);
-
-        // Нормализуем вектор, чтобы сделать его единичной длины
-        if (direction.len() > 0) {
-            direction.nor(); // Нормализуем
-
-            // Обновляем позицию врага
-            vector.add(direction.scl(speed * delta));
-        }
-
-        // Устанавливаем новую позицию врага
-        setPosition(vector.x, vector.y);
+    @Override
+    public void act(float delta) {
+        super.act(delta);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
     }
 }

@@ -13,8 +13,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.ArrayList;
 import java.util.List;
 
+import end.team.center.GameCore.Animations.CharacterAnimation;
 import end.team.center.GameCore.GameEvent.PostMob;
 import end.team.center.GameCore.GameEvent.Spawner;
+import end.team.center.GameCore.Logic.AI;
 import end.team.center.GameCore.Objects.Enemy;
 import end.team.center.GameCore.Objects.Hero;
 import end.team.center.GameCore.UIElements.TouchpadClass;
@@ -30,8 +32,8 @@ public class GameScreen implements Screen {
     private Viewport uiViewport;
 
     private GameCamera gameCamera;
-    private static final float WORLD_WIDTH = 5000;
-    private static final float WORLD_HEIGHT = 5000;
+    public static final float WORLD_WIDTH = 5000;
+    public static final float WORLD_HEIGHT = 5000;
 
     private Spawner spawner;
     private int locationCount = 0;
@@ -40,7 +42,6 @@ public class GameScreen implements Screen {
 
 
     public GameScreen() {
-
         gameCamera = new GameCamera(WORLD_WIDTH, WORLD_HEIGHT);
 
         worldViewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCamera.getCamera());
@@ -50,7 +51,6 @@ public class GameScreen implements Screen {
         uiStage = new Stage(uiViewport);
         Gdx.input.setInputProcessor(uiStage);
 
-
         touchpadMove = new TouchpadClass(200, 200, false, "move");
         uiStage.addActor(touchpadMove);
 
@@ -59,13 +59,18 @@ public class GameScreen implements Screen {
 
         hero = new Hero(
             new Texture(Gdx.files.internal("UI/GameUI/Hero/Right/heroRight.png")),
-            new Texture(Gdx.files.internal("UI/GameUI/Hero/Left/heroLeft.png")),
+            CharacterAnimation.Hero,
             new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
-            100, 1 ,0,
-            300, 140, 160, WORLD_WIDTH, WORLD_HEIGHT
+            140, 120 ,100,
+            1, 0, 300f,
+            WORLD_WIDTH, WORLD_HEIGHT
         );
 
+        System.out.println("Размеры: " + hero.getHeight() + "/" + hero.getWidth());
+
         worldStage.addActor(hero);
+
+        enemies = new ArrayList<>();
 
         spawner = new Spawner(new PostMob() {
             @Override
@@ -85,7 +90,13 @@ public class GameScreen implements Screen {
         float moveX = touchpadMove.getKnobPercentX();
         float moveY = touchpadMove.getKnobPercentY();
 
-        hero.move(moveX, moveY, delta);
+        for(Enemy e: enemies) {
+            Vector2 v = AI.MoveToPlayer(hero, e.getVector(), e.getSpeed(), delta);
+
+            e.move(v.x, v.y, delta, true);
+        }
+
+        hero.move(moveX, moveY, delta, false);
 
         gameCamera.updateCameraPosition(hero.getX(), hero.getY(), hero.getWidth(), hero.getHeight());
 

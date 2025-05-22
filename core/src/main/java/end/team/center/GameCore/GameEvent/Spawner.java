@@ -7,20 +7,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import end.team.center.GameCore.Library.EnemyType;
-import end.team.center.GameCore.Library.Mobs.ForFrog;
+import end.team.center.GameCore.Library.Mobs.Owl;
 import end.team.center.GameCore.Objects.Enemy;
+import end.team.center.Screens.Game.GameScreen;
 
 public class Spawner {
     private final int minRadiusSpawnMobY = Gdx.graphics.getHeight();
     private final int minRadiusSpawnMobX = Gdx.graphics.getWidth();
     private final int maxCountMobInMap = 100;
-    private final int maxRadiusSpawn = 1000;
+    private final int maxRadiusSpawn = (int) Math.min(GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH);
     private int timeSpawn;
     private ArrayList<EnemyType> canSpawn;
     private PostMob poster;
 
     public Spawner(PostMob poster, int countLocation) {
         this.poster = poster;
+
+        canSpawn = new ArrayList<>();
 
         if (countLocation == 0) {
             canSpawn.add(EnemyType.Owl);
@@ -33,27 +36,30 @@ public class Spawner {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Enemy[] enemies = new Enemy[canSpawn.size()];
+                while (true) {
+                    Enemy[] enemies = new Enemy[canSpawn.size()];
 
-                for(int i = 0; i < canSpawn.size(); i++) {
-                    enemies[i] = spawn(canSpawn.get(i));
+                    for (int i = 0; i < canSpawn.size(); i++) {
+                        enemies[i] = spawn(canSpawn.get(i));
+                    }
+
+                    poster.post(enemies);
+                    System.out.println("Отправка мобов: " + Arrays.toString(enemies));
+
+                    try {
+                        Thread.sleep(timeSpawn);
+                    } catch (InterruptedException ignore) {
+                    }
                 }
-
-                poster.post(enemies);
-                System.out.println("Отправка мобов: " + Arrays.toString(enemies));
-
-                try {
-                    Thread.sleep(timeSpawn);
-                } catch (InterruptedException ignore) {}
             }
-        });
+        }).start();
 
 
     }
 
     private Enemy spawn(EnemyType type) {
         if (type == EnemyType.Owl) {
-            return new ForFrog(type, randomCord());
+            return new Owl(type, randomCord(), GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH);
         } else return null;
     }
 
