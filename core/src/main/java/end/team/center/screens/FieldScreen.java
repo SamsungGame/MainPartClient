@@ -11,6 +11,11 @@ import java.util.Random;
 
 import end.team.center.Zone;
 import end.team.center.MyGame;
+import end.team.center.zoneTypes.BossField;
+import end.team.center.zoneTypes.Dungeon;
+import end.team.center.zoneTypes.Garden;
+import end.team.center.zoneTypes.Portal;
+import end.team.center.zoneTypes.Tree;
 
 public class FieldScreen implements Screen {
     private static final int fieldX = 20000; // Размер поля по X
@@ -26,13 +31,13 @@ public class FieldScreen implements Screen {
     private final float viewportHeight = Gdx.graphics.getHeight();
     private final SpriteBatch batch = new SpriteBatch();
     private final Texture grassTexture = new Texture("grass.png");
+    private final Texture treeTexture = new Texture("tree.png");
     private final Texture radiationTexture = new Texture("radiation.png");
     private final Texture gardenTexture = new Texture("garden.png");
     private final Texture bossFieldTexture = new Texture("bossField.png");
     private final Texture dungeonTexture = new Texture("dungeon.png");
-    ArrayList<Integer> sizes = new ArrayList<>();
-    ArrayList<Character> symbols = new ArrayList<>();
     ArrayList<Zone> zones = new ArrayList<>();
+    ArrayList<Tree> treeZonesInsidePlayerZone = new ArrayList<>();
 
     public FieldScreen(MyGame game) {
 
@@ -40,13 +45,6 @@ public class FieldScreen implements Screen {
 
     @Override
     public void show() {
-        sizes.add(200);
-        sizes.add(400);
-        sizes.add(500);
-        symbols.add('@');
-        symbols.add('$');
-        symbols.add('#');
-        zones.add(new Zone(0, 0, 0, '0'));
         generateZones();
     }
 
@@ -77,9 +75,11 @@ public class FieldScreen implements Screen {
             minY = fieldY - viewportHeight;
         }
 
+        ArrayList<Zone> visibleZones = getZonesInView();
+
         batch.begin();
 
-        drawZones(batch);
+        drawZones(batch, visibleZones);
 
         batch.end();
     }
@@ -108,6 +108,7 @@ public class FieldScreen implements Screen {
     public void dispose() {
         batch.dispose();
         grassTexture.dispose();
+        treeTexture.dispose();
         radiationTexture.dispose();
         gardenTexture.dispose();
         bossFieldTexture.dispose();
@@ -116,45 +117,37 @@ public class FieldScreen implements Screen {
 
     private void generateZones() {
         Random random = new Random();
-        for (int i = 0; i < sizes.size(); i++) {
-            for (int j = 0; j < 100; j++) {
-                int size = sizes.get(i);
-                char symbol = symbols.get(i);
-                int x;
-                int y;
-                while (true) {
-                    x = random.nextInt(fieldX - size);
-                    y = random.nextInt(fieldY - size);
-                    boolean correct = true;
-                    for (Zone zone : zones) {
-                        if (x < zone.x + zone.size && x + size > zone.x && y < zone.y + zone.size && y + size > zone.y) {
-                            correct = false;
-                            break;
-                        }
-                    }
-                    if (correct) {
-                        break;
-                    }
+        zones.add(new Zone(9500, 9500, 1000, "Player"));
+
+        int x;
+        int y;
+        int size = 50;
+        while (true) {
+            x = random.nextInt(20000 - size);
+            y = random.nextInt(20000 - size);
+            boolean correct = true;
+            for (Zone zone : zones) {
+                if (!(x + size < zone.x || zone.x + zone.size < x || y + size < zone.y || zone.y + zone.size < y)) {
+                    correct = false;
+                    break;
                 }
-                zones.add(new Zone(x, y, size, symbol));
+            }
+            if (correct) {
+                break;
             }
         }
 
-        for (int i = 0; i < 200; i++) {
-            int size = random.nextInt(100);
-            if (size == 0) {
-                size = 100;
-            }
-            size += 100;
-            char symbol = '?';
-            int x;
-            int y;
+        Portal portal = new Portal(x, y);
+        zones.add(portal);
+
+        size = 200;
+        for (int j = 0; j < 100; j++) {
             while (true) {
-                x = random.nextInt(fieldX - size);
-                y = random.nextInt(fieldY - size);
+                x = random.nextInt(20000 - size);
+                y = random.nextInt(20000 - size);
                 boolean correct = true;
                 for (Zone zone : zones) {
-                    if (x < zone.x + zone.size && x + size > zone.x && y < zone.y + zone.size && y + size > zone.y) {
+                    if (!(x + size < zone.x || zone.x + zone.size < x || y + size < zone.y || zone.y + zone.size < y)) {
                         correct = false;
                         break;
                     }
@@ -163,38 +156,160 @@ public class FieldScreen implements Screen {
                     break;
                 }
             }
-            zones.add(new Zone(x, y, size, symbol));
+
+            Garden garden = new Garden(x, y);
+            garden.createRadiation();
+            zones.add(garden);
+        }
+
+        size = 400;
+        for (int j = 0; j < 100; j++) {
+            while (true) {
+                x = random.nextInt(20000 - size);
+                y = random.nextInt(20000 - size);
+                boolean correct = true;
+                for (Zone zone : zones) {
+                    if (!(x + size < zone.x || zone.x + zone.size < x || y + size < zone.y || zone.y + zone.size < y)) {
+                        correct = false;
+                        break;
+                    }
+                }
+                if (correct) {
+                    break;
+                }
+            }
+
+            BossField bossField = new BossField(x, y);
+            bossField.createRadiation();
+            zones.add(bossField);
+        }
+
+        size = 500;
+        for (int j = 0; j < 100; j++) {
+            while (true) {
+                x = random.nextInt(20000 - size);
+                y = random.nextInt(20000 - size);
+                boolean correct = true;
+                for (Zone zone : zones) {
+                    if (!(x + size < zone.x || zone.x + zone.size < x || y + size < zone.y || zone.y + zone.size < y)) {
+                        correct = false;
+                        break;
+                    }
+                }
+                if (correct) {
+                    break;
+                }
+            }
+
+            Dungeon dungeon = new Dungeon(x, y);
+            dungeon.createRadiation();
+            zones.add(dungeon);
+        }
+
+        size = random.nextInt(100);
+        if (size == 0) {
+            size = 100;
+        }
+        size += 100;
+        String type = "Radiation";
+        for (int i = 0; i < 2000; i++) {
+            while (true) {
+                x = random.nextInt(20000 - size);
+                y = random.nextInt(20000 - size);
+                boolean correct = true;
+                for (Zone zone : zones) {
+                    if (!(x + size < zone.x || zone.x + zone.size < x || y + size < zone.y || zone.y + zone.size < y)) {
+                        correct = false;
+                        break;
+                    }
+                }
+                if (correct) {
+                    break;
+                }
+            }
+
+            zones.add(new Zone(x, y, size, type));
+        }
+
+        size = 10;
+        for (int i = 0; i < 9900; i++) {
+            while (true) {
+                x = random.nextInt(20000 - size);
+                y = random.nextInt(20000 - size);
+                boolean correct = true;
+                for (Zone zone : zones) {
+                    if (!(x + size < zone.x || zone.x + zone.size < x || y + size < zone.y || zone.y + zone.size < y)) {
+                        correct = false;
+                        break;
+                    }
+                }
+                if (correct) {
+                    break;
+                }
+            }
+
+            Tree tree = new Tree(x, y);
+            zones.add(tree);
+        }
+
+        for (int i = 0; i < 100; i++) {
+            x = random.nextInt(zones.get(0).size - size);
+            y = random.nextInt(zones.get(0).size - size);
+            x += zones.get(0).x;
+            y += zones.get(0).y;
+            Tree tree = new Tree(x, y);
+            treeZonesInsidePlayerZone.add(tree);
         }
     }
 
-    private void drawZones(SpriteBatch batch) {
+    private void drawZones(SpriteBatch batch, ArrayList<Zone> visibleZones) {
         int startX = Math.max(0, (int)(minX / cellSize));
-        int endX = Math.min(fieldX / cellSize, (int)(maxX / cellSize) + 1);
+        int endX = (int) Math.min(fieldX / cellSize, (int)(maxX / cellSize) + 1);
         int startY = Math.max(0, (int)(minY / cellSize));
-        int endY = Math.min(fieldY / cellSize, (int)(maxY / cellSize) + 1);
+        int endY = (int) Math.min(fieldY / cellSize, (int)(maxY / cellSize) + 1);
 
         for (int x = startX; x < endX; x++) {
             for (int y = startY; y < endY; y++) {
                 float drawX = x * cellSize - minX;
                 float drawY = y * cellSize - minY;
                 boolean isNotDrawn = true;
-                for (Zone zone : zones) {
+                for (Zone zone : visibleZones) {
                     if (x < zone.x / cellSize + zone.size / cellSize &&
                         x + 1 > zone.x / cellSize &&
                         y < zone.y / cellSize + zone.size / cellSize &&
                         y + 1 > zone.y / cellSize) {
 
-                        switch (zone.symbol) {
-                            case ('?'):
+                        switch (zone.type) {
+                            case ("Player"):
+                                boolean treeIsNotDrawn = true;
+                                for (Tree tree : treeZonesInsidePlayerZone) {
+                                    if (x >= tree.x / cellSize &&
+                                        x < tree.x / cellSize + tree.size / cellSize &&
+                                        y >= tree.y / cellSize &&
+                                        y < tree.y / cellSize + tree.size / cellSize) {
+
+                                        batch.draw(treeTexture, drawX, drawY, cellSize, cellSize);
+                                        treeIsNotDrawn = false;
+                                        break;
+                                    }
+                                }
+                                if (treeIsNotDrawn) {
+                                    batch.draw(grassTexture, drawX, drawY, cellSize, cellSize);
+                                }
+                                break;
+                            case ("Tree"):
+                                batch.draw(treeTexture, drawX, drawY, cellSize, cellSize);
+                                break;
+                            case ("Radiation"):
                                 batch.draw(radiationTexture, drawX, drawY, cellSize, cellSize);
                                 break;
-                            case ('@'):
+                            case ("Garden"):
                                 batch.draw(gardenTexture, drawX, drawY, cellSize, cellSize);
                                 break;
-                            case ('$'):
+                            case ("BossField"):
                                 batch.draw(bossFieldTexture, drawX, drawY, cellSize, cellSize);
                                 break;
-                            case ('#'):
+                            case ("Dungeon"):
                                 batch.draw(dungeonTexture, drawX, drawY, cellSize, cellSize);
                                 break;
                         }
@@ -207,5 +322,16 @@ public class FieldScreen implements Screen {
                 }
             }
         }
+    }
+
+    private ArrayList<Zone> getZonesInView() {
+        ArrayList<Zone> visibleZones = new ArrayList<>();
+        for (Zone zone : zones) {
+            if (zone.x + zone.size >= minX && zone.x <= maxX &&
+                zone.y + zone.size >= minY && zone.y <= maxY) {
+                visibleZones.add(zone);
+            }
+        }
+        return visibleZones;
     }
 }
