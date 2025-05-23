@@ -33,7 +33,7 @@ public class Enemy extends Entity {
 
     @Override
     public void move(float deltaX, float deltaY, float delta, boolean isMob) {
-        if (!stan && STAN_IS_STOP_MOB) super.move(deltaX, deltaY, delta, isMob);
+        if (!stan || !STAN_IS_STOP_MOB) super.move(deltaX, deltaY, delta, isMob);
     }
 
     @Override

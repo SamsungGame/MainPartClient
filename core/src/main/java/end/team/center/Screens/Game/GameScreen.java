@@ -4,8 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -39,6 +43,9 @@ public class GameScreen implements Screen {
     private int locationCount = 0;
     private ArrayList<Enemy> enemies;
 
+    private Label costumePower;
+    private Label playerHealth;
+
 
 
     public GameScreen() {
@@ -66,10 +73,38 @@ public class GameScreen implements Screen {
             WORLD_WIDTH, WORLD_HEIGHT
         );
 
-        System.out.println("Размеры: " + hero.getHeight() + "/" + hero.getWidth());
-
         worldStage.addActor(hero);
 
+        // Настройки UI на карте
+        Image imageHealth = new Image(new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/HealthLabel/heart.png"))));
+        imageHealth.setSize(180, 180);
+        imageHealth.setPosition(20, Gdx.graphics.getHeight() - imageHealth.getHeight() - 20);
+
+        Image imagePower = new Image(new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/PowerLabel/power.png"))));
+        imagePower.setSize(360, 120);
+        imagePower.setPosition(Gdx.graphics.getWidth() - imagePower.getWidth() - 20,
+            Gdx.graphics.getHeight() - imageHealth.getHeight() + 30);
+
+        Skin h = new Skin(Gdx.files.internal("UI/GameUI/Hero/HealthLabel/label.json"));
+        Skin l = new Skin(Gdx.files.internal("UI/GameUI/Hero/PowerLabel/label.json"));
+
+        playerHealth = new Label(String.valueOf(hero.getHealth()), h);
+        costumePower = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), l);
+
+        playerHealth.setPosition(playerHealth.getWidth() + 20 + 105,
+            Gdx.graphics.getHeight() - (imageHealth.getHeight() / 2) - 40);
+        costumePower.setPosition(Gdx.graphics.getWidth() - costumePower.getWidth() - 20 - 155,
+            Gdx.graphics.getHeight() - (imagePower.getHeight() / 2) - 40);
+
+        costumePower.setFontScale(3.5f);
+        playerHealth.setFontScale(2.5f);
+
+        uiStage.addActor(imagePower);
+        uiStage.addActor(costumePower);
+        uiStage.addActor(imageHealth);
+        uiStage.addActor(playerHealth);
+
+        // Настройки спавна мобов
         enemies = new ArrayList<>();
 
         spawner = new Spawner(new PostMob() {
@@ -78,14 +113,16 @@ public class GameScreen implements Screen {
                 setSpawnMob(enemy);
             }
         }, locationCount);
-
-        // Устанавливаем изначальную позицию камеры
     }
 
+    @SuppressWarnings("DefaultLocale")
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        playerHealth.setText(String.valueOf(hero.getHealth()));
+        costumePower.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
 
         float moveX = touchpadMove.getKnobPercentX();
         float moveY = touchpadMove.getKnobPercentY();
