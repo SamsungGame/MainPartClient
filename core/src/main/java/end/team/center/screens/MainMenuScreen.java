@@ -17,16 +17,12 @@ public class MainMenuScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        // Создание стиля кнопки
-        skin = new Skin(Gdx.files.internal("newGameButton/newGameButton.json"));
+        skin = new Skin(Gdx.files.internal("buttonStyle/buttonStyle.json"));
 
-        // Создание кнопки
         TextButton newGameButton = new TextButton("Новая игра", skin);
         newGameButton.setSize(320, 150);
         newGameButton.setPosition(Gdx.graphics.getWidth() / 2 - newGameButton.getWidth() / 2,
-            Gdx.graphics.getHeight() / 2 - newGameButton.getHeight() / 2);
-
-        // Добавление слушателя нажатия на кнопку
+            Gdx.graphics.getHeight() / 2 - newGameButton.getHeight() / 2 + newGameButton.getHeight() / 2);
         newGameButton.addListener(event -> {
             if(event.isHandled()){
                 game.setScreen(new FieldScreen(game));
@@ -36,7 +32,21 @@ public class MainMenuScreen implements Screen {
             return false;
         });
 
+        TextButton achievementsButton = new TextButton("Достижения", skin);
+        achievementsButton.setSize(320, 150);
+        achievementsButton.setPosition(Gdx.graphics.getWidth() / 2 - achievementsButton.getWidth() / 2,
+            Gdx.graphics.getHeight() / 2 - achievementsButton.getHeight() / 2 - achievementsButton.getHeight() / 2);
+        achievementsButton.addListener(event -> {
+            if(event.isHandled()){
+                game.setScreen(new AchievementsScreen(game));
+                achievementsButton.remove();
+                return true;
+            }
+            return false;
+        });
+
         stage.addActor(newGameButton);
+        stage.addActor(achievementsButton);
     }
 
     @Override
