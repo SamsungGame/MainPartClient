@@ -28,7 +28,9 @@ public abstract class Entity extends GameObject {
     private Animation<TextureRegion> stayRightAnimation;
     private Animation<TextureRegion> stayLeftAnimation;
 
-    public Entity(Texture texture, CharacterAnimation anim, Vector2 vector, float width, float height, int health, int damage, int defence, float speed, float worldHeight, float worldWidth) {
+    public Entity(Texture texture, CharacterAnimation anim, Vector2 vector, float width,
+                  float height, int health, int damage, int defence,
+                  float speed, float worldHeight, float worldWidth) {
         super(texture, vector, width, height);
         this.health = health;
         this.damage = damage;

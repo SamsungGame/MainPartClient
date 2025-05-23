@@ -16,17 +16,20 @@ public abstract class Enemy extends Entity {
     protected boolean stan = false;
     protected float timeToReload = 0;
     protected float timePlayerInvulnerability = 0.5f;
+    public int damage;
 
     public Enemy(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, float worldHeight, float worldWidth, AI ai) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
         this.level = level;
         this.ai = ai;
+        this.damage = damage;
+
     }
 
 
-    public void attack(Hero hero) {
+    public void attack(Hero hero, int damage) {
         if (!hero.isInvulnerability && !stan) {
-            hero.health--;
+            hero.health-=this.damage;
             hero.frameInvulnerability(timePlayerInvulnerability);
 
             stan = true;
