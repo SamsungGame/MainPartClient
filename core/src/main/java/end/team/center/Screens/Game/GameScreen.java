@@ -20,7 +20,6 @@ import java.util.List;
 import end.team.center.GameCore.Animations.CharacterAnimation;
 import end.team.center.GameCore.GameEvent.PostMob;
 import end.team.center.GameCore.GameEvent.Spawner;
-import end.team.center.GameCore.Logic.AI.AI;
 import end.team.center.GameCore.Objects.Enemy;
 import end.team.center.GameCore.Objects.Hero;
 import end.team.center.GameCore.UIElements.TouchpadClass;
@@ -49,6 +48,8 @@ public class GameScreen implements Screen {
 
 
     public GameScreen() {
+        System.out.println("Размеры экрана: " + Gdx.graphics.getWidth() + "x на " + Gdx.graphics.getHeight() + "y");
+
         gameCamera = new GameCamera(WORLD_WIDTH, WORLD_HEIGHT);
 
         worldViewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCamera.getCamera());

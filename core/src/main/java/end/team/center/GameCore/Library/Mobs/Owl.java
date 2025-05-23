@@ -14,7 +14,7 @@ import end.team.center.GameCore.Objects.Enemy;
 
 public class Owl extends Enemy {
 
-    protected Circle circle;
+    protected Circle startAttack, endAttack;
     protected Texture lDiveTexture, rDiveTexture;
 
     public Owl(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, float worldHeight, float worldWidth, AI ai) {
@@ -28,18 +28,24 @@ public class Owl extends Enemy {
     }
 
     public void initialization() {
-        circle = new Circle(vector.x + width / 2, vector.y + height / 2, 1400);
+        startAttack = new Circle(vector.x + width / 2, vector.y + height / 2, 1400);
+        endAttack = new Circle(vector.x + width / 2, vector.y + height / 2, 400);
 
         lDiveTexture = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png"));
         rDiveTexture = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlRight_down.png"));
     }
 
-    public Circle getCircle() {
-        return circle;
+    public Circle getStartCircle() {
+        return startAttack;
+    }
+    public Circle getEndCircle() {
+        return endAttack;
     }
     public void updateCircle() {
-        circle.x = vector.x;
-        circle.y = vector.y;
+        startAttack.x = vector.x;
+        startAttack.y = vector.y;
+        endAttack.x = vector.x;
+        endAttack.y = vector.y;
     }
 
     @Override

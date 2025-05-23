@@ -31,7 +31,7 @@ public class Hero extends Friendly {
     public void act(float delta) {
         super.act(delta);
 
-        antiRadiationCostumePower -= (float) (((radiationLevel * 0.4) / radiationProtect) * delta);
+        antiRadiationCostumePower -= (float) (((radiationLevel * 0.6) / radiationProtect) * delta);
     }
 
     @Override

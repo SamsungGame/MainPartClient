@@ -33,7 +33,7 @@ public class AI_Owl extends AI {
     }
 
     public void diveAttack(Owl owl) {
-        if(GMath.circleRectangleOverlap(owl.getCircle(), hero.getBound()) && !isDiveAttacking && timeToReloadDive == 0) {
+        if(GMath.circleRectangleOverlap(owl.getStartCircle(), hero.getBound()) && !GMath.circleRectangleOverlap(owl.getEndCircle(), hero.getBound()) && !isDiveAttacking && timeToReloadDive == 0) {
 
             isDiveAttacking = true;
             lockAttack = new Vector2(hero.getVector().x, hero.getVector().y);
