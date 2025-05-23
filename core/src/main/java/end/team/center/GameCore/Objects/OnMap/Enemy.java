@@ -1,12 +1,11 @@
-package end.team.center.GameCore.Objects;
+package end.team.center.GameCore.Objects.OnMap;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
-import end.team.center.GameCore.Animations.CharacterAnimation;
+import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.Logic.AI.AI;
-import end.team.center.Screens.Game.GameScreen;
 
 public abstract class Enemy extends Entity {
     private static final boolean STAN_IS_STOP_MOB = false;
@@ -23,11 +22,10 @@ public abstract class Enemy extends Entity {
         this.level = level;
         this.ai = ai;
         this.damage = damage;
-
     }
 
 
-    public void attack(Hero hero, int damage) {
+    public void attack(Hero hero) {
         if (!hero.isInvulnerability && !stan) {
             hero.health-=this.damage;
             hero.frameInvulnerability(timePlayerInvulnerability);

@@ -1,4 +1,4 @@
-package end.team.center.GameCore.Animations;
+package end.team.center.GameCore.Library.Animations;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

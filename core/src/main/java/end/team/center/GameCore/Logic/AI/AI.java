@@ -2,7 +2,7 @@ package end.team.center.GameCore.Logic.AI;
 
 import com.badlogic.gdx.math.Vector2;
 
-import end.team.center.GameCore.Objects.Hero;
+import end.team.center.GameCore.Objects.OnMap.Hero;
 
 public abstract class AI {
     protected Hero hero;

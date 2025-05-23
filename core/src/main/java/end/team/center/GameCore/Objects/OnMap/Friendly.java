@@ -1,10 +1,10 @@
-package end.team.center.GameCore.Objects;
+package end.team.center.GameCore.Objects.OnMap;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
-import end.team.center.GameCore.Animations.CharacterAnimation;
+import end.team.center.GameCore.Library.CharacterAnimation;
 
 public abstract class Friendly extends Entity {
 

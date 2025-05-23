@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import end.team.center.GameCore.Library.Mobs.Owl;
 import end.team.center.GameCore.Logic.GMath;
-import end.team.center.GameCore.Objects.Hero;
+import end.team.center.GameCore.Objects.OnMap.Hero;
 
 public class AI_Owl extends AI {
 

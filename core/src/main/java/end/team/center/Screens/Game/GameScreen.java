@@ -17,13 +17,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.ArrayList;
 import java.util.List;
 
-import end.team.center.GameCore.Animations.CharacterAnimation;
+import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.GameEvent.PostMob;
 import end.team.center.GameCore.GameEvent.Spawner;
-import end.team.center.GameCore.Objects.Enemy;
-import end.team.center.GameCore.Objects.Hero;
-import end.team.center.GameCore.UIGameScreenElements.Heart;
-import end.team.center.GameCore.UIGameScreenElements.TouchpadClass;
+import end.team.center.GameCore.Objects.InInventary.Weapon;
+import end.team.center.GameCore.Objects.OnMap.Enemy;
+import end.team.center.GameCore.Objects.OnMap.Hero;
+import end.team.center.GameCore.UIElements.UIGameScreenElements.Heart;
+import end.team.center.GameCore.UIElements.UIGameScreenElements.TouchpadClass;
 import end.team.center.GameCore.Logic.GameCamera;
 
 public class GameScreen implements Screen {
@@ -67,8 +68,6 @@ public class GameScreen implements Screen {
         touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth()-500, 200, false, "attack");
         uiStage.addActor(touchpadAttack);
 
-
-
         hero = new Hero(
             new Texture(Gdx.files.internal("UI/GameUI/Hero/Right/heroRight.png")),
             CharacterAnimation.Hero,
@@ -86,11 +85,6 @@ public class GameScreen implements Screen {
         hearts = new Heart(heartFull, heartEmpty,heartFullBit, hero.getHealth());
         uiStage.addActor(hearts);
 
-        // Настройки UI на карте
-//        Image imageHealth = new Image(new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/HealthLabel/heart.png"))));
-//        imageHealth.setSize(180, 180);
-//        imageHealth.setPosition(20, Gdx.graphics.getHeight() - imageHealth.getHeight() - 20);
-
         Image imagePower = new Image(new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/PowerLabel/power.png"))));
         imagePower.setSize(360, 120);
         imagePower.setPosition(Gdx.graphics.getWidth() - imagePower.getWidth() - 20,
@@ -101,8 +95,6 @@ public class GameScreen implements Screen {
 
         costumePower = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), l);
 
-//        playerHealth.setPosition(playerHealth.getWidth() + 20 + 105,
-//            Gdx.graphics.getHeight() - (imageHealth.getHeight() / 2) - 40);
         costumePower.setPosition(Gdx.graphics.getWidth() - costumePower.getWidth() - 20 - 155,
             Gdx.graphics.getHeight() - (imagePower.getHeight() / 2) - 40);
 
@@ -133,7 +125,24 @@ public class GameScreen implements Screen {
         float moveX = touchpadMove.getKnobPercentX();
         float moveY = touchpadMove.getKnobPercentY();
 
+        // Получаем нормализованные значения от Touchpad
+        float normalizedX = (touchpadAttack.getKnobPercentX() + 1) / 2;
+        float normalizedY = (touchpadAttack.getKnobPercentY() + 1) / 2;
+
+        // Преобразуем в координаты центра
+        float dx = normalizedX * 2 - 1; // от -1 до 1
+        float dy = normalizedY * 2 - 1;
+
         hero.move(moveX, moveY, delta, false);
+
+        if (touchpadAttack.isTouchpadActive()) {
+            Weapon w = hero.getWep();
+
+            w.setRotationAroundPlayer(hero.getCenterVector(), dx, dy);
+            w.showGhost();
+        } else if (hero.getWep().getShow()) {
+            hero.getWep().hideGhost();
+        }
 
         gameCamera.updateCameraPosition(hero.getVector().x, hero.getVector().y, hero.getWidth(), hero.getHeight());
 
@@ -141,8 +150,9 @@ public class GameScreen implements Screen {
         worldStage.draw();
 
         for(Enemy e: enemies) {
-            if (e.getBound().overlaps(hero.getBound())) e.attack(hero, e.damage);
+            if (e.getBound().overlaps(hero.getBound())) e.attack(hero);
         }
+
         hearts.updateAnimation(delta);
         hearts.updateHealth(hero.getHealth());
 

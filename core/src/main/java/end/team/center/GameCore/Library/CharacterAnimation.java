@@ -1,6 +1,9 @@
-package end.team.center.GameCore.Animations;
+package end.team.center.GameCore.Library;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+import end.team.center.GameCore.Library.Animations.AnimationsHero;
+import end.team.center.GameCore.Library.Animations.AnimationsOwl;
 
 public enum CharacterAnimation {
     Hero(AnimationsHero.rightFrames, AnimationsHero.leftFrames, AnimationsHero.rightStay, AnimationsHero.leftStay),

@@ -1,11 +1,13 @@
-package end.team.center.GameCore.Objects;
+package end.team.center.GameCore.Objects.OnMap;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
-import end.team.center.GameCore.Animations.CharacterAnimation;
-import end.team.center.ProgramSetting.Config;
+import end.team.center.GameCore.Library.CharacterAnimation;
+import end.team.center.GameCore.Library.Items.Knife;
+import end.team.center.GameCore.Library.WeaponType;
+import end.team.center.GameCore.Objects.InInventary.Weapon;
 
 public class Hero extends Friendly {
 
@@ -13,13 +15,21 @@ public class Hero extends Friendly {
     protected int radiationProtect = 1;
     protected float antiRadiationCostumePower = 100.0f;
     protected int radiationLevel = 1;
+    protected Weapon weapon;
+
+
 
     public Hero(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, float worldWidth, float worldHeight) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
+
+        weapon = new Knife(WeaponType.knife, vector, this);
     }
 
     public float getAntiRadiationCostumePower() {
         return antiRadiationCostumePower;
+    }
+    public Weapon getWep() {
+        return weapon;
     }
 
     @Override
@@ -37,6 +47,8 @@ public class Hero extends Friendly {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+
+        weapon.draw(batch, parentAlpha);
     }
 
     @Override

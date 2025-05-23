@@ -9,8 +9,8 @@ import java.util.Arrays;
 import end.team.center.GameCore.Library.EnemyType;
 import end.team.center.GameCore.Library.Mobs.Owl;
 import end.team.center.GameCore.Logic.AI.AI_Owl;
-import end.team.center.GameCore.Objects.Enemy;
-import end.team.center.GameCore.Objects.Hero;
+import end.team.center.GameCore.Objects.OnMap.Enemy;
+import end.team.center.GameCore.Objects.OnMap.Hero;
 import end.team.center.Screens.Game.GameScreen;
 
 public class Spawner {

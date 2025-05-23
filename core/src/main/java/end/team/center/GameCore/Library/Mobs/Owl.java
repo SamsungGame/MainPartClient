@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
-import end.team.center.GameCore.Animations.CharacterAnimation;
+import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.Library.EnemyType;
 import end.team.center.GameCore.Logic.AI.AI;
 import end.team.center.GameCore.Logic.AI.AI_Owl;
-import end.team.center.GameCore.Objects.Enemy;
+import end.team.center.GameCore.Objects.OnMap.Enemy;
 
 public class Owl extends Enemy {
 
