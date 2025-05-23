@@ -17,12 +17,14 @@ public class AboutGameScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        skin = new Skin(Gdx.files.internal(""));
+        skin = new Skin(Gdx.files.internal("UI/AboutGame/label.json"));
 
         String text = "Разработка игры \"Конец времени\": \n"
-            + "Разработчики: Баранов Елисей, Ананьин Данил, <Аноним> Сергей";
+            + "Разработчики: \n\nБаранов Елисей - Программист, \nАнаньин Данил - Программист генерации, \n<Аноним> Сергей - Художник, Программист";
 
         Label label = new Label(text, skin);
+
+        label.sizeBy(80);
 
         Table table = new Table();
         table.setFillParent(true);

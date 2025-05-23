@@ -82,11 +82,21 @@ public class Entity extends GameObject {
             mRight = false;
         }
 
+        updateBound();
+
         stateTime += delta;
     }
 
     public float getSpeed() {
         return speed;
+    }
+    public int getHealth() {
+        return health;
+    }
+
+    public void updateBound() {
+        bound.x = vector.x;
+        bound.y = vector.y;
     }
 
     @Override

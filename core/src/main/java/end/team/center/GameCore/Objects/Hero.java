@@ -8,6 +8,8 @@ import end.team.center.GameCore.Animations.CharacterAnimation;
 
 public class Hero extends Friendly {
 
+    protected boolean isInvulnerability = false;
+
     public Hero(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, float worldWidth, float worldHeight) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
     }
@@ -26,4 +28,21 @@ public class Hero extends Friendly {
     public void dispose() {
         super.dispose();
     }
+
+    public void frameInvulnerability(float sec) {
+        isInvulnerability = true;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep((long) (sec * 1000L));
+
+                    isInvulnerability = false;
+                } catch (InterruptedException ignore) {}
+            }
+        }).start();
+    }
+
+
 }

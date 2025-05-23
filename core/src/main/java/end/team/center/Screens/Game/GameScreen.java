@@ -61,7 +61,7 @@ public class GameScreen implements Screen {
             new Texture(Gdx.files.internal("UI/GameUI/Hero/Right/heroRight.png")),
             CharacterAnimation.Hero,
             new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
-            140, 120 ,100,
+            140, 120 ,3,
             1, 0, 300f,
             WORLD_WIDTH, WORLD_HEIGHT
         );
@@ -90,13 +90,14 @@ public class GameScreen implements Screen {
         float moveX = touchpadMove.getKnobPercentX();
         float moveY = touchpadMove.getKnobPercentY();
 
+        hero.move(moveX, moveY, delta, false);
+
         for(Enemy e: enemies) {
             Vector2 v = AI.MoveToPlayer(hero, e.getVector(), e.getSpeed(), delta);
 
             e.move(v.x, v.y, delta, true);
+            if (e.getBound().overlaps(hero.getBound())) e.attack(hero);
         }
-
-        hero.move(moveX, moveY, delta, false);
 
         gameCamera.updateCameraPosition(hero.getVector().x, hero.getVector().y, hero.getWidth(), hero.getHeight());
 
