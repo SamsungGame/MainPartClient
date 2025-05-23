@@ -20,10 +20,10 @@ import java.util.List;
 import end.team.center.GameCore.Animations.CharacterAnimation;
 import end.team.center.GameCore.GameEvent.PostMob;
 import end.team.center.GameCore.GameEvent.Spawner;
-import end.team.center.GameCore.Logic.AI.AI;
 import end.team.center.GameCore.Objects.Enemy;
 import end.team.center.GameCore.Objects.Hero;
-import end.team.center.GameCore.UIElements.TouchpadClass;
+import end.team.center.GameCore.UIGameScreenElements.Heart;
+import end.team.center.GameCore.UIGameScreenElements.TouchpadClass;
 import end.team.center.GameCore.Logic.GameCamera;
 
 public class GameScreen implements Screen {
@@ -45,10 +45,13 @@ public class GameScreen implements Screen {
 
     private Label costumePower;
     private Label playerHealth;
+    private Heart hearts;
 
 
 
     public GameScreen() {
+        System.out.println("Размеры экрана: " + Gdx.graphics.getWidth() + "x на " + Gdx.graphics.getHeight() + "y");
+
         gameCamera = new GameCamera(WORLD_WIDTH, WORLD_HEIGHT);
 
         worldViewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCamera.getCamera());
@@ -64,6 +67,8 @@ public class GameScreen implements Screen {
         touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth()-500, 200, false, "attack");
         uiStage.addActor(touchpadAttack);
 
+
+
         hero = new Hero(
             new Texture(Gdx.files.internal("UI/GameUI/Hero/Right/heroRight.png")),
             CharacterAnimation.Hero,
@@ -75,34 +80,36 @@ public class GameScreen implements Screen {
 
         worldStage.addActor(hero);
 
+        Texture heartFull = new Texture("UI/GameUI/OtherGameItems/heart_full.png");
+        Texture heartEmpty = new Texture("UI/GameUI/OtherGameItems/heart_empty.png");
+        Texture heartFullBit = new Texture("UI/GameUI/OtherGameItems/heart_full_bit.png");
+        hearts = new Heart(heartFull, heartEmpty,heartFullBit, hero.getHealth());
+        uiStage.addActor(hearts);
+
         // Настройки UI на карте
-        Image imageHealth = new Image(new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/HealthLabel/heart.png"))));
-        imageHealth.setSize(180, 180);
-        imageHealth.setPosition(20, Gdx.graphics.getHeight() - imageHealth.getHeight() - 20);
+//        Image imageHealth = new Image(new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/HealthLabel/heart.png"))));
+//        imageHealth.setSize(180, 180);
+//        imageHealth.setPosition(20, Gdx.graphics.getHeight() - imageHealth.getHeight() - 20);
 
         Image imagePower = new Image(new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/PowerLabel/power.png"))));
         imagePower.setSize(360, 120);
         imagePower.setPosition(Gdx.graphics.getWidth() - imagePower.getWidth() - 20,
-            Gdx.graphics.getHeight() - imageHealth.getHeight() + 30);
+            Gdx.graphics.getHeight() - 180 + 30);
 
         Skin h = new Skin(Gdx.files.internal("UI/GameUI/Hero/HealthLabel/label.json"));
         Skin l = new Skin(Gdx.files.internal("UI/GameUI/Hero/PowerLabel/label.json"));
 
-        playerHealth = new Label(String.valueOf(hero.getHealth()), h);
         costumePower = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), l);
 
-        playerHealth.setPosition(playerHealth.getWidth() + 20 + 105,
-            Gdx.graphics.getHeight() - (imageHealth.getHeight() / 2) - 40);
+//        playerHealth.setPosition(playerHealth.getWidth() + 20 + 105,
+//            Gdx.graphics.getHeight() - (imageHealth.getHeight() / 2) - 40);
         costumePower.setPosition(Gdx.graphics.getWidth() - costumePower.getWidth() - 20 - 155,
             Gdx.graphics.getHeight() - (imagePower.getHeight() / 2) - 40);
 
         costumePower.setFontScale(3.5f);
-        playerHealth.setFontScale(2.5f);
 
         uiStage.addActor(imagePower);
         uiStage.addActor(costumePower);
-        uiStage.addActor(imageHealth);
-        uiStage.addActor(playerHealth);
 
         // Настройки спавна мобов
         enemies = new ArrayList<>();
@@ -121,7 +128,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        playerHealth.setText(String.valueOf(hero.getHealth()));
         costumePower.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
 
         float moveX = touchpadMove.getKnobPercentX();
@@ -135,14 +141,18 @@ public class GameScreen implements Screen {
         worldStage.draw();
 
         for(Enemy e: enemies) {
-            if (e.getBound().overlaps(hero.getBound())) e.attack(hero);
+            if (e.getBound().overlaps(hero.getBound())) e.attack(hero, e.damage);
         }
+        hearts.updateAnimation(delta);
+        hearts.updateHealth(hero.getHealth());
 
         touchpadMove.TouchpadLogic(uiStage);
         touchpadAttack.TouchpadLogic(uiStage);
 
         touchpadMove.touchpadSetBounds();
         touchpadAttack.touchpadSetBounds();
+
+
 
         uiStage.act(delta);
         uiStage.draw();
