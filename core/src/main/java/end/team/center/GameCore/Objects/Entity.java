@@ -11,7 +11,7 @@ import org.w3c.dom.Text;
 import end.team.center.GameCore.Animations.AnimationsHero;
 import end.team.center.GameCore.Animations.CharacterAnimation;
 
-public class Entity extends GameObject {
+public abstract class Entity extends GameObject {
 
     private static final float BOUNDARY_PADDING = 100f;
 

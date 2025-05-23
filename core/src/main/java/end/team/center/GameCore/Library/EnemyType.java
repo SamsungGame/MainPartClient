@@ -4,10 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
 import end.team.center.GameCore.Animations.CharacterAnimation;
+import end.team.center.GameCore.Logic.AI.AI;
+import end.team.center.GameCore.Logic.AI.AI_Owl;
 
 public enum EnemyType {
     // Типы существующих врагов
-    Owl(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png")), CharacterAnimation.Owl, 120, 140, 5, 0, 1, 1, 200f);
+    Owl(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png")), CharacterAnimation.Owl, 120, 140, 5, 0, 1, 1, 100f);
 
     private final Texture texture;
     private final CharacterAnimation anim;

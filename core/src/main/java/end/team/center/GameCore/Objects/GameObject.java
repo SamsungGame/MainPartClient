@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class GameObject extends Actor {
+public abstract class GameObject extends Actor {
     protected Texture texture;
     protected Rectangle bound;
     protected Vector2 vector;
@@ -28,6 +28,9 @@ public class GameObject extends Actor {
     public Vector2 getVector() {
         return vector;
     }
+    public Vector2 getCenterVector() {
+        return new Vector2(vector.x + width / 2, vector.y + height / 2);
+    }
     public float getHeight() {
         return height;
     }
@@ -40,9 +43,6 @@ public class GameObject extends Actor {
     public void reSizeBound() {
         bound.height = height;
         bound.width = width;
-    }
-    public Vector2 getCenterPosition() {
-        return new Vector2(vector.x + width / 2f, vector.y + height / 2f);
     }
 
     @Override

@@ -20,7 +20,7 @@ import java.util.List;
 import end.team.center.GameCore.Animations.CharacterAnimation;
 import end.team.center.GameCore.GameEvent.PostMob;
 import end.team.center.GameCore.GameEvent.Spawner;
-import end.team.center.GameCore.Logic.AI;
+import end.team.center.GameCore.Logic.AI.AI;
 import end.team.center.GameCore.Objects.Enemy;
 import end.team.center.GameCore.Objects.Hero;
 import end.team.center.GameCore.UIElements.TouchpadClass;
@@ -112,7 +112,7 @@ public class GameScreen implements Screen {
             public void post(Enemy[] enemy) {
                 setSpawnMob(enemy);
             }
-        }, locationCount);
+        }, hero, locationCount);
     }
 
     @SuppressWarnings("DefaultLocale")
@@ -129,17 +129,14 @@ public class GameScreen implements Screen {
 
         hero.move(moveX, moveY, delta, false);
 
-        for(Enemy e: enemies) {
-            Vector2 v = AI.MoveToPlayer(hero, e.getVector(), e.getSpeed(), delta);
-
-            e.move(v.x, v.y, delta, true);
-            if (e.getBound().overlaps(hero.getBound())) e.attack(hero);
-        }
-
         gameCamera.updateCameraPosition(hero.getVector().x, hero.getVector().y, hero.getWidth(), hero.getHeight());
 
         worldStage.act(delta);
         worldStage.draw();
+
+        for(Enemy e: enemies) {
+            if (e.getBound().overlaps(hero.getBound())) e.attack(hero);
+        }
 
         touchpadMove.TouchpadLogic(uiStage);
         touchpadAttack.TouchpadLogic(uiStage);

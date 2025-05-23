@@ -5,19 +5,22 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
 import end.team.center.GameCore.Animations.CharacterAnimation;
+import end.team.center.GameCore.Logic.AI.AI;
 import end.team.center.Screens.Game.GameScreen;
 
-public class Enemy extends Entity {
+public abstract class Enemy extends Entity {
     private static final boolean STAN_IS_STOP_MOB = false;
 
+    protected AI ai;
     protected int level;
     protected boolean stan = false;
     protected float timeToReload = 0;
     protected float timePlayerInvulnerability = 0.5f;
 
-    public Enemy(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, float worldHeight, float worldWidth) {
+    public Enemy(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, float worldHeight, float worldWidth, AI ai) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
         this.level = level;
+        this.ai = ai;
     }
 
 

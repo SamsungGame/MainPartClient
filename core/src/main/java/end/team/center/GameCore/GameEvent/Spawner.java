@@ -8,20 +8,25 @@ import java.util.Arrays;
 
 import end.team.center.GameCore.Library.EnemyType;
 import end.team.center.GameCore.Library.Mobs.Owl;
+import end.team.center.GameCore.Logic.AI.AI_Owl;
 import end.team.center.GameCore.Objects.Enemy;
+import end.team.center.GameCore.Objects.Hero;
 import end.team.center.Screens.Game.GameScreen;
 
 public class Spawner {
     private final int minRadiusSpawnMobY = Gdx.graphics.getHeight();
     private final int minRadiusSpawnMobX = Gdx.graphics.getWidth();
     private final int maxCountMobInMap = 100;
+    private int countEnemy = 0;
     private final int maxRadiusSpawn = (int) Math.min(GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH);
     private int timeSpawn;
     private ArrayList<EnemyType> canSpawn;
     private PostMob poster;
+    private Hero hero;
 
-    public Spawner(PostMob poster, int countLocation) {
+    public Spawner(PostMob poster, Hero hero, int countLocation) {
         this.poster = poster;
+        this.hero = hero;
 
         canSpawn = new ArrayList<>();
 
@@ -36,7 +41,7 @@ public class Spawner {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true) {
+                while (maxCountMobInMap > countEnemy) {
                     Enemy[] enemies = new Enemy[canSpawn.size()];
 
                     for (int i = 0; i < canSpawn.size(); i++) {
@@ -44,6 +49,9 @@ public class Spawner {
                     }
 
                     poster.post(enemies);
+
+                    countEnemy += enemies.length;
+
                     System.out.println("Отправка мобов: " + Arrays.toString(enemies));
 
                     try {
@@ -59,7 +67,7 @@ public class Spawner {
 
     private Enemy spawn(EnemyType type) {
         if (type == EnemyType.Owl) {
-            return new Owl(type, randomCord(), GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH);
+            return new Owl(type, randomCord(), GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Owl(hero));
         } else return null;
     }
 
@@ -68,10 +76,14 @@ public class Spawner {
 
         Vector2 vector;
 
-        if (zone <= 1) return vector = new Vector2((int) (0 - (Math.random() * maxRadiusSpawn)), (int) (0 + (Math.random() * maxRadiusSpawn)));
-        if (zone <= 2) return vector = new Vector2((int) (0 - (Math.random() * maxRadiusSpawn)), (int) (0 - (Math.random() * maxRadiusSpawn)));
-        if (zone <= 3) return vector = new Vector2((int) (minRadiusSpawnMobX + (Math.random() * maxRadiusSpawn)), (int) (0 + (Math.random() * maxRadiusSpawn)));
-        else           return vector = new Vector2((int) (minRadiusSpawnMobX + (Math.random() * maxRadiusSpawn)), (int) (0 - (Math.random() * maxRadiusSpawn)));
+        if (zone <= 1) vector = new Vector2((int) (0 - (Math.random() * maxRadiusSpawn)), (int) (0 + (Math.random() * maxRadiusSpawn)));
+        if (zone <= 2) vector = new Vector2((int) (0 - (Math.random() * maxRadiusSpawn)), (int) (0 - (Math.random() * maxRadiusSpawn)));
+        if (zone <= 3) vector = new Vector2((int) (minRadiusSpawnMobX + (Math.random() * maxRadiusSpawn)), (int) (0 + (Math.random() * maxRadiusSpawn)));
+        else           vector = new Vector2((int) (minRadiusSpawnMobX + (Math.random() * maxRadiusSpawn)), (int) (0 - (Math.random() * maxRadiusSpawn)));
+
+        System.out.println("По плану: " + vector.x + "/" + vector.y);
+
+        return vector;
     }
 
 }

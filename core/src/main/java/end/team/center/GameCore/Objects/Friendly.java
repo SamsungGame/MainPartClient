@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import end.team.center.GameCore.Animations.CharacterAnimation;
 
-public class Friendly extends Entity {
+public abstract class Friendly extends Entity {
 
     public Friendly(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, float worldHeight, float worldWidth) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
