@@ -46,13 +46,14 @@ public class Entity extends GameObject {
         TextureRegion[] leftStayArray    = anim.getLeftStay();
 
         walkRightAnimation = new Animation<>(0.13f, rightFramesArray);
-        walkLeftAnimation = new Animation<>(0.13f, leftFramesArray);
+        walkLeftAnimation  = new Animation<>(0.13f, leftFramesArray);
         stayRightAnimation = new Animation<>(0.22f, rightStayArray);
-        stayLeftAnimation = new Animation<>(0.22f, leftStayArray);
+        stayLeftAnimation  = new Animation<>(0.22f, leftStayArray);
     }
 
     @Override
     public void act(float delta) {
+        super.act(delta);
     }
 
     public void move(float deltaX, float deltaY, float delta, boolean isMob) {
@@ -71,7 +72,7 @@ public class Entity extends GameObject {
             vector.set(potentialPosition);
             setPosition(vector.x, vector.y);
         } else {
-            vector.set(new Vector2(deltaX, deltaY));
+            vector.add(new Vector2(deltaX, deltaY));
             setPosition(vector.x, vector.y);
         }
 

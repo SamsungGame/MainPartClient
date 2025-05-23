@@ -10,14 +10,9 @@ public class AI {
         Vector2 direction = target.sub(vector);
 
         // Нормализуем вектор, чтобы сделать его единичной длины
-        if (direction.len() > 0) {
-            direction.nor(); // Нормализуем
+        if (direction.len() > 0) direction.nor(); // Нормализуем
 
-            // Обновляем позицию врага
-            vector.add(direction.scl(speed * delta));
-        }
-
-        // Устанавливаем новую позицию врага
-        return vector;
+        // Обновляем позицию врага
+        return direction.scl(speed * delta);
     }
 }

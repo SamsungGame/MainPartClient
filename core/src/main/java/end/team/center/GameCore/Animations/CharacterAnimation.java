@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public enum CharacterAnimation {
     Hero(AnimationsHero.rightFrames, AnimationsHero.leftFrames, AnimationsHero.rightStay, AnimationsHero.leftStay),
-    Owl(AnimationsOwl.leftTurn, AnimationsOwl.rightTurn, AnimationsOwl.leftTurn, AnimationsOwl.rightTurn);
+    Owl(AnimationsOwl.rightTurn, AnimationsOwl.leftTurn, AnimationsOwl.rightTurn, AnimationsOwl.leftTurn);
 
     private TextureRegion[] rightWalk;
     private TextureRegion[] leftWalk;
