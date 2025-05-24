@@ -22,7 +22,7 @@ public class Hero extends Friendly {
     public Hero(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, float worldWidth, float worldHeight) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
 
-        weapon = new Knife(WeaponType.knife, vector, this);
+        weapon = new Knife(WeaponType.knife, this);
     }
 
     public float getAntiRadiationCostumePower() {
@@ -30,6 +30,19 @@ public class Hero extends Friendly {
     }
     public Weapon getWep() {
         return weapon;
+    }
+
+    public void useWeapon(float x, float y) {
+        if (weapon instanceof Knife) {
+            weapon.showGhost();
+            weapon.setRotationAroundPlayer(x, y);
+        }
+    }
+
+    public void unUseWeapon() {
+        if (weapon instanceof Knife) {
+            ((Knife) weapon).hideGhost();
+        }
     }
 
     @Override

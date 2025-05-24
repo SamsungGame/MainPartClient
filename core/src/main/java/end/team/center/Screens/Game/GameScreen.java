@@ -20,6 +20,7 @@ import java.util.List;
 import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.GameEvent.PostMob;
 import end.team.center.GameCore.GameEvent.Spawner;
+import end.team.center.GameCore.Library.Items.Knife;
 import end.team.center.GameCore.Objects.InInventary.Weapon;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
 import end.team.center.GameCore.Objects.OnMap.Hero;
@@ -103,6 +104,7 @@ public class GameScreen implements Screen {
         uiStage.addActor(imagePower);
         uiStage.addActor(costumePower);
 
+
         // Настройки спавна мобов
         enemies = new ArrayList<>();
 
@@ -136,12 +138,9 @@ public class GameScreen implements Screen {
         hero.move(moveX, moveY, delta, false);
 
         if (touchpadAttack.isTouchpadActive()) {
-            Weapon w = hero.getWep();
-
-            w.setRotationAroundPlayer(dx, dy);
-            w.showGhost();
+            hero.useWeapon(dx, dy);
         } else if (hero.getWep().getShow()) {
-            hero.getWep().hideGhost();
+            hero.unUseWeapon();
         }
 
         gameCamera.updateCameraPosition(hero.getVector().x, hero.getVector().y, hero.getWidth(), hero.getHeight());

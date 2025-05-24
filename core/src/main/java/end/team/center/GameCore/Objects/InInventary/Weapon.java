@@ -11,24 +11,30 @@ public abstract class Weapon extends Interactable {
     protected TextureRegion textureR;
     protected int damage;
     protected float reload;
-    protected Hero hero;
     protected boolean show = false, isActivate = false;
-    protected Vector2 flyPoint;
     protected Vector2 lastTouchpadVector;
 
-    public Weapon(Texture texture, Vector2 vector, Hero hero, int width, int height, int damage, float reload) {
-        super(texture, vector, width, height);
+    public Weapon(Texture texture, Hero hero, int width, int height, int damage, float reload) {
+        super(texture, hero, width, height);
         this.damage = damage;
         this.reload = reload;
         this.hero = hero;
-        flyPoint = new Vector2(hero.getCenterVector().x, (hero.getHeight() + hero.getWidth()) / 2 + hero.getVector().y);
+
         lastTouchpadVector = new Vector2();
         textureR = new TextureRegion(texture);
 
-        setPosition(flyPoint.x, flyPoint.y);
+        vector = new Vector2(hero.getCenterVector());
+        vector.y = hero.getHeight() + hero.getVector().y;
+
+        setPosition(vector.x, vector.y);
+        setBounds(vector.x, vector.y, width, height);
     }
 
     public void showGhost() {
+        System.out.println("Позиция игрока: " + hero.getCenterVector().x + "/" + hero.getCenterVector().y);
+        System.out.println("Центр ножа: " + getOriginX() + "/" + getOriginY());
+        System.out.println("Позиция ножа: " + getX() + "/" + getY());
+
         show = true;
         isActivate = true;
     }
@@ -53,24 +59,32 @@ public abstract class Weapon extends Interactable {
             angleDeg += 360;
         }
 
-        lastTouchpadVector.x = x;
-        lastTouchpadVector.y = y;
+        lastTouchpadVector.set(x, y);
 
-        setOrigin(hero.getCenterVector().x, hero.getCenterVector().y);
+        // Получаем локальные координаты для центра героя
+        Vector2 localPos = super.stageToLocalCoordinates(hero.getCenterVector());
+
+        // Устанавливаем точку вращения
+        setOrigin(localPos.x, localPos.y);
+
         setRotation(angleDeg);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+
+        if (show) batch.draw(textureR, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
 
-        flyPoint.x = vector.x + hero.getWidth() / 2;
-        flyPoint.y = (hero.getHeight() + hero.getWidth()) / 2 + hero.getVector().y;
+        setOrigin(hero.getCenterVector().x, hero.getCenterVector().y);
+
+        vector = new Vector2(hero.getCenterVector());
+        vector.y += hero.getHeight() + 20 + hero.getVector().y;
     }
 
     @Override

@@ -2,39 +2,21 @@ package end.team.center.GameCore.Library.Items;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-
-import end.team.center.GameCore.Library.Effects;
 import end.team.center.GameCore.Library.WeaponType;
 import end.team.center.GameCore.Objects.InInventary.Weapon;
-import end.team.center.GameCore.Library.Particles.ForwardsEffect;
 import end.team.center.GameCore.Objects.OnMap.Hero;
 
 public class Knife extends Weapon {
-    protected ForwardsEffect weaponStep;
     protected float distance;
 
-    public Knife(Texture texture, Vector2 vector, Hero hero, int width, int height, int damage, float reload, float distance) {
-        super(texture, vector, hero, width, height, damage, reload);
+    public Knife(Texture texture, Hero hero, int width, int height, int damage, float reload, float distance) {
+        super(texture, hero, width, height, damage, reload);
         this.distance = distance;
-
-        initialization();
     }
 
-    public Knife(WeaponType type, Vector2 vector, Hero hero) {
-        super(type.getTexture(), vector, hero, type.getWidth(), type.getHeight(), type.getDamage(), type.getReload());
+    public Knife(WeaponType type, Hero hero) {
+        super(type.getTexture(), hero, type.getWidth(), type.getHeight(), type.getDamage(), type.getReload());
         this.distance = type.getDistance();
-
-        initialization();
-    }
-
-    public void initialization() {
-        weaponStep = new ForwardsEffect(Effects.knifeStep, new Vector2(hero.getCenterVector()), hero);
-    }
-
-    public void use(Vector2 target) {
-        weaponStep.startMove(hero.getCenterVector(), target, getRotation());
     }
 
     @Override
@@ -45,23 +27,19 @@ public class Knife extends Weapon {
     @Override
     public void hideGhost() {
         super.hideGhost();
+
         isActivate = false;
-        use(new Vector2(lastTouchpadVector.x * distance, lastTouchpadVector.y * distance));
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
-        if(show) batch.draw(textureR, flyPoint.x, flyPoint.y, getOriginX(), getOriginY(), width, height, getScaleX(), getScaleY(), getRotation());
-        if(weaponStep.getStart()) weaponStep.draw(batch, parentAlpha);
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
-
-        weaponStep.act(delta);
     }
 
     @Override
