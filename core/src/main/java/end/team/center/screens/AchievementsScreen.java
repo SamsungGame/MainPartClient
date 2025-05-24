@@ -4,10 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import end.team.center.MyGame;
@@ -29,13 +31,11 @@ public class AchievementsScreen implements Screen {
         TextButton backButton = new TextButton("Назад", skin);
         backButton.setSize(200, 150);
         backButton.setPosition(50,  Gdx.graphics.getHeight() - backButton.getHeight());
-        backButton.addListener(event -> {
-            if(event.isHandled()){
+        backButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new MainMenuScreen(game));
-                backButton.remove();
-                return true;
             }
-            return false;
         });
 
         Image achievementsImage = new Image(achievementsTexture);
