@@ -1,20 +1,23 @@
-package end.team.center.GameCore.Objects.InInventary;
+package end.team.center.GameCore.Objects.Effects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import end.team.center.GameCore.Objects.OnMap.Hero;
 
-public abstract class Interactable extends Actor {
+public abstract class Effect extends Actor {
+    protected TextureRegion texture;
     protected int height, width;
-    protected Hero hero;
+    protected float speed;
 
-    public Interactable(Hero hero, int width, int height) {
+    public Effect(Texture texture, int width, int height, float speed) {
+        this.texture = new TextureRegion(texture);
         this.width = width;
         this.height = height;
-        this.hero = hero;
+        this.speed = speed;
 
         setSize(width, height);
     }
@@ -32,10 +35,5 @@ public abstract class Interactable extends Actor {
 
     public void dispose() {
 
-    }
-
-    @Override
-    public Vector2 stageToLocalCoordinates(Vector2 stageCoords) {
-        return super.stageToLocalCoordinates(stageCoords);
     }
 }

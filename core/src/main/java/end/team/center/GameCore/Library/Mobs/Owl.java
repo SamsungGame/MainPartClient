@@ -50,8 +50,12 @@ public class Owl extends Enemy {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (((AI_Owl) ai).isAttaking) batch.draw(mRight ? rDiveTexture : lDiveTexture, vector.x, vector.y, getWidth(), getHeight());
-        else super.draw(batch, parentAlpha);
+        if (isLive) {
+            if (((AI_Owl) ai).isAttaking) {
+                if (mRight) batch.draw(rDiveTexture, vector.x, vector.y, getWidth(), getHeight());
+                if (!mRight) batch.draw(lDiveTexture, vector.x, vector.y, getWidth(), getHeight());
+            } else super.draw(batch, parentAlpha);
+        }
     }
 
     @Override

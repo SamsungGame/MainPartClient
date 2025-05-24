@@ -26,38 +26,54 @@ public abstract class Enemy extends Entity {
 
 
     public void attack(Hero hero) {
-        if (!hero.isInvulnerability && !stan) {
-            hero.health-=this.damage;
-            hero.frameInvulnerability(timePlayerInvulnerability);
+        if (isLive) {
+            if (!hero.isInvulnerability && !stan) {
+                hero.health -= this.damage;
+                hero.frameInvulnerability(timePlayerInvulnerability);
 
-            stan = true;
-            timeToReload = 0;
+                stan = true;
+                timeToReload = 0;
+            }
         }
     }
 
     @Override
     public void move(float deltaX, float deltaY, float delta, boolean isMob) {
-        if (!stan || !STAN_IS_STOP_MOB) super.move(deltaX, deltaY, delta, isMob);
+        if (isLive) {
+            if (!stan || !STAN_IS_STOP_MOB) super.move(deltaX, deltaY, delta, isMob);
+        }
     }
 
     @Override
     public void act(float delta) {
-        super.act(delta);
+        if (isLive) {
+            super.act(delta);
 
-        if (stan) {
-            timeToReload += delta;
+            if (stan) {
+                timeToReload += delta;
 
-            if (timeToReload >= 1.5f) stan = false;
+                if (timeToReload >= 1.5f) stan = false;
+            }
         }
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
+        if (isLive) {
+            super.draw(batch, parentAlpha);
+        }
     }
 
     @Override
     public void dispose() {
         super.dispose();
+    }
+
+    public void die() {
+        isLive = false;
+    }
+
+    public boolean isLive() {
+        return isLive;
     }
 }

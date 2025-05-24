@@ -92,6 +92,9 @@ public abstract class Entity extends GameObject {
     public int getHealth() {
         return health;
     }
+    public void setHealth(int health) {
+        this.health = health;
+    }
 
     public void updateBound() {
         bound.x = vector.x;
@@ -106,11 +109,11 @@ public abstract class Entity extends GameObject {
         if (isMoving) {
             currentFrame = mRight
                     ? walkRightAnimation.getKeyFrame(stateTime, true)
-                    : walkLeftAnimation.getKeyFrame(stateTime, true);
+                    : walkLeftAnimation .getKeyFrame(stateTime, true);
         } else {
             currentFrame = mRight
                     ? stayRightAnimation.getKeyFrame(stateTime, true)
-                    : stayLeftAnimation.getKeyFrame(stateTime, true);
+                    : stayLeftAnimation .getKeyFrame(stateTime, true);
         }
 
         batch.draw(currentFrame, vector.x, vector.y, getWidth(), getHeight());
