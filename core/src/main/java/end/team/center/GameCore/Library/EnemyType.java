@@ -5,15 +5,18 @@ import com.badlogic.gdx.graphics.Texture;
 
 public enum EnemyType {
     // Типы существующих врагов
-    fogFrog(new Texture(Gdx.files.internal("")), new Texture(Gdx.files.internal("")), 5, 0, 1, 1, 400f);
+    Owl(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png")), CharacterAnimation.Owl, 120, 140, 5, 0, 1, 1, 100f);
 
-    private final Texture leftTurn, rightTurn;
+    private final Texture texture;
+    private final CharacterAnimation anim;
     private final int health, defense, damage, level; // Базовые
-    private final float speed;
+    private final float speed, height, width;
 
-    EnemyType(Texture leftTurn, Texture rightTurn, int health, int defense, int damage, int level, float speed) {
-        this.leftTurn = leftTurn;
-        this.rightTurn = rightTurn;
+    EnemyType(Texture texture, CharacterAnimation anim, float height, float width, int health, int defense, int damage, int level, float speed) {
+        this.texture = texture;
+        this.anim = anim;
+        this.height = height;
+        this.width = width;
         this.health = health;
         this.defense = defense;
         this.damage = damage;
@@ -37,15 +40,23 @@ public enum EnemyType {
         return speed;
     }
 
-    public Texture getLeftTurn() {
-        return leftTurn;
-    }
-
-    public Texture getRightTurn() {
-        return rightTurn;
-    }
-
     public int getLevel() {
         return level;
+    }
+
+    public Texture getTexture() {
+        return texture;
+    }
+
+    public CharacterAnimation getAnim() {
+        return anim;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public float getWidth() {
+        return width;
     }
 }

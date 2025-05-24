@@ -55,13 +55,13 @@ public class MainMenuScreen implements Screen {
         buttonSetting.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                // hello
+                ((Center) Gdx.app.getApplicationListener()).setScreen(new SettingScreen());
             }
         });
         buttonAboutGame.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                ((Center) Gdx.app.getApplicationListener()).setScreen(new PowerSelectScreen());
+                ((Center) Gdx.app.getApplicationListener()).setScreen(new AboutGameScreen());
             }
         });
     }

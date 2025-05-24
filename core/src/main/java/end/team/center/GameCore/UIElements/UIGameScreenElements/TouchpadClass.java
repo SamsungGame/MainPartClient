@@ -1,4 +1,4 @@
-package end.team.center.GameCore.UIElements;
+package end.team.center.GameCore.UIElements.UIGameScreenElements;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -88,6 +88,9 @@ public class TouchpadClass extends Touchpad {
         }
     }
 
+    public boolean isTouchpadActive() {
+        return isTouchpadActive;
+    }
     public void touchpadSetBounds() {
 
         if(xp != this.x && yp != this.y) {
