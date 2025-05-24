@@ -42,6 +42,8 @@ public class Hero extends Friendly {
         super.act(delta);
 
         antiRadiationCostumePower -= (float) (((radiationLevel * 0.6) / radiationProtect) * delta);
+
+        weapon.act(delta);
     }
 
     @Override

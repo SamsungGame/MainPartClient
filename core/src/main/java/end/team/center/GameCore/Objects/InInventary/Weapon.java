@@ -2,11 +2,13 @@ package end.team.center.GameCore.Objects.InInventary;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import end.team.center.GameCore.Objects.OnMap.Hero;
 
 public abstract class Weapon extends Interactable {
+    protected TextureRegion textureR;
     protected int damage;
     protected float reload;
     protected Hero hero;
@@ -19,8 +21,11 @@ public abstract class Weapon extends Interactable {
         this.damage = damage;
         this.reload = reload;
         this.hero = hero;
-        flyPoint = new Vector2(vector.x + hero.getWidth() / 2, (hero.getHeight() + hero.getWidth()) / 2 + hero.getVector().y);
+        flyPoint = new Vector2(hero.getCenterVector().x, (hero.getHeight() + hero.getWidth()) / 2 + hero.getVector().y);
         lastTouchpadVector = new Vector2();
+        textureR = new TextureRegion(texture);
+
+        setPosition(flyPoint.x, flyPoint.y);
     }
 
     public void showGhost() {
@@ -36,7 +41,7 @@ public abstract class Weapon extends Interactable {
         return show;
     }
 
-    public void setRotationAroundPlayer(Vector2 hero, float x, float y) {
+    public void setRotationAroundPlayer(float x, float y) {
         // Находим угол в радианах
         float angleRad = (float) Math.atan2(y, x);
 
@@ -51,7 +56,7 @@ public abstract class Weapon extends Interactable {
         lastTouchpadVector.x = x;
         lastTouchpadVector.y = y;
 
-        setOrigin(hero.x, hero.y);
+        setOrigin(hero.getCenterVector().x, hero.getCenterVector().y);
         setRotation(angleDeg);
     }
 

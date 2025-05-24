@@ -7,29 +7,33 @@ import com.badlogic.gdx.math.Vector2;
 
 import end.team.center.GameCore.Library.Effects;
 import end.team.center.GameCore.Logic.GMath;
+import end.team.center.GameCore.Objects.OnMap.Hero;
 import end.team.center.GameCore.Objects.Particles.Effect;
 
 public class ForwardsEffect extends Effect {
     protected Vector2 target;
     protected int duration;
     protected boolean start = false;
-    public ForwardsEffect(Texture texture, Vector2 vector, int width, int height, int duration, float speed) {
+    protected Hero hero;
+    protected float elapsedTime = 0f;
+    public ForwardsEffect(Texture texture, Vector2 vector, Hero hero, int width, int height, int duration, float speed) {
         super(texture, vector, width, height, speed);
         this.duration = duration;
     }
 
-    public ForwardsEffect(Effects effect, Vector2 vector, int width, int height) {
-        super(effect.getTexture(), vector, width, height, effect.getSpeed());
+    public ForwardsEffect(Effects effect, Vector2 vector, Hero hero) {
+        super(effect.getTexture(), vector, effect.getWidth(), effect.getHeight(), effect.getSpeed());
         this.duration = effect.getDuration();
+        this.hero = hero;
     }
 
     private boolean startIllusion(float delta) {
         Vector2 potentialPosition = new Vector2(vector.x + target.x * speed * delta,
             vector.y + target.y * speed * delta);
 
-        if (GMath.checkVectorDistance(potentialPosition, target, (int) potentialPosition.x, (int) potentialPosition.y)) {
-            return true;
-        }
+        elapsedTime += delta;
+
+        if (elapsedTime >= duration) return true;
 
         vector.set(potentialPosition);
         setPosition(vector.x, vector.y);
@@ -37,7 +41,8 @@ public class ForwardsEffect extends Effect {
         return false;
     }
 
-    public void startMove(Vector2 target, float rotation) {
+    public void startMove(Vector2 vector, Vector2 target, float rotation) {
+        this.vector = vector;
         start = true;
         this.target = target;
 
@@ -59,10 +64,14 @@ public class ForwardsEffect extends Effect {
     public void act(float delta) {
         super.act(delta);
 
-        boolean s = true;
-        if(start) s = startIllusion(delta);
-        if(s) start = false;
-        else  start = true;
+        if(start) {
+            if(startIllusion(delta)) {
+                start = false;
+                vector = hero.getCenterVector();
+            }
+        } else {
+            vector = hero.getCenterVector();
+        }
     }
 
 }

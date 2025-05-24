@@ -138,7 +138,7 @@ public class GameScreen implements Screen {
         if (touchpadAttack.isTouchpadActive()) {
             Weapon w = hero.getWep();
 
-            w.setRotationAroundPlayer(hero.getCenterVector(), dx, dy);
+            w.setRotationAroundPlayer(dx, dy);
             w.showGhost();
         } else if (hero.getWep().getShow()) {
             hero.getWep().hideGhost();

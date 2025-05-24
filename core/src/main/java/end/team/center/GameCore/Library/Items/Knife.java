@@ -30,11 +30,11 @@ public class Knife extends Weapon {
     }
 
     public void initialization() {
-        weaponStep = new ForwardsEffect(Effects.knifeStep, new Vector2(hero.getCenterVector()), 16, 7);
+        weaponStep = new ForwardsEffect(Effects.knifeStep, new Vector2(hero.getCenterVector()), hero);
     }
 
     public void use(Vector2 target) {
-        weaponStep.startMove(target, getRotation());
+        weaponStep.startMove(hero.getCenterVector(), target, getRotation());
     }
 
     @Override
@@ -53,13 +53,15 @@ public class Knife extends Weapon {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
-        if(show) batch.draw(new TextureRegion(texture), flyPoint.x, flyPoint.y, getOriginX(), getOriginY(), width, height, getScaleX(), getScaleY(), getRotation());
+        if(show) batch.draw(textureR, flyPoint.x, flyPoint.y, getOriginX(), getOriginY(), width, height, getScaleX(), getScaleY(), getRotation());
         if(weaponStep.getStart()) weaponStep.draw(batch, parentAlpha);
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
+
+        weaponStep.act(delta);
     }
 
     @Override

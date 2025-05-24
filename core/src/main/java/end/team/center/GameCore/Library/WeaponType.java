@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
 public enum WeaponType {
-    knife(new Texture(Gdx.files.internal("UI/GameUI/Weapon/knife.png")), 13, 3, 5,2, 400);
+    knife(new Texture(Gdx.files.internal("UI/GameUI/Weapon/knife.png")), 104, 24, 5,2, 200);
 
     private final Texture texture;
     private final int width, height, damage;
