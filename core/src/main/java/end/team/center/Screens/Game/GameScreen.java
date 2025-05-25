@@ -181,6 +181,50 @@ public class GameScreen implements Screen {
         // Обновление камеры
         gameCamera.updateCameraPosition(hero.getVector().x, hero.getVector().y, hero.getWidth(), hero.getHeight());
 
+        // Шейдер
+        frameBuffer.begin();
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        worldStage.act(delta);
+        worldStage.draw();
+        frameBuffer.end();
+
+        Vector2 heroPosScreen = worldStage.stageToScreenCoordinates(
+            new Vector2(hero.getX() + hero.getWidth() / 2f, hero.getY() + hero.getHeight() / 2f)
+        );
+        float heroXNorm = heroPosScreen.x / Gdx.graphics.getWidth();
+        float heroYNorm = 1f - (heroPosScreen.y / Gdx.graphics.getHeight());
+
+        Texture worldTexture = frameBuffer.getColorBufferTexture();
+        worldTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        // Мягкая маска
+        batch.setShader(maskShader);
+        maskShader.bind();
+        maskShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
+        maskShader.setUniformf("u_time", totalTime);
+
+        batch.begin();
+        batch.draw(worldTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
+            0, 0, worldTexture.getWidth(), worldTexture.getHeight(), false, true);
+        batch.end();
+
+        // Затемнение
+        batch.setShader(dimmingShader);
+        dimmingShader.bind();
+        dimmingShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
+
+        batch.begin();
+        batch.draw(worldTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
+            0, 0, worldTexture.getWidth(), worldTexture.getHeight(), false, true);
+        batch.end();
+
+        batch.setShader(null);
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+
         // Обновление джостиков
         touchpadMove.TouchpadLogic(uiStage);
         touchpadAttack.TouchpadLogic(uiStage);
