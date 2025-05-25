@@ -24,6 +24,8 @@ public class Hero extends Friendly {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
 
         weapon = new Knife(WeaponType.knife, this);
+        exp = 0;
+        level = 0;
     }
 
     public float getAntiRadiationCostumePower() {
@@ -64,8 +66,8 @@ public class Hero extends Friendly {
     }
 
     @Override
-    public void move(float deltaX, float deltaY, float delta, boolean isMob) {
-        super.move(deltaX, deltaY, delta, isMob);
+    public void move(float deltaX, float deltaY, float delta) {
+        super.move(deltaX, deltaY, delta);
     }
 
     @Override

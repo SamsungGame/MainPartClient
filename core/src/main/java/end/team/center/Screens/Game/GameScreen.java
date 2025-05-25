@@ -48,7 +48,7 @@ public class GameScreen implements Screen {
 
     private Spawner spawner;
     private int locationCount = 0;
-    private ArrayList<Enemy> enemies;
+    public static ArrayList<Enemy> enemies;
 
     private Label costumePower;
     private Label playerHealth;
@@ -168,7 +168,7 @@ public class GameScreen implements Screen {
         float dy = normalizedY * 2 - 1;
 
         // Обновление значений классов типа "Object & Interacteble"
-        hero.move(moveX, moveY, delta, false);
+        hero.move(moveX, moveY, delta);
 
         if (touchpadAttack.isTouchpadActive()) {
             hero.useWeapon(dx, dy);
@@ -187,7 +187,7 @@ public class GameScreen implements Screen {
                     if (e.getHealth() <= 0) {
                         e.die();
 
-                        Experience experience = new Experience(ItemType.exp, new Vector2(e.getVector()), hero, e.getExp());
+                        Experience experience = new Experience(ItemType.exp, new Vector2(e.getCenterVector()), hero, e.getExp());
                         worldStage.addActor(experience);
                     }
                 }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import end.team.center.GameCore.Library.CharacterAnimation;
@@ -72,13 +73,13 @@ public class Owl extends Enemy {
         if (ai instanceof AI_Owl) {
             Vector2 v = ((AI_Owl) ai).MoveToPlayer(null, vector, speed, delta);
 
-            move(v.x, v.y, delta, true);
+            move(v.x, v.y, delta);
         }
     }
 
     @Override
-    public void move(float deltaX, float deltaY, float delta, boolean isMob) {
-        super.move(deltaX, deltaY, delta, isMob);
+    public void move(float deltaX, float deltaY, float delta) {
+        super.move(deltaX, deltaY, delta);
     }
 
     @Override

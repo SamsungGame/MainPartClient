@@ -10,7 +10,7 @@ import end.team.center.GameCore.Library.CharacterAnimation;
 
 public abstract class Entity extends GameObject {
 
-    private static final float BOUNDARY_PADDING = 100f;
+    protected static final float BOUNDARY_PADDING = 100f;
 
     protected int health;
     protected int damage, defence;
@@ -56,36 +56,6 @@ public abstract class Entity extends GameObject {
         super.act(delta);
     }
 
-    public void move(float deltaX, float deltaY, float delta, boolean isMob) {
-        isMoving = deltaX != 0 || deltaY != 0;
-
-        if (!isMob) {
-            Vector2 potentialPosition = new Vector2(vector.x + deltaX * speed * delta,
-                    vector.y + deltaY * speed * delta);
-
-            // Ограничения по границам мира
-            potentialPosition.x = Math.max(BOUNDARY_PADDING,
-                    Math.min(potentialPosition.x, worldWidth - BOUNDARY_PADDING - width));
-            potentialPosition.y = Math.max(BOUNDARY_PADDING,
-                    Math.min(potentialPosition.y, worldHeight - BOUNDARY_PADDING - height));
-
-            vector.set(potentialPosition);
-            setPosition(vector.x, vector.y);
-        } else {
-            vector.add(new Vector2(deltaX, deltaY));
-            setPosition(vector.x, vector.y);
-        }
-
-        if (deltaX > 0) {
-            mRight = true;
-        } else if (deltaX < 0) {
-            mRight = false;
-        }
-
-        updateBound();
-
-        stateTime += delta;
-    }
 
     public float getSpeed() {
         return speed;
