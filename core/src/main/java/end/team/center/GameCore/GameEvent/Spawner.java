@@ -81,8 +81,6 @@ public class Spawner {
         if (zone <= 3) vector = new Vector2((int) (minRadiusSpawnMobX + (Math.random() * maxRadiusSpawn)), (int) (0 + (Math.random() * maxRadiusSpawn)));
         else           vector = new Vector2((int) (minRadiusSpawnMobX + (Math.random() * maxRadiusSpawn)), (int) (0 - (Math.random() * maxRadiusSpawn)));
 
-        System.out.println("По плану: " + vector.x + "/" + vector.y);
-
         return vector;
     }
 

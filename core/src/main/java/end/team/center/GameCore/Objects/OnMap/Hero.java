@@ -34,14 +34,19 @@ public class Hero extends Friendly {
 
     public void useWeapon(float x, float y) {
         if (weapon instanceof Knife) {
-            weapon.showGhost();
-            weapon.setRotationAroundPlayer(x, y);
+            ((Knife) weapon).showGhost(x, y);
         }
     }
 
     public void unUseWeapon() {
         if (weapon instanceof Knife) {
             ((Knife) weapon).hideGhost();
+        }
+    }
+
+    public void startAttackAnim() {
+        if (weapon instanceof Knife) {
+            ((Knife) weapon).startAnimation();
         }
     }
 
@@ -56,14 +61,16 @@ public class Hero extends Friendly {
 
         antiRadiationCostumePower -= (float) (((radiationLevel * 0.6) / radiationProtect) * delta);
 
-        weapon.act(delta);
+        ((Knife) weapon).act(delta);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
-        weapon.draw(batch, parentAlpha);
+        if (weapon instanceof Knife) {
+            ((Knife) weapon).draw(batch, parentAlpha);
+        }
     }
 
     @Override
