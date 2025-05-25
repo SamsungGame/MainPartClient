@@ -31,6 +31,7 @@ public class AchievementsScreen implements Screen {
         TextButton backButton = new TextButton("Назад", skin);
         backButton.setSize(200, 150);
         backButton.setPosition(50,  Gdx.graphics.getHeight() - backButton.getHeight());
+
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

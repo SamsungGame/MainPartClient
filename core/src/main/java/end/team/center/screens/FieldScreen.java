@@ -123,8 +123,8 @@ public class FieldScreen implements Screen {
         int y;
         int size = 50;
         while (true) {
-            x = random.nextInt(20000 - size);
-            y = random.nextInt(20000 - size);
+            x = random.nextInt(fieldX - size);
+            y = random.nextInt(fieldY - size);
             boolean correct = true;
             for (Zone zone : zones) {
                 if (!(x + size < zone.x || zone.x + zone.size < x || y + size < zone.y || zone.y + zone.size < y)) {
@@ -143,8 +143,8 @@ public class FieldScreen implements Screen {
         size = 200;
         for (int j = 0; j < 100; j++) {
             while (true) {
-                x = random.nextInt(20000 - size);
-                y = random.nextInt(20000 - size);
+                x = random.nextInt(fieldX - size);
+                y = random.nextInt(fieldY - size);
                 boolean correct = true;
                 for (Zone zone : zones) {
                     if (!(x + size < zone.x || zone.x + zone.size < x || y + size < zone.y || zone.y + zone.size < y)) {
@@ -165,8 +165,8 @@ public class FieldScreen implements Screen {
         size = 400;
         for (int j = 0; j < 100; j++) {
             while (true) {
-                x = random.nextInt(20000 - size);
-                y = random.nextInt(20000 - size);
+                x = random.nextInt(fieldX - size);
+                y = random.nextInt(fieldY - size);
                 boolean correct = true;
                 for (Zone zone : zones) {
                     if (!(x + size < zone.x || zone.x + zone.size < x || y + size < zone.y || zone.y + zone.size < y)) {
@@ -187,8 +187,8 @@ public class FieldScreen implements Screen {
         size = 500;
         for (int j = 0; j < 100; j++) {
             while (true) {
-                x = random.nextInt(20000 - size);
-                y = random.nextInt(20000 - size);
+                x = random.nextInt(fieldX - size);
+                y = random.nextInt(fieldY - size);
                 boolean correct = true;
                 for (Zone zone : zones) {
                     if (!(x + size < zone.x || zone.x + zone.size < x || y + size < zone.y || zone.y + zone.size < y)) {
@@ -214,8 +214,8 @@ public class FieldScreen implements Screen {
         String type = "Radiation";
         for (int i = 0; i < 2000; i++) {
             while (true) {
-                x = random.nextInt(20000 - size);
-                y = random.nextInt(20000 - size);
+                x = random.nextInt(fieldX - size);
+                y = random.nextInt(fieldY - size);
                 boolean correct = true;
                 for (Zone zone : zones) {
                     if (!(x + size < zone.x || zone.x + zone.size < x || y + size < zone.y || zone.y + zone.size < y)) {
@@ -234,8 +234,8 @@ public class FieldScreen implements Screen {
         size = 10;
         for (int i = 0; i < 9900; i++) {
             while (true) {
-                x = random.nextInt(20000 - size);
-                y = random.nextInt(20000 - size);
+                x = random.nextInt(fieldX - size);
+                y = random.nextInt(fieldY - size);
                 boolean correct = true;
                 for (Zone zone : zones) {
                     if (!(x + size < zone.x || zone.x + zone.size < x || y + size < zone.y || zone.y + zone.size < y)) {

@@ -30,19 +30,19 @@ public class MainMenuScreen implements Screen {
             Gdx.graphics.getHeight() / 2 - gameTitleImage.getHeight() / 2 + 200);
 
         TextButton newGameButton = new TextButton("Новая игра", skin);
-        newGameButton.setSize(300, 100);
+        newGameButton.setSize(300, 150);
         newGameButton.setPosition(Gdx.graphics.getWidth() / 2 - newGameButton.getWidth() / 2,
             Gdx.graphics.getHeight() / 2 - newGameButton.getHeight() / 2 - newGameButton.getHeight() / 2);
 
         TextButton achievementsButton = new TextButton("Достижения", skin);
-        achievementsButton.setSize(300, 100);
+        achievementsButton.setSize(300, 150);
         achievementsButton.setPosition(Gdx.graphics.getWidth() / 2 - achievementsButton.getWidth() / 2,
-            Gdx.graphics.getHeight() / 2 - achievementsButton.getHeight() / 2 - achievementsButton.getHeight() / 2 - newGameButton.getHeight());
+            Gdx.graphics.getHeight() / 2 - achievementsButton.getHeight() * 1.5f - 15);
 
         TextButton settingsButton = new TextButton("Настройки", skin);
-        settingsButton.setSize(300, 100);
+        settingsButton.setSize(300, 150);
         settingsButton.setPosition(Gdx.graphics.getWidth() / 2 - settingsButton.getWidth() / 2,
-            Gdx.graphics.getHeight() / 2 - settingsButton.getHeight() / 2 - settingsButton.getHeight() / 2 - achievementsButton.getHeight() * 2);
+            achievementsButton.getY() - achievementsButton.getHeight() / 2 - 15);
 
         newGameButton.addListener(new ChangeListener() {
             @Override
