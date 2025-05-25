@@ -17,11 +17,11 @@ import end.team.center.MyGame;
 public class AchievementsScreen implements Screen {
     private final Stage stage;
     private final Skin skin;
-
     private final Texture achievementsTexture = new Texture(Gdx.files.internal("achievements.png"));
     private final Texture achievementTexture1 = new Texture(Gdx.files.internal("achievement1.png"));
     private final Texture achievementTexture2 = new Texture(Gdx.files.internal("achievement2.png"));
     private final Texture achievementTexture3 = new Texture(Gdx.files.internal("achievement3.png"));
+
     public AchievementsScreen(MyGame game) {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);

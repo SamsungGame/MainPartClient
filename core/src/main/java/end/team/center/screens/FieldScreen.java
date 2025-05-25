@@ -78,9 +78,7 @@ public class FieldScreen implements Screen {
         ArrayList<Zone> visibleZones = getZonesInView();
 
         batch.begin();
-
         drawZones(batch, visibleZones);
-
         batch.end();
     }
 

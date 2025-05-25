@@ -18,6 +18,7 @@ public class MainMenuScreen implements Screen {
     private final Stage stage;
     private final Skin skin;
     private final Texture gameTitleTexture = new Texture(Gdx.files.internal("gameTitle.png"));
+
     public MainMenuScreen(MyGame game) {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
@@ -44,6 +45,10 @@ public class MainMenuScreen implements Screen {
         settingsButton.setPosition(Gdx.graphics.getWidth() / 2 - settingsButton.getWidth() / 2,
             achievementsButton.getY() - achievementsButton.getHeight() / 2 - 15);
 
+        TextButton aboutUsButton = new TextButton("О нас", skin);
+        aboutUsButton.setSize(200, 150);
+        aboutUsButton.setPosition(50, 0);
+
         newGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -58,10 +63,18 @@ public class MainMenuScreen implements Screen {
             }
         });
 
+        aboutUsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new AboutUsScreen(game));
+            }
+        });
+
         stage.addActor(gameTitleImage);
         stage.addActor(newGameButton);
         stage.addActor(achievementsButton);
         stage.addActor(settingsButton);
+        stage.addActor(aboutUsButton);
     }
 
     @Override
