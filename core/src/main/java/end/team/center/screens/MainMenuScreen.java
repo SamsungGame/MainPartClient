@@ -3,7 +3,9 @@ package end.team.center.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -15,20 +17,17 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import end.team.center.MyGame;
 
 public class MainMenuScreen implements Screen {
+    private final SpriteBatch batch = new SpriteBatch();
+    private final BitmapFont font = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
+    private final GlyphLayout layout = new GlyphLayout();
     private final Stage stage;
     private final Skin skin;
-    private final Texture gameTitleTexture = new Texture(Gdx.files.internal("gameTitle.png"));
 
     public MainMenuScreen(MyGame game) {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("buttonStyle/buttonStyle.json"));
-
-        Image gameTitleImage = new Image(gameTitleTexture);
-        gameTitleImage.setSize(1000, 200);
-        gameTitleImage.setPosition(Gdx.graphics.getWidth() / 2 - gameTitleImage.getWidth() / 2,
-            Gdx.graphics.getHeight() / 2 - gameTitleImage.getHeight() / 2 + 200);
 
         TextButton newGameButton = new TextButton("Новая игра", skin);
         newGameButton.setSize(300, 150);
@@ -70,7 +69,6 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        stage.addActor(gameTitleImage);
         stage.addActor(newGameButton);
         stage.addActor(achievementsButton);
         stage.addActor(settingsButton);
@@ -86,6 +84,17 @@ public class MainMenuScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        font.getData().setScale(6.0f);
+        String aboutUsText = "Time Forest";
+        layout.setText(font, aboutUsText);
+        float x = (Gdx.graphics.getWidth() - layout.width) / 2;
+        float y = Gdx.graphics.getHeight() - layout.height;
+
+        batch.begin();
+        font.draw(batch, layout, x, y);
+        batch.end();
+
         stage.act();
         stage.draw();
     }
@@ -112,8 +121,9 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
+        batch.dispose();
+        font.dispose();
         stage.dispose();
         skin.dispose();
-        gameTitleTexture.dispose();
     }
 }
