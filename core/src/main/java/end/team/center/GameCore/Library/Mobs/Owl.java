@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.Arrays;
+
 import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.Library.EnemyType;
 import end.team.center.GameCore.Logic.AI.AI;
@@ -28,11 +30,11 @@ public class Owl extends Enemy {
     }
 
     public void initialization() {
-        startAttack = new Circle(vector.x + width / 2, vector.y + height / 2, 1400);
+        startAttack = new Circle(vector.x + width / 2, vector.y + height / 2, 1000);
         endAttack = new Circle(vector.x + width / 2, vector.y + height / 2, 400);
 
-        lDiveTexture = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png"));
-        rDiveTexture = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlRight_down.png"));
+        lDiveTexture = this.texture;
+        rDiveTexture = this.texture;
     }
 
     public Circle getStartCircle() {
