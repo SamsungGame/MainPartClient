@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import end.team.center.GameCore.Library.EnemyType;
+import end.team.center.GameCore.Library.Mobs.Ghost;
 import end.team.center.GameCore.Library.Mobs.Owl;
+import end.team.center.GameCore.Logic.AI.AI_Ghost;
 import end.team.center.GameCore.Logic.AI.AI_Owl;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
 import end.team.center.GameCore.Objects.OnMap.Hero;
@@ -32,6 +34,7 @@ public class Spawner {
 
         if (countLocation == 0) {
             canSpawn.add(EnemyType.Owl);
+            canSpawn.add(EnemyType.Ghost);
 
             timeSpawn = 10 * 1000;
         } // Добавить больше врагов в список, по мере продвижении по локациям
@@ -66,8 +69,10 @@ public class Spawner {
     }
 
     private Enemy spawn(EnemyType type) {
-        if (type == EnemyType.Owl) {
+        if        (type == EnemyType.Owl) {
             return new Owl(type, randomCord(), GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Owl(hero));
+        } else if (type == EnemyType.Ghost) {
+            return new Ghost(type, randomCord(), GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Ghost(hero));
         } else return null;
     }
 
