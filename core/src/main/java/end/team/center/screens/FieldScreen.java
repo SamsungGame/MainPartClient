@@ -264,9 +264,9 @@ public class FieldScreen implements Screen {
 
     private void drawZones(SpriteBatch batch, ArrayList<Zone> visibleZones) {
         int startX = Math.max(0, (int)(minX / cellSize));
-        int endX = (int) Math.min(fieldX / cellSize, (int)(maxX / cellSize) + 1);
+        int endX = Math.min(fieldX / cellSize, (int)(maxX / cellSize) + 1);
         int startY = Math.max(0, (int)(minY / cellSize));
-        int endY = (int) Math.min(fieldY / cellSize, (int)(maxY / cellSize) + 1);
+        int endY = Math.min(fieldY / cellSize, (int)(maxY / cellSize) + 1);
 
         for (int x = startX; x < endX; x++) {
             for (int y = startY; y < endY; y++) {
