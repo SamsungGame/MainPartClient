@@ -49,6 +49,12 @@ public abstract class Enemy extends Entity {
             if (!stan && STAN_IS_STOP_MOB) {
                 isMoving = deltaX != 0 || deltaY != 0;
 
+                if (deltaX > 0) {
+                    mRight = true;
+                } else if (deltaX < 0) {
+                    mRight = false;
+                }
+
                 // Проверка касания врагов
                 for(Enemy e: GameScreen.enemies) {
                     if (e != this) {
@@ -61,12 +67,6 @@ public abstract class Enemy extends Entity {
 
                 vector.add(new Vector2(deltaX, deltaY));
                 setPosition(vector.x, vector.y);
-
-                if (deltaX > 0) {
-                    mRight = true;
-                } else if (deltaX < 0) {
-                    mRight = false;
-                }
 
                 updateBound();
 

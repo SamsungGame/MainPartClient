@@ -26,6 +26,12 @@ public abstract class Friendly extends Entity {
         potentialPosition.y = Math.max(BOUNDARY_PADDING,
             Math.min(potentialPosition.y, worldHeight - BOUNDARY_PADDING - height));
 
+        if (deltaX > 0) {
+            mRight = true;
+        } else if (deltaX < 0) {
+            mRight = false;
+        }
+
         // Проверка касания врагов
         for(Enemy e: GameScreen.enemies) {
             if (e.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
@@ -36,12 +42,6 @@ public abstract class Friendly extends Entity {
 
         vector.set(potentialPosition);
         setPosition(vector.x, vector.y);
-
-        if (deltaX > 0) {
-            mRight = true;
-        } else if (deltaX < 0) {
-            mRight = false;
-        }
 
         updateBound();
 
