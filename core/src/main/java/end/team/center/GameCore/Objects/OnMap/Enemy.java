@@ -11,14 +11,14 @@ import end.team.center.GameCore.Logic.AI.AI;
 import end.team.center.GameCore.Objects.Effects.Death;
 
 public abstract class Enemy extends Entity {
-    private static final boolean STAN_IS_STOP_MOB = false;
+    private static final boolean STAN_IS_STOP_MOB = true;
 
     protected AI ai;
     protected int level;
     protected boolean stan = false;
     protected float timeToReload = 0;
     protected float timePlayerInvulnerability = 0.5f;
-    public int damage, exp;
+    protected int damage, exp;
 
     public Enemy(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, int exp, float worldHeight, float worldWidth, AI ai) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
@@ -35,7 +35,6 @@ public abstract class Enemy extends Entity {
                 hero.health -= this.damage;
                 hero.frameInvulnerability(timePlayerInvulnerability);
 
-                stan = true;
                 timeToReload = 0;
             }
         }
@@ -44,7 +43,7 @@ public abstract class Enemy extends Entity {
     @Override
     public void move(float deltaX, float deltaY, float delta, boolean isMob) {
         if (isLive) {
-            if (!stan || !STAN_IS_STOP_MOB) super.move(deltaX, deltaY, delta, isMob);
+            if (!stan && STAN_IS_STOP_MOB) super.move(deltaX, deltaY, delta, isMob);
         }
     }
 
@@ -52,12 +51,6 @@ public abstract class Enemy extends Entity {
     public void act(float delta) {
         if (isLive) {
             super.act(delta);
-
-            if (stan) {
-                timeToReload += delta;
-
-                if (timeToReload >= 1.5f) stan = false;
-            }
         }
     }
 
@@ -75,8 +68,10 @@ public abstract class Enemy extends Entity {
 
     public void die() {
         isLive = false;
+    }
 
-        Experience experience = new Experience(ItemType.exp, new Vector2(vector), ai.getHero(), exp);
+    public int getExp() {
+        return exp;
     }
 
     public boolean isLive() {

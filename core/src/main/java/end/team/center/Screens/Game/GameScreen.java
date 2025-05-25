@@ -24,6 +24,8 @@ import java.util.List;
 import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.GameEvent.PostMob;
 import end.team.center.GameCore.GameEvent.Spawner;
+import end.team.center.GameCore.Library.ItemType;
+import end.team.center.GameCore.Library.Items.Experience;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
 import end.team.center.GameCore.Objects.OnMap.Hero;
 import end.team.center.GameCore.UIElements.UIGameScreenElements.Heart;
@@ -182,7 +184,12 @@ public class GameScreen implements Screen {
                     e.setHealth(e.getHealth() - hero.getWep().getDamage());
                     e.stan(1);
 
-                    if (e.getHealth() <= 0) e.die();
+                    if (e.getHealth() <= 0) {
+                        e.die();
+
+                        Experience experience = new Experience(ItemType.exp, new Vector2(e.getVector()), hero, e.getExp());
+                        worldStage.addActor(experience);
+                    }
                 }
             }
 

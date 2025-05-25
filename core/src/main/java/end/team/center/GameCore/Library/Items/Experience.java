@@ -11,7 +11,7 @@ import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.OnMap.Hero;
 
 public class Experience extends Drops {
-    protected static final int DISTANCE_TO_PICKUP = 220;
+    protected static final int DISTANCE_TO_PICKUP = 190;
     protected int count;
     protected double speed;
     public Experience(Texture texture, Vector2 vector, Hero hero, int width, int height, int count) {
@@ -27,6 +27,8 @@ public class Experience extends Drops {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+
+        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
     }
 
     @Override
@@ -34,11 +36,7 @@ public class Experience extends Drops {
         super.act(delta);
 
         if (GMath.checkVectorDistance(getCenterVector(), hero.getCenterVector(), DISTANCE_TO_PICKUP, DISTANCE_TO_PICKUP)) {
-            Vector2 distance = GMath.vectorDistance(getCenterVector(), hero.getCenterVector());
-
-            double floatDistance = Math.sqrt(Math.pow(distance.x, 2) + Math.pow(distance.y, 2));
-
-            speed = floatDistance / 10;
+            speed = 50;
 
             Vector2 fixTarget   = new Vector2(hero.getCenterVector().x, hero.getCenterVector().y);
             Vector2 fixPosition = new Vector2(vector.x, vector.y);
@@ -56,6 +54,7 @@ public class Experience extends Drops {
         }
         if (hero.getBound().overlaps(bound)) {
             hero.addExp(count);
+            System.out.println("Выдано " + count + "exp");
             remove();
         }
     }
