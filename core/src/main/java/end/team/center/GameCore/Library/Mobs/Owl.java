@@ -3,6 +3,7 @@ package end.team.center.GameCore.Library.Mobs;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -17,26 +18,25 @@ import end.team.center.GameCore.Objects.OnMap.Enemy;
 public class Owl extends Enemy {
 
     protected Circle startAttack, endAttack;
-    protected Texture lDiveTexture, rDiveTexture;
+    protected TextureRegion lDiveTexture, rDiveTexture;
 
     public Owl(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, float worldHeight, float worldWidth, AI ai) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, level, worldHeight, worldWidth, ai);
-        initialization();
+        intialization();
     }
 
     public Owl(EnemyType type, Vector2 vector, float worldHeight, float worldWidth, AI ai) {
         super(type.getTexture(), type.getAnim(), vector, type.getHeight(), type.getWidth(), type.getHealth(), type.getDamage(), type.getDefense(), type.getSpeed(), type.getLevel(), worldHeight, worldWidth, ai);
-        initialization();
+        intialization();
     }
 
-    public void initialization() {
+    public void intialization() {
         startAttack = new Circle(vector.x + width / 2, vector.y + height / 2, 1000);
         endAttack = new Circle(vector.x + width / 2, vector.y + height / 2, 400);
 
-//        lDiveTexture = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT1.png"));
-//        rDiveTexture = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT2.png"));
-        lDiveTexture = this.texture;
-        rDiveTexture = this.texture;
+        lDiveTexture = new TextureRegion(this.texture); // this.texture
+        rDiveTexture = new TextureRegion(this.texture);
+        rDiveTexture.flip(true, false);
     }
 
     public Circle getStartCircle() {
@@ -56,7 +56,7 @@ public class Owl extends Enemy {
     public void draw(Batch batch, float parentAlpha) {
         if (isLive) {
             if (((AI_Owl) ai).isAttaking) {
-                if (mRight) batch.draw(rDiveTexture, vector.x, vector.y, getWidth(), getHeight());
+                if (mRight)  batch.draw(rDiveTexture, vector.x, vector.y, getWidth(), getHeight());
                 if (!mRight) batch.draw(lDiveTexture, vector.x, vector.y, getWidth(), getHeight());
             } else super.draw(batch, parentAlpha);
         }

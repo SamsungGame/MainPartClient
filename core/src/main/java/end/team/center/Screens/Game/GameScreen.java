@@ -153,9 +153,7 @@ public class GameScreen implements Screen {
     @SuppressWarnings("DefaultLocale")
     @Override
     public void render(float delta) {
-
-        totalTime+=delta;
-
+        totalTime += delta;
 
         // Подготовка значений для методов классов типа "Object & Interacteble"
         float moveX = touchpadMove.getKnobPercentX();
