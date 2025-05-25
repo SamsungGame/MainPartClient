@@ -117,21 +117,9 @@ public class GameScreen implements Screen {
     @SuppressWarnings("DefaultLocale")
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Удаление лишнего со сцены
+        totalTime+=delta;
 
-        // Удаление мобов
-        int max = enemies.size();
-        for(int i = 0; i < max; i++) {
-            if (!enemies.get(i).isLive()) {
-                Enemy e = enemies.get(i);
-                enemies.remove(e);
-                e.remove();
-                max--;
-            }
-        }
 
         // Подготовка значений для методов классов типа "Object & Interacteble"
         float moveX = touchpadMove.getKnobPercentX();
@@ -170,6 +158,17 @@ public class GameScreen implements Screen {
 
         for(Enemy e: enemies) {
             if (e.getBound().overlaps(hero.getBound())) e.attack(hero);
+        }
+        int max = enemies.size();
+
+        // Удаление мобов
+        for(int i = 0; i < max; i++) {
+            if (!enemies.get(i).isLive()) {
+                Enemy e = enemies.get(i);
+                enemies.remove(e);
+                e.remove();
+                max--;
+            }
         }
 
         // Обновление UI игрока
@@ -233,9 +232,6 @@ public class GameScreen implements Screen {
         touchpadMove.touchpadSetBounds();
         touchpadAttack.touchpadSetBounds();
 
-        // Отрисовка мира
-        worldStage.act(delta);
-        worldStage.draw();
 
         // Отрисовка обьектов
         uiStage.act(delta);
