@@ -16,6 +16,7 @@ public class Hero extends Friendly {
     protected float antiRadiationCostumePower = 100.0f;
     protected int radiationLevel = 1;
     protected Weapon weapon;
+    protected int exp, level;
 
 
 
@@ -48,6 +49,18 @@ public class Hero extends Friendly {
         if (weapon instanceof Knife) {
             ((Knife) weapon).startAnimation();
         }
+    }
+
+    public int getExp() {
+        return exp;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void addExp(int add) {
+        exp += add;
     }
 
     @Override

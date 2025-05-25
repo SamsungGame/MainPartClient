@@ -5,7 +5,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
 import end.team.center.GameCore.Library.CharacterAnimation;
+import end.team.center.GameCore.Library.ItemType;
+import end.team.center.GameCore.Library.Items.Experience;
 import end.team.center.GameCore.Logic.AI.AI;
+import end.team.center.GameCore.Objects.Effects.Death;
 
 public abstract class Enemy extends Entity {
     private static final boolean STAN_IS_STOP_MOB = false;
@@ -15,13 +18,14 @@ public abstract class Enemy extends Entity {
     protected boolean stan = false;
     protected float timeToReload = 0;
     protected float timePlayerInvulnerability = 0.5f;
-    public int damage;
+    public int damage, exp;
 
-    public Enemy(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, float worldHeight, float worldWidth, AI ai) {
+    public Enemy(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, int exp, float worldHeight, float worldWidth, AI ai) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
         this.level = level;
         this.ai = ai;
         this.damage = damage;
+        this.exp = exp;
     }
 
 
@@ -71,6 +75,8 @@ public abstract class Enemy extends Entity {
 
     public void die() {
         isLive = false;
+
+        Experience experience = new Experience(ItemType.exp, new Vector2(vector), ai.getHero(), exp);
     }
 
     public boolean isLive() {

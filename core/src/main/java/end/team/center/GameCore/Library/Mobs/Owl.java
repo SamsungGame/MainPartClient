@@ -20,13 +20,13 @@ public class Owl extends Enemy {
     protected Circle startAttack, endAttack;
     protected TextureRegion lDiveTexture, rDiveTexture;
 
-    public Owl(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, float worldHeight, float worldWidth, AI ai) {
-        super(texture, anim, vector, height, width, health, damage, defence, speed, level, worldHeight, worldWidth, ai);
+    public Owl(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, int exp, float worldHeight, float worldWidth, AI ai) {
+        super(texture, anim, vector, height, width, health, damage, defence, speed, level, exp, worldHeight, worldWidth, ai);
         intialization();
     }
 
     public Owl(EnemyType type, Vector2 vector, float worldHeight, float worldWidth, AI ai) {
-        super(type.getTexture(), type.getAnim(), vector, type.getHeight(), type.getWidth(), type.getHealth(), type.getDamage(), type.getDefense(), type.getSpeed(), type.getLevel(), worldHeight, worldWidth, ai);
+        super(type.getTexture(), type.getAnim(), vector, type.getHeight(), type.getWidth(), type.getHealth(), type.getDamage(), type.getDefense(), type.getSpeed(), type.getLevel(), type.getExp(), worldHeight, worldWidth, ai);
         intialization();
     }
 

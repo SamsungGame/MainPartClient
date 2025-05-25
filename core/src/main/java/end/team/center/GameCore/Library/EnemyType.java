@@ -3,16 +3,19 @@ package end.team.center.GameCore.Library;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
+import java.util.Random;
+
 public enum EnemyType {
     // Типы существующих врагов
-    Owl(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png")), CharacterAnimation.Owl, 120, 140, 5, 0, 1, 1, 100f);
+    @SuppressWarnings("NewApi")
+    Owl(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png")), CharacterAnimation.Owl, 120, 140, 5, 0, 1, 1, new Random().nextInt(2, 4), 100f);
 
     private final Texture texture;
     private final CharacterAnimation anim;
-    private final int health, defense, damage, level; // Базовые
+    private final int health, defense, damage, level, exp; // Базовые
     private final float speed, height, width;
 
-    EnemyType(Texture texture, CharacterAnimation anim, float height, float width, int health, int defense, int damage, int level, float speed) {
+    EnemyType(Texture texture, CharacterAnimation anim, float height, float width, int health, int defense, int damage, int level, int exp, float speed) {
         this.texture = texture;
         this.anim = anim;
         this.height = height;
@@ -22,6 +25,7 @@ public enum EnemyType {
         this.damage = damage;
         this.level = level;
         this.speed = speed;
+        this.exp = exp;
     }
 
     public int getHealth() {
@@ -58,5 +62,9 @@ public enum EnemyType {
 
     public float getWidth() {
         return width;
+    }
+
+    public int getExp() {
+        return exp;
     }
 }

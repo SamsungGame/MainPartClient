@@ -22,4 +22,8 @@ public abstract class AI {
         // Обновляем позицию врага
         return direction.scl(speed * delta);
     }
+
+    public Hero getHero() {
+        return hero;
+    }
 }
