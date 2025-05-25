@@ -8,7 +8,7 @@ import java.util.Random;
 public enum EnemyType {
     // Типы существующих врагов
     @SuppressWarnings("NewApi")
-    Owl(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png")), CharacterAnimation.Owl, 120, 140, 5, 0, 1, 1, new Random().nextInt(2, 4), 100f);
+    Owl(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png")), CharacterAnimation.Owl, 120, 140, 6, 0, 1, 1, new Random().nextInt(2, 4), 100f);
 
     private final Texture texture;
     private final CharacterAnimation anim;

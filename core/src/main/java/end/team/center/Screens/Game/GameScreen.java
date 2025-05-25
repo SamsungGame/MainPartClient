@@ -177,9 +177,10 @@ public class GameScreen implements Screen {
             for(Enemy e: enemies) {
                 if (hero.getWep().checkTouchRectangle(e.getBound())) {
 
-                    System.out.println("Смерть! Врагов: " + enemies.size());
+                    System.out.println("Удар! Врагов: " + enemies.size());
 
                     e.setHealth(e.getHealth() - hero.getWep().getDamage());
+                    e.stan(1);
 
                     if (e.getHealth() <= 0) e.die();
                 }

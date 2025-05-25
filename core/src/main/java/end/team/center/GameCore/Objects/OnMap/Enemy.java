@@ -82,4 +82,21 @@ public abstract class Enemy extends Entity {
     public boolean isLive() {
         return isLive;
     }
+
+    public void stan(int sec) {
+        if (!stan) {
+            stan = true;
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(sec * 1000L);
+                    } catch (InterruptedException ignore) {}
+
+                    stan = false;
+                }
+            }).start();
+        }
+    }
 }
