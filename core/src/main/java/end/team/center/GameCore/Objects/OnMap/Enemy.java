@@ -17,7 +17,7 @@ public abstract class Enemy extends Entity {
     protected int level;
     protected boolean stan = false;
     protected float timeToReload = 0;
-    protected float timePlayerInvulnerability = 0.5f;
+    protected float timePlayerInvulnerability = 1f;
     protected int damage, exp;
 
     public Enemy(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, int exp, float worldHeight, float worldWidth, AI ai) {

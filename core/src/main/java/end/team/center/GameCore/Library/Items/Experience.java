@@ -13,7 +13,7 @@ import end.team.center.GameCore.Objects.OnMap.Hero;
 public class Experience extends Drops {
     protected static final int DISTANCE_TO_PICKUP = 190;
     protected int count;
-    protected double speed;
+    protected static final int speed = 80;
     public Experience(Texture texture, Vector2 vector, Hero hero, int width, int height, int count) {
         super(texture, vector, hero, width, height);
         this.count = count;
@@ -36,8 +36,6 @@ public class Experience extends Drops {
         super.act(delta);
 
         if (GMath.checkVectorDistance(getCenterVector(), hero.getCenterVector(), DISTANCE_TO_PICKUP, DISTANCE_TO_PICKUP)) {
-            speed = 50;
-
             Vector2 fixTarget   = new Vector2(hero.getCenterVector().x, hero.getCenterVector().y);
             Vector2 fixPosition = new Vector2(vector.x, vector.y);
 

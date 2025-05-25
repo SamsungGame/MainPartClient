@@ -55,8 +55,6 @@ public class ForwardEffect extends OneSpriteEffect {
                 // Нормализуем вектор, чтобы сделать его единичной длины
                 if (direction.len() > 0) direction.nor(); // Нормализуем
 
-                System.out.println("Вектор: " + direction.scl(speed * delta).x + "/" + direction.scl(speed * delta).y);
-
                 // Обновляем позицию врага
                 pos.add(direction.scl(speed * delta));
                 setPosition(pos.x, pos.y);
