@@ -155,31 +155,71 @@ public class GameScreen implements Screen {
     @SuppressWarnings("DefaultLocale")
     @Override
     public void render(float delta) {
-        totalTime += delta;
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        costumePower.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
+        // Удаление лишнего со сцены
 
+        // Удаление мобов
+        int max = enemies.size();
+        for(int i = 0; i < max; i++) {
+            if (!enemies.get(i).isLive()) {
+                Enemy e = enemies.get(i);
+                enemies.remove(e);
+                e.remove();
+                max--;
+            }
+        }
+
+        // Подготовка значений для методов классов типа "Object & Interacteble"
         float moveX = touchpadMove.getKnobPercentX();
         float moveY = touchpadMove.getKnobPercentY();
 
         // Получаем нормализованные значения от Touchpad
         float normalizedX = (touchpadAttack.getKnobPercentX() + 1) / 2;
         float normalizedY = (touchpadAttack.getKnobPercentY() + 1) / 2;
-
-        // Преобразуем в координаты центра
         float dx = normalizedX * 2 - 1; // от -1 до 1
         float dy = normalizedY * 2 - 1;
 
+        // Обновление значений классов типа "Object & Interacteble"
         hero.move(moveX, moveY, delta, false);
 
         if (touchpadAttack.isTouchpadActive()) {
             hero.useWeapon(dx, dy);
+
+        } else if (hero.getWep().getShow() && hero.getWep().isCanAttack()) {
+            hero.startAttackAnim();
+
+            for(Enemy e: enemies) {
+                if (hero.getWep().checkTouchRectangle(e.getBound())) {
+
+                    System.out.println("Смерть! Врагов: " + enemies.size());
+
+                    e.setHealth(e.getHealth() - hero.getWep().getDamage());
+
+                    if (e.getHealth() <= 0) e.die();
+                }
+            }
+
+            hero.unUseWeapon();
         } else if (hero.getWep().getShow()) {
             hero.unUseWeapon();
         }
 
+        for(Enemy e: enemies) {
+            if (e.getBound().overlaps(hero.getBound())) e.attack(hero);
+        }
+
+        // Обновление UI игрока
+        costumePower.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
+
+        hearts.updateAnimation(delta);
+        hearts.updateHealth(hero.getHealth());
+
+        // Обновление камеры
         gameCamera.updateCameraPosition(hero.getVector().x, hero.getVector().y, hero.getWidth(), hero.getHeight());
 
+        // Шейдер
         frameBuffer.begin();
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -223,21 +263,19 @@ public class GameScreen implements Screen {
         batch.setShader(null);
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
-        for(Enemy e: enemies) {
-            if (e.getBound().overlaps(hero.getBound())) e.attack(hero);
-        }
-
-        hearts.updateAnimation(delta);
-        hearts.updateHealth(hero.getHealth());
-
+        // Обновление джостиков
         touchpadMove.TouchpadLogic(uiStage);
         touchpadAttack.TouchpadLogic(uiStage);
 
+        // Установка джостиков
         touchpadMove.touchpadSetBounds();
         touchpadAttack.touchpadSetBounds();
 
+        // Отрисовка мира
+        worldStage.act(delta);
+        worldStage.draw();
 
-
+        // Отрисовка обьектов
         uiStage.act(delta);
         uiStage.draw();
     }
