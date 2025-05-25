@@ -30,8 +30,8 @@ public class Owl extends Enemy {
     public void initialization() {
         circle = new Circle(vector.x + width / 2, vector.y + height / 2, 1400);
 
-        lDiveTexture = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png"));
-        rDiveTexture = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlRight_down.png"));
+        lDiveTexture = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_midle.png"));
+        rDiveTexture = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlRight_midle.png"));
     }
 
     public Circle getCircle() {

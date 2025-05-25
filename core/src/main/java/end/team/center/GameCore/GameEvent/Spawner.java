@@ -18,7 +18,7 @@ public class Spawner {
     private final int minRadiusSpawnMobX = Gdx.graphics.getWidth();
     private final int maxCountMobInMap = 100;
     private int countEnemy = 0;
-    private final int maxRadiusSpawn = (int) Math.min(GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH);
+    private static final int maxRadiusSpawn = (int) Math.min(GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH);
     private int timeSpawn;
     private ArrayList<EnemyType> canSpawn;
     private PostMob poster;
