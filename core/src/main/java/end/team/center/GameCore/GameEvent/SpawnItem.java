@@ -1,14 +1,11 @@
 package end.team.center.GameCore.GameEvent;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
-import java.util.ArrayList;
 import java.util.Random;
-import java.util.Vector;
 
 import end.team.center.GameCore.Library.ItemType;
-import end.team.center.GameCore.Library.Items.Skint;
+import end.team.center.GameCore.Library.Items.Acumulattor;
 import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.OnMap.Entity;
 import end.team.center.GameCore.Objects.OnMap.Hero;
@@ -28,7 +25,7 @@ public class SpawnItem {
         this.hero = hero;
 
         canDrop = new ItemType[2];
-        canDrop[0] = ItemType.skint;
+        canDrop[0] = ItemType.accumulator;
         canDrop[1] = ItemType.BreakIron;
 
         timeSpawn = 25;
@@ -59,9 +56,9 @@ public class SpawnItem {
         int r = random.nextInt(1, 2);
 
         if(r == 1) {
-            return new Skint(ItemType.skint, setPosition(), hero);
+            return new Acumulattor(ItemType.accumulator, setPosition(), hero);
         } else {
-            return new Skint(ItemType.skint, setPosition(), hero);
+            return new Acumulattor(ItemType.accumulator, setPosition(), hero);
         }
     }
 

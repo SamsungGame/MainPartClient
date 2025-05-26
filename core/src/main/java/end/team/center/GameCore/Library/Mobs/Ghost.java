@@ -18,20 +18,22 @@ import end.team.center.GameCore.Objects.OnMap.Ammo;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
 
 public class Ghost extends Enemy {
-    public TextureRegion r, l, shot;
+    public TextureRegion r, l, shotR, shotL;
     protected AI_Ghost ai;
     protected Circle stop, run;
     protected ArrayList<Ammo> ammos;
-    public Ghost(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, int exp, float worldHeight, float worldWidth, AI ai) {
-        super(texture, anim, vector, height, width, health, damage, defence, speed, level, exp, worldHeight, worldWidth, ai);
-        this.ai = (AI_Ghost) ai;
 
-        initialization();
-    }
+//    public Ghost(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, int exp, float worldHeight, float worldWidth, AI ai) {
+//        super(texture, anim, vector, height, width, health, damage, defence, speed, level, exp, worldHeight, worldWidth, ai);
+//        this.ai = (AI_Ghost) ai;
+//
+//        initialization();
+//    }
 
-    public Ghost(EnemyType type, Vector2 vector, int level, float worldHeight, float worldWidth, AI ai) {
+    public Ghost(EnemyType type, Vector2 vector, int level, float worldHeight, float worldWidth, AI ai, TextureRegion attack) {
         super(type.getTexture(), type.getAnim(), vector, type.getHeight(), type.getWidth(), type.getHealth(), type.getDamage(), type.getDefense(), type.getSpeed(), level, type.getExp(), worldHeight, worldWidth, ai);
         this.ai = (AI_Ghost) ai;
+        this.shotR = attack;
 
         initialization();
     }
@@ -44,11 +46,12 @@ public class Ghost extends Enemy {
         stop = new Circle(getCenterVector().x, getCenterVector().y, 2000);
         run  = new Circle(getCenterVector().x, getCenterVector().y, 350);
 
-        shot = new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ghostAttack.png")));
-
         r = new TextureRegion(texture);
         l = new TextureRegion(texture);
         l.flip(true, false);
+
+        shotL = new TextureRegion(shotR);
+        shotL.flip(true, false);
 
         health = health + (health / 5 * level);
 
@@ -83,7 +86,8 @@ public class Ghost extends Enemy {
         if (isLive) {
             if (mRight && !ai.getIsShotLoad()) batch.draw(r, getX(), getY(), getWidth(), getHeight());
             else if (!ai.getIsShotLoad())      batch.draw(l, getX(), getY(), getWidth(), getHeight());
-            else                               batch.draw(l, getX(), getY(), getWidth(), getHeight());
+            else if (mRight)                   batch.draw(shotR, getX(), getY(), getWidth(), getHeight());
+            else                               batch.draw(shotL, getX(), getY(), getWidth(), getHeight());
         }
     }
 

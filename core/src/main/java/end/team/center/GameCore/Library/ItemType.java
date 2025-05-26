@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public enum ItemType {
     exp(new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/exp.png")), 28, 42),
-    skint(new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/_.png")), 5, 5),
+    accumulator(new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/accomulator.png")), 48, 56),
     BreakIron(new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/_.png")), 5, 5);
 
     private final Texture texture;
