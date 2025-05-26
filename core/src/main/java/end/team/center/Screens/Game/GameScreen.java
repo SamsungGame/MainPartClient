@@ -61,8 +61,6 @@ public class GameScreen implements Screen {
     public static ArrayList<Enemy> enemies;
     private SpawnItem spawnItem;
     public static ArrayList<Drops> drop;
-
-    private Label costumePower;
     private Heart hearts;
 
     private FrameBuffer frameBuffer;
@@ -81,8 +79,8 @@ public class GameScreen implements Screen {
     protected VerticalGroup content1, content2, content3;
     protected ArrayList<Power> powers;
     public static boolean STOP = false;
-
     ProgressBar expBar;
+    Label energyValue;
 
 
 
@@ -121,19 +119,20 @@ public class GameScreen implements Screen {
         hearts = new Heart(heartFull, heartEmpty,heartFullBit, hero.getHealth());
         uiStage.addActor(hearts);
 
-        Image imagePower = new Image(new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/PowerLabel/power.png"))));
-        imagePower.setSize(360, 120);
-        imagePower.setPosition(Gdx.graphics.getWidth() - imagePower.getWidth() - 20,
-            Gdx.graphics.getHeight() - 180 + 30);
+        Texture EnergyValue = new Texture("UI/GameUI/OtherGameItems/energy.png");
+        Image EnergyValueImg = new Image(EnergyValue);
+        EnergyValueImg.setSize(90,126);
+        EnergyValueImg.setPosition((float) Gdx.graphics.getWidth() - 150, Gdx.graphics.getHeight() - 160);
 
-        Skin l = new Skin(Gdx.files.internal("UI/GameUI/Hero/PowerLabel/label.json"));
+        Skin energySkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/energyText.json"));
 
-        costumePower = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), l);
+        energyValue = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), energySkin);
+        energyValue.setFontScale(3f);
 
-        costumePower.setPosition(Gdx.graphics.getWidth() - costumePower.getWidth() - 20 - 155,
-            Gdx.graphics.getHeight() - (imagePower.getHeight() / 2) - 40);
+        uiStage.addActor(EnergyValueImg);
+        uiStage.addActor(energyValue);
 
-        costumePower.setFontScale(3.5f);
+
 
         Texture ExpTexture1 = new Texture("UI/GameUI/OtherGameItems/expBorderLeft.png");
         Image image = new Image(ExpTexture1);
@@ -153,8 +152,6 @@ public class GameScreen implements Screen {
         image2.setPosition((float) Gdx.graphics.getWidth() /2 + 400, Gdx.graphics.getHeight() - 110);
         uiStage.addActor(image2);
 
-        uiStage.addActor(imagePower);
-        uiStage.addActor(costumePower);
 
 
         // Настройки спавна мобов
@@ -347,7 +344,7 @@ public class GameScreen implements Screen {
         hero.newLevel();
 
         // Обновление UI игрока
-        costumePower.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
+        energyValue.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
 
         hearts.updateAnimation(delta);
         hearts.updateHealth(hero.getHealth());

@@ -1,14 +1,14 @@
 {
 com.badlogic.gdx.graphics.g2d.BitmapFont: {
-	pixel_font: {
-		file: pixel_font.fnt
+	Tiny5-Regular3: {
+		file: Tiny5-Regular(3).fnt
 		scaledSize: -1
 		markupEnabled: false
 		flip: false
 	}
 }
 com.badlogic.gdx.graphics.Color: {
-	White: {
+	RGBA_255_255_255_255: {
 		r: 1
 		g: 1
 		b: 1
@@ -17,8 +17,14 @@ com.badlogic.gdx.graphics.Color: {
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: {
-		font: pixel_font
-		fontColor: White
+		font: Tiny5-Regular3
+		fontColor: RGBA_255_255_255_255
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
+	default-horizontal: {
+		background: expBorder
+		knobBefore: expFill
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
