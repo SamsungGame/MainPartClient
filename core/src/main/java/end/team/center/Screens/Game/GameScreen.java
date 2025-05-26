@@ -19,6 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -207,11 +209,10 @@ public class GameScreen implements Screen {
         selectPower = new Dialog("Выберите усиление!", ws);
 
         // Добавление существующих усилений
-        Skin b1 = new Skin(Gdx.files.internal(""));
-        Power p = new Power(b1) {
+        Power p = new Power(new TextureRegionDrawable(new Texture("UI/GameUI/SelectPowerUI/Effect/expMore.png"))) {
             @Override
             public void effect() {
-                // Эффект
+                hero.setExpBonus(hero.getExpBonus() * 2);
             }
         };
         p.addListener(new ChangeListener() {
@@ -222,6 +223,54 @@ public class GameScreen implements Screen {
             }
         });
         powers.add(p);
+
+        // Добавление существующих усилений
+        Power p1 = new Power(new TextureRegionDrawable(new Texture("UI/GameUI/SelectPowerUI/Effect/HPforAttack.png"))) {
+            @Override
+            public void effect() {
+                hero.setVampirism(true);
+            }
+        };
+        p.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                p.effect();
+                hidePowerDialog();
+            }
+        });
+        powers.add(p1);
+
+        // Добавление существующих усилений
+        Power p2 = new Power(new TextureRegionDrawable(new Texture("UI/GameUI/SelectPowerUI/Effect/speedHP.png"))) {
+            @Override
+            public void effect() {
+                hero.setHealth(hero.getHealth() - 1);
+                hero.setSpeed(hero.getSpeed() * 2);
+            }
+        };
+        p.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                p.effect();
+                hidePowerDialog();
+            }
+        });
+        powers.add(p2);
+
+        Power p3 = new Power(new TextureRegionDrawable(new Texture("UI/GameUI/SelectPowerUI/Effect/visible.png"))) {
+            @Override
+            public void effect() {
+                // TODO Сергей
+            }
+        };
+        p.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                p.effect();
+                hidePowerDialog();
+            }
+        });
+        powers.add(p3);
 
 
         spawner.startWork();
@@ -263,6 +312,10 @@ public class GameScreen implements Screen {
 
                     e.setHealth(e.getHealth() - hero.getWep().getDamage());
                     e.stan(1);
+
+                    if (Math.random() * 100 > 80 && hero.getHealth() < 3) {
+                        hero.setHealth(hero.getHealth() + 1);
+                    }
 
                     if (e.getHealth() <= 0) {
                         e.die();
@@ -387,6 +440,8 @@ public class GameScreen implements Screen {
 
     @SuppressWarnings("NewApi")
     public void showPowerDialog() {
+        STOP = true;
+
         Power[] imgB = new Power[3];
 
         Random random = new Random();
@@ -395,24 +450,20 @@ public class GameScreen implements Screen {
             imgB[i] = powers.get(random.nextInt(0, powers.size() - 1));
         }
 
-        Skin sD1 = new Skin(Gdx.files.internal(""));
-
-        content1.addActor(new Label("Первое", sD1));
-        content1.addActor(imgB[1]);
+        content1.addActor(imgB[0]);
         selectPower.getContentTable().add(content1).padRight(20);
 
-        content2.addActor(new Label("Второе", sD1));
-        content2.addActor(imgB[2]);
+        content2.addActor(imgB[1]);
         selectPower.getContentTable().add(content2).padRight(20);
 
-        content3.addActor(new Label("Третье", sD1));
-        content3.addActor(imgB[3]);
-        selectPower.getContentTable().add(content3).expand().fill();
+        content3.addActor(imgB[2]);
+        selectPower.getContentTable().add(content3);
 
         selectPower.show(uiStage);
     }
 
     public void hidePowerDialog() {
+        STOP = false;
         selectPower.hide();
         selectPower.getContentTable().clear();
     }
