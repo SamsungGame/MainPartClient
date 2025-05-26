@@ -18,10 +18,10 @@ public class Hero extends Friendly {
     protected int radiationLevel = 0;
     protected Weapon weapon;
     protected int expWeapon = 0, levelWeapon = 0;
-    protected int exp, level;
+    protected int exp, level ;
     protected float expBonus = 1, damageBonus = 0;
     protected boolean vampirism = false;
-    public int maxExp = 300;
+    protected int maxExp;
 
 
 
@@ -30,7 +30,8 @@ public class Hero extends Friendly {
 
         weapon = new Knife(WeaponType.knife, this);
         exp = 0;
-        level = 0;
+        level = 1;
+        maxExp = 20;
     }
 
     public void setSpeed(float speed) {
@@ -81,9 +82,21 @@ public class Hero extends Friendly {
     public int getLevel() {
         return level;
     }
+    public int getMaxExp() {
+        return level;
+    }
+
 
     public void addExp(int add) {
         exp += (int) (add * expBonus);
+    }
+
+    public void newLevel() {
+        if(exp >= maxExp) {
+            level++;
+            maxExp = (int) (maxExp * level * 0.3);
+            exp = 0;
+        }
     }
 
     public void addExpWeapon(int add) {

@@ -63,7 +63,6 @@ public class GameScreen implements Screen {
     public static ArrayList<Drops> drop;
 
     private Label costumePower;
-    private Label playerHealth;
     private Heart hearts;
 
     private FrameBuffer frameBuffer;
@@ -127,7 +126,6 @@ public class GameScreen implements Screen {
         imagePower.setPosition(Gdx.graphics.getWidth() - imagePower.getWidth() - 20,
             Gdx.graphics.getHeight() - 180 + 30);
 
-        Skin h = new Skin(Gdx.files.internal("UI/GameUI/Hero/HealthLabel/label.json"));
         Skin l = new Skin(Gdx.files.internal("UI/GameUI/Hero/PowerLabel/label.json"));
 
         costumePower = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), l);
@@ -144,7 +142,7 @@ public class GameScreen implements Screen {
         uiStage.addActor(image);
 
         Skin skin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/expProgress.json"));
-        expBar = new ProgressBar(0, 20, 1, false, skin);
+        expBar = new ProgressBar(0, hero.getMaxExp(), 1, false, skin);
         expBar.setSize(800, 60);
         expBar.setPosition((float) Gdx.graphics.getWidth() /2 - 400, Gdx.graphics.getHeight() - 130);
         uiStage.addActor(expBar);
@@ -153,9 +151,8 @@ public class GameScreen implements Screen {
         Image image2 = new Image(ExpTexture2);
         image2.setSize(20,20);
         image2.setPosition((float) Gdx.graphics.getWidth() /2 + 400, Gdx.graphics.getHeight() - 110);
-
-
         uiStage.addActor(image2);
+
         uiStage.addActor(imagePower);
         uiStage.addActor(costumePower);
 
@@ -347,6 +344,7 @@ public class GameScreen implements Screen {
         }
 
         expBar.setValue(hero.getExp());
+        hero.newLevel();
 
         // Обновление UI игрока
         costumePower.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
