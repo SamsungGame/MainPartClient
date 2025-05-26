@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -62,7 +63,7 @@ public class GameScreen implements Screen {
     private ShaderProgram maskShader;
     private ShaderProgram hardMaskShader;
     private ShaderProgram dimmingShader;
-
+    ProgressBar expBar;
     private float totalTime = 0f;
 
 
@@ -149,6 +150,23 @@ public class GameScreen implements Screen {
         dimmingShader.bind();
         dimmingShader.setUniformf("u_aspectRatio", aspectRatio);
 
+        Texture ExpTexture1 = new Texture("UI/GameUI/OtherGameItems/expBorderLeft.png");
+        Image image = new Image(ExpTexture1);
+        image.setSize(20, 20);
+        image.setPosition((float) Gdx.graphics.getWidth() /2 - 420, Gdx.graphics.getHeight() - 110);
+        uiStage.addActor(image);
+
+        Skin skin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/expProgress.json"));
+        expBar = new ProgressBar(0, 20, 1, false, skin);
+        expBar.setSize(800, 60);
+        expBar.setPosition((float) Gdx.graphics.getWidth() /2 - 400, Gdx.graphics.getHeight() - 130);
+        uiStage.addActor(expBar);
+
+        Texture ExpTexture2 = new Texture("UI/GameUI/OtherGameItems/expBorderRight.png");
+        Image image2 = new Image(ExpTexture2);
+        image2.setSize(20,20);
+        image2.setPosition((float) Gdx.graphics.getWidth() /2 + 400, Gdx.graphics.getHeight() - 110);
+        uiStage.addActor(image2);
         spawner.startWork();
     }
 
@@ -193,6 +211,7 @@ public class GameScreen implements Screen {
                 }
             }
 
+
             hero.unUseWeapon();
         } else if (hero.getWep().getShow()) {
             hero.unUseWeapon();
@@ -212,6 +231,7 @@ public class GameScreen implements Screen {
                 max--;
             }
         }
+        expBar.setValue(hero.getExp());
 
         // Обновление UI игрока
         costumePower.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));

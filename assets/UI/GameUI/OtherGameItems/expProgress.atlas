@@ -1,0 +1,20 @@
+
+expProgress.png
+size: 1024, 1024
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+expBorder
+  rotate: false
+  xy: 1, 699
+  size: 760, 60
+  orig: 760, 60
+  offset: 0, 0
+  index: -1
+expFill
+  rotate: false
+  xy: 1, 637
+  size: 760, 60
+  orig: 760, 60
+  offset: 0, 0
+  index: -1

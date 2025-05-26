@@ -17,6 +17,7 @@ public class Hero extends Friendly {
     protected int radiationLevel = 1;
     protected Weapon weapon;
     protected int exp, level;
+    public int maxExp = 300;
 
 
 

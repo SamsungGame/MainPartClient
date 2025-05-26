@@ -34,7 +34,7 @@ public class Spawner {
 
         if (countLocation == 0) {
             canSpawn.add(EnemyType.Owl);
-            canSpawn.add(EnemyType.Ghost);
+//            canSpawn.add(EnemyType.Ghost);
 
             timeSpawn = 10 * 1000;
         } // Добавить больше врагов в список, по мере продвижении по локациям
@@ -71,9 +71,11 @@ public class Spawner {
     private Enemy spawn(EnemyType type) {
         if        (type == EnemyType.Owl) {
             return new Owl(type, randomCord(), GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Owl(hero));
-        } else if (type == EnemyType.Ghost) {
-            return new Ghost(type, randomCord(), GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Ghost(hero));
-        } else return null;
+        }
+//        else if (type == EnemyType.Owl) {
+//            return new Ghost(type, randomCord(), GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Ghost(hero));
+//        }
+        else return null;
     }
 
     private Vector2 randomCord() {

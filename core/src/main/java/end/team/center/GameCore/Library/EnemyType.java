@@ -6,11 +6,14 @@ import com.badlogic.gdx.graphics.Texture;
 import java.util.Random;
 
 public enum EnemyType {
+
+    @SuppressWarnings("NewApi")
+    Owl(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png")), CharacterAnimation.Owl, 120, 140, 6, 0, 1, 1, new Random().nextInt(2, 4), 100f);
     // Типы существующих врагов
     @SuppressWarnings("NewApi")
-    Owl(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png")), CharacterAnimation.Owl, 120, 140, 7, 0, 1, 1, new Random().nextInt(2, 4), 100f),
-    @SuppressWarnings("NewApi")
-    Ghost(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/_.png")), null, 120, 140, 5, 0, 1, 1, new Random().nextInt(4, 8), 200f);
+//    Owl(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png")), CharacterAnimation.Owl, 120, 140, 7, 0, 1, 1, new Random().nextInt(2, 4), 100f),
+//    @SuppressWarnings("NewApi")
+////    Ghost(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/_.png")), null, 120, 140, 5, 0, 1, 1, new Random().nextInt(4, 8), 200f);
 
     private final Texture texture;
     private final CharacterAnimation anim;
