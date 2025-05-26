@@ -10,12 +10,12 @@ import end.team.center.GameCore.Library.ItemType;
 import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.OnMap.Hero;
 
-public class BrakeIron extends Drops {
-    public BrakeIron(Texture texture, Vector2 vector, Hero hero, int width, int height) {
+public class Bandage extends Drops {
+    public Bandage(Texture texture, Vector2 vector, Hero hero, int width, int height) {
         super(texture, vector, hero, width, height);
     }
 
-    public BrakeIron(ItemType type, Vector2 vector, Hero hero) {
+    public Bandage(ItemType type, Vector2 vector, Hero hero) {
         super(type.getTexture(), vector, hero, type.getWidth(), type.getHeight());
     }
 
@@ -32,9 +32,8 @@ public class BrakeIron extends Drops {
         super.act(delta);
 
         if (bound.overlaps(hero.getBound())) {
-            Random random = new Random();
+            hero.setHealth(hero.getHealth() + 1);
 
-            hero.addExpWeapon(random.nextInt(3, 10));
             remove();
         }
     }
