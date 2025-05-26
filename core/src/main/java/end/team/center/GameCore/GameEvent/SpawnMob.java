@@ -70,7 +70,6 @@ public class SpawnMob {
 
     protected void setNewMob() {
         levelMobSpawn = (int) (GameScreen.totalTime / 15);
-        System.out.println("Уровень врагов: " + levelMobSpawn);
 
         if        (GameScreen.totalTime >= 5 && canSpawn.get(0) == null) {
             System.out.println("Новый моб: Owl");

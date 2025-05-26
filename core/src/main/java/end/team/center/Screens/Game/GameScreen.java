@@ -249,6 +249,7 @@ public class GameScreen implements Screen {
                 hidePowerDialog();
             }
         });
+        p.setSize(600, 600);
         powers.add(p);
 
         Power p1 = new Power(new TextureRegionDrawable(new Texture("UI/GameUI/SelectPowerUI/Effect/HPforAttack.png"))) {
@@ -264,6 +265,7 @@ public class GameScreen implements Screen {
                 hidePowerDialog();
             }
         });
+        p1.setSize(600, 600);
         powers.add(p1);
 
         Power p2 = new Power(new TextureRegionDrawable(new Texture("UI/GameUI/SelectPowerUI/Effect/speedHP.png"))) {
@@ -280,6 +282,7 @@ public class GameScreen implements Screen {
                 hidePowerDialog();
             }
         });
+        p2.setSize(600, 600);
         powers.add(p2);
 
         Power p3 = new Power(new TextureRegionDrawable(new Texture("UI/GameUI/SelectPowerUI/Effect/visible.png"))) {
@@ -297,6 +300,7 @@ public class GameScreen implements Screen {
                 hidePowerDialog();
             }
         });
+        p3.setSize(600, 600);
         powers.add(p3);
 
         new Thread(new Runnable() {
@@ -500,7 +504,7 @@ public class GameScreen implements Screen {
             imgB[i] = powers.get(random.nextInt(0, powers.size() - 1));
         }
 
-        selectPower.getContentTable().center();
+        selectPower.getContentTable().center().setFillParent(true);
 
         content1 = new VerticalGroup();
         content2 = new VerticalGroup();

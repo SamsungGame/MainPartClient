@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import end.team.center.Center;
 import end.team.center.Screens.Game.GameScreen;
-import end.team.center.Screens.Game.PowerSelectScreen;
 
 public class MainMenuScreen implements Screen {
     private Stage stage;
@@ -27,8 +26,6 @@ public class MainMenuScreen implements Screen {
 
         // Создаем кнопки
         Button buttonStart     = new Button(skin);
-        Button buttonSetting   = new Button(skin);
-        Button buttonAboutGame = new Button(skin);
 
         // Создаем таблицу
         Table table = new Table();
@@ -37,10 +34,6 @@ public class MainMenuScreen implements Screen {
 
         // Добавляем кнопки в таблицу с отступами
         table.add(buttonStart).height(180).width(640); // pad - отступ между кнопками
-        table.row(); // Переход на следующую строку
-        table.add(buttonSetting).height(180).width(640);
-        table.row();
-        table.add(buttonAboutGame).height(180).width(640);
 
         // Добавляем кнопку на сцену
         stage.addActor(table);
@@ -50,18 +43,6 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
-            }
-        });
-        buttonSetting.addListener(new ClickListener() {
-            @Override
-            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                ((Center) Gdx.app.getApplicationListener()).setScreen(new SettingScreen());
-            }
-        });
-        buttonAboutGame.addListener(new ClickListener() {
-            @Override
-            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                ((Center) Gdx.app.getApplicationListener()).setScreen(new AboutGameScreen());
             }
         });
     }
