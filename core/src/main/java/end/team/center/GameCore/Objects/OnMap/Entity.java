@@ -20,10 +20,10 @@ public abstract class Entity extends GameObject {
     protected boolean isLive = true, isMoving = false;
     protected boolean mRight = false;
 
-    private Animation<TextureRegion> walkRightAnimation;
-    private Animation<TextureRegion> walkLeftAnimation;
-    private Animation<TextureRegion> stayRightAnimation;
-    private Animation<TextureRegion> stayLeftAnimation;
+    protected Animation<TextureRegion> walkRightAnimation;
+    protected Animation<TextureRegion> walkLeftAnimation;
+    protected Animation<TextureRegion> stayRightAnimation;
+    protected Animation<TextureRegion> stayLeftAnimation;
 
 
     public Entity(Texture texture, CharacterAnimation anim, Vector2 vector, float width,
@@ -87,19 +87,6 @@ public abstract class Entity extends GameObject {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        TextureRegion currentFrame;
-
-        if (isMoving) {
-            currentFrame = mRight
-                    ? walkRightAnimation.getKeyFrame(stateTime, true)
-                    : walkLeftAnimation .getKeyFrame(stateTime, true);
-        } else {
-            currentFrame = mRight
-                    ? stayRightAnimation.getKeyFrame(stateTime, true)
-                    : stayLeftAnimation .getKeyFrame(stateTime, true);
-        }
-
-        batch.draw(currentFrame, vector.x, vector.y, getWidth(), getHeight());
     }
 
     @Override

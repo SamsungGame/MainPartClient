@@ -8,6 +8,7 @@ import end.team.center.GameCore.Library.ItemType;
 import end.team.center.GameCore.Library.Items.Acumulattor;
 import end.team.center.GameCore.Library.Items.Bandage;
 import end.team.center.GameCore.Library.Items.BrakeIron;
+import end.team.center.GameCore.Library.Items.Lamp;
 import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.OnMap.Entity;
 import end.team.center.GameCore.Objects.OnMap.Hero;
@@ -26,10 +27,11 @@ public class SpawnItem {
         this.poster = poster;
         this.hero = hero;
 
-        canDrop = new ItemType[3];
+        canDrop = new ItemType[4];
         canDrop[0] = ItemType.accumulator;
         canDrop[1] = ItemType.BreakIron;
         canDrop[2] = ItemType.Bandage;
+        canDrop[3] = ItemType.lamp;
 
         timeSpawn = 25;
     }
@@ -55,15 +57,16 @@ public class SpawnItem {
     }
     @SuppressWarnings("NewApi")
     public Drops spawn() {
-        Random random = new Random();
-        int r = random.nextInt(1, 2);
+        int r = (int) Math.floor(Math.random() * 4);
 
-        if(r == 1) {
+        if(r == 0) {
             return new Acumulattor(ItemType.accumulator, setPosition(), hero);
-        } else if (r == 2) {
+        } else if (r == 1) {
             return new BrakeIron(ItemType.BreakIron, setPosition(), hero);
-        } else {
+        } else if (r == 2) {
             return new Bandage(ItemType.Bandage, setPosition(), hero);
+        } else {
+            return new Lamp(ItemType.lamp, setPosition(), hero);
         }
     }
 

@@ -53,6 +53,8 @@ public class Ghost extends Enemy {
         shotL = new TextureRegion(shotR);
         shotL.flip(true, false);
 
+        ammos = new ArrayList<>();
+
         health = health + (health / 5 * level);
 
         if (level > 7 && level < 14) damage = 2;
@@ -84,6 +86,8 @@ public class Ghost extends Enemy {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if (isLive) {
+            super.draw(batch, parentAlpha);
+
             if (mRight && !ai.getIsShotLoad()) batch.draw(r, getX(), getY(), getWidth(), getHeight());
             else if (!ai.getIsShotLoad())      batch.draw(l, getX(), getY(), getWidth(), getHeight());
             else if (mRight)                   batch.draw(shotR, getX(), getY(), getWidth(), getHeight());

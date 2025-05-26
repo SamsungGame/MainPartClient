@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -64,6 +65,7 @@ public class GameScreen implements Screen {
     private SpawnItem spawnItem;
     public static ArrayList<Drops> drop;
     private Heart hearts;
+    private ArrayList<Object> wait;
 
     private FrameBuffer frameBuffer;
     private FrameBuffer hardMaskBuffer;
@@ -85,11 +87,15 @@ public class GameScreen implements Screen {
     ProgressBar expBar;
     Label energyValue;
 
+    public boolean isIteration = false;
+
 
 
     @SuppressWarnings("NewApi")
     public GameScreen() {
         System.out.println("Размеры экрана: " + Gdx.graphics.getWidth() + "x на " + Gdx.graphics.getHeight() + "y");
+
+        wait = new ArrayList<>();
 
         gameCamera = new GameCamera(WORLD_WIDTH, WORLD_HEIGHT);
 
@@ -105,6 +111,23 @@ public class GameScreen implements Screen {
 
         touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth()-500, 200, false, "attack");
         uiStage.addActor(touchpadAttack);
+
+        // Разбрасывание камней по карте
+        Texture textureT1 = new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/rock1.png"));
+        Texture textureT2 = new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/rock2.png"));
+
+        Random r = new Random();
+
+        for (int i = 0; i < 15; i++) { // 15 камней каждого вида
+            worldStage.addActor(new Rock(
+                textureT1,
+                new Vector2(r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_WIDTH), r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_HEIGHT)),
+                21, 15, true));
+            worldStage.addActor(new Rock(
+                textureT2,
+                new Vector2(r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_WIDTH), r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_HEIGHT)),
+                21, 15, true));
+        }
 
         hero = new Hero(
             new Texture(Gdx.files.internal("UI/GameUI/Hero/Right/heroRight.png")),
@@ -131,12 +154,14 @@ public class GameScreen implements Screen {
         Skin energySkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/energyText.json"));
 
         energyValue = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), energySkin);
-        energyValue.setFontScale(3f);
+        energyValue.setFontScale(5f);
+
+        energyValue.setPosition(Gdx.graphics.getWidth() - EnergyValue.getWidth() - energyValue.getWidth() - 280,
+            Gdx.graphics.getHeight() - energyValue.getHeight() - 100);
+
 
         uiStage.addActor(EnergyValueImg);
         uiStage.addActor(energyValue);
-
-
 
         Texture ExpTexture1 = new Texture("UI/GameUI/OtherGameItems/expBorderLeft.png");
         Image image = new Image(ExpTexture1);
@@ -156,7 +181,7 @@ public class GameScreen implements Screen {
         image2.setPosition((float) Gdx.graphics.getWidth() /2 + 400, Gdx.graphics.getHeight() - 110);
         uiStage.addActor(image2);
 
-
+        drop = new ArrayList<>();
 
         // Настройки спавна мобов
         enemies = new ArrayList<>();
@@ -205,6 +230,8 @@ public class GameScreen implements Screen {
         // Создание окна
         Skin ws = new Skin(Gdx.files.internal("UI/GameUI/Dialog/dialog.json"));
         selectPower = new Dialog("Выберите усиление!", ws);
+
+        powers = new ArrayList<>();
 
         // Добавление существующих усилений
         Power p = new Power(new TextureRegionDrawable(new Texture("UI/GameUI/SelectPowerUI/Effect/expMore.png"))) {
@@ -256,9 +283,9 @@ public class GameScreen implements Screen {
         Power p3 = new Power(new TextureRegionDrawable(new Texture("UI/GameUI/SelectPowerUI/Effect/visible.png"))) {
             @Override
             public void effect() {
-                ShaderManager.radiusView1 += 0.03f;
-                ShaderManager.radiusView2 += 0.03f;
-                ShaderManager.radiusView3 += 0.03f;
+                ShaderManager.radiusView1 += 0.1f;
+                ShaderManager.radiusView2 += 0.1f;
+                ShaderManager.radiusView3 += 0.1f;
             }
         };
         p.addListener(new ChangeListener() {
@@ -269,23 +296,6 @@ public class GameScreen implements Screen {
             }
         });
         powers.add(p3);
-
-        // Разбрасывание камней по карте
-        Texture textureT1 = new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/rock1"));
-        Texture textureT2 = new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/rock2"));
-
-        Random r = new Random();
-
-        for (int i = 0; i < 15; i++) { // 15 камней каждого вида
-            worldStage.addActor(new Rock(
-                textureT1,
-                new Vector2(r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_WIDTH), r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_HEIGHT)),
-                21, 15, true));
-            worldStage.addActor(new Rock(
-                textureT2,
-                new Vector2(r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_WIDTH), r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_HEIGHT)),
-                21, 15, true));
-        }
 
         new Thread(new Runnable() {
             @Override
@@ -298,7 +308,7 @@ public class GameScreen implements Screen {
                     } catch (InterruptedException ignore) {}
                 }
             }
-        });
+        }).start();
 
         spawner.startWork();
         spawnItem.goWork();
@@ -307,6 +317,8 @@ public class GameScreen implements Screen {
     @SuppressWarnings("DefaultLocale")
     @Override
     public void render(float delta) {
+        addToList();
+
         TIME += delta;
 
         if (hero.newLevelFlag) {
@@ -341,7 +353,7 @@ public class GameScreen implements Screen {
                     e.setHealth(e.getHealth() - hero.getWep().getDamage());
                     e.stan(1);
 
-                    if (Math.random() * 100 > 80 && hero.getHealth() < 3) {
+                    if (Math.random() * 100 > 80 && hero.getHealth() < 3 && hero.getVampirism()) {
                         hero.setHealth(hero.getHealth() + 1);
                     }
 
@@ -391,8 +403,10 @@ public class GameScreen implements Screen {
             frameBuffer.begin();
             Gdx.gl.glClearColor(0, 0, 0, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            batch.begin();
             worldStage.act(delta);
             worldStage.draw();
+            batch.end();
             frameBuffer.end();
         }
 
@@ -481,6 +495,10 @@ public class GameScreen implements Screen {
 
         selectPower.getContentTable().center();
 
+        content1 = new VerticalGroup();
+        content2 = new VerticalGroup();
+        content3 = new VerticalGroup();
+
         content1.addActor(imgB[0]);
         selectPower.getContentTable().add(content1).height(600).width(600).padRight(20);
 
@@ -500,16 +518,26 @@ public class GameScreen implements Screen {
     }
 
     public void setSpawnMob(Enemy[] enemy) {
-        enemies.addAll(List.of(enemy));
-
         for(Enemy e: enemy) {
-            if (e != null) worldStage.addActor(e);
+            if (e != null) wait.add(e);
         }
     }
 
     public void setSpawnItem(Drops d) {
-        drop.add(d);
+        wait.add(d);
+    }
 
-        worldStage.addActor(d);
+    public void addToList() {
+        for(Object o: wait) {
+            if (o != null) {
+                if (o instanceof Enemy) {
+                    enemies.add((Enemy) o);
+                } else if (o instanceof Drops) {
+                    drop.add((Drops) o);
+                }
+                worldStage.addActor((Actor) o);
+            }
+        }
+        wait.clear();
     }
 }

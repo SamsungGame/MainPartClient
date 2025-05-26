@@ -63,10 +63,26 @@ public class Owl extends Enemy {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if (isLive) {
+            super.draw(batch, parentAlpha);
+
             if (((AI_Owl) ai).isAttaking) {
-                if (mRight)  batch.draw(rDiveTexture, vector.x, vector.y, getWidth(), getHeight());
-                if (!mRight) batch.draw(lDiveTexture, vector.x, vector.y, getWidth(), getHeight());
-            } else super.draw(batch, parentAlpha);
+                if (mRight)  batch.draw(new TextureRegion(rDiveTexture), vector.x, vector.y, getWidth(), getHeight());
+                if (!mRight) batch.draw(new TextureRegion(lDiveTexture), vector.x, vector.y, getWidth(), getHeight());
+            } else {
+                TextureRegion currentFrame;
+
+                if (isMoving) {
+                    currentFrame = mRight
+                        ? walkRightAnimation.getKeyFrame(stateTime, true)
+                        : walkLeftAnimation .getKeyFrame(stateTime, true);
+                } else {
+                    currentFrame = mRight
+                        ? stayRightAnimation.getKeyFrame(stateTime, true)
+                        : stayLeftAnimation .getKeyFrame(stateTime, true);
+                }
+
+                batch.draw(currentFrame, vector.x, vector.y, getWidth(), getHeight());
+            }
         }
     }
 

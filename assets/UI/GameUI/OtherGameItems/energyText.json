@@ -20,16 +20,5 @@
 		"font": "Tiny5-Regular3",
 		"fontColor": "RGBA_255_255_255_255"
 	}
-},
-"com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle": {
-	"default-horizontal": {
-		"background": "expBorder",
-		"knobBefore": "expFill"
-	}
-},
-"com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle": {
-	"default": {
-		"label": "default"
-	}
 }
 }
