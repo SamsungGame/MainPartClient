@@ -5,16 +5,20 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.ArrayList;
+
 import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.Library.EnemyType;
 import end.team.center.GameCore.Logic.AI.AI;
 import end.team.center.GameCore.Logic.AI.AI_Ghost;
 import end.team.center.GameCore.Logic.AI.AI_Owl;
+import end.team.center.GameCore.Objects.OnMap.Ammo;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
 
 public class Ghost extends Enemy {
     protected AI_Ghost ai;
     protected Circle stop, run;
+    protected ArrayList<Ammo> ammos;
     public Ghost(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, int exp, float worldHeight, float worldWidth, AI ai) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, level, exp, worldHeight, worldWidth, ai);
         this.ai = (AI_Ghost) ai;
@@ -27,6 +31,10 @@ public class Ghost extends Enemy {
         this.ai = (AI_Ghost) ai;
 
         initialization();
+    }
+
+    public void addAmmo(Ammo a) {
+        ammos.add(a);
     }
 
     protected void initialization() {
@@ -70,6 +78,15 @@ public class Ghost extends Enemy {
         move(v.x, v.y, delta);
 
         ai.shot(this);
+
+        int size = ammos.size();
+        for(int i = 0; i < size; i++) {
+            if (ammos.get(i) == null) {
+                ammos.remove(i);
+            } else {
+                ammos.get(i).act(delta);
+            }
+        }
     }
 
     @Override

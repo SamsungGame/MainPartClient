@@ -26,46 +26,69 @@ public class Spawner {
     private PostMob poster;
     private Hero hero;
 
-    public Spawner(PostMob poster, Hero hero, int countLocation) {
+    public Spawner(PostMob poster, Hero hero) {
         this.poster = poster;
         this.hero = hero;
 
         canSpawn = new ArrayList<>();
+        for(int i = 0; i < 2; i++) { // 2 - коль-во видов мобов
+            canSpawn.add(null);
+        }
 
-        if (countLocation == 0) {
-            canSpawn.add(EnemyType.Owl);
-            canSpawn.add(EnemyType.Ghost);
-
-            timeSpawn = 10 * 1000;
-        } // Добавить больше врагов в список, по мере продвижении по локациям
+        timeSpawn = 30;
     }
 
     public void startWork() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (maxCountMobInMap > countEnemy) {
-                    Enemy[] enemies = new Enemy[canSpawn.size()];
+                while (true) {
+                    setNewMob();
 
-                    for (int i = 0; i < canSpawn.size(); i++) {
-                        enemies[i] = spawn(canSpawn.get(i));
-                    }
+                    if (maxCountMobInMap > countEnemy) {
+                        Enemy[] enemies = new Enemy[canSpawn.size()];
 
-                    poster.post(enemies);
+                        for (int i = 0; i < canSpawn.size(); i++) {
+                            enemies[i] = spawn(canSpawn.get(i));
+                        }
 
-                    countEnemy += enemies.length;
+                        poster.post(enemies);
 
-                    System.out.println("Отправка мобов: " + Arrays.toString(enemies));
+                        countEnemy += enemies.length;
 
-                    try {
-                        Thread.sleep(timeSpawn);
-                    } catch (InterruptedException ignore) {
+                        System.out.println("Отправка мобов: " + Arrays.toString(enemies));
+
+                        try {
+                            Thread.sleep(timeSpawn * 1000L);
+                        } catch (InterruptedException ignore) {}
                     }
                 }
             }
         }).start();
+    }
 
+    protected void setNewMob() {
+        if        (GameScreen.totalTime >= 5 && canSpawn.get(0) == null) {
+            System.out.println("Новый моб: Owl");
+            canSpawn.set(0, EnemyType.Owl);
+        } else if (GameScreen.totalTime >= 5 && canSpawn.get(1) == null) {
+            System.out.println("Новый моб: Ghost");
+            canSpawn.set(1, EnemyType.Ghost);
+        }
 
+        if        (GameScreen.totalTime <= 20 && timeSpawn > 20) {
+            System.out.println("Время спавна: 20");
+            timeSpawn = 20;
+        } else if (GameScreen.totalTime <= 40 && timeSpawn > 10) {
+            System.out.println("Время спавна: 20 -> 10");
+            timeSpawn = 10;
+        } else if (GameScreen.totalTime <= 60 && timeSpawn > 5) {
+            System.out.println("Время спавна: 10 -> 5");
+            timeSpawn = 5;
+        } else if (GameScreen.totalTime <= 120 && timeSpawn > 1) {
+            System.out.println("Время спавна: 5 -> 1");
+            timeSpawn = 1;
+        }
     }
 
     private Enemy spawn(EnemyType type) {

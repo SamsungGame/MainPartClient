@@ -1,8 +1,14 @@
 package end.team.center.GameCore.Logic.AI;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.ArrayList;
+
 import end.team.center.GameCore.Library.Mobs.Ghost;
+import end.team.center.GameCore.Objects.Effects.Death;
+import end.team.center.GameCore.Objects.OnMap.Ammo;
 import end.team.center.GameCore.Objects.OnMap.Hero;
 
 public class AI_Ghost extends AI {
@@ -60,7 +66,8 @@ public class AI_Ghost extends AI {
 
     public void shotStart(Ghost ghost) {
 
-        // Атака
+        Ammo ammo = new Ammo(new Texture(Gdx.files.internal("")), ghost, hero, 5, 5, 100);
+        ghost.addAmmo(ammo);
 
         isShotLoad = false;
 

@@ -51,6 +51,14 @@ public abstract class Entity extends GameObject {
         stayLeftAnimation  = new Animation<>(0.22f, leftStayArray);
     }
 
+    public float getWorldHeight() {
+        return worldHeight;
+    }
+
+    public float getWorldWidth() {
+        return worldWidth;
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);

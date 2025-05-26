@@ -8,13 +8,14 @@ import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.Library.Items.Knife;
 import end.team.center.GameCore.Library.WeaponType;
 import end.team.center.GameCore.Objects.InInventary.Weapon;
+import end.team.center.Screens.Game.GameScreen;
 
 public class Hero extends Friendly {
 
     protected boolean isInvulnerability = false;
     protected int radiationProtect = 1;
     protected float antiRadiationCostumePower = 100.0f;
-    protected int radiationLevel = 1;
+    protected int radiationLevel = 0;
     protected Weapon weapon;
     protected int exp, level;
 
@@ -65,6 +66,22 @@ public class Hero extends Friendly {
         exp += add;
     }
 
+    public void setRadiationLevel() {
+        if        (GameScreen.totalTime <= 30 && radiationLevel < 1) {
+            System.out.println("Урвоень радиации: 1");
+            radiationLevel = 1;
+        } else if (GameScreen.totalTime <= 60 && radiationLevel < 2) {
+            System.out.println("Урвоень радиации: 2");
+            radiationLevel = 2;
+        } else if (GameScreen.totalTime <= 90 && radiationLevel < 3) {
+            System.out.println("Урвоень радиации: 3");
+            radiationLevel = 3;
+        } else if (GameScreen.totalTime <= 120 && radiationLevel < 4) {
+            System.out.println("Урвоень радиации: 4");
+            radiationLevel = 4;
+        }
+    }
+
     @Override
     public void move(float deltaX, float deltaY, float delta) {
         super.move(deltaX, deltaY, delta);
@@ -74,6 +91,7 @@ public class Hero extends Friendly {
     public void act(float delta) {
         super.act(delta);
 
+        setRadiationLevel();
         antiRadiationCostumePower -= (float) (((radiationLevel * 0.6) / radiationProtect) * delta);
 
         ((Knife) weapon).act(delta);

@@ -47,7 +47,6 @@ public class GameScreen implements Screen {
     public static final float WORLD_HEIGHT = 5000;
 
     private Spawner spawner;
-    private int locationCount = 0;
     public static ArrayList<Enemy> enemies;
 
     private Label costumePower;
@@ -63,7 +62,7 @@ public class GameScreen implements Screen {
     private ShaderProgram hardMaskShader;
     private ShaderProgram dimmingShader;
 
-    private float totalTime = 0f;
+    public static float totalTime = 0f;
 
 
 
@@ -129,7 +128,7 @@ public class GameScreen implements Screen {
             public void post(Enemy[] enemy) {
                 setSpawnMob(enemy);
             }
-        }, hero, locationCount);
+        }, hero);
 
         frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
         hardMaskBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
