@@ -304,7 +304,7 @@ public class GameScreen implements Screen {
         enemies.addAll(List.of(enemy));
 
         for(Enemy e: enemy) {
-            worldStage.addActor(e);
+            if (e != null) worldStage.addActor(e);
         }
     }
 }

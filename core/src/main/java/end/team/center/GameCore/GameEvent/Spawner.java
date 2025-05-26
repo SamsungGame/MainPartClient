@@ -35,7 +35,7 @@ public class Spawner {
             canSpawn.add(null);
         }
 
-        timeSpawn = 30;
+        timeSpawn = 25;
     }
 
     public void startWork() {
@@ -45,7 +45,7 @@ public class Spawner {
                 while (true) {
                     setNewMob();
 
-                    if (maxCountMobInMap > countEnemy) {
+                    if (maxCountMobInMap > countEnemy) { // true
                         Enemy[] enemies = new Enemy[canSpawn.size()];
 
                         for (int i = 0; i < canSpawn.size(); i++) {
@@ -53,8 +53,6 @@ public class Spawner {
                         }
 
                         poster.post(enemies);
-
-                        countEnemy += enemies.length;
 
                         System.out.println("Отправка мобов: " + Arrays.toString(enemies));
 
@@ -73,16 +71,16 @@ public class Spawner {
             canSpawn.set(0, EnemyType.Owl);
         } else if (GameScreen.totalTime >= 5 && canSpawn.get(1) == null) {
             System.out.println("Новый моб: Ghost");
-            canSpawn.set(1, EnemyType.Ghost);
+            // canSpawn.set(1, EnemyType.Ghost);
         }
 
-        if        (GameScreen.totalTime <= 20 && timeSpawn > 20) {
+        if        (GameScreen.totalTime <= 30 && timeSpawn > 20) {
             System.out.println("Время спавна: 20");
             timeSpawn = 20;
-        } else if (GameScreen.totalTime <= 40 && timeSpawn > 10) {
+        } else if (GameScreen.totalTime <= 60 && timeSpawn > 10) {
             System.out.println("Время спавна: 20 -> 10");
             timeSpawn = 10;
-        } else if (GameScreen.totalTime <= 60 && timeSpawn > 5) {
+        } else if (GameScreen.totalTime <= 90 && timeSpawn > 5) {
             System.out.println("Время спавна: 10 -> 5");
             timeSpawn = 5;
         } else if (GameScreen.totalTime <= 120 && timeSpawn > 1) {
@@ -92,6 +90,8 @@ public class Spawner {
     }
 
     private Enemy spawn(EnemyType type) {
+        if (type == null) return null;
+
         if        (type == EnemyType.Owl) {
             return new Owl(type, randomCord(), GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Owl(hero));
         } else if (type == EnemyType.Ghost) {
