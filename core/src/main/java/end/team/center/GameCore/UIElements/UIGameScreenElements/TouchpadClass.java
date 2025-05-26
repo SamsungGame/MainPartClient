@@ -25,6 +25,7 @@ public class TouchpadClass extends Touchpad {
     float xp = this.x;
     float yp = this.y;
     private String type;
+    private int pointer = -1;
     public TouchpadClass(float x, float y, boolean isTouchpadActive, String type) {
         super(10, createTouchpadStyle());
         setBounds(x, y, touchSize, touchSize);
@@ -49,42 +50,72 @@ public class TouchpadClass extends Touchpad {
 
 
     public void TouchpadLogic(Stage stage) {
-        if (Gdx.input.isTouched()) {
-            Vector2 stageTouch = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
-            float touchX = stageTouch.x;
-            float touchY = stageTouch.y;
+        int maxPointers = 10;
 
-            TouchpadClass movePad = touchpads.get(0);
-            if (movePad.type.equals("move")) {
-                if (!movePad.isTouchpadActive) {
-                    if (touchX >= movePad.x - touchSize / 2 && touchX <= movePad.x + touchSize / 2 &&
-                        touchY >= movePad.y - touchSize / 2 && touchY <= movePad.y + touchSize / 2) {
-                        movePad.isTouchpadActive = true;
-                    } else if (touchX < (float) Gdx.graphics.getWidth() / 2 - touchSize / 2) {
-                        movePad.setPosition(touchX - touchSize / 2, touchY - touchSize / 2);
-                        movePad.x = touchX;
-                        movePad.y = touchY;
+        // Сбрасываем джойстики, если палец отпущен
+        for (TouchpadClass pad : touchpads) {
+            if (pad.pointer != -1 && !Gdx.input.isTouched(pad.pointer)) {
+                pad.pointer = -1;
+                pad.isTouchpadActive = false;
+            }
+        }
+
+        // Обрабатываем касания
+        for (int i = 0; i < maxPointers; i++) {
+            if (!Gdx.input.isTouched(i)) continue;
+
+            Vector2 touch = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(i), Gdx.input.getY(i)));
+            float touchX = touch.x;
+            float touchY = touch.y;
+
+            for (TouchpadClass pad : touchpads) {
+                boolean isLeftSide = touchX < Gdx.graphics.getWidth() / 2f;
+                boolean isRightSide = touchX >= Gdx.graphics.getWidth() / 2f;
+
+                if (pad.pointer == i) {
+                    // Палец держит джойстик — не перемещаем его
+                    pad.isTouchpadActive = true;
+                } else if (pad.pointer == -1) {
+                    // Джойстик свободен — можем занять или переместить
+                    boolean inBounds = touchX >= pad.x - touchSize / 2 && touchX <= pad.x + touchSize / 2 &&
+                        touchY >= pad.y - touchSize / 2 && touchY <= pad.y + touchSize / 2;
+
+                    if (pad.type.equals("move") && isLeftSide) {
+                        if (inBounds) {
+                            pad.pointer = i;
+                            pad.isTouchpadActive = true;
+                        } else {
+                            // Перемещаем джойстик, только если он не активен
+                            if (!pad.isTouchpadActive) {
+                                pad.setPosition(touchX - touchSize / 2, touchY - touchSize / 2);
+                                pad.x = touchX;
+                                pad.y = touchY;
+                            }
+                        }
+                    }
+
+                    if (pad.type.equals("attack") && isRightSide) {
+                        if (inBounds) {
+                            pad.pointer = i;
+                            pad.isTouchpadActive = true;
+                        } else {
+                            if (!pad.isTouchpadActive) {
+                                pad.setPosition(touchX - touchSize / 2, touchY - touchSize / 2);
+                                pad.x = touchX;
+                                pad.y = touchY;
+                            }
+                        }
                     }
                 }
             }
+        }
 
-            TouchpadClass attackPad = touchpads.get(1);
-            if (attackPad.type.equals("attack")) {
-                if (!attackPad.isTouchpadActive) {
-                    if (touchX >= attackPad.x - touchSize / 2 && touchX <= attackPad.x + touchSize / 2 &&
-                        touchY >= attackPad.y - touchSize / 2 && touchY <= attackPad.y + touchSize / 2) {
-                        attackPad.isTouchpadActive = true;
-                    } else if (touchX > (float) Gdx.graphics.getWidth() / 2 + touchSize / 2) {
-                        attackPad.setPosition(touchX - touchSize / 2, touchY - touchSize / 2);
-                        attackPad.x = touchX;
-                        attackPad.y = touchY;
-                    }
-                }
+        // Если нет ни одного касания — сбрасываем все джойстики
+        if (!Gdx.input.isTouched()) {
+            for (TouchpadClass pad : touchpads) {
+                pad.pointer = -1;
+                pad.isTouchpadActive = false;
             }
-
-        } else {
-            touchpads.get(0).isTouchpadActive = false;
-            touchpads.get(1).isTouchpadActive = false;
         }
     }
 

@@ -1,7 +1,9 @@
 package end.team.center.GameCore.Library.Mobs;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -16,6 +18,7 @@ import end.team.center.GameCore.Objects.OnMap.Ammo;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
 
 public class Ghost extends Enemy {
+    public TextureRegion r, l, shot;
     protected AI_Ghost ai;
     protected Circle stop, run;
     protected ArrayList<Ammo> ammos;
@@ -40,6 +43,12 @@ public class Ghost extends Enemy {
     protected void initialization() {
         stop = new Circle(getCenterVector().x, getCenterVector().y, 2000);
         run  = new Circle(getCenterVector().x, getCenterVector().y, 350);
+
+        shot = new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ghostAttack.png")));
+
+        r = new TextureRegion(texture);
+        l = new TextureRegion(texture);
+        l.flip(true, false);
 
         health = health + (health / 5 * level);
 
@@ -72,7 +81,9 @@ public class Ghost extends Enemy {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if (isLive) {
-            super.draw(batch, parentAlpha);
+            if (mRight && !ai.getIsShotLoad()) batch.draw(r, getX(), getY(), getWidth(), getHeight());
+            else if (!ai.getIsShotLoad())      batch.draw(l, getX(), getY(), getWidth(), getHeight());
+            else                               batch.draw(l, getX(), getY(), getWidth(), getHeight());
         }
     }
 

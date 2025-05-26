@@ -18,6 +18,10 @@ public class AI_Ghost extends AI {
         super(hero);
     }
 
+    public boolean getIsShotLoad() {
+        return isShotLoad;
+    }
+
     @Override
     public Vector2 MoveToPlayer(Vector2 target, Vector2 position, float speed, float delta) {
         return super.MoveToPlayer(target, position, speed, delta);
@@ -66,7 +70,7 @@ public class AI_Ghost extends AI {
 
     public void shotStart(Ghost ghost) {
 
-        Ammo ammo = new Ammo(new Texture(Gdx.files.internal("")), ghost, hero, 5, 5, 100);
+        Ammo ammo = new Ammo(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ammo.png")), ghost, hero, 42, 42, 100);
         ghost.addAmmo(ammo);
 
         isShotLoad = false;

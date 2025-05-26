@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
@@ -80,6 +81,8 @@ public class GameScreen implements Screen {
     protected ArrayList<Power> powers;
     public static boolean STOP = false;
 
+    ProgressBar expBar;
+
 
 
     public GameScreen() {
@@ -132,6 +135,25 @@ public class GameScreen implements Screen {
 
         costumePower.setFontScale(3.5f);
 
+        Texture ExpTexture1 = new Texture("UI/GameUI/OtherGameItems/expBorderLeft.png");
+        Image image = new Image(ExpTexture1);
+        image.setSize(20, 20);
+        image.setPosition((float) Gdx.graphics.getWidth() /2 - 420, Gdx.graphics.getHeight() - 110);
+        uiStage.addActor(image);
+
+        Skin skin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/expProgress.json"));
+        expBar = new ProgressBar(0, 20, 1, false, skin);
+        expBar.setSize(800, 60);
+        expBar.setPosition((float) Gdx.graphics.getWidth() /2 - 400, Gdx.graphics.getHeight() - 130);
+        uiStage.addActor(expBar);
+
+        Texture ExpTexture2 = new Texture("UI/GameUI/OtherGameItems/expBorderRight.png");
+        Image image2 = new Image(ExpTexture2);
+        image2.setSize(20,20);
+        image2.setPosition((float) Gdx.graphics.getWidth() /2 + 400, Gdx.graphics.getHeight() - 110);
+
+
+        uiStage.addActor(image2);
         uiStage.addActor(imagePower);
         uiStage.addActor(costumePower);
 
@@ -181,7 +203,7 @@ public class GameScreen implements Screen {
         dimmingShader.setUniformf("u_aspectRatio", aspectRatio);
 
         // Создание окна
-        Skin ws = new Skin(Gdx.files.internal("")); // TODO
+        Skin ws = new Skin(Gdx.files.internal("UI/GameUI/Dialog/dialog.json"));
         selectPower = new Dialog("Выберите усиление!", ws);
 
         // Добавление существующих усилений
@@ -270,6 +292,8 @@ public class GameScreen implements Screen {
                 max--;
             }
         }
+
+        expBar.setValue(hero.getExp());
 
         // Обновление UI игрока
         costumePower.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
@@ -375,11 +399,11 @@ public class GameScreen implements Screen {
 
         content1.addActor(new Label("Первое", sD1));
         content1.addActor(imgB[1]);
-        selectPower.getContentTable().add(content1).expand().fill();
+        selectPower.getContentTable().add(content1).padRight(20);
 
         content2.addActor(new Label("Второе", sD1));
         content2.addActor(imgB[2]);
-        selectPower.getContentTable().add(content2).expand().fill();
+        selectPower.getContentTable().add(content2).padRight(20);
 
         content3.addActor(new Label("Третье", sD1));
         content3.addActor(imgB[3]);
