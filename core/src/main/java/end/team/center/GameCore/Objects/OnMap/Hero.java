@@ -22,6 +22,7 @@ public class Hero extends Friendly {
     protected float expBonus = 1, damageBonus = 0;
     protected boolean vampirism = false;
     protected int maxExp;
+    public boolean newLevelFlag = false;
 
 
 
@@ -96,6 +97,7 @@ public class Hero extends Friendly {
             level++;
             maxExp = (int) (maxExp * level * 0.3);
             exp = 0;
+            newLevelFlag = true;
         }
     }
 

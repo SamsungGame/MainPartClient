@@ -276,8 +276,9 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         totalTime += delta;
 
-        if (false) { // TODO
+        if (hero.newLevelFlag) { // TODO
             showPowerDialog();
+            hero.newLevelFlag = false;
         }
 
         // Подготовка значений для методов классов типа "Object & Interacteble"
