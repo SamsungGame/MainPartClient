@@ -1,4 +1,3 @@
-Mango.mp3
 achievement1.png
 achievement2.png
 achievement3.png
@@ -13,5 +12,6 @@ buttonStyle/pixel_font2.png
 dungeon.png
 garden.png
 grass.png
+mainMenuMusic.mp3
 radiation.png
 tree.png

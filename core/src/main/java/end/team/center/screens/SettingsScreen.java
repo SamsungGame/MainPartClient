@@ -62,7 +62,7 @@ public class SettingsScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (mainMenuMusic.getVolume() == 0.0f) {
-                    mainMenuMusic.setVolume(1.0f);
+                    mainMenuMusic.setVolume(0.75f);
                     musicButton.setText(turnOffMusic);
                 }
                 else {
