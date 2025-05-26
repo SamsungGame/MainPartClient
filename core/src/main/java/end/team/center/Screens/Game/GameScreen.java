@@ -281,12 +281,14 @@ public class GameScreen implements Screen {
         gameCamera.updateCameraPosition(hero.getVector().x, hero.getVector().y, hero.getWidth(), hero.getHeight());
 
         // Шейдер
-        frameBuffer.begin();
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        worldStage.act(delta);
-        worldStage.draw();
-        frameBuffer.end();
+        if (!STOP) {
+            frameBuffer.begin();
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            worldStage.act(delta);
+            worldStage.draw();
+            frameBuffer.end();
+        }
 
         Vector2 heroPosScreen = worldStage.stageToScreenCoordinates(
             new Vector2(hero.getX() + hero.getWidth() / 2f, hero.getY() + hero.getHeight() / 2f)

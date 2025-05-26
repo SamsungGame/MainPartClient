@@ -39,13 +39,16 @@ public class SpawnItem {
             @Override
             public void run() {
                 while (true) {
-                    setTimeSpawn();
+                    if (!GameScreen.STOP) {
+                        setTimeSpawn();
 
-                    poster.post(spawn());
+                        poster.post(spawn());
 
-                    try {
-                        Thread.sleep(timeSpawn * 1000L);
-                    } catch (InterruptedException ignore) {}
+                        try {
+                            Thread.sleep(timeSpawn * 1000L);
+                        } catch (InterruptedException ignore) {
+                        }
+                    }
                 }
             }
         }).start();

@@ -46,7 +46,7 @@ public class SpawnMob {
                 while (true) {
                     setNewMob();
 
-                    if (maxCountMobInMap > countEnemy) { // true
+                    if (maxCountMobInMap > countEnemy && !GameScreen.STOP) { // true
                         Enemy[] enemies = new Enemy[canSpawn.size()];
 
                         for (int i = 0; i < canSpawn.size(); i++) {
