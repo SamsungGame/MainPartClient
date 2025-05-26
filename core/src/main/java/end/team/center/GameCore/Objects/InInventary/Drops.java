@@ -17,6 +17,7 @@ public abstract class Drops extends Interactable {
         this.vector = vector;
 
         bound = new Rectangle(vector.x, vector.y, width, height);
+        setPosition(vector.x, vector.y);
     }
 
     public void updateBound() {

@@ -78,7 +78,7 @@ public class TouchpadClass extends Touchpad {
                 } else if (pad.pointer == -1) {
                     // Джойстик свободен — можем занять или переместить
                     boolean inBounds = touchX >= pad.x - touchSize / 2 && touchX <= pad.x + touchSize / 2 &&
-                            touchY >= pad.y - touchSize / 2 && touchY <= pad.y + touchSize / 2;
+                        touchY >= pad.y - touchSize / 2 && touchY <= pad.y + touchSize / 2;
 
                     if (pad.type.equals("move") && isLeftSide) {
                         if (inBounds) {
@@ -118,7 +118,6 @@ public class TouchpadClass extends Touchpad {
             }
         }
     }
-
 
     public boolean isTouchpadActive() {
         return isTouchpadActive;

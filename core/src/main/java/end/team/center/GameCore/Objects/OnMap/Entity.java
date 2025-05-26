@@ -10,7 +10,7 @@ import end.team.center.GameCore.Library.CharacterAnimation;
 
 public abstract class Entity extends GameObject {
 
-    protected static final float BOUNDARY_PADDING = 100f;
+    public static final float BOUNDARY_PADDING = 100f;
 
     protected int health;
     protected int damage, defence;
@@ -51,6 +51,14 @@ public abstract class Entity extends GameObject {
         stayLeftAnimation  = new Animation<>(0.22f, leftStayArray);
     }
 
+    public float getWorldHeight() {
+        return worldHeight;
+    }
+
+    public float getWorldWidth() {
+        return worldWidth;
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);
@@ -65,6 +73,10 @@ public abstract class Entity extends GameObject {
     }
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public int getDamage() {
+        return damage;
     }
 
     public void updateBound() {

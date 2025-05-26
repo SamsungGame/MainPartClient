@@ -20,6 +20,11 @@ public abstract class Interactable extends Actor {
     }
 
     @Override
+    public void setSize(float width, float height) {
+        super.setSize(width, height);
+    }
+
+    @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
     }
