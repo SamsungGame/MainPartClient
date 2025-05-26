@@ -33,6 +33,22 @@ public class Hero extends Friendly {
         level = 0;
     }
 
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+    public void setVampirism(boolean set) {
+        vampirism = set;
+    }
+
+    public float getExpBonus() {
+        return expBonus;
+    }
+
+    public void setExpBonus(float expBonus) {
+        this.expBonus = expBonus;
+    }
+
     public float getAntiRadiationCostumePower() {
         return antiRadiationCostumePower;
     }
@@ -67,7 +83,7 @@ public class Hero extends Friendly {
     }
 
     public void addExp(int add) {
-        exp += add;
+        exp += (int) (add * expBonus);
     }
 
     public void addExpWeapon(int add) {
@@ -107,7 +123,7 @@ public class Hero extends Friendly {
             weapon.setSize(155, 300);
         }
 
-        weapon.setDamage(3 + (int) (expWeapon / 5));
+        weapon.setDamage((int) (damageBonus + 3 + (float) (expWeapon / 5)));
     }
 
     public void setRadiationLevel() {
