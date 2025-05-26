@@ -7,6 +7,9 @@ public class ShaderManager {
     public static ShaderProgram maskShader;
     public static ShaderProgram hardMaskShader;
     public static ShaderProgram dimmingShader;
+    public static float radiusView1 = 0.2f;
+    public static float radiusView2 = 0.17f;
+    public static float radiusView3 = 0.15f;
 
     static {
         ShaderProgram.pedantic = false;
@@ -45,7 +48,7 @@ public class ShaderManager {
                 "    vec2 scaledCenter = vec2(center.x, center.y * u_aspectRatio);\n" +
                 "    float dist = distance(scaledCoords, scaledCenter);\n" +
 
-                "    float baseRadius = 0.20;\n" +
+                "    float baseRadius ="+radiusView1+";\n" +
                 "    float amplitude = 0.01;\n" +
                 "    float period = 2.0;\n" +
                 "    float radius = baseRadius + amplitude * sin(6.2831 * u_time / period);\n" +
@@ -81,7 +84,7 @@ public class ShaderManager {
                 "    vec2 scaledCenter = vec2(center.x, center.y * u_aspectRatio);\n" +
                 "    float dist = distance(scaledCoords, scaledCenter);\n" +
 
-                "    float radius = 0.17;\n" +
+                "    float radius = "+radiusView2+";\n" +
                 "    if (dist <= radius) discard;\n" +
                 "    else gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);\n" +
                 "}";
@@ -105,7 +108,7 @@ public class ShaderManager {
                 "    vec2 scaledCenter = vec2(center.x, center.y * u_aspectRatio);\n" +
 
                 "    float dist = distance(scaledCoords, scaledCenter);\n" +
-                "    float innerRadius = 0.15;\n" +
+                "    float innerRadius ="+radiusView3+";\n" +
                 "    float outerRadius = 0.5;\n" +
                 "    float edgeSoftness = 0.5;\n" +
 

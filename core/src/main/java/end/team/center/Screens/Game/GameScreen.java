@@ -255,6 +255,9 @@ public class GameScreen implements Screen {
             @Override
             public void effect() {
                 // TODO Сергей
+                ShaderManager.radiusView1+=0.3f;
+                ShaderManager.radiusView2+=0.3f;
+                ShaderManager.radiusView3+=0.3f;
             }
         };
         p.addListener(new ChangeListener() {
