@@ -21,6 +21,7 @@ public class Hero extends Friendly {
     protected int exp, level;
     protected float expBonus = 1, damageBonus = 0;
     protected boolean vampirism = false;
+    public int maxExp = 300;
 
 
 
@@ -30,37 +31,6 @@ public class Hero extends Friendly {
         weapon = new Knife(WeaponType.knife, this);
         exp = 0;
         level = 0;
-    }
-
-    public boolean getVampirism() {
-        return vampirism;
-    }
-
-    public void setVampirism(boolean vampirism) {
-        this.vampirism = vampirism;
-    }
-
-    public void setExpBonus(float set) {
-        expBonus = set;
-    }
-    public float getExpBonus() {
-        return expBonus;
-    }
-
-    public void setDamageBonus(float set) {
-        damageBonus = set;
-    }
-    public float getDamageBonus() {
-        return damageBonus;
-    }
-
-    public void setSpeed(float speed) {
-        this.speed = speed;
-    }
-
-    @Override
-    public float getSpeed() {
-        return super.getSpeed();
     }
 
     public float getAntiRadiationCostumePower() {
@@ -97,7 +67,7 @@ public class Hero extends Friendly {
     }
 
     public void addExp(int add) {
-        exp += (int) (add * expBonus);
+        exp += add;
     }
 
     public void addExpWeapon(int add) {
@@ -137,7 +107,7 @@ public class Hero extends Friendly {
             weapon.setSize(155, 300);
         }
 
-        weapon.setDamage((int) (damageBonus + 3 + (float) expWeapon / 5));
+        weapon.setDamage(3 + (int) (expWeapon / 5));
     }
 
     public void setRadiationLevel() {
