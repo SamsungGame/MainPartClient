@@ -139,6 +139,7 @@ public class Hero extends Friendly {
         }
 
         weapon.setDamage((int) (damageBonus + 3 + (float) (expWeapon / 5)));
+        System.out.println("Урон оружия: " + weapon.getDamage());
     }
 
     public void setRadiationLevel() {

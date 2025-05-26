@@ -75,6 +75,7 @@ public class GameScreen implements Screen {
     private ShaderProgram dimmingShader;
 
     public static float totalTime = 0f;
+    public static float TIME = 0f;
 
     // Dialog для усиления
     protected Dialog selectPower;
@@ -286,6 +287,19 @@ public class GameScreen implements Screen {
                 21, 15, true));
         }
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    totalTime++;
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ignore) {}
+                }
+            }
+        });
+
         spawner.startWork();
         spawnItem.goWork();
     }
@@ -293,7 +307,7 @@ public class GameScreen implements Screen {
     @SuppressWarnings("DefaultLocale")
     @Override
     public void render(float delta) {
-        totalTime += delta;
+        TIME += delta;
 
         if (hero.newLevelFlag) {
             showPowerDialog();
@@ -398,7 +412,7 @@ public class GameScreen implements Screen {
         batch.setShader(maskShader);
         maskShader.bind();
         maskShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
-        maskShader.setUniformf("u_time", totalTime);
+        maskShader.setUniformf("u_time", TIME);
 
         batch.begin();
         batch.draw(worldTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
