@@ -2,6 +2,7 @@ package end.team.center.GameCore.Objects.OnMap;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -10,15 +11,17 @@ import end.team.center.GameCore.Objects.Effects.Death;
 import end.team.center.GameCore.Objects.Effects.OneSpriteEffect;
 
 public class Ammo extends OneSpriteEffect {
+    protected TextureRegion r;
     protected Hero hero;
     protected Enemy enemy;
     protected Rectangle bound;
     protected Vector2 position, target;
 
-    public Ammo(Texture texture, Enemy enemy, Hero hero, int width, int height, float speed) {
+    public Ammo(Texture texture, TextureRegion r, Enemy enemy, Hero hero, int width, int height, float speed) {
         super(texture, width, height, speed);
         this.hero = hero;
         this.enemy = enemy;
+        this.r = r;
 
         position = new Vector2(enemy.getCenterVector());
         bound = new Rectangle(position.x, position.y, width, height);
@@ -34,7 +37,7 @@ public class Ammo extends OneSpriteEffect {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
-        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+        batch.draw(r, getX(), getY(), getWidth(), getHeight());
     }
 
     @Override

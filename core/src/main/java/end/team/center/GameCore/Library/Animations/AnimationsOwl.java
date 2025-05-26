@@ -17,4 +17,11 @@ public class AnimationsOwl {
         new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlRight_midle.png"))),
         new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlRight_up.png")))
     };
+
+    public static final TextureRegion[] rightDive = new TextureRegion[] {
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlRight_down.png")))
+    };
+    public static final TextureRegion[] leftDive = new TextureRegion[] {
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png")))
+    };
 }

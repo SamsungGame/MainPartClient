@@ -15,15 +15,15 @@ public abstract class Entity extends GameObject {
     protected int health;
     protected int damage, defence;
     protected float speed;
-    protected float stateTime;
+    public float stateTime;
     protected float worldWidth, worldHeight;
     protected boolean isLive = true, isMoving = false;
     protected boolean mRight = false;
 
-    protected Animation<TextureRegion> walkRightAnimation;
-    protected Animation<TextureRegion> walkLeftAnimation;
-    protected Animation<TextureRegion> stayRightAnimation;
-    protected Animation<TextureRegion> stayLeftAnimation;
+    public Animation<TextureRegion> firstTypeAnimation;
+    public Animation<TextureRegion> secondTypeAnimation;
+    public Animation<TextureRegion> therdTypeAnimation;
+    public Animation<TextureRegion> fourthTypeAnimation;
 
 
     public Entity(Texture texture, CharacterAnimation anim, Vector2 vector, float width,
@@ -45,10 +45,10 @@ public abstract class Entity extends GameObject {
         TextureRegion[] rightStayArray   = anim.getRightStay();
         TextureRegion[] leftStayArray    = anim.getLeftStay();
 
-        walkRightAnimation = new Animation<>(0.13f, rightFramesArray);
-        walkLeftAnimation  = new Animation<>(0.13f, leftFramesArray);
-        stayRightAnimation = new Animation<>(0.22f, rightStayArray);
-        stayLeftAnimation  = new Animation<>(0.22f, leftStayArray);
+        firstTypeAnimation = new Animation<>(0.13f, rightFramesArray);
+        secondTypeAnimation = new Animation<>(0.13f, leftFramesArray);
+        therdTypeAnimation = new Animation<>(0.22f, rightStayArray);
+        fourthTypeAnimation = new Animation<>(0.22f, leftStayArray);
     }
 
     public float getWorldHeight() {
@@ -72,6 +72,8 @@ public abstract class Entity extends GameObject {
         return health;
     }
     public void setHealth(int health) {
+        if (health < 0) health = 0;
+
         this.health = health;
     }
 
@@ -93,16 +95,16 @@ public abstract class Entity extends GameObject {
     public void dispose() {
         super.dispose();
 
-        for (TextureRegion region : walkRightAnimation.getKeyFrames()) {
+        for (TextureRegion region : firstTypeAnimation.getKeyFrames()) {
             region.getTexture().dispose();
         }
-        for (TextureRegion region : walkLeftAnimation.getKeyFrames()) {
+        for (TextureRegion region : secondTypeAnimation.getKeyFrames()) {
             region.getTexture().dispose();
         }
-        for (TextureRegion region : stayRightAnimation.getKeyFrames()) {
+        for (TextureRegion region : therdTypeAnimation.getKeyFrames()) {
             region.getTexture().dispose();
         }
-        for (TextureRegion region : stayLeftAnimation.getKeyFrames()) {
+        for (TextureRegion region : fourthTypeAnimation.getKeyFrames()) {
             region.getTexture().dispose();
         }
     }

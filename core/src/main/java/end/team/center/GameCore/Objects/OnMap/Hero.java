@@ -10,6 +10,7 @@ import end.team.center.GameCore.Library.Items.Knife;
 import end.team.center.GameCore.Library.WeaponType;
 import end.team.center.GameCore.Logic.ShaderManager;
 import end.team.center.GameCore.Objects.InInventary.Weapon;
+import end.team.center.GameCore.Objects.Map.Zone;
 import end.team.center.Screens.Game.GameScreen;
 
 public class Hero extends Friendly {
@@ -151,19 +152,16 @@ public class Hero extends Friendly {
     }
 
     public void setRadiationLevel() {
-        if        (GameScreen.totalTime >= 10 && radiationLevel < 1) {
-            System.out.println("Урвоень радиации: 1");
-            radiationLevel = 1;
-        } else if (GameScreen.totalTime >= 50 && radiationLevel < 2) {
-            System.out.println("Урвоень радиации: 2");
-            radiationLevel = 2;
-        } else if (GameScreen.totalTime >= 90 && radiationLevel < 3) {
-            System.out.println("Урвоень радиации: 3");
-            radiationLevel = 3;
-        } else if (GameScreen.totalTime >= 130 && radiationLevel < 4) {
-            System.out.println("Урвоень радиации: 4");
-            radiationLevel = 4;
+        boolean was = false;
+
+        for(Zone z: GameScreen.zone) {
+            if(z.bound.overlaps(bound)) {
+                radiationLevel = z.level;
+                was = true;
+            }
         }
+
+        if (!was) radiationLevel = 1;
     }
 
     public void addCostumePower(int add) {
@@ -217,12 +215,12 @@ public class Hero extends Friendly {
 
         if (isMoving) {
             currentFrame = mRight
-                ? walkRightAnimation.getKeyFrame(stateTime, true)
-                : walkLeftAnimation .getKeyFrame(stateTime, true);
+                ? firstTypeAnimation.getKeyFrame(stateTime, true)
+                : secondTypeAnimation.getKeyFrame(stateTime, true);
         } else {
             currentFrame = mRight
-                ? stayRightAnimation.getKeyFrame(stateTime, true)
-                : stayLeftAnimation .getKeyFrame(stateTime, true);
+                ? therdTypeAnimation.getKeyFrame(stateTime, true)
+                : fourthTypeAnimation.getKeyFrame(stateTime, true);
         }
 
         batch.draw(currentFrame, vector.x, vector.y, getWidth(), getHeight());

@@ -1,14 +1,10 @@
 package end.team.center.GameCore.Library.Mobs;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.Library.EnemyType;
@@ -26,8 +22,8 @@ public class Owl extends Enemy {
         intialization();
     }
 
-    public Owl(EnemyType type, Vector2 vector, int level, float worldHeight, float worldWidth, AI ai) {
-        super(type.getTexture(), type.getAnim(), vector, type.getHeight(), type.getWidth(), type.getHealth(), type.getDamage(), type.getDefense(), type.getSpeed(), level, type.getExp(), worldHeight, worldWidth, ai);
+    public Owl(EnemyType type, Texture texture, Vector2 vector, int level, float worldHeight, float worldWidth, AI ai) {
+        super(texture, type.getAnim(), vector, type.getHeight(), type.getWidth(), type.getHealth(), type.getDamage(), type.getDefense(), type.getSpeed(), level, type.getExp(), worldHeight, worldWidth, ai);
         intialization();
     }
 
@@ -63,26 +59,19 @@ public class Owl extends Enemy {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if (isLive) {
-            super.draw(batch, parentAlpha);
+            TextureRegion currentFrame;
 
-            if (((AI_Owl) ai).isAttaking) {
-                if (mRight)  batch.draw(new TextureRegion(rDiveTexture), vector.x, vector.y, getWidth(), getHeight());
-                if (!mRight) batch.draw(new TextureRegion(lDiveTexture), vector.x, vector.y, getWidth(), getHeight());
-            } else {
-                TextureRegion currentFrame;
+            if (isMoving && !((AI_Owl) ai).isAttaking) {
+                currentFrame = mRight
+                    ? firstTypeAnimation.getKeyFrame(stateTime, true) // Хотьба направо
+                    : secondTypeAnimation.getKeyFrame(stateTime, true); // Хотьба налево
+            } else if (((AI_Owl) ai).isAttaking) {
+                currentFrame = mRight
+                    ? therdTypeAnimation.getKeyFrame(stateTime, true) // Пикирование направо
+                    : fourthTypeAnimation.getKeyFrame(stateTime, true); // Пикирование налево
+            } else currentFrame = new TextureRegion(texture);
 
-                if (isMoving) {
-                    currentFrame = mRight
-                        ? walkRightAnimation.getKeyFrame(stateTime, true)
-                        : walkLeftAnimation .getKeyFrame(stateTime, true);
-                } else {
-                    currentFrame = mRight
-                        ? stayRightAnimation.getKeyFrame(stateTime, true)
-                        : stayLeftAnimation .getKeyFrame(stateTime, true);
-                }
-
-                batch.draw(currentFrame, vector.x, vector.y, getWidth(), getHeight());
-            }
+            batch.draw(currentFrame, vector.x, vector.y, getWidth(), getHeight());
         }
     }
 

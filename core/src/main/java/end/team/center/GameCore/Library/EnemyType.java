@@ -8,17 +8,15 @@ import java.util.Random;
 public enum EnemyType {
     // Типы существующих врагов
     @SuppressWarnings("NewApi")
-    Owl(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png")), CharacterAnimation.Owl, 120, 140, 8, 0, 1, new Random().nextInt(2, 4), 100f),
+    Owl(CharacterAnimation.Owl, 120, 140, 8, 0, 1, new Random().nextInt(2, 4), 100f),
     @SuppressWarnings("NewApi")
-    Ghost(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ghostWalk.png")), CharacterAnimation.Ghost, 144, 126, 5, 0, 1, new Random().nextInt(4, 8), 200f);
+    Ghost(CharacterAnimation.Ghost, 144, 126, 5, 0, 1, new Random().nextInt(4, 8), 200f);
 
-    private final Texture texture;
     private final CharacterAnimation anim;
     private final int health, defense, damage, exp; // Базовые
     private final float speed, height, width;
 
-    EnemyType(Texture texture, CharacterAnimation anim, float height, float width, int health, int defense, int damage, int exp, float speed) {
-        this.texture = texture;
+    EnemyType(CharacterAnimation anim, float height, float width, int health, int defense, int damage, int exp, float speed) {
         this.anim = anim;
         this.height = height;
         this.width = width;
@@ -45,9 +43,6 @@ public enum EnemyType {
         return speed;
     }
 
-    public Texture getTexture() {
-        return texture;
-    }
 
     public CharacterAnimation getAnim() {
         return anim;

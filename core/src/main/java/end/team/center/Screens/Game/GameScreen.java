@@ -38,6 +38,7 @@ import end.team.center.GameCore.Library.ItemType;
 import end.team.center.GameCore.Library.Items.Experience;
 import end.team.center.GameCore.Library.Other.Rock;
 import end.team.center.GameCore.Objects.InInventary.Drops;
+import end.team.center.GameCore.Objects.Map.Zone;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
 import end.team.center.GameCore.Objects.OnMap.Entity;
 import end.team.center.GameCore.Objects.OnMap.Hero;
@@ -88,6 +89,7 @@ public class GameScreen implements Screen {
     Label energyValue;
 
     public boolean isIteration = false;
+    public static ArrayList<Zone> zone = new ArrayList<>();
 
 
 
@@ -118,15 +120,15 @@ public class GameScreen implements Screen {
 
         Random r = new Random();
 
-        for (int i = 0; i < 15; i++) { // 15 камней каждого вида
+        for (int i = 0; i < 45; i++) { // 15 камней каждого вида
             worldStage.addActor(new Rock(
                 textureT1,
                 new Vector2(r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_WIDTH), r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_HEIGHT)),
-                21, 15, true));
+                28, 20, true));
             worldStage.addActor(new Rock(
                 textureT2,
                 new Vector2(r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_WIDTH), r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_HEIGHT)),
-                21, 15, true));
+                28, 20, true));
         }
 
         hero = new Hero(
@@ -309,6 +311,11 @@ public class GameScreen implements Screen {
                 }
             }
         }).start();
+
+        for (int i = 0; i < 6; i++) {
+            Zone z = new Zone((int) Math.floor(1 + Math.random() * 5));
+            zone.add(z);
+        }
 
         spawner.startWork();
         spawnItem.goWork();

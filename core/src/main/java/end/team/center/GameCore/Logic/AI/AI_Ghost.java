@@ -27,29 +27,18 @@ public class AI_Ghost extends AI {
         return super.MoveToPlayer(target, position, speed, delta);
     }
 
-    public Vector2 RunOurPlayer(Vector2 target, Vector2 position, float speed, float delta) {
-        Vector2 v = super.MoveToPlayer(target, position, speed, delta);
-
-        v.x = -v.x;
-        v.y = -v.y;
-
-        return v;
-    }
-
     public Vector2 move(Ghost ghost, float delta) {
-        if        (hero.getBound().contains(ghost.getRunCircle()) && !isShotLoad) {
-            return RunOurPlayer(hero.getVector(), ghost.getVector(), ghost.getSpeed(), delta);
-        } else if (hero.getBound().contains(ghost.getStopCircle())) {
+        if        (hero.getBound().overlaps(ghost.getStopRectangle()) && !isShotLoad) {
             return new Vector2(0, 0);
         } else if (!isShotLoad) {
-            return MoveToPlayer(hero.getVector(), ghost.getVector(), ghost.getSpeed(), delta);
-        } else {
             return new Vector2(0, 0);
+        } else {
+            return MoveToPlayer(hero.getVector(), ghost.getVector(), ghost.getSpeed(), delta);
         }
     }
 
     public void shot(Ghost ghost) {
-        if (hero.getBound().contains(ghost.getStopCircle()) && !hero.getBound().contains(ghost.getRunCircle()) && !isShotLoad && isReloaded) {
+        if (hero.getBound().overlaps(ghost.getStopRectangle()) && !isShotLoad && isReloaded) {
             isShotLoad = true;
             isReloaded = false;
 
@@ -70,7 +59,7 @@ public class AI_Ghost extends AI {
 
     public void shotStart(Ghost ghost) {
 
-        Ammo ammo = new Ammo(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ammo.png")), ghost, hero, 42, 42, 100);
+        Ammo ammo = new Ammo(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ammo.png")), ghost.fourthTypeAnimation.getKeyFrame(ghost.stateTime, true), ghost, hero, 42, 42, 100);
         ghost.addAmmo(ammo);
 
         isShotLoad = false;

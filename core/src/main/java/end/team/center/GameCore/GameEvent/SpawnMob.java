@@ -99,9 +99,9 @@ public class SpawnMob {
         if (type == null) return null;
 
         if        (type == EnemyType.Owl) {
-            return new Owl(type, randomCord(), levelMobSpawn, GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Owl(hero));
+            return new Owl(type, new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png")), randomCord(), levelMobSpawn, GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Owl(hero));
         } else if (type == EnemyType.Ghost) {
-            return new Ghost(type, randomCord(), levelMobSpawn, GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Ghost(hero), new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ghostAttack.png"))));
+            return new Ghost(type, new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ghostWalk.png")), randomCord(), levelMobSpawn, GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Ghost(hero), new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ghostAttack.png"))));
         } else return null;
     }
 

@@ -9,4 +9,12 @@ public class AnimationGhost {
     public static TextureRegion[] ghostWalk = new TextureRegion[] {
         new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ghostWalk.png")))
     };
+
+    public static TextureRegion[] ghostAttack = new TextureRegion[] {
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ghostAttack.png")))
+    };
+
+    public static TextureRegion[] ammo = new TextureRegion[] {
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ammo.png")))
+    };
 }
