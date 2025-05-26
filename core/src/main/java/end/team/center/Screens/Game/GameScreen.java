@@ -35,8 +35,10 @@ import end.team.center.GameCore.GameEvent.Post;
 import end.team.center.GameCore.GameEvent.SpawnMob;
 import end.team.center.GameCore.Library.ItemType;
 import end.team.center.GameCore.Library.Items.Experience;
+import end.team.center.GameCore.Library.Other.Rock;
 import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
+import end.team.center.GameCore.Objects.OnMap.Entity;
 import end.team.center.GameCore.Objects.OnMap.Hero;
 import end.team.center.GameCore.UIElements.Power;
 import end.team.center.GameCore.UIElements.UIGameScreenElements.Heart;
@@ -84,6 +86,7 @@ public class GameScreen implements Screen {
 
 
 
+    @SuppressWarnings("NewApi")
     public GameScreen() {
         System.out.println("Размеры экрана: " + Gdx.graphics.getWidth() + "x на " + Gdx.graphics.getHeight() + "y");
 
@@ -218,7 +221,6 @@ public class GameScreen implements Screen {
         });
         powers.add(p);
 
-        // Добавление существующих усилений
         Power p1 = new Power(new TextureRegionDrawable(new Texture("UI/GameUI/SelectPowerUI/Effect/HPforAttack.png"))) {
             @Override
             public void effect() {
@@ -234,7 +236,6 @@ public class GameScreen implements Screen {
         });
         powers.add(p1);
 
-        // Добавление существующих усилений
         Power p2 = new Power(new TextureRegionDrawable(new Texture("UI/GameUI/SelectPowerUI/Effect/speedHP.png"))) {
             @Override
             public void effect() {
@@ -254,10 +255,9 @@ public class GameScreen implements Screen {
         Power p3 = new Power(new TextureRegionDrawable(new Texture("UI/GameUI/SelectPowerUI/Effect/visible.png"))) {
             @Override
             public void effect() {
-                // TODO Сергей
-                ShaderManager.radiusView1+=0.03f;
-                ShaderManager.radiusView2+=0.03f;
-                ShaderManager.radiusView3+=0.03f;
+                ShaderManager.radiusView1 += 0.03f;
+                ShaderManager.radiusView2 += 0.03f;
+                ShaderManager.radiusView3 += 0.03f;
             }
         };
         p.addListener(new ChangeListener() {
@@ -269,6 +269,22 @@ public class GameScreen implements Screen {
         });
         powers.add(p3);
 
+        // Разбрасывание камней по карте
+        Texture textureT1 = new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/rock1"));
+        Texture textureT2 = new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/rock2"));
+
+        Random r = new Random();
+
+        for (int i = 0; i < 15; i++) { // 15 камней каждого вида
+            worldStage.addActor(new Rock(
+                textureT1,
+                new Vector2(r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_WIDTH), r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_HEIGHT)),
+                21, 15, true));
+            worldStage.addActor(new Rock(
+                textureT2,
+                new Vector2(r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_WIDTH), r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_HEIGHT)),
+                21, 15, true));
+        }
 
         spawner.startWork();
         spawnItem.goWork();
@@ -449,14 +465,16 @@ public class GameScreen implements Screen {
             imgB[i] = powers.get(random.nextInt(0, powers.size() - 1));
         }
 
+        selectPower.getContentTable().center();
+
         content1.addActor(imgB[0]);
-        selectPower.getContentTable().add(content1).padRight(20);
+        selectPower.getContentTable().add(content1).height(600).width(600).padRight(20);
 
         content2.addActor(imgB[1]);
-        selectPower.getContentTable().add(content2).padRight(20);
+        selectPower.getContentTable().add(content2).height(600).width(600).padRight(20);
 
         content3.addActor(imgB[2]);
-        selectPower.getContentTable().add(content3);
+        selectPower.getContentTable().add(content3).height(600).width(600);
 
         selectPower.show(uiStage);
     }

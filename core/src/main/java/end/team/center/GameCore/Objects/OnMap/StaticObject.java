@@ -10,13 +10,15 @@ public class StaticObject extends GameObject {
     public StaticObject(Texture texture, Vector2 vector, float height, float width, boolean canWalk) {
         super(texture, vector, height, width);
         this.canWalk = canWalk;
+
+        setPosition(vector.x, vector.y);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
-        batch.draw(texture, vector.x, vector.y, getWidth(), getHeight());
+        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
     }
 
     @Override

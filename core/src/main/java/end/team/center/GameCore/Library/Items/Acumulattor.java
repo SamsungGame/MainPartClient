@@ -10,12 +10,12 @@ import end.team.center.GameCore.Library.ItemType;
 import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.OnMap.Hero;
 
-public class Skint extends Drops {
-    public Skint(Texture texture, Vector2 vector, Hero hero, int width, int height) {
+public class Acumulattor extends Drops {
+    public Acumulattor(Texture texture, Vector2 vector, Hero hero, int width, int height) {
         super(texture, vector, hero, width, height);
     }
 
-    public Skint(ItemType type, Vector2 vector, Hero hero) {
+    public Acumulattor(ItemType type, Vector2 vector, Hero hero) {
         super(type.getTexture(), vector, hero, type.getWidth(), type.getHeight());
     }
 
@@ -34,7 +34,7 @@ public class Skint extends Drops {
         if (bound.overlaps(hero.getBound())) {
             Random random = new Random();
 
-            hero.addCostumePower(random.nextInt(10, 50));
+            hero.addCostumePower(random.nextInt(10, 30));
             remove();
         }
     }
