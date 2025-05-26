@@ -11,13 +11,14 @@ import end.team.center.GameCore.Objects.Effects.OneSpriteEffect;
 
 public class Ammo extends OneSpriteEffect {
     protected Hero hero;
+    protected Enemy enemy;
     protected Rectangle bound;
     protected Vector2 position, target;
-    protected Death die;
 
     public Ammo(Texture texture, Enemy enemy, Hero hero, int width, int height, float speed) {
         super(texture, width, height, speed);
         this.hero = hero;
+        this.enemy = enemy;
 
         position = new Vector2(enemy.getCenterVector());
         bound = new Rectangle(position.x, position.y, width, height);
@@ -55,6 +56,11 @@ public class Ammo extends OneSpriteEffect {
             // Обновляем позицию врага
             position.add(direction.scl(speed * delta));
             setPosition(position.x, position.y);
+        }
+
+        if (bound.overlaps(hero.getBound())) {
+            hero.setHealth(hero.getHealth() - enemy.getDamage());
+            remove();
         }
     }
 

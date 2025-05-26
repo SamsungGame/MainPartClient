@@ -41,6 +41,11 @@ public class Knife extends Weapon {
 
     }
 
+    @Override
+    public void setSize(float width, float height) {
+        super.setSize(width, height);
+    }
+
     public void startAnimation() {
         startAnim = true;
         aniPos = new Vector2(hero.getCenterVector());

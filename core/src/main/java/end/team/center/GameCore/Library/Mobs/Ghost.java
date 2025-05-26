@@ -26,8 +26,8 @@ public class Ghost extends Enemy {
         initialization();
     }
 
-    public Ghost(EnemyType type, Vector2 vector, float worldHeight, float worldWidth, AI ai) {
-        super(type.getTexture(), type.getAnim(), vector, type.getHeight(), type.getWidth(), type.getHealth(), type.getDamage(), type.getDefense(), type.getSpeed(), type.getLevel(), type.getExp(), worldHeight, worldWidth, ai);
+    public Ghost(EnemyType type, Vector2 vector, int level, float worldHeight, float worldWidth, AI ai) {
+        super(type.getTexture(), type.getAnim(), vector, type.getHeight(), type.getWidth(), type.getHealth(), type.getDamage(), type.getDefense(), type.getSpeed(), level, type.getExp(), worldHeight, worldWidth, ai);
         this.ai = (AI_Ghost) ai;
 
         initialization();
@@ -40,6 +40,13 @@ public class Ghost extends Enemy {
     protected void initialization() {
         stop = new Circle(getCenterVector().x, getCenterVector().y, 2000);
         run  = new Circle(getCenterVector().x, getCenterVector().y, 350);
+
+        health = health + (health / 5 * level);
+
+        if (level > 7 && level < 14) damage = 2;
+        else if (level >= 14) damage = 3;
+
+        speed = speed + 15 * level;
     }
 
     protected void updateCircle() {

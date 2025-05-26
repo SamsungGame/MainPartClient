@@ -26,8 +26,8 @@ public class Owl extends Enemy {
         intialization();
     }
 
-    public Owl(EnemyType type, Vector2 vector, float worldHeight, float worldWidth, AI ai) {
-        super(type.getTexture(), type.getAnim(), vector, type.getHeight(), type.getWidth(), type.getHealth(), type.getDamage(), type.getDefense(), type.getSpeed(), type.getLevel(), type.getExp(), worldHeight, worldWidth, ai);
+    public Owl(EnemyType type, Vector2 vector, int level, float worldHeight, float worldWidth, AI ai) {
+        super(type.getTexture(), type.getAnim(), vector, type.getHeight(), type.getWidth(), type.getHealth(), type.getDamage(), type.getDefense(), type.getSpeed(), level, type.getExp(), worldHeight, worldWidth, ai);
         intialization();
     }
 
@@ -38,6 +38,13 @@ public class Owl extends Enemy {
         lDiveTexture = new TextureRegion(this.texture); // this.texture
         rDiveTexture = new TextureRegion(this.texture);
         rDiveTexture.flip(true, false);
+
+        health = health + (health / 4 * level);
+
+        if (level > 7 && level < 14) damage = 2;
+        else if (level >= 14) damage = 3;
+
+        speed = speed + 30 * level;
     }
 
     public Circle getStartCircle() {

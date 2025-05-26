@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
 public enum ItemType {
-    exp(new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/exp.png")), 28, 42);
+    exp(new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/exp.png")), 28, 42),
+    skint(new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/_.png")), 5, 5),
+    BreakIron(new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/_.png")), 5, 5);
 
     private final Texture texture;
     private final int width, height;

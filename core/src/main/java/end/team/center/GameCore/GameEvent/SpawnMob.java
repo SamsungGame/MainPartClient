@@ -15,7 +15,7 @@ import end.team.center.GameCore.Objects.OnMap.Enemy;
 import end.team.center.GameCore.Objects.OnMap.Hero;
 import end.team.center.Screens.Game.GameScreen;
 
-public class Spawner {
+public class SpawnMob {
     private final int minRadiusSpawnMobY = Gdx.graphics.getHeight();
     private final int minRadiusSpawnMobX = Gdx.graphics.getWidth();
     private final int maxCountMobInMap = 100;
@@ -23,10 +23,11 @@ public class Spawner {
     private final int maxRadiusSpawn = (int) Math.min(GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH);
     private int timeSpawn;
     private ArrayList<EnemyType> canSpawn;
-    private PostMob poster;
+    private Post poster;
     private Hero hero;
+    private int levelMobSpawn = 0;
 
-    public Spawner(PostMob poster, Hero hero) {
+    public SpawnMob(Post poster, Hero hero) {
         this.poster = poster;
         this.hero = hero;
 
@@ -66,6 +67,9 @@ public class Spawner {
     }
 
     protected void setNewMob() {
+        levelMobSpawn = (int) (GameScreen.totalTime / 15);
+        System.out.println("уровень врагов: " + levelMobSpawn);
+
         if        (GameScreen.totalTime >= 5 && canSpawn.get(0) == null) {
             System.out.println("Новый моб: Owl");
             canSpawn.set(0, EnemyType.Owl);
@@ -93,9 +97,9 @@ public class Spawner {
         if (type == null) return null;
 
         if        (type == EnemyType.Owl) {
-            return new Owl(type, randomCord(), GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Owl(hero));
+            return new Owl(type, randomCord(), levelMobSpawn, GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Owl(hero));
         } else if (type == EnemyType.Ghost) {
-            return new Ghost(type, randomCord(), GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Ghost(hero));
+            return new Ghost(type, randomCord(), levelMobSpawn, GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Ghost(hero));
         } else return null;
     }
 

@@ -10,24 +10,32 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import end.team.center.GameCore.GameEvent.SpawnItem;
 import end.team.center.GameCore.Library.CharacterAnimation;
-import end.team.center.GameCore.GameEvent.PostMob;
-import end.team.center.GameCore.GameEvent.Spawner;
+import end.team.center.GameCore.GameEvent.Post;
+import end.team.center.GameCore.GameEvent.SpawnMob;
 import end.team.center.GameCore.Library.ItemType;
 import end.team.center.GameCore.Library.Items.Experience;
+import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
 import end.team.center.GameCore.Objects.OnMap.Hero;
+import end.team.center.GameCore.UIElements.Power;
 import end.team.center.GameCore.UIElements.UIGameScreenElements.Heart;
 import end.team.center.GameCore.UIElements.UIGameScreenElements.TouchpadClass;
 import end.team.center.GameCore.Logic.GameCamera;
@@ -46,8 +54,10 @@ public class GameScreen implements Screen {
     public static final float WORLD_WIDTH = 5000;
     public static final float WORLD_HEIGHT = 5000;
 
-    private Spawner spawner;
+    private SpawnMob spawner;
     public static ArrayList<Enemy> enemies;
+    private SpawnItem spawnItem;
+    public static ArrayList<Drops> drop;
 
     private Label costumePower;
     private Label playerHealth;
@@ -63,6 +73,12 @@ public class GameScreen implements Screen {
     private ShaderProgram dimmingShader;
 
     public static float totalTime = 0f;
+
+    // Dialog для усиления
+    protected Dialog selectPower;
+    protected VerticalGroup content1, content2, content3;
+    protected ArrayList<Power> powers;
+    public static boolean STOP = false;
 
 
 
@@ -123,10 +139,26 @@ public class GameScreen implements Screen {
         // Настройки спавна мобов
         enemies = new ArrayList<>();
 
-        spawner = new Spawner(new PostMob() {
+        spawner = new SpawnMob(new Post() {
             @Override
             public void post(Enemy[] enemy) {
                 setSpawnMob(enemy);
+            }
+            @Override
+            public void post(Drops drops) {
+
+            }
+        }, hero);
+
+        spawnItem = new SpawnItem(new Post() {
+            @Override
+            public void post(Enemy[] enemy) {
+
+            }
+
+            @Override
+            public void post(Drops drops) {
+                setSpawnItem(drops);
             }
         }, hero);
 
@@ -148,13 +180,40 @@ public class GameScreen implements Screen {
         dimmingShader.bind();
         dimmingShader.setUniformf("u_aspectRatio", aspectRatio);
 
+        // Создание окна
+        Skin ws = new Skin(Gdx.files.internal("")); // TODO
+        selectPower = new Dialog("Выберите усиление!", ws);
+
+        // Добавление существующих усилений
+        Skin b1 = new Skin(Gdx.files.internal(""));
+        Power p = new Power(b1) {
+            @Override
+            public void effect() {
+                // Эффект
+            }
+        };
+        p.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                p.effect();
+                hidePowerDialog();
+            }
+        });
+        powers.add(p);
+
+
         spawner.startWork();
+        spawnItem.goWork();
     }
 
     @SuppressWarnings("DefaultLocale")
     @Override
     public void render(float delta) {
         totalTime += delta;
+
+        if (false) { // TODO
+            showPowerDialog();
+        }
 
         // Подготовка значений для методов классов типа "Object & Interacteble"
         float moveX = touchpadMove.getKnobPercentX();
@@ -300,11 +359,49 @@ public class GameScreen implements Screen {
     @Override public void resume() {}
     @Override public void hide() {}
 
+    @SuppressWarnings("NewApi")
+    public void showPowerDialog() {
+        Power[] imgB = new Power[3];
+
+        Random random = new Random();
+
+        for (int i = 0; i < 3; i++) {
+            imgB[i] = powers.get(random.nextInt(0, powers.size() - 1));
+        }
+
+        Skin sD1 = new Skin(Gdx.files.internal(""));
+
+        content1.addActor(new Label("Первое", sD1));
+        content1.addActor(imgB[1]);
+        selectPower.getContentTable().add(content1).expand().fill();
+
+        content2.addActor(new Label("Второе", sD1));
+        content2.addActor(imgB[2]);
+        selectPower.getContentTable().add(content2).expand().fill();
+
+        content3.addActor(new Label("Третье", sD1));
+        content3.addActor(imgB[3]);
+        selectPower.getContentTable().add(content3).expand().fill();
+
+        selectPower.show(uiStage);
+    }
+
+    public void hidePowerDialog() {
+        selectPower.hide();
+        selectPower.getContentTable().clear();
+    }
+
     public void setSpawnMob(Enemy[] enemy) {
         enemies.addAll(List.of(enemy));
 
         for(Enemy e: enemy) {
             if (e != null) worldStage.addActor(e);
         }
+    }
+
+    public void setSpawnItem(Drops d) {
+        drop.add(d);
+
+        worldStage.addActor(d);
     }
 }

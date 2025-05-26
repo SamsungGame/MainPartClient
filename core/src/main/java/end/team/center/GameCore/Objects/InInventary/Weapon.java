@@ -37,6 +37,10 @@ public abstract class Weapon extends Interactable {
         setBounds(vectorGhost.x, vectorGhost.y, width, height);
     }
 
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
     public void setRotationAroundPlayer(float x, float y) {
         float angleRad = (float) Math.atan2(y, x);
         float angleDeg = (float) Math.toDegrees(angleRad);
@@ -125,6 +129,11 @@ public abstract class Weapon extends Interactable {
 
     public int getDamage() {
         return damage;
+    }
+
+    @Override
+    public void setSize(float width, float height) {
+        super.setSize(width, height);
     }
 
     @Override

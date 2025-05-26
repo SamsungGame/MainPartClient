@@ -17,6 +17,7 @@ public class Hero extends Friendly {
     protected float antiRadiationCostumePower = 100.0f;
     protected int radiationLevel = 0;
     protected Weapon weapon;
+    protected int expWeapon = 0, levelWeapon = 0;
     protected int exp, level;
 
 
@@ -66,6 +67,46 @@ public class Hero extends Friendly {
         exp += add;
     }
 
+    public void addExpWeapon(int add) {
+        expWeapon += add;
+
+        upgradeWeapon();
+    }
+
+    protected void upgradeWeapon() { // 140; +
+        if (expWeapon >= 10 && levelWeapon == 0) {
+            System.out.println("Новый уроввень оружия! >1<");
+            levelWeapon = 1;
+            weapon.setSize(90, 150);
+        } else if (expWeapon >= 30 && levelWeapon == 1) {
+            System.out.println("Новый уроввень оружия! >2<");
+            levelWeapon = 2;
+            weapon.setSize(100, 170);
+        } else if (expWeapon >= 60 && levelWeapon == 2) {
+            System.out.println("Новый уроввень оружия! >3<");
+            levelWeapon = 3;
+            weapon.setSize(110, 190);
+        } else if (expWeapon >= 90 && levelWeapon == 3) {
+            System.out.println("Новый уроввень оружия! >4<");
+            levelWeapon = 4;
+            weapon.setSize(120, 210);
+        } else if (expWeapon >= 130 && levelWeapon == 4) {
+            System.out.println("Новый уроввень оружия! >5<");
+            levelWeapon = 5;
+            weapon.setSize(140, 230);
+        } else if (expWeapon >= 170 && levelWeapon == 5) {
+            System.out.println("Новый уроввень оружия! >6<");
+            levelWeapon = 6;
+            weapon.setSize(150, 260);
+        } else if (expWeapon >= 200 && levelWeapon == 6) {
+            System.out.println("Новый уроввень оружия! >7<");
+            levelWeapon = 7;
+            weapon.setSize(155, 300);
+        }
+
+        weapon.setDamage(3 + (int) (expWeapon / 5));
+    }
+
     public void setRadiationLevel() {
         if        (GameScreen.totalTime <= 30 && radiationLevel < 1) {
             System.out.println("Урвоень радиации: 1");
@@ -80,6 +121,10 @@ public class Hero extends Friendly {
             System.out.println("Урвоень радиации: 4");
             radiationLevel = 4;
         }
+    }
+
+    public void addCostumePower(int add) {
+        antiRadiationCostumePower += add;
     }
 
     @Override
