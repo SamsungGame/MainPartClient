@@ -453,7 +453,7 @@ public class GameScreen implements Screen {
 
         content2.addActor(imgB[1]);
         selectPower.getContentTable().add(content2).padRight(20);
-        
+
         content3.addActor(imgB[2]);
         selectPower.getContentTable().add(content3);
 
