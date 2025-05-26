@@ -18,11 +18,15 @@ import end.team.center.MyGame;
 
 public class SettingsScreen implements Screen {
     private final SpriteBatch batch = new SpriteBatch();
-    private final BitmapFont font = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
-    private final GlyphLayout layout = new GlyphLayout();
+    private final BitmapFont fontSettings = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
+    private final BitmapFont fontMusic = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
+    private final GlyphLayout layoutSettings = new GlyphLayout();
+    private final GlyphLayout layoutMusic = new GlyphLayout();
     private final Music mainMenuMusic;
     private final Stage stage;
     private final Skin skin;
+    private final String turnOnMusic = "Включить музыку";
+    private final String turnOffMusic = "Выключить музыку";
 
     public SettingsScreen(MyGame game) {
         this.mainMenuMusic = MyGame.mainMenuMusic;
@@ -38,14 +42,14 @@ public class SettingsScreen implements Screen {
 
         TextButton musicButton = new TextButton("", skin);
         if (mainMenuMusic.getVolume() > 0) {
-            musicButton.setText("Выключить музыку");
+            musicButton.setText(turnOffMusic);
         }
         else {
-            musicButton.setText("Включить музыку");
+            musicButton.setText(turnOnMusic);
         }
         musicButton.setSize(350, 150);
         musicButton.setPosition(Gdx.graphics.getWidth() / 2 - musicButton.getWidth() / 2,
-            Gdx.graphics.getHeight() / 2 - musicButton.getHeight() / 2);
+            Gdx.graphics.getHeight() / 2 - musicButton.getHeight());
 
         backButton.addListener(new ChangeListener() {
             @Override
@@ -57,13 +61,13 @@ public class SettingsScreen implements Screen {
         musicButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (mainMenuMusic.getVolume() > 0) {
-                    mainMenuMusic.setVolume(0.0f);
-                    musicButton.setText("Включить музыку");
+                if (mainMenuMusic.getVolume() == 0.0f) {
+                    mainMenuMusic.setVolume(1.0f);
+                    musicButton.setText(turnOffMusic);
                 }
                 else {
-                    mainMenuMusic.setVolume(1.0f);
-                    musicButton.setText("Выключить музыку");
+                    mainMenuMusic.setVolume(0.0f);
+                    musicButton.setText(turnOnMusic);
                 }
             }
         });
@@ -82,14 +86,21 @@ public class SettingsScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        font.getData().setScale(4.0f);
-        String aboutUsText = "Настройки";
-        layout.setText(font, aboutUsText);
-        float x = (Gdx.graphics.getWidth() - layout.width) / 2;
-        float y = Gdx.graphics.getHeight() - layout.height;
+        String settingsText = "Настройки";
+        layoutSettings.setText(fontSettings, settingsText);
+        float layoutSettingsX = (Gdx.graphics.getWidth() - layoutSettings.width) / 2;
+        float layoutSettingsY = Gdx.graphics.getHeight() - layoutSettings.height;
+
+        String musicText = "Музыка:";
+        layoutMusic.setText(fontMusic, musicText);
+        float layoutMusicX = (Gdx.graphics.getWidth() - layoutMusic.width) / 2 - 100;
+        float layoutMusicY = Gdx.graphics.getHeight() / 2 - layoutMusic.height + 15;
 
         batch.begin();
-        font.draw(batch, layout, x, y);
+        fontSettings.getData().setScale(4.0f);
+        fontSettings.draw(batch, layoutSettings, layoutSettingsX, layoutSettingsY);
+        fontMusic.getData().setScale(1.0f);
+        fontMusic.draw(batch, layoutMusic, layoutMusicX, layoutMusicY);
         batch.end();
 
         stage.act();
@@ -119,7 +130,7 @@ public class SettingsScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
-        font.dispose();
+        fontSettings.dispose();
         stage.dispose();
         skin.dispose();
     }
