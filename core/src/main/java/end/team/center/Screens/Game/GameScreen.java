@@ -440,6 +440,8 @@ public class GameScreen implements Screen {
 
     @SuppressWarnings("NewApi")
     public void showPowerDialog() {
+        STOP = true;
+
         Power[] imgB = new Power[3];
 
         Random random = new Random();
@@ -461,6 +463,7 @@ public class GameScreen implements Screen {
     }
 
     public void hidePowerDialog() {
+        STOP = false;
         selectPower.hide();
         selectPower.getContentTable().clear();
     }
