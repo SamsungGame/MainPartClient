@@ -59,8 +59,8 @@ public class GameScreen implements Screen {
     private Viewport uiViewport;
 
     private GameCamera gameCamera;
-    public static final float WORLD_WIDTH = 5000;
-    public static final float WORLD_HEIGHT = 5000;
+    public static final float WORLD_WIDTH = 10000;
+    public static final float WORLD_HEIGHT = 10000;
 
     private SpawnMob spawner;
     public static ArrayList<Enemy> enemies;
@@ -102,14 +102,14 @@ public class GameScreen implements Screen {
         Texture brick2 = new Texture("UI/GameUI/Grow/dirt2_big.png");
         Texture brick3 = new Texture("UI/GameUI/Grow/dirt3_big.png");
         Texture brick4 = new Texture("UI/GameUI/Grow/dirt4_big.png");
-        Texture brick15 = new Texture("UI/GameUI/Grow/dirt5_big.png");
+        Texture brick5 = new Texture("UI/GameUI/Grow/dirt5_big.png");
 
         TextureRegion[] tiles = new TextureRegion[] {
             new TextureRegion(brick1),
-            new TextureRegion(brick1),
-            new TextureRegion(brick1),
-            new TextureRegion(brick1),
-            new TextureRegion(brick1)
+            new TextureRegion(brick2),
+            new TextureRegion(brick3),
+            new TextureRegion(brick4),
+            new TextureRegion(brick5)
         };
 
         int tileWidth = 250;
@@ -371,7 +371,6 @@ public class GameScreen implements Screen {
             hero.newLevelFlag = false;
         }
 
-        // Подготовка значений для методов классов типа "Object & Interacteble"
         float moveX = touchpadMove.getKnobPercentX();
         float moveY = touchpadMove.getKnobPercentY();
 
