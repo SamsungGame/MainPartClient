@@ -35,7 +35,7 @@ public class Owl extends Enemy {
         rDiveTexture = new TextureRegion(this.texture);
         rDiveTexture.flip(true, false);
 
-        health = health + (health / 4 * level);
+        health = health + (health / 6 * level);
 
         if (level > 7 && level < 14) damage = 2;
         else if (level >= 14) damage = 3;

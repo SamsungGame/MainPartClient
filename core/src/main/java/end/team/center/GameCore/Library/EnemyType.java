@@ -8,9 +8,11 @@ import java.util.Random;
 public enum EnemyType {
     // Типы существующих врагов
     @SuppressWarnings("NewApi")
-    Owl(CharacterAnimation.Owl, 120, 140, 8, 0, 1, new Random().nextInt(2, 4), 100f),
+    Owl(CharacterAnimation.Owl, 120, 140, 6, 0, 1, new Random().nextInt(2, 4), 100f),
     @SuppressWarnings("NewApi")
-    Ghost(CharacterAnimation.Ghost, 144, 126, 5, 0, 1, new Random().nextInt(4, 8), 200f);
+    Ghost(CharacterAnimation.Ghost, 144, 126, 5, 0, 1, new Random().nextInt(3, 6), 130f),
+    @SuppressWarnings("NewApi")
+    Rabbit(CharacterAnimation.Rabbit, 144, 135, 8, 0, 1, new Random().nextInt(1, 3), 160f);
 
     private final CharacterAnimation anim;
     private final int health, defense, damage, exp; // Базовые

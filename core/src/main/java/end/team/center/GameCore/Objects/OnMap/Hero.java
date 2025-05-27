@@ -97,7 +97,7 @@ public class Hero extends Friendly {
         return level;
     }
     public int getMaxExp() {
-        return level;
+        return maxExp;
     }
 
 

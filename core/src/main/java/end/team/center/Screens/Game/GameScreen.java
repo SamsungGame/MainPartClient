@@ -5,7 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -13,23 +12,15 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 import end.team.center.GameCore.GameEvent.SpawnItem;
 import end.team.center.GameCore.Library.CharacterAnimation;
@@ -37,12 +28,10 @@ import end.team.center.GameCore.GameEvent.Post;
 import end.team.center.GameCore.GameEvent.SpawnMob;
 import end.team.center.GameCore.Library.ItemType;
 import end.team.center.GameCore.Library.Items.Experience;
-import end.team.center.GameCore.Library.Other.Rock;
 import end.team.center.GameCore.Objects.InInventary.Drops;
-import end.team.center.GameCore.Objects.Map.BackgroundActor;
+import end.team.center.GameCore.Objects.Map.BackgroundTiledRenderer;
 import end.team.center.GameCore.Objects.Map.Zone;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
-import end.team.center.GameCore.Objects.OnMap.Entity;
 import end.team.center.GameCore.Objects.OnMap.Hero;
 import end.team.center.GameCore.UIElements.Power;
 import end.team.center.GameCore.UIElements.UIGameScreenElements.Heart;
@@ -92,6 +81,7 @@ public class GameScreen implements Screen {
 
     protected PowerSelectScreen PSC;
     private boolean isShow = false;
+    private BackgroundTiledRenderer backgroundTiledRenderer;
 
 
 
@@ -116,10 +106,10 @@ public class GameScreen implements Screen {
         int tileWidth = 250;
         int tileHeight = 250;
 
-        int cols = (int) (WORLD_WIDTH / tileWidth);
-        int rows = (int) (WORLD_HEIGHT / tileHeight);
+//        int cols = (int) (WORLD_WIDTH / tileWidth);
+//        int rows = (int) (WORLD_HEIGHT / tileHeight);
 
-        BackgroundActor background = new BackgroundActor(tiles, cols, rows, tileWidth, tileHeight);
+        backgroundTiledRenderer = new BackgroundTiledRenderer(tiles, tileWidth, tileHeight);
 
         wait = new ArrayList<>();
 
@@ -131,7 +121,6 @@ public class GameScreen implements Screen {
         uiViewport = new ScreenViewport();
         uiStage = new Stage(uiViewport);
         Gdx.input.setInputProcessor(uiStage);
-        worldStage.addActor(background);
 
         touchpadMove = new TouchpadClass(200, 200, false, "move");
         uiStage.addActor(touchpadMove);
@@ -424,9 +413,17 @@ public class GameScreen implements Screen {
                 frameBuffer.begin();
                 Gdx.gl.glClearColor(0, 0, 0, 1);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+                batch.setProjectionMatrix(gameCamera.getCamera().combined);
                 batch.begin();
+
+                // Фон отрисовывается первым
+                backgroundTiledRenderer.render(batch, gameCamera.getCamera());
+
+                // Сцена с героями, врагами и т.п.
                 worldStage.act(delta);
                 worldStage.draw();
+
                 batch.end();
                 frameBuffer.end();
             }
