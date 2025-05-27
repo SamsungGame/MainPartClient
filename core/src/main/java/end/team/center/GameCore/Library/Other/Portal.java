@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import end.team.center.Center;
 import end.team.center.GameCore.Objects.OnMap.Hero;
 import end.team.center.GameCore.Objects.OnMap.StaticObject;
+import end.team.center.Screens.Game.GameScreen;
 import end.team.center.Screens.Menu.MainMenuScreen;
 
 public class Portal extends StaticObject {
@@ -38,6 +39,7 @@ public class Portal extends StaticObject {
 
         if (hero.getBound().overlaps(bound)) {
             ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(1));
+            GameScreen.backgroundMusic.stop();
         }
 
         stateTime += delta;

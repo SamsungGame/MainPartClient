@@ -33,7 +33,7 @@ public abstract class Enemy extends Entity {
         this.damage = damage;
         this.exp = exp;
 
-        runSpeed = speed * 3;
+        runSpeed = speed * 4;
     }
 
 
@@ -84,10 +84,10 @@ public abstract class Enemy extends Entity {
         if (isLive) {
             super.act(delta);
 
-            if (!GMath.checkVectorDistance(ai.getHero().getCenterVector(), getCenterVector(), 1000, 1000)) {
+            if (!GMath.checkVectorDistance(ai.getHero().getCenterVector(), getCenterVector(), 600, 600)) {
                 speed = runSpeed;
             } else {
-                speed = runSpeed / 3;
+                speed = runSpeed / 4;
             }
         }
     }

@@ -40,7 +40,7 @@ public class PowerSelectScreen implements Screen {
 
         selectBuff   = new Texture(Gdx.files.internal("UI/GameUI/SelectPowerUI/selectPower.png"));
 
-        portal = new Image(new Texture(Gdx.files.internal("UI/GameUI/SelectPowerUI/portal.png")));
+        portal = new Image(new Texture(Gdx.files.internal("UI/GameUI/Structure/portal3.png")));
 
         batch = new SpriteBatch();
         buffs[0] = new PowerElement(textures[0].getTexture(), textures[0], portal);

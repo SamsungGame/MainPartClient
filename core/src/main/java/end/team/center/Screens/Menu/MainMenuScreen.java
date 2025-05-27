@@ -29,7 +29,7 @@ public class MainMenuScreen implements Screen {
         "ДОБРО ПОЖАЛОВАТЬ!",
         "Сбегаешь от правды? \n   Победа!",
         "Разве... это спасение? \n     Поражение...",
-        "Не это ли сделало их такими?... \n           Поражение..."
+        "Не это сделало их такими... \n              Поражение..."
     };
 
     public MainMenuScreen(int code) { // 0 - ничего, 1 - победа, 2 - поражение от ХП, 3 - поражение от радиации
@@ -86,6 +86,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
+                backgroundMusic.stop();
             }
         });
 

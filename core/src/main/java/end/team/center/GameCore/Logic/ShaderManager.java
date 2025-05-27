@@ -116,7 +116,7 @@ public class ShaderManager {
                 "    if (dist < innerRadius) alpha = 0.0;\n" +
 
                 "    vec3 dimColor = vec3(0.0);\n" +
-                "    float dimIntensity = 0.99;\n" +
+                "    float dimIntensity = 0.8;\n" +
 
                 "    gl_FragColor = vec4(dimColor, alpha * dimIntensity);\n" +
                 "}";

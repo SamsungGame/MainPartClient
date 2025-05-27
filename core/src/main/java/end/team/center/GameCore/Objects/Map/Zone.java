@@ -12,7 +12,11 @@ public class Zone {
 
     public Zone(int level) {
         float p = (GameScreen.WORLD_WIDTH + GameScreen.WORLD_HEIGHT) / 2;
-        bound = new Rectangle((float) (Math.random() * GameScreen.WORLD_WIDTH), (float) (Math.random() * GameScreen.WORLD_HEIGHT), p, p);
+
+        float w = (float) (Math.random() * p / 10);
+        float h = (float) (Math.random() * p / 10);
+
+        bound = new Rectangle((float) (Math.random() * GameScreen.WORLD_WIDTH), (float) (Math.random() * GameScreen.WORLD_HEIGHT), w, h);
 
         this.level = level;
     }

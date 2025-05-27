@@ -25,11 +25,12 @@ public class SpawnMob {
     private final int maxCountMobInMap = 100;
     private int countEnemy = 0;
     private final int maxRadiusSpawn = (int) Math.min(GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH);
-    private int timeSpawn;
+    private float timeSpawn;
     private ArrayList<EnemyType> canSpawn;
     private Post poster;
     private Hero hero;
     private int levelMobSpawn = 0;
+    private boolean isSpawn = true;
 
     public SpawnMob(Post poster, Hero hero) {
         this.poster = poster;
@@ -40,14 +41,14 @@ public class SpawnMob {
             canSpawn.add(null);
         }
 
-        timeSpawn = 7;
+        timeSpawn = 3.5f;
     }
 
     public void startWork() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true) {
+                while (isSpawn) {
                     setNewMob();
 
                     if (maxCountMobInMap > countEnemy && !GameScreen.STOP) { // true
@@ -62,7 +63,7 @@ public class SpawnMob {
                         System.out.println("Отправка мобов: " + Arrays.toString(enemies));
 
                         try {
-                            Thread.sleep(timeSpawn * 1000L);
+                            Thread.sleep((long) (timeSpawn * 1000L));
                         } catch (InterruptedException ignore) {}
                     }
                 }
@@ -71,8 +72,8 @@ public class SpawnMob {
     }
 
     protected void setNewMob() {
-        if (GameScreen.totalTime % 30 == 0) {
-            levelMobSpawn = (int) (GameScreen.totalTime / 30);
+        if (GameScreen.totalTime % 60 == 0) {
+            levelMobSpawn = (int) (GameScreen.totalTime / 60);
             System.out.println("Уровень врагов: " + levelMobSpawn);
         }
 
@@ -111,6 +112,10 @@ public class SpawnMob {
         else           vector = new Vector2((int) (minRadiusSpawnMobX + (Math.random() * maxRadiusSpawn / 2)), (int) (0 - (Math.random() * maxRadiusSpawn / 2)));
 
         return vector;
+    }
+
+    public void dispose() {
+        isSpawn = false;
     }
 
 }

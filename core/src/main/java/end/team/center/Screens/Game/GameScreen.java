@@ -55,8 +55,8 @@ public class GameScreen implements Screen {
     private GameCamera gameCamera;
     public static final float WORLD_WIDTH = 50000;
     public static final float WORLD_HEIGHT = 50000;
-    public int maxMobSpawn = 100;
-    public int maxDropSpawn = 200;
+    public int maxMobSpawn = 250;
+    public int maxDropSpawn = 1000;
 
     private SpawnMob spawner;
     public static ArrayList<Enemy> enemies;
@@ -88,13 +88,18 @@ public class GameScreen implements Screen {
     protected PowerSelectScreen PSC;
     private boolean isShow = false;
     private BackgroundTiledRenderer backgroundTiledRenderer;
-    private Music backgroundMusic;
+    public static Music backgroundMusic;
+
+    private boolean isTimeGo = true;
+    private int countZone;
 
 
 
     @SuppressWarnings("NewApi")
     public GameScreen() {
         System.out.println("Размеры экрана: " + Gdx.graphics.getWidth() + "x на " + Gdx.graphics.getHeight() + "y");
+
+        countZone = (int) (100 + Math.random() * 100);
 
         Texture brick1 = new Texture("UI/GameUI/Grow/dirt1_big.png");
         Texture brick2 = new Texture("UI/GameUI/Grow/dirt2_big.png");
@@ -298,7 +303,7 @@ public class GameScreen implements Screen {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true) {
+                while (isTimeGo) {
                     totalTime++;
 
                     try {
@@ -308,7 +313,7 @@ public class GameScreen implements Screen {
             }
         }).start();
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < countZone; i++) {
             Zone z = new Zone((int) (1 + Math.random() * 5));
             zone.add(z);
         }
@@ -333,6 +338,8 @@ public class GameScreen implements Screen {
         backgroundMusic.setLooping(true);
         backgroundMusic.setVolume(0.3f);
         backgroundMusic.play();
+
+        wait.addAll(spawnItem.startDropSet());
 
         worldStage.addActor(portal);
 
@@ -487,11 +494,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        // Сообщаем об изменении размеров камере и вьюпортам
+        uiStage.getViewport().update(width, height, true);
     }
 
     @Override
     public void dispose() {
+        isTimeGo = false;
+
         worldStage.dispose();
         uiStage.dispose();
         touchpadMove.dispose();
@@ -500,6 +509,9 @@ public class GameScreen implements Screen {
 
         backgroundMusic.stop();
         backgroundMusic.dispose();
+
+        spawnItem.dispose();
+        spawner.dispose();
     }
 
     @Override public void show() {
@@ -571,14 +583,15 @@ public class GameScreen implements Screen {
     }
 
     public void addToList() {
-        for(Object o: wait) {
-            if (o != null) {
-                if (o instanceof Enemy && enemies.size() < maxMobSpawn) {
-                    enemies.add((Enemy) o);
-                } else if (o instanceof Drops && drop.size() < maxDropSpawn) {
-                    drop.add((Drops) o);
+        for(int i = 0; i < wait.size(); i++) {
+            if (wait.get(i) != null) {
+                if (wait.get(i) instanceof Enemy && enemies.size() < maxMobSpawn) {
+                    enemies.add((Enemy) wait.get(i));
+                    worldStage.addActor((Actor) wait.get(i));
+                } else if (wait.get(i) instanceof Drops && drop.size() < maxDropSpawn) {
+                    drop.add((Drops) wait.get(i));
+                    worldStage.addActor((Actor) wait.get(i));
                 }
-                worldStage.addActor((Actor) o);
             }
         }
         wait.clear();

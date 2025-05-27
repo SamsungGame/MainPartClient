@@ -170,7 +170,10 @@ public class Hero extends Friendly {
 
         setRadiationLevel();
         antiRadiationCostumePower -= (float) (((radiationLevel * 0.4) / radiationProtect) * delta);
-        if (antiRadiationCostumePower < 0) ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(3));
+        if (antiRadiationCostumePower < 0) {
+            ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(3));
+            GameScreen.backgroundMusic.stop();
+        }
 
         ((Knife) weapon).act(delta);
 
@@ -188,6 +191,7 @@ public class Hero extends Friendly {
 
         if (this.health <= 0) {
             ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(2));
+            GameScreen.backgroundMusic.stop();
         }
     }
 

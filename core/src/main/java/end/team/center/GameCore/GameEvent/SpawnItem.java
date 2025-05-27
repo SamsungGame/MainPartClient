@@ -2,12 +2,13 @@ package end.team.center.GameCore.GameEvent;
 
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import end.team.center.GameCore.Library.ItemType;
 import end.team.center.GameCore.Library.Items.Acumulattor;
 import end.team.center.GameCore.Library.Items.Bandage;
-import end.team.center.GameCore.Library.Items.BrakeIron;
+import end.team.center.GameCore.Library.Items.SharpnessStone;
 import end.team.center.GameCore.Library.Items.Lamp;
 import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.OnMap.Entity;
@@ -22,6 +23,7 @@ public class SpawnItem {
     private Hero hero;
     private ItemType[] canDrop;
     private int timeSpawn;
+    private boolean isSpawn = true;
 
     public SpawnItem(Post poster, Hero hero) {
         this.poster = poster;
@@ -33,14 +35,14 @@ public class SpawnItem {
         canDrop[2] = ItemType.Bandage;
         canDrop[3] = ItemType.lamp;
 
-        timeSpawn = 2;
+        timeSpawn = 1;
     }
 
     public void goWork() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true) {
+                while (isSpawn) {
                     if (!GameScreen.STOP) {
                         poster.post(spawn());
 
@@ -60,7 +62,7 @@ public class SpawnItem {
         if(r == 0) {
             return new Acumulattor(ItemType.accumulator, setPosition(), hero);
         } else if (r == 1) {
-            return new BrakeIron(ItemType.BreakIron, setPosition(), hero);
+            return new SharpnessStone(ItemType.BreakIron, setPosition(), hero);
         } else if (r == 2) {
             return new Bandage(ItemType.Bandage, setPosition(), hero);
         } else {
@@ -73,5 +75,19 @@ public class SpawnItem {
         Random random = new Random();
 
         return new Vector2(random.nextInt((int) minRadiusSpawn, (int) (GameScreen.WORLD_WIDTH - minRadiusSpawn)), random.nextInt((int) minRadiusSpawn, (int) (GameScreen.WORLD_HEIGHT - minRadiusSpawn)));
+    }
+
+    public ArrayList<Drops> startDropSet() {
+        ArrayList<Drops> dropsStart = new ArrayList<>();
+
+        for(int i = 0; i < 600; i++) {
+            dropsStart.add(spawn());
+        }
+
+        return dropsStart;
+    }
+
+    public void dispose() {
+        isSpawn = false;
     }
 }

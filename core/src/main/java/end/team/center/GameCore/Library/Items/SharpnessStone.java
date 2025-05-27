@@ -10,12 +10,12 @@ import end.team.center.GameCore.Library.ItemType;
 import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.OnMap.Hero;
 
-public class BrakeIron extends Drops {
-    public BrakeIron(Texture texture, Vector2 vector, Hero hero, int width, int height) {
+public class SharpnessStone extends Drops {
+    public SharpnessStone(Texture texture, Vector2 vector, Hero hero, int width, int height) {
         super(texture, vector, hero, width, height);
     }
 
-    public BrakeIron(ItemType type, Vector2 vector, Hero hero) {
+    public SharpnessStone(ItemType type, Vector2 vector, Hero hero) {
         super(type.getTexture(), vector, hero, type.getWidth(), type.getHeight());
     }
 
