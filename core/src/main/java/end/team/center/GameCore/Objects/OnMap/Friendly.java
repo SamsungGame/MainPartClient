@@ -32,13 +32,13 @@ public abstract class Friendly extends Entity {
             mRight = false;
         }
 
-        // Проверка касания врагов
-        for(Enemy e: GameScreen.enemies) {
-            if (e.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
-                if (e.getBound().contains(new Rectangle(vector.x + deltaX, e.getBound().y, width, height))) deltaX = -deltaX;
-                if (e.getBound().contains(new Rectangle(e.getBound().x, vector.y + deltaY, width, height))) deltaY = -deltaY;
-            }
-        }
+//        // Проверка касания врагов
+//        for(Enemy e: GameScreen.enemies) {
+//            if (e.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
+//                if (e.getBound().contains(new Rectangle(vector.x + deltaX, e.getBound().y, width, height))) deltaX = -deltaX;
+//                if (e.getBound().contains(new Rectangle(e.getBound().x, vector.y + deltaY, width, height))) deltaY = -deltaY;
+//            }
+//        }
 
         vector.set(potentialPosition);
         setPosition(vector.x, vector.y);

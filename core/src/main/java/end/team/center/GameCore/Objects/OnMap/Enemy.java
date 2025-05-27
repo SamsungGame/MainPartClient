@@ -55,15 +55,15 @@ public abstract class Enemy extends Entity {
                     mRight = false;
                 }
 
-                // Проверка касания врагов
-                for(Enemy e: GameScreen.enemies) {
-                    if (e != this) {
-                        if (e.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
-                            if (e.getBound().overlaps(new Rectangle(vector.x + deltaX, e.getBound().y, width, height))) deltaX = -deltaX;
-                            if (e.getBound().overlaps(new Rectangle(e.getBound().x, vector.y + deltaY, width, height))) deltaY = -deltaY;
-                        }
-                    }
-                }
+//                // Проверка касания врагов
+//                for(Enemy e: GameScreen.enemies) {
+//                    if (e != this) {
+//                        if (e.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
+//                            if (e.getBound().overlaps(new Rectangle(vector.x + deltaX, e.getBound().y, width, height))) deltaX = -deltaX;
+//                            if (e.getBound().overlaps(new Rectangle(e.getBound().x, vector.y + deltaY, width, height))) deltaY = -deltaY;
+//                        }
+//                    }
+//                }
 
                 vector.add(new Vector2(deltaX, deltaY));
                 setPosition(vector.x, vector.y);

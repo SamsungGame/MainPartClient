@@ -511,12 +511,15 @@ public class GameScreen implements Screen {
         content3 = new VerticalGroup();
 
         content1.addActor(imgB[0]);
+        content1.setSize(600, 600);
         selectPower.getContentTable().add(content1).height(600).width(600).padRight(20);
 
         content2.addActor(imgB[1]);
+        content2.setSize(600, 600);
         selectPower.getContentTable().add(content2).height(600).width(600).padRight(20);
 
         content3.addActor(imgB[2]);
+        content3.setSize(600, 600);
         selectPower.getContentTable().add(content3).height(600).width(600);
 
         selectPower.show(uiStage);
