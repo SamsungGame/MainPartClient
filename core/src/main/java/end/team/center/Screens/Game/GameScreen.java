@@ -38,6 +38,7 @@ import end.team.center.GameCore.Library.ItemType;
 import end.team.center.GameCore.Library.Items.Experience;
 import end.team.center.GameCore.Library.Other.Rock;
 import end.team.center.GameCore.Objects.InInventary.Drops;
+import end.team.center.GameCore.Objects.Map.BackgroundActor;
 import end.team.center.GameCore.Objects.Map.Zone;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
 import end.team.center.GameCore.Objects.OnMap.Entity;
@@ -97,6 +98,30 @@ public class GameScreen implements Screen {
     public GameScreen() {
         System.out.println("Размеры экрана: " + Gdx.graphics.getWidth() + "x на " + Gdx.graphics.getHeight() + "y");
 
+        Texture brick1 = new Texture("UI/GameUI/Grow/dirt1_big.png");
+        Texture brick2 = new Texture("UI/GameUI/Grow/dirt2_big.png");
+        Texture brick3 = new Texture("UI/GameUI/Grow/dirt3_big.png");
+        Texture brick4 = new Texture("UI/GameUI/Grow/dirt4_big.png");
+        Texture brick15 = new Texture("UI/GameUI/Grow/dirt5_big.png");
+
+        TextureRegion[] tiles = new TextureRegion[] {
+            new TextureRegion(brick1),
+            new TextureRegion(brick1),
+            new TextureRegion(brick1),
+            new TextureRegion(brick1),
+            new TextureRegion(brick1)
+        };
+
+        int tileWidth = 250;
+        int tileHeight = 250;
+
+        int cols = (int) (WORLD_WIDTH / tileWidth);
+        int rows = (int) (WORLD_HEIGHT / tileHeight);
+
+
+        BackgroundActor background = new BackgroundActor(tiles, cols, rows, tileWidth, tileHeight);
+
+
         wait = new ArrayList<>();
 
         gameCamera = new GameCamera(WORLD_WIDTH, WORLD_HEIGHT);
@@ -107,6 +132,7 @@ public class GameScreen implements Screen {
         uiViewport = new ScreenViewport();
         uiStage = new Stage(uiViewport);
         Gdx.input.setInputProcessor(uiStage);
+        worldStage.addActor(background);
 
         touchpadMove = new TouchpadClass(200, 200, false, "move");
         uiStage.addActor(touchpadMove);
@@ -115,21 +141,21 @@ public class GameScreen implements Screen {
         uiStage.addActor(touchpadAttack);
 
         // Разбрасывание камней по карте
-        Texture textureT1 = new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/rock1.png"));
-        Texture textureT2 = new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/rock2.png"));
-
-        Random r = new Random();
-
-        for (int i = 0; i < 45; i++) { // 15 камней каждого вида
-            worldStage.addActor(new Rock(
-                textureT1,
-                new Vector2(r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_WIDTH), r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_HEIGHT)),
-                28, 20, true));
-            worldStage.addActor(new Rock(
-                textureT2,
-                new Vector2(r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_WIDTH), r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_HEIGHT)),
-                28, 20, true));
-        }
+//        Texture textureT1 = new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/rock1.png"));
+//        Texture textureT2 = new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/rock2.png"));
+//
+//        Random r = new Random();
+//
+//        for (int i = 0; i < 45; i++) { // 15 камней каждого вида
+//            worldStage.addActor(new Rock(
+//                textureT1,
+//                new Vector2(r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_WIDTH), r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_HEIGHT)),
+//                28, 20, true));
+//            worldStage.addActor(new Rock(
+//                textureT2,
+//                new Vector2(r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_WIDTH), r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_HEIGHT)),
+//                28, 20, true));
+//        }
 
         hero = new Hero(
             new Texture(Gdx.files.internal("UI/GameUI/Hero/Right/heroRight.png")),
