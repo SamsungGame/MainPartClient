@@ -40,6 +40,10 @@ public class Hero extends Friendly {
         maxExp = 20;
     }
 
+    public int getRadiationLevel() {
+        return radiationLevel;
+    }
+
     public void setSpeed(float speed) {
         this.speed = speed;
     }

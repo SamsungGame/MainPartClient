@@ -3,6 +3,10 @@ package end.team.center.Screens.Menu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -11,16 +15,34 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import end.team.center.Center;
+import end.team.center.GameCore.UIElements.Fon;
 import end.team.center.Screens.Game.GameScreen;
 
 public class MainMenuScreen implements Screen {
     private Stage stage;
     private Skin skin;
+    private Fon backround;
 
     public MainMenuScreen() {
         // Создаем сцену
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage); // Устанавливаем обработчик ввода
+
+        Texture fon = new Texture(Gdx.files.internal("UI/MainMenu/fon.jpg"));
+
+        Vector2 size = new Vector2(fon.getWidth(), fon.getHeight());
+
+        int x = Gdx.graphics.getWidth() - fon.getWidth();
+        int y = Gdx.graphics.getHeight() - fon.getHeight();
+
+        if (x > y) {
+            size.add(x, x);
+        } else {
+            size.add(y, y);
+        }
+
+        TextureRegion tr = new TextureRegion(fon);
+        backround = new Fon(tr, new Vector2(0, 0), size);
 
         skin = new Skin(Gdx.files.internal("UI/MainMenu/skinPlayButton.json"));
 
@@ -33,9 +55,10 @@ public class MainMenuScreen implements Screen {
         table.center();
 
         // Добавляем кнопки в таблицу с отступами
-        table.add(buttonStart).height(180).width(640); // pad - отступ между кнопками
+        table.add(buttonStart).height(290).width(630); // pad - отступ между кнопками
 
         // Добавляем кнопку на сцену
+        stage.addActor(backround);
         stage.addActor(table);
 
         // Добавляем обработчик нажатия на кнопку

@@ -87,7 +87,7 @@ public class GameScreen implements Screen {
     protected ArrayList<Power> powers;
     public static boolean STOP = false;
     ProgressBar expBar;
-    Label energyValue;
+    Label energyValue, radiationValue;
 
     public boolean isIteration = false;
     public static ArrayList<Zone> zone = new ArrayList<>();
@@ -137,7 +137,7 @@ public class GameScreen implements Screen {
         touchpadMove = new TouchpadClass(200, 200, false, "move");
         uiStage.addActor(touchpadMove);
 
-        touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth()-500, 200, false, "attack");
+        touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth() - 500, 200, false, "attack");
         uiStage.addActor(touchpadAttack);
 
         // Разбрасывание камней по карте
@@ -187,7 +187,15 @@ public class GameScreen implements Screen {
         energyValue.setPosition(Gdx.graphics.getWidth() - EnergyValue.getWidth() - energyValue.getWidth() - 280,
             Gdx.graphics.getHeight() - energyValue.getHeight() - 100);
 
+        Skin radiationSkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/energyText.json"));
 
+        radiationValue = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), radiationSkin);
+        radiationValue.setFontScale(4f);
+
+        radiationValue.setPosition(Gdx.graphics.getWidth() - EnergyValue.getWidth() - energyValue.getWidth() - 180,
+            Gdx.graphics.getHeight() - energyValue.getHeight() - radiationValue.getHeight() - 200);
+
+        uiStage.addActor(radiationValue);
         uiStage.addActor(EnergyValueImg);
         uiStage.addActor(energyValue);
 
@@ -428,6 +436,7 @@ public class GameScreen implements Screen {
 
         // Обновление UI игрока
         energyValue.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
+        radiationValue.setText(hero.getRadiationLevel());
 
         hearts.updateAnimation(delta);
         hearts.updateHealth(hero.getHealth());

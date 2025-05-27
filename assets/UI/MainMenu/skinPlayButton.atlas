@@ -1,19 +1,12 @@
 
-skinPlayButton.png
+buttonPlay.png
 size: 128, 64
 format: RGBA8888
 repeat: none
-play_down
-  rotate: false
-  xy: 1, 25
-  size: 64, 18
-  orig: 64, 18
-  offset: 0, 0
-  index: -1
 play_up
   rotate: false
-  xy: 1, 45
-  size: 64, 18
-  orig: 64, 18
+  xy: 1, 1
+  size: 63, 29
+  orig: 63, 29
   offset: 0, 0
   index: -1
