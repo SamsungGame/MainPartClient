@@ -40,7 +40,7 @@ public class SpawnMob {
             canSpawn.add(null);
         }
 
-        timeSpawn = 5;
+        timeSpawn = 10;
     }
 
     public void startWork() {

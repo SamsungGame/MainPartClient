@@ -50,8 +50,8 @@ public class GameScreen implements Screen {
     private Viewport uiViewport;
 
     private GameCamera gameCamera;
-    public static final float WORLD_WIDTH = 5000;
-    public static final float WORLD_HEIGHT = 5000;
+    public static final float WORLD_WIDTH = 20000;
+    public static final float WORLD_HEIGHT = 20000;
 
     private SpawnMob spawner;
     public static ArrayList<Enemy> enemies;
