@@ -50,8 +50,8 @@ public class GameScreen implements Screen {
     private Viewport uiViewport;
 
     private GameCamera gameCamera;
-    public static final float WORLD_WIDTH = 50000;
-    public static final float WORLD_HEIGHT = 50000;
+    public static final float WORLD_WIDTH = 5000;
+    public static final float WORLD_HEIGHT = 5000;
 
     private SpawnMob spawner;
     public static ArrayList<Enemy> enemies;
@@ -154,6 +154,7 @@ public class GameScreen implements Screen {
             1, 0, 300f,
             WORLD_WIDTH, WORLD_HEIGHT
         );
+
         worldStage.addActor(hero);
 
         Texture heartFull = new Texture("UI/GameUI/OtherGameItems/heart_full.png");
@@ -164,29 +165,27 @@ public class GameScreen implements Screen {
 
         Texture EnergyValue = new Texture("UI/GameUI/OtherGameItems/energy.png");
         Image EnergyValueImg = new Image(EnergyValue);
-        EnergyValueImg.setSize(70, 98);
-        EnergyValueImg.setPosition((float) Gdx.graphics.getWidth() - 100, Gdx.graphics.getHeight() - 130);
-
-        Texture radiationLevel = new Texture("UI/GameUI/OtherGameItems/warning.png");
-        Image radiationLevelImg = new Image(radiationLevel);
-        radiationLevelImg.setSize(90,78);
-        radiationLevelImg.setPosition((float) Gdx.graphics.getWidth() - 120, Gdx.graphics.getHeight() - (130 + EnergyValueImg.getHeight()));
+        EnergyValueImg.setSize(90,126);
+        EnergyValueImg.setPosition((float) Gdx.graphics.getWidth() - 150, Gdx.graphics.getHeight() - 160);
 
         Skin energySkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/energyText.json"));
+
         energyValue = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), energySkin);
         energyValue.setFontScale(5f);
-        energyValue.setPosition(Gdx.graphics.getWidth() - (EnergyValueImg.getWidth() + energyValue.getWidth() + 150),
-            Gdx.graphics.getHeight() - (energyValue.getHeight() + EnergyValueImg.getHeight() / 2 + 30));
+
+        energyValue.setPosition(Gdx.graphics.getWidth() - EnergyValue.getWidth() - energyValue.getWidth() - 280,
+            Gdx.graphics.getHeight() - energyValue.getHeight() - 100);
 
         Skin radiationSkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/energyText.json"));
+
         radiationValue = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), radiationSkin);
-        radiationValue.setFontScale(5f);
-        radiationValue.setPosition(Gdx.graphics.getWidth() - radiationLevelImg.getWidth() - radiationValue.getWidth() - 30,
-            Gdx.graphics.getHeight() - (energyValue.getHeight() + EnergyValueImg.getHeight() + radiationLevelImg.getHeight() / 2 + 50));
+        radiationValue.setFontScale(4f);
+
+        radiationValue.setPosition(Gdx.graphics.getWidth() - EnergyValue.getWidth() - energyValue.getWidth() - 180,
+            Gdx.graphics.getHeight() - energyValue.getHeight() - radiationValue.getHeight() - 200);
 
         uiStage.addActor(radiationValue);
         uiStage.addActor(EnergyValueImg);
-        uiStage.addActor(radiationLevelImg);
         uiStage.addActor(energyValue);
 
         Texture ExpTexture1 = new Texture("UI/GameUI/OtherGameItems/expBorderLeft.png");
@@ -333,35 +332,42 @@ public class GameScreen implements Screen {
         spawner.startWork();
         spawnItem.goWork();
     }
+
     @SuppressWarnings("DefaultLocale")
     @Override
     public void render(float delta) {
         addToList();
+
         TIME += delta;
 
         if (hero.newLevelFlag) {
             showPowerDialog(delta);
         } else {
 
-            // Получаем значения от джойстиков
+            // Подготовка значений для методов классов типа "Object & Interacteble"
             float moveX = touchpadMove.getKnobPercentX();
             float moveY = touchpadMove.getKnobPercentY();
 
+            // Получаем нормализованные значения от Touchpad
             float normalizedX = (touchpadAttack.getKnobPercentX() + 1) / 2;
             float normalizedY = (touchpadAttack.getKnobPercentY() + 1) / 2;
-            float dx = normalizedX * 2 - 1;
+            float dx = normalizedX * 2 - 1; // от -1 до 1
             float dy = normalizedY * 2 - 1;
 
-            // Движение героя
+            // Обновление значений классов типа "Object & Interacteble"
             hero.move(moveX, moveY, delta);
 
-            // Атака
             if (touchpadAttack.isTouchpadActive()) {
                 hero.useWeapon(dx, dy);
+
             } else if (hero.getWep().getShow() && hero.getWep().isCanAttack()) {
                 hero.startAttackAnim();
+
                 for (Enemy e : enemies) {
                     if (hero.getWep().checkTouchRectangle(e.getBound())) {
+
+                        System.out.println("Удар! Врагов: " + enemies.size());
+
                         e.setHealth(e.getHealth() - hero.getWep().getDamage());
                         e.stan(1);
 
@@ -371,43 +377,47 @@ public class GameScreen implements Screen {
 
                         if (e.getHealth() <= 0) {
                             e.die();
-                            Experience exp = new Experience(ItemType.exp, new Vector2(e.getCenterVector()), hero, e.getExp());
-                            worldStage.addActor(exp);
+
+                            Experience experience = new Experience(ItemType.exp, new Vector2(e.getCenterVector()), hero, e.getExp());
+                            worldStage.addActor(experience);
                         }
                     }
                 }
+
                 hero.unUseWeapon();
             } else if (hero.getWep().getShow()) {
                 hero.unUseWeapon();
             }
 
-            // Урон от врагов
             for (Enemy e : enemies) {
-                if (e.getBound().overlaps(hero.getBound())) {
-                    e.attack(hero);
+                if (e.getBound().overlaps(hero.getBound())) e.attack(hero);
+            }
+            int max = enemies.size();
+
+            // Удаление мобов
+            for (int i = 0; i < max; i++) {
+                if (!enemies.get(i).isLive()) {
+                    Enemy e = enemies.get(i);
+                    enemies.remove(e);
+                    e.remove();
+                    max--;
                 }
             }
 
-            // Удаление мертвых врагов
-            enemies.removeIf(e -> {
-                if (!e.isLive()) {
-                    e.remove();
-                    return true;
-                }
-                return false;
-            });
-
             expBar.setValue(hero.getExp());
             hero.newLevel();
+
+            // Обновление UI игрока
             energyValue.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
             radiationValue.setText(hero.getRadiationLevel());
+
             hearts.updateAnimation(delta);
             hearts.updateHealth(hero.getHealth());
 
             // Обновление камеры
-            gameCamera.updateCameraPosition(hero.getX(), hero.getY(), hero.getWidth(), hero.getHeight());
+            gameCamera.updateCameraPosition(hero.getVector().x, hero.getVector().y, hero.getWidth(), hero.getHeight());
 
-            // Рендер в буфер
+            // Шейдер
             if (!STOP) {
                 frameBuffer.begin();
                 Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -427,7 +437,6 @@ public class GameScreen implements Screen {
                 frameBuffer.end();
             }
 
-            // Вычисление координат героя в экране
             Vector2 heroPosScreen = worldStage.stageToScreenCoordinates(
                 new Vector2(hero.getX() + hero.getWidth() / 2f, hero.getY() + hero.getHeight() / 2f)
             );
@@ -437,24 +446,21 @@ public class GameScreen implements Screen {
             Texture worldTexture = frameBuffer.getColorBufferTexture();
             worldTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-            // Шейдер маски
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-            batch.setProjectionMatrix(uiStage.getCamera().combined);
-
+            // Мягкая маска
             batch.setShader(maskShader);
             maskShader.bind();
             maskShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
             maskShader.setUniformf("u_time", TIME);
-
 
             batch.begin();
             batch.draw(worldTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
                 0, 0, worldTexture.getWidth(), worldTexture.getHeight(), false, true);
             batch.end();
 
-            // Шейдер затемнения
+            // Затемнение
             batch.setShader(dimmingShader);
             dimmingShader.bind();
             dimmingShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
@@ -467,13 +473,16 @@ public class GameScreen implements Screen {
             batch.setShader(null);
             Gdx.gl.glDisable(GL20.GL_BLEND);
 
-            // Джойстики
+            // Обновление джостиков
             touchpadMove.TouchpadLogic(uiStage);
             touchpadAttack.TouchpadLogic(uiStage);
+
+            // Установка джостиков
             touchpadMove.touchpadSetBounds();
             touchpadAttack.touchpadSetBounds();
 
-            // UI поверх всего
+
+            // Отрисовка обьектов
             uiStage.act(delta);
             uiStage.draw();
         }
