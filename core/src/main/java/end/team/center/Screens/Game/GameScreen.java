@@ -28,6 +28,7 @@ import end.team.center.GameCore.GameEvent.Post;
 import end.team.center.GameCore.GameEvent.SpawnMob;
 import end.team.center.GameCore.Library.ItemType;
 import end.team.center.GameCore.Library.Items.Experience;
+import end.team.center.GameCore.Library.Other.Portal;
 import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.Map.BackgroundTiledRenderer;
 import end.team.center.GameCore.Objects.Map.Zone;
@@ -320,6 +321,14 @@ public class GameScreen implements Screen {
             Zone z = new Zone((int) (1 + Math.random() * 5));
             zone.add(z);
         }
+
+        Portal portal = new Portal(
+            new Texture(Gdx.files.internal("UI/GameUI/Structure/portal1.png")),
+            new Texture(Gdx.files.internal("UI/GameUI/Structure/portal2.png")),
+            new Texture(Gdx.files.internal("UI/GameUI/Structure/portal3.png")),
+            new Vector2((float) (Math.random() * WORLD_WIDTH), (float) (Math.random() * WORLD_HEIGHT)),
+            hero,
+            171, 189);
 
         spawner.startWork();
         spawnItem.goWork();
