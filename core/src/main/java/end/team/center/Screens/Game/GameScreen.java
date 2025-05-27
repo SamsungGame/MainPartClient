@@ -165,27 +165,29 @@ public class GameScreen implements Screen {
 
         Texture EnergyValue = new Texture("UI/GameUI/OtherGameItems/energy.png");
         Image EnergyValueImg = new Image(EnergyValue);
-        EnergyValueImg.setSize(90,126);
-        EnergyValueImg.setPosition((float) Gdx.graphics.getWidth() - 150, Gdx.graphics.getHeight() - 160);
+        EnergyValueImg.setSize(70, 98);
+        EnergyValueImg.setPosition((float) Gdx.graphics.getWidth() - 100, Gdx.graphics.getHeight() - 130);
+
+        Texture radiationLevel = new Texture("UI/GameUI/OtherGameItems/warning.png");
+        Image radiationLevelImg = new Image(radiationLevel);
+        radiationLevelImg.setSize(90,78);
+        radiationLevelImg.setPosition((float) Gdx.graphics.getWidth() - 120, Gdx.graphics.getHeight() - (130 + EnergyValueImg.getHeight()));
 
         Skin energySkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/energyText.json"));
-
         energyValue = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), energySkin);
         energyValue.setFontScale(5f);
-
-        energyValue.setPosition(Gdx.graphics.getWidth() - EnergyValue.getWidth() - energyValue.getWidth() - 280,
-            Gdx.graphics.getHeight() - energyValue.getHeight() - 100);
+        energyValue.setPosition(Gdx.graphics.getWidth() - (EnergyValueImg.getWidth() + energyValue.getWidth() + 150),
+            Gdx.graphics.getHeight() - (energyValue.getHeight() + EnergyValueImg.getHeight() / 2 + 30));
 
         Skin radiationSkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/energyText.json"));
-
         radiationValue = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), radiationSkin);
-        radiationValue.setFontScale(4f);
-
-        radiationValue.setPosition(Gdx.graphics.getWidth() - EnergyValue.getWidth() - energyValue.getWidth() - 180,
-            Gdx.graphics.getHeight() - energyValue.getHeight() - radiationValue.getHeight() - 200);
+        radiationValue.setFontScale(5f);
+        radiationValue.setPosition(Gdx.graphics.getWidth() - radiationLevelImg.getWidth() - radiationValue.getWidth() - 30,
+            Gdx.graphics.getHeight() - (energyValue.getHeight() + EnergyValueImg.getHeight() + radiationLevelImg.getHeight() / 2 + 50));
 
         uiStage.addActor(radiationValue);
         uiStage.addActor(EnergyValueImg);
+        uiStage.addActor(radiationLevelImg);
         uiStage.addActor(energyValue);
 
         Texture ExpTexture1 = new Texture("UI/GameUI/OtherGameItems/expBorderLeft.png");
