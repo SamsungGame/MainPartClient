@@ -49,6 +49,11 @@ public abstract class Friendly extends Entity {
     }
 
     @Override
+    public void setHealth(int health) {
+        super.setHealth(health);
+    }
+
+    @Override
     public void act(float delta) {
         super.act(delta);
     }

@@ -38,7 +38,7 @@ public class SpawnMob {
             canSpawn.add(null);
         }
 
-        timeSpawn = 25;
+        timeSpawn = 5;
     }
 
     public void startWork() {
@@ -69,7 +69,10 @@ public class SpawnMob {
     }
 
     protected void setNewMob() {
-        levelMobSpawn = (int) (GameScreen.totalTime / 15);
+        if (GameScreen.totalTime % 15 == 0) {
+            levelMobSpawn = (int) (GameScreen.totalTime / 15);
+            System.out.println("Уровень врагов: " + levelMobSpawn);
+        }
 
         if        (GameScreen.totalTime >= 5 && canSpawn.get(0) == null) {
             System.out.println("Новый моб: Owl");
@@ -77,20 +80,6 @@ public class SpawnMob {
         } else if (GameScreen.totalTime >= 15 && canSpawn.get(1) == null) {
             System.out.println("Новый моб: Ghost");
             canSpawn.set(1, EnemyType.Ghost);
-        }
-
-        if        (GameScreen.totalTime >= 30 && timeSpawn > 20) {
-            System.out.println("Время спавна: 20");
-            timeSpawn = 20;
-        } else if (GameScreen.totalTime >= 60 && timeSpawn > 10) {
-            System.out.println("Время спавна: 20 -> 10");
-            timeSpawn = 10;
-        } else if (GameScreen.totalTime >= 90 && timeSpawn > 5) {
-            System.out.println("Время спавна: 10 -> 5");
-            timeSpawn = 5;
-        } else if (GameScreen.totalTime >= 120 && timeSpawn > 1) {
-            System.out.println("Время спавна: 5 -> 1");
-            timeSpawn = 1;
         }
     }
 

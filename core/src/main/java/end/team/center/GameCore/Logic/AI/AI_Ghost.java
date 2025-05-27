@@ -87,8 +87,10 @@ public class AI_Ghost extends AI {
     }
 
     public void whoDieAmmo(Ammo a, Ghost g) {
-        for (Ammo ammo: g.getAmmos()) {
-            if (ammo == a) g.getAmmos().remove(a);
+        int size = g.getAmmos().size();
+        for (int i = 0; i < size; i++) {
+            if (g.getAmmos().get(i) == a) g.getAmmos().remove(a);
+            size--;
         }
     }
 }

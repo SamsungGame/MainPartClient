@@ -507,12 +507,15 @@ public class GameScreen implements Screen {
     public void showPowerDialog(float delta) {
         STOP = true;
 
+        ArrayList<Power> powers = this.powers;
         Power[] imgB = new Power[3];
 
-        Random random = new Random();
-
         for (int i = 0; i < 3; i++) {
-            imgB[i] = powers.get(random.nextInt(0, powers.size() - 1));
+            int index = (int) (Math.random() * powers.size());
+            if (index == powers.size()) index--;
+
+            imgB[i] = powers.get(index);
+            powers.remove(index);
         }
 
         if (!isShow) {
@@ -529,6 +532,8 @@ public class GameScreen implements Screen {
         isShow = false;
 
         PSC = null;
+
+        Gdx.input.setInputProcessor(uiStage);
     }
 
     public void setSpawnMob(Enemy[] enemy) {

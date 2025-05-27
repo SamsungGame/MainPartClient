@@ -39,8 +39,6 @@ public class Owl extends Enemy {
 
         if (level > 7 && level < 14) damage = 2;
         else if (level >= 14) damage = 3;
-
-        speed = speed + 30 * level;
     }
 
     public Circle getStartCircle() {

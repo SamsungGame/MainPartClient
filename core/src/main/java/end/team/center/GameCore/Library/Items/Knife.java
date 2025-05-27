@@ -59,7 +59,7 @@ public class Knife extends Weapon {
 
         System.out.println("Позиция: " + x + "/" + y);
 
-        fe = new ForwardEffect(texture, (int) getWidth(), (int) getHeight(), 600, 0.3f);
+        fe = new ForwardEffect(texture, (int) (getWidth() / 1.5f), (int) (getHeight() / 1.5f), 800, 0.3f);
         fe.go(new Death() {
             @Override
             public void die() {

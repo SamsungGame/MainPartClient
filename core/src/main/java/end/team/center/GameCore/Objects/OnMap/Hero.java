@@ -211,6 +211,13 @@ public class Hero extends Friendly {
         super.dispose();
     }
 
+    @Override
+    public void setHealth(int health) {
+        super.setHealth(health);
+
+        if (health > 3) health = 3;
+    }
+
     public void frameInvulnerability(float sec) {
         isInvulnerability = true;
 
