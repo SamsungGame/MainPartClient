@@ -331,7 +331,6 @@ public class GameScreen implements Screen {
 
         if (hero.newLevelFlag) {
             showPowerDialog(delta);
-            return;
         }
 
         // Получаем значения от джойстиков
