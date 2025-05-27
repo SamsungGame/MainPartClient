@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -59,8 +60,8 @@ public class GameScreen implements Screen {
     private Viewport uiViewport;
 
     private GameCamera gameCamera;
-    public static final float WORLD_WIDTH = 10000;
-    public static final float WORLD_HEIGHT = 10000;
+    public static final float WORLD_WIDTH = 5000;
+    public static final float WORLD_HEIGHT = 5000;
 
     private SpawnMob spawner;
     public static ArrayList<Enemy> enemies;
@@ -82,15 +83,15 @@ public class GameScreen implements Screen {
     public static float TIME = 0f;
 
     // Dialog для усиления
-    protected Dialog selectPower;
-    protected VerticalGroup content1, content2, content3;
     protected ArrayList<Power> powers;
     public static boolean STOP = false;
+
     ProgressBar expBar;
     Label energyValue, radiationValue;
-
-    public boolean isIteration = false;
     public static ArrayList<Zone> zone = new ArrayList<>();
+
+    protected PowerSelectScreen PSC;
+    private boolean isShow = false;
 
 
 
@@ -118,9 +119,7 @@ public class GameScreen implements Screen {
         int cols = (int) (WORLD_WIDTH / tileWidth);
         int rows = (int) (WORLD_HEIGHT / tileHeight);
 
-
         BackgroundActor background = new BackgroundActor(tiles, cols, rows, tileWidth, tileHeight);
-
 
         wait = new ArrayList<>();
 
@@ -264,76 +263,53 @@ public class GameScreen implements Screen {
         dimmingShader.setUniformf("u_aspectRatio", aspectRatio);
 
         // Создание окна
-        Skin ws = new Skin(Gdx.files.internal("UI/GameUI/Dialog/dialog.json"));
-        selectPower = new Dialog("Выберите усиление!", ws);
-
         powers = new ArrayList<>();
 
         // Добавление существующих усилений
-        Power p = new Power(new TextureRegionDrawable(new Texture("UI/GameUI/SelectPowerUI/Effect/expMore.png"))) {
+        Power p = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/expMore.png")) {
             @Override
             public void effect() {
                 hero.setExpBonus(hero.getExpBonus() * 2);
-            }
-        };
-        p.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                p.effect();
+
                 hidePowerDialog();
             }
-        });
+        };
         p.setSize(600, 600);
         powers.add(p);
 
-        Power p1 = new Power(new TextureRegionDrawable(new Texture("UI/GameUI/SelectPowerUI/Effect/HPforAttack.png"))) {
+        Power p1 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/HPforAttack.png")) {
             @Override
             public void effect() {
                 hero.setVampirism(true);
-            }
-        };
-        p.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                p.effect();
+
                 hidePowerDialog();
             }
-        });
+        };
         p1.setSize(600, 600);
         powers.add(p1);
 
-        Power p2 = new Power(new TextureRegionDrawable(new Texture("UI/GameUI/SelectPowerUI/Effect/speedHP.png"))) {
+        Power p2 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/speedHP.png")) {
             @Override
             public void effect() {
                 hero.setHealth(hero.getHealth() - 1);
                 hero.setSpeed(hero.getSpeed() * 2);
-            }
-        };
-        p.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                p.effect();
+
                 hidePowerDialog();
             }
-        });
+        };
         p2.setSize(600, 600);
         powers.add(p2);
 
-        Power p3 = new Power(new TextureRegionDrawable(new Texture("UI/GameUI/SelectPowerUI/Effect/visible.png"))) {
+        Power p3 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/visible.png")) {
             @Override
             public void effect() {
                 ShaderManager.radiusView1 += 0.1f;
                 ShaderManager.radiusView2 += 0.1f;
                 ShaderManager.radiusView3 += 0.1f;
-            }
-        };
-        p.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                p.effect();
+
                 hidePowerDialog();
             }
-        });
+        };
         p3.setSize(600, 600);
         powers.add(p3);
 
@@ -351,7 +327,7 @@ public class GameScreen implements Screen {
         }).start();
 
         for (int i = 0; i < 6; i++) {
-            Zone z = new Zone((int) Math.floor(1 + Math.random() * 5));
+            Zone z = new Zone((int) (1 + Math.random() * 5));
             zone.add(z);
         }
 
@@ -367,142 +343,143 @@ public class GameScreen implements Screen {
         TIME += delta;
 
         if (hero.newLevelFlag) {
-            showPowerDialog();
-            hero.newLevelFlag = false;
-        }
+            showPowerDialog(delta);
+        } else {
 
-        float moveX = touchpadMove.getKnobPercentX();
-        float moveY = touchpadMove.getKnobPercentY();
+            // Подготовка значений для методов классов типа "Object & Interacteble"
+            float moveX = touchpadMove.getKnobPercentX();
+            float moveY = touchpadMove.getKnobPercentY();
 
-        // Получаем нормализованные значения от Touchpad
-        float normalizedX = (touchpadAttack.getKnobPercentX() + 1) / 2;
-        float normalizedY = (touchpadAttack.getKnobPercentY() + 1) / 2;
-        float dx = normalizedX * 2 - 1; // от -1 до 1
-        float dy = normalizedY * 2 - 1;
+            // Получаем нормализованные значения от Touchpad
+            float normalizedX = (touchpadAttack.getKnobPercentX() + 1) / 2;
+            float normalizedY = (touchpadAttack.getKnobPercentY() + 1) / 2;
+            float dx = normalizedX * 2 - 1; // от -1 до 1
+            float dy = normalizedY * 2 - 1;
 
-        // Обновление значений классов типа "Object & Interacteble"
-        hero.move(moveX, moveY, delta);
+            // Обновление значений классов типа "Object & Interacteble"
+            hero.move(moveX, moveY, delta);
 
-        if (touchpadAttack.isTouchpadActive()) {
-            hero.useWeapon(dx, dy);
+            if (touchpadAttack.isTouchpadActive()) {
+                hero.useWeapon(dx, dy);
 
-        } else if (hero.getWep().getShow() && hero.getWep().isCanAttack()) {
-            hero.startAttackAnim();
+            } else if (hero.getWep().getShow() && hero.getWep().isCanAttack()) {
+                hero.startAttackAnim();
 
-            for(Enemy e: enemies) {
-                if (hero.getWep().checkTouchRectangle(e.getBound())) {
+                for (Enemy e : enemies) {
+                    if (hero.getWep().checkTouchRectangle(e.getBound())) {
 
-                    System.out.println("Удар! Врагов: " + enemies.size());
+                        System.out.println("Удар! Врагов: " + enemies.size());
 
-                    e.setHealth(e.getHealth() - hero.getWep().getDamage());
-                    e.stan(1);
+                        e.setHealth(e.getHealth() - hero.getWep().getDamage());
+                        e.stan(1);
 
-                    if (Math.random() * 100 > 80 && hero.getHealth() < 3 && hero.getVampirism()) {
-                        hero.setHealth(hero.getHealth() + 1);
+                        if (Math.random() * 100 > 80 && hero.getHealth() < 3 && hero.getVampirism()) {
+                            hero.setHealth(hero.getHealth() + 1);
+                        }
+
+                        if (e.getHealth() <= 0) {
+                            e.die();
+
+                            Experience experience = new Experience(ItemType.exp, new Vector2(e.getCenterVector()), hero, e.getExp());
+                            worldStage.addActor(experience);
+                        }
                     }
+                }
 
-                    if (e.getHealth() <= 0) {
-                        e.die();
+                hero.unUseWeapon();
+            } else if (hero.getWep().getShow()) {
+                hero.unUseWeapon();
+            }
 
-                        Experience experience = new Experience(ItemType.exp, new Vector2(e.getCenterVector()), hero, e.getExp());
-                        worldStage.addActor(experience);
-                    }
+            for (Enemy e : enemies) {
+                if (e.getBound().overlaps(hero.getBound())) e.attack(hero);
+            }
+            int max = enemies.size();
+
+            // Удаление мобов
+            for (int i = 0; i < max; i++) {
+                if (!enemies.get(i).isLive()) {
+                    Enemy e = enemies.get(i);
+                    enemies.remove(e);
+                    e.remove();
+                    max--;
                 }
             }
 
-            hero.unUseWeapon();
-        } else if (hero.getWep().getShow()) {
-            hero.unUseWeapon();
-        }
+            expBar.setValue(hero.getExp());
+            hero.newLevel();
 
-        for(Enemy e: enemies) {
-            if (e.getBound().overlaps(hero.getBound())) e.attack(hero);
-        }
-        int max = enemies.size();
+            // Обновление UI игрока
+            energyValue.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
+            radiationValue.setText(hero.getRadiationLevel());
 
-        // Удаление мобов
-        for(int i = 0; i < max; i++) {
-            if (!enemies.get(i).isLive()) {
-                Enemy e = enemies.get(i);
-                enemies.remove(e);
-                e.remove();
-                max--;
+            hearts.updateAnimation(delta);
+            hearts.updateHealth(hero.getHealth());
+
+            // Обновление камеры
+            gameCamera.updateCameraPosition(hero.getVector().x, hero.getVector().y, hero.getWidth(), hero.getHeight());
+
+            // Шейдер
+            if (!STOP) {
+                frameBuffer.begin();
+                Gdx.gl.glClearColor(0, 0, 0, 1);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+                batch.begin();
+                worldStage.act(delta);
+                worldStage.draw();
+                batch.end();
+                frameBuffer.end();
             }
-        }
 
-        expBar.setValue(hero.getExp());
-        hero.newLevel();
+            Vector2 heroPosScreen = worldStage.stageToScreenCoordinates(
+                new Vector2(hero.getX() + hero.getWidth() / 2f, hero.getY() + hero.getHeight() / 2f)
+            );
+            float heroXNorm = heroPosScreen.x / Gdx.graphics.getWidth();
+            float heroYNorm = 1f - (heroPosScreen.y / Gdx.graphics.getHeight());
 
-        // Обновление UI игрока
-        energyValue.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
-        radiationValue.setText(hero.getRadiationLevel());
+            Texture worldTexture = frameBuffer.getColorBufferTexture();
+            worldTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-        hearts.updateAnimation(delta);
-        hearts.updateHealth(hero.getHealth());
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        // Обновление камеры
-        gameCamera.updateCameraPosition(hero.getVector().x, hero.getVector().y, hero.getWidth(), hero.getHeight());
+            // Мягкая маска
+            batch.setShader(maskShader);
+            maskShader.bind();
+            maskShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
+            maskShader.setUniformf("u_time", TIME);
 
-        // Шейдер
-        if (!STOP) {
-            frameBuffer.begin();
-            Gdx.gl.glClearColor(0, 0, 0, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             batch.begin();
-            worldStage.act(delta);
-            worldStage.draw();
+            batch.draw(worldTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
+                0, 0, worldTexture.getWidth(), worldTexture.getHeight(), false, true);
             batch.end();
-            frameBuffer.end();
+
+            // Затемнение
+            batch.setShader(dimmingShader);
+            dimmingShader.bind();
+            dimmingShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
+
+            batch.begin();
+            batch.draw(worldTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
+                0, 0, worldTexture.getWidth(), worldTexture.getHeight(), false, true);
+            batch.end();
+
+            batch.setShader(null);
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+
+            // Обновление джостиков
+            touchpadMove.TouchpadLogic(uiStage);
+            touchpadAttack.TouchpadLogic(uiStage);
+
+            // Установка джостиков
+            touchpadMove.touchpadSetBounds();
+            touchpadAttack.touchpadSetBounds();
+
+
+            // Отрисовка обьектов
+            uiStage.act(delta);
+            uiStage.draw();
         }
-
-        Vector2 heroPosScreen = worldStage.stageToScreenCoordinates(
-            new Vector2(hero.getX() + hero.getWidth() / 2f, hero.getY() + hero.getHeight() / 2f)
-        );
-        float heroXNorm = heroPosScreen.x / Gdx.graphics.getWidth();
-        float heroYNorm = 1f - (heroPosScreen.y / Gdx.graphics.getHeight());
-
-        Texture worldTexture = frameBuffer.getColorBufferTexture();
-        worldTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-        // Мягкая маска
-        batch.setShader(maskShader);
-        maskShader.bind();
-        maskShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
-        maskShader.setUniformf("u_time", TIME);
-
-        batch.begin();
-        batch.draw(worldTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
-            0, 0, worldTexture.getWidth(), worldTexture.getHeight(), false, true);
-        batch.end();
-
-        // Затемнение
-        batch.setShader(dimmingShader);
-        dimmingShader.bind();
-        dimmingShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
-
-        batch.begin();
-        batch.draw(worldTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
-            0, 0, worldTexture.getWidth(), worldTexture.getHeight(), false, true);
-        batch.end();
-
-        batch.setShader(null);
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-
-        // Обновление джостиков
-        touchpadMove.TouchpadLogic(uiStage);
-        touchpadAttack.TouchpadLogic(uiStage);
-
-        // Установка джостиков
-        touchpadMove.touchpadSetBounds();
-        touchpadAttack.touchpadSetBounds();
-
-
-        // Отрисовка обьектов
-        uiStage.act(delta);
-        uiStage.draw();
     }
 
     @Override
@@ -527,7 +504,7 @@ public class GameScreen implements Screen {
     @Override public void hide() {}
 
     @SuppressWarnings("NewApi")
-    public void showPowerDialog() {
+    public void showPowerDialog(float delta) {
         STOP = true;
 
         Power[] imgB = new Power[3];
@@ -538,31 +515,20 @@ public class GameScreen implements Screen {
             imgB[i] = powers.get(random.nextInt(0, powers.size() - 1));
         }
 
-        selectPower.getContentTable().center().setFillParent(true);
+        if (!isShow) {
+            isShow = true;
+            PSC = new PowerSelectScreen(imgB);
+        }
 
-        content1 = new VerticalGroup();
-        content2 = new VerticalGroup();
-        content3 = new VerticalGroup();
-
-        content1.addActor(imgB[0]);
-        content1.setSize(600, 600);
-        selectPower.getContentTable().add(content1).height(600).width(600).padRight(20);
-
-        content2.addActor(imgB[1]);
-        content2.setSize(600, 600);
-        selectPower.getContentTable().add(content2).height(600).width(600).padRight(20);
-
-        content3.addActor(imgB[2]);
-        content3.setSize(600, 600);
-        selectPower.getContentTable().add(content3).height(600).width(600);
-
-        selectPower.show(uiStage);
+        PSC.render(delta);
     }
 
     public void hidePowerDialog() {
         STOP = false;
-        selectPower.hide();
-        selectPower.getContentTable().clear();
+        hero.newLevelFlag = false;
+        isShow = false;
+
+        PSC = null;
     }
 
     public void setSpawnMob(Enemy[] enemy) {

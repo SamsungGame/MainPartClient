@@ -121,36 +121,6 @@ public class Hero extends Friendly {
     }
 
     protected void upgradeWeapon() { // 140; +
-        if (expWeapon >= 10 && levelWeapon == 0) {
-            System.out.println("Новый уроввень оружия! >1<");
-            levelWeapon = 1;
-            weapon.setSize(90, 150);
-        } else if (expWeapon >= 30 && levelWeapon == 1) {
-            System.out.println("Новый уроввень оружия! >2<");
-            levelWeapon = 2;
-            weapon.setSize(100, 170);
-        } else if (expWeapon >= 60 && levelWeapon == 2) {
-            System.out.println("Новый уроввень оружия! >3<");
-            levelWeapon = 3;
-            weapon.setSize(110, 190);
-        } else if (expWeapon >= 90 && levelWeapon == 3) {
-            System.out.println("Новый уроввень оружия! >4<");
-            levelWeapon = 4;
-            weapon.setSize(120, 210);
-        } else if (expWeapon >= 130 && levelWeapon == 4) {
-            System.out.println("Новый уроввень оружия! >5<");
-            levelWeapon = 5;
-            weapon.setSize(140, 230);
-        } else if (expWeapon >= 170 && levelWeapon == 5) {
-            System.out.println("Новый уроввень оружия! >6<");
-            levelWeapon = 6;
-            weapon.setSize(150, 260);
-        } else if (expWeapon >= 200 && levelWeapon == 6) {
-            System.out.println("Новый уроввень оружия! >7<");
-            levelWeapon = 7;
-            weapon.setSize(155, 300);
-        }
-
         weapon.setDamage((int) (damageBonus + 3 + (float) (expWeapon / 5)));
         System.out.println("Урон оружия: " + weapon.getDamage());
     }
@@ -170,6 +140,8 @@ public class Hero extends Friendly {
 
     public void addCostumePower(int add) {
         antiRadiationCostumePower += add;
+
+        if (antiRadiationCostumePower > 100) antiRadiationCostumePower = 100;
     }
 
     public void startShyne() {
@@ -194,7 +166,7 @@ public class Hero extends Friendly {
         super.act(delta);
 
         setRadiationLevel();
-        antiRadiationCostumePower -= (float) (((radiationLevel * 0.6) / radiationProtect) * delta);
+        antiRadiationCostumePower -= (float) (((radiationLevel * 0.4) / radiationProtect) * delta);
         if (antiRadiationCostumePower < 0) antiRadiationCostumePower = 0;
 
         ((Knife) weapon).act(delta);

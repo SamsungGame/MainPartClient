@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.Objects.Effects.Death;
 import end.team.center.GameCore.Objects.Effects.OneSpriteEffect;
+import end.team.center.Screens.Game.GameScreen;
 
 public class Ammo extends OneSpriteEffect {
     protected TextureRegion r;
@@ -16,16 +17,18 @@ public class Ammo extends OneSpriteEffect {
     protected Enemy enemy;
     protected Rectangle bound;
     protected Vector2 position, target;
+    protected Death die;
 
-    public Ammo(Texture texture, TextureRegion r, Enemy enemy, Hero hero, int width, int height, float speed) {
+    public Ammo(Texture texture, TextureRegion r, Death die, Enemy enemy, Hero hero, int width, int height, float speed) {
         super(texture, width, height, speed);
         this.hero = hero;
         this.enemy = enemy;
         this.r = r;
+        this.die = die;
 
         position = new Vector2(enemy.getCenterVector());
         bound = new Rectangle(position.x, position.y, width, height);
-        target = new Vector2(hero.getCenterVector().x * 1000, hero.getCenterVector().y * 1000);
+        target = new Vector2(hero.getCenterVector().x, hero.getCenterVector().y);
     }
 
     protected void updateBound() {
@@ -45,7 +48,7 @@ public class Ammo extends OneSpriteEffect {
         super.act(delta);
         updateBound();
 
-        if (position.y >= hero.getWorldHeight() || position.y <= 0 || position.x >= hero.getWorldHeight() || position.x <= 0) {
+        if (position.y >= GameScreen.WORLD_HEIGHT || position.y <= 0 || position.x >= GameScreen.WORLD_WIDTH || position.x <= 0) {
             remove();
         } else {
             Vector2 fixTarget = new Vector2(target.x, target.y);
@@ -63,6 +66,10 @@ public class Ammo extends OneSpriteEffect {
 
         if (bound.overlaps(hero.getBound())) {
             hero.setHealth(hero.getHealth() - enemy.getDamage());
+            die.whoDie(this);
+            remove();
+        } else if (bound.overlaps(new Rectangle(target.x, target.y, 1, 1))) {
+            die.whoDie(this);
             remove();
         }
     }

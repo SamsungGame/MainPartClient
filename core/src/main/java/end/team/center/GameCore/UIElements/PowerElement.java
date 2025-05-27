@@ -10,25 +10,29 @@ public class PowerElement extends Actor {
     public boolean isSelected = false;
     private Texture texture;
     private Image portal;
+    private Power p;
     private String name, description;
     private boolean animated = false, sAnimated = false;
     private float scale = 50, startScaleX = 130, startScaleY = 130, elapsedTime = 0, startX, startY;
     private float rotation = 1, duration = 1.5f, alpha = 1f;
 
-    public PowerElement(Texture texture, Image portal) {
+    public PowerElement(Texture texture, Power p, Image portal) {
+        this.p = p;
         this.texture = texture;
         this.portal = portal;
         setSize(texture.getWidth(), texture.getHeight());
         setOrigin((getX() + getWidth()) / 2, (getY() + getHeight()) / 2);
     }
-    public PowerElement(Texture texture, Image portal, String name) {
+    public PowerElement(Texture texture, Power p, Image portal, String name) {
+        this.p = p;
         this.texture = texture;
         this.name = name;
         this.portal = portal;
         setSize(texture.getWidth(), texture.getHeight());
         setOrigin((getX() + getWidth()) / 2, (getY() + getHeight()) / 2);
     }
-    public PowerElement(Texture texture, Image portal, String name, String description) {
+    public PowerElement(Texture texture, Power p, Image portal, String name, String description) {
+        this.p = p;
         this.texture = texture;
         this.name = name;
         this.description = description;
@@ -37,6 +41,9 @@ public class PowerElement extends Actor {
         setOrigin((getX() + getWidth()) / 2, (getY() + getHeight()) / 2);
     }
 
+    public Texture getTexture() {
+        return texture;
+    }
     public void setDescription(String description) {
         this.description = description;
     }
@@ -61,7 +68,10 @@ public class PowerElement extends Actor {
         super.act(delta);
         if (animated) {
             boolean finished = goAnimation(portal, delta);
-            if (finished) animated = false;
+            if (finished) {
+                animated = false;
+                p.effect();
+            }
         }
         if (sAnimated) {
             boolean finished = goSmallAnimation(delta);

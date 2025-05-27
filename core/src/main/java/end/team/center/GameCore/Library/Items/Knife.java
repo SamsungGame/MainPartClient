@@ -65,9 +65,13 @@ public class Knife extends Weapon {
             public void die() {
                 stopAnimation();
             }
-        }, hero.getCenterVector(),
-                new Vector2(x, y),
-                getRotation() + 90);
+            @Override
+            public void whoDie(Object o) {
+
+            }
+            }, hero.getCenterVector(),
+            new Vector2(x, y),
+            getRotation() + 90);
     }
 
     public void stopAnimation() {
