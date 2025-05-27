@@ -332,142 +332,142 @@ public class GameScreen implements Screen {
 
         if (hero.newLevelFlag) {
             showPowerDialog(delta);
-            return;
-        }
+        } else {
 
-        // Получаем значения от джойстиков
-        float moveX = touchpadMove.getKnobPercentX();
-        float moveY = touchpadMove.getKnobPercentY();
+            // Получаем значения от джойстиков
+            float moveX = touchpadMove.getKnobPercentX();
+            float moveY = touchpadMove.getKnobPercentY();
 
-        float normalizedX = (touchpadAttack.getKnobPercentX() + 1) / 2;
-        float normalizedY = (touchpadAttack.getKnobPercentY() + 1) / 2;
-        float dx = normalizedX * 2 - 1;
-        float dy = normalizedY * 2 - 1;
+            float normalizedX = (touchpadAttack.getKnobPercentX() + 1) / 2;
+            float normalizedY = (touchpadAttack.getKnobPercentY() + 1) / 2;
+            float dx = normalizedX * 2 - 1;
+            float dy = normalizedY * 2 - 1;
 
-        // Движение героя
-        hero.move(moveX, moveY, delta);
+            // Движение героя
+            hero.move(moveX, moveY, delta);
 
-        // Атака
-        if (touchpadAttack.isTouchpadActive()) {
-            hero.useWeapon(dx, dy);
-        } else if (hero.getWep().getShow() && hero.getWep().isCanAttack()) {
-            hero.startAttackAnim();
-            for (Enemy e : enemies) {
-                if (hero.getWep().checkTouchRectangle(e.getBound())) {
-                    e.setHealth(e.getHealth() - hero.getWep().getDamage());
-                    e.stan(1);
+            // Атака
+            if (touchpadAttack.isTouchpadActive()) {
+                hero.useWeapon(dx, dy);
+            } else if (hero.getWep().getShow() && hero.getWep().isCanAttack()) {
+                hero.startAttackAnim();
+                for (Enemy e : enemies) {
+                    if (hero.getWep().checkTouchRectangle(e.getBound())) {
+                        e.setHealth(e.getHealth() - hero.getWep().getDamage());
+                        e.stan(1);
 
-                    if (Math.random() * 100 > 80 && hero.getHealth() < 3 && hero.getVampirism()) {
-                        hero.setHealth(hero.getHealth() + 1);
-                    }
+                        if (Math.random() * 100 > 80 && hero.getHealth() < 3 && hero.getVampirism()) {
+                            hero.setHealth(hero.getHealth() + 1);
+                        }
 
-                    if (e.getHealth() <= 0) {
-                        e.die();
-                        Experience exp = new Experience(ItemType.exp, new Vector2(e.getCenterVector()), hero, e.getExp());
-                        worldStage.addActor(exp);
+                        if (e.getHealth() <= 0) {
+                            e.die();
+                            Experience exp = new Experience(ItemType.exp, new Vector2(e.getCenterVector()), hero, e.getExp());
+                            worldStage.addActor(exp);
+                        }
                     }
                 }
+                hero.unUseWeapon();
+            } else if (hero.getWep().getShow()) {
+                hero.unUseWeapon();
             }
-            hero.unUseWeapon();
-        } else if (hero.getWep().getShow()) {
-            hero.unUseWeapon();
-        }
 
-        // Урон от врагов
-        for (Enemy e : enemies) {
-            if (e.getBound().overlaps(hero.getBound())) {
-                e.attack(hero);
+            // Урон от врагов
+            for (Enemy e : enemies) {
+                if (e.getBound().overlaps(hero.getBound())) {
+                    e.attack(hero);
+                }
             }
-        }
 
-        // Удаление мертвых врагов
-        enemies.removeIf(e -> {
-            if (!e.isLive()) {
-                e.remove();
-                return true;
+            // Удаление мертвых врагов
+            enemies.removeIf(e -> {
+                if (!e.isLive()) {
+                    e.remove();
+                    return true;
+                }
+                return false;
+            });
+
+            expBar.setValue(hero.getExp());
+            hero.newLevel();
+            energyValue.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
+            radiationValue.setText(hero.getRadiationLevel());
+            hearts.updateAnimation(delta);
+            hearts.updateHealth(hero.getHealth());
+
+            // Обновление камеры
+            gameCamera.updateCameraPosition(hero.getX(), hero.getY(), hero.getWidth(), hero.getHeight());
+
+            // Рендер в буфер
+            if (!STOP) {
+                frameBuffer.begin();
+                Gdx.gl.glClearColor(0, 0, 0, 1);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+                batch.setProjectionMatrix(gameCamera.getCamera().combined);
+                batch.begin();
+
+                // Фон отрисовывается первым
+                backgroundTiledRenderer.render(batch, gameCamera.getCamera());
+
+                // Сцена с героями, врагами и т.п.
+                worldStage.act(delta);
+                worldStage.draw();
+
+                batch.end();
+                frameBuffer.end();
             }
-            return false;
-        });
 
-        expBar.setValue(hero.getExp());
-        hero.newLevel();
-        energyValue.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
-        radiationValue.setText(hero.getRadiationLevel());
-        hearts.updateAnimation(delta);
-        hearts.updateHealth(hero.getHealth());
+            // Вычисление координат героя в экране
+            Vector2 heroPosScreen = worldStage.stageToScreenCoordinates(
+                new Vector2(hero.getX() + hero.getWidth() / 2f, hero.getY() + hero.getHeight() / 2f)
+            );
+            float heroXNorm = heroPosScreen.x / Gdx.graphics.getWidth();
+            float heroYNorm = 1f - (heroPosScreen.y / Gdx.graphics.getHeight());
 
-        // Обновление камеры
-        gameCamera.updateCameraPosition(hero.getX(), hero.getY(), hero.getWidth(), hero.getHeight());
+            Texture worldTexture = frameBuffer.getColorBufferTexture();
+            worldTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-        // Рендер в буфер
-        if (!STOP) {
-            frameBuffer.begin();
-            Gdx.gl.glClearColor(0, 0, 0, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            // Шейдер маски
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-            batch.setProjectionMatrix(gameCamera.getCamera().combined);
+            batch.setProjectionMatrix(uiStage.getCamera().combined);
+
+            batch.setShader(maskShader);
+            maskShader.bind();
+            maskShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
+            maskShader.setUniformf("u_time", TIME);
+
+
             batch.begin();
-
-            // Фон отрисовывается первым
-            backgroundTiledRenderer.render(batch, gameCamera.getCamera());
-
-            // Сцена с героями, врагами и т.п.
-            worldStage.act(delta);
-            worldStage.draw();
-
+            batch.draw(worldTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
+                0, 0, worldTexture.getWidth(), worldTexture.getHeight(), false, true);
             batch.end();
-            frameBuffer.end();
+
+            // Шейдер затемнения
+            batch.setShader(dimmingShader);
+            dimmingShader.bind();
+            dimmingShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
+
+            batch.begin();
+            batch.draw(worldTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
+                0, 0, worldTexture.getWidth(), worldTexture.getHeight(), false, true);
+            batch.end();
+
+            batch.setShader(null);
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+
+            // Джойстики
+            touchpadMove.TouchpadLogic(uiStage);
+            touchpadAttack.TouchpadLogic(uiStage);
+            touchpadMove.touchpadSetBounds();
+            touchpadAttack.touchpadSetBounds();
+
+            // UI поверх всего
+            uiStage.act(delta);
+            uiStage.draw();
         }
-
-        // Вычисление координат героя в экране
-        Vector2 heroPosScreen = worldStage.stageToScreenCoordinates(
-            new Vector2(hero.getX() + hero.getWidth() / 2f, hero.getY() + hero.getHeight() / 2f)
-        );
-        float heroXNorm = heroPosScreen.x / Gdx.graphics.getWidth();
-        float heroYNorm = 1f - (heroPosScreen.y / Gdx.graphics.getHeight());
-
-        Texture worldTexture = frameBuffer.getColorBufferTexture();
-        worldTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-        // Шейдер маски
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-        batch.setProjectionMatrix(uiStage.getCamera().combined);
-
-        batch.setShader(maskShader);
-        maskShader.bind();
-        maskShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
-        maskShader.setUniformf("u_time", TIME);
-
-
-        batch.begin();
-        batch.draw(worldTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
-            0, 0, worldTexture.getWidth(), worldTexture.getHeight(), false, true);
-        batch.end();
-
-        // Шейдер затемнения
-        batch.setShader(dimmingShader);
-        dimmingShader.bind();
-        dimmingShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
-
-        batch.begin();
-        batch.draw(worldTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
-            0, 0, worldTexture.getWidth(), worldTexture.getHeight(), false, true);
-        batch.end();
-
-        batch.setShader(null);
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-
-        // Джойстики
-        touchpadMove.TouchpadLogic(uiStage);
-        touchpadAttack.TouchpadLogic(uiStage);
-        touchpadMove.touchpadSetBounds();
-        touchpadAttack.touchpadSetBounds();
-
-        // UI поверх всего
-        uiStage.act(delta);
-        uiStage.draw();
     }
 
     @Override
