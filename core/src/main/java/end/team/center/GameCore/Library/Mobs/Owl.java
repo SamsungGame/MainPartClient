@@ -36,9 +36,6 @@ public class Owl extends Enemy {
         rDiveTexture.flip(true, false);
 
         health = health + (health / 6 * level);
-
-        if (level > 7 && level < 14) damage = 2;
-        else if (level >= 14) damage = 3;
     }
 
     public Circle getStartCircle() {
@@ -67,7 +64,7 @@ public class Owl extends Enemy {
                 currentFrame = mRight
                     ? therdTypeAnimation.getKeyFrame(stateTime, true) // Пикирование направо
                     : fourthTypeAnimation.getKeyFrame(stateTime, true); // Пикирование налево
-            } else currentFrame = new TextureRegion(texture);
+            } else currentFrame = firstTypeAnimation.getKeyFrame(stateTime, true);
 
             batch.draw(currentFrame, vector.x, vector.y, getWidth(), getHeight());
         }

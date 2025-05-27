@@ -11,6 +11,7 @@ import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.Library.ItemType;
 import end.team.center.GameCore.Library.Items.Experience;
 import end.team.center.GameCore.Logic.AI.AI;
+import end.team.center.GameCore.Logic.GMath;
 import end.team.center.GameCore.Objects.Effects.Death;
 import end.team.center.Screens.Game.GameScreen;
 
@@ -23,6 +24,7 @@ public abstract class Enemy extends Entity {
     protected float timeToReload = 0;
     protected float timePlayerInvulnerability = 1f;
     protected int damage, exp;
+    protected float runSpeed;
 
     public Enemy(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, int exp, float worldHeight, float worldWidth, AI ai) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
@@ -30,6 +32,8 @@ public abstract class Enemy extends Entity {
         this.ai = ai;
         this.damage = damage;
         this.exp = exp;
+
+        runSpeed = speed * 3;
     }
 
 
@@ -79,6 +83,12 @@ public abstract class Enemy extends Entity {
     public void act(float delta) {
         if (isLive) {
             super.act(delta);
+
+            if (!GMath.checkVectorDistance(ai.getHero().getCenterVector(), getCenterVector(), 1000, 1000)) {
+                speed = runSpeed;
+            } else {
+                speed = runSpeed / 3;
+            }
         }
     }
 

@@ -40,7 +40,7 @@ public class SpawnMob {
             canSpawn.add(null);
         }
 
-        timeSpawn = 10;
+        timeSpawn = 7;
     }
 
     public void startWork() {
@@ -71,8 +71,8 @@ public class SpawnMob {
     }
 
     protected void setNewMob() {
-        if (GameScreen.totalTime % 15 == 0) {
-            levelMobSpawn = (int) (GameScreen.totalTime / 15);
+        if (GameScreen.totalTime % 30 == 0) {
+            levelMobSpawn = (int) (GameScreen.totalTime / 30);
             System.out.println("Уровень врагов: " + levelMobSpawn);
         }
 
@@ -105,10 +105,10 @@ public class SpawnMob {
 
         Vector2 vector;
 
-        if (zone <= 1) vector = new Vector2((int) (0 - (Math.random() * maxRadiusSpawn)), (int) (0 + (Math.random() * maxRadiusSpawn)));
-        if (zone <= 2) vector = new Vector2((int) (0 - (Math.random() * maxRadiusSpawn)), (int) (0 - (Math.random() * maxRadiusSpawn)));
-        if (zone <= 3) vector = new Vector2((int) (minRadiusSpawnMobX + (Math.random() * maxRadiusSpawn)), (int) (0 + (Math.random() * maxRadiusSpawn)));
-        else           vector = new Vector2((int) (minRadiusSpawnMobX + (Math.random() * maxRadiusSpawn)), (int) (0 - (Math.random() * maxRadiusSpawn)));
+        if (zone <= 1) vector = new Vector2((int) (0 - (Math.random() * maxRadiusSpawn / 2)), (int) (0 + (Math.random() * maxRadiusSpawn / 2)));
+        if (zone <= 2) vector = new Vector2((int) (0 - (Math.random() * maxRadiusSpawn / 2)), (int) (0 - (Math.random() * maxRadiusSpawn)));
+        if (zone <= 3) vector = new Vector2((int) (minRadiusSpawnMobX + (Math.random() * maxRadiusSpawn / 2)), (int) (0 + (Math.random() * maxRadiusSpawn / 2)));
+        else           vector = new Vector2((int) (minRadiusSpawnMobX + (Math.random() * maxRadiusSpawn / 2)), (int) (0 - (Math.random() * maxRadiusSpawn / 2)));
 
         return vector;
     }

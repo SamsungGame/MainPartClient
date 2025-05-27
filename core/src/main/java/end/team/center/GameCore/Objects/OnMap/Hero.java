@@ -1,10 +1,12 @@
 package end.team.center.GameCore.Objects.OnMap;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import end.team.center.Center;
 import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.Library.Items.Knife;
 import end.team.center.GameCore.Library.WeaponType;
@@ -12,6 +14,7 @@ import end.team.center.GameCore.Logic.ShaderManager;
 import end.team.center.GameCore.Objects.InInventary.Weapon;
 import end.team.center.GameCore.Objects.Map.Zone;
 import end.team.center.Screens.Game.GameScreen;
+import end.team.center.Screens.Menu.MainMenuScreen;
 
 public class Hero extends Friendly {
 
@@ -167,7 +170,7 @@ public class Hero extends Friendly {
 
         setRadiationLevel();
         antiRadiationCostumePower -= (float) (((radiationLevel * 0.4) / radiationProtect) * delta);
-        if (antiRadiationCostumePower < 0) antiRadiationCostumePower = 0;
+        if (antiRadiationCostumePower < 0) ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(3));
 
         ((Knife) weapon).act(delta);
 
@@ -181,6 +184,10 @@ public class Hero extends Friendly {
                 ShaderManager.radiusView2 = -0.08f;
                 ShaderManager.radiusView3 = -0.08f;
             }
+        }
+
+        if (this.health <= 0) {
+            ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(2));
         }
     }
 
@@ -215,7 +222,10 @@ public class Hero extends Friendly {
     public void setHealth(int health) {
         super.setHealth(health);
 
-        if (health > 3) health = 3;
+        if (health > 3) {
+            health = 3;
+        }
+        this.health = health;
     }
 
     public void frameInvulnerability(float sec) {

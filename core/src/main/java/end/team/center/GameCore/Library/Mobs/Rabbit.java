@@ -22,7 +22,7 @@ public class Rabbit extends Enemy {
     }
 
     public Rabbit(Texture texture, EnemyType type, Vector2 vector, int level, float worldHeight, float worldWidth, AI ai) {
-        super(texture, type.getAnim(), vector, type.getHeight(), type.getWidth(), type.getHealth(), type.getHealth(), type.getDefense(), type.getSpeed(), level, type.getExp(), worldHeight, worldWidth, ai);
+        super(texture, type.getAnim(), vector, type.getHeight(), type.getWidth(), type.getHealth(), type.getDamage(), type.getDefense(), type.getSpeed(), level, type.getExp(), worldHeight, worldWidth, ai);
         this.ai = (AI_Rabbit) ai;
 
         initialization();
@@ -30,9 +30,6 @@ public class Rabbit extends Enemy {
 
     public void initialization() {
         health = health + (health / 4 * level);
-
-        if (level > 7 && level < 14) damage = 2;
-        else if (level >= 14) damage = 3;
     }
 
     @Override

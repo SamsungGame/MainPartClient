@@ -33,7 +33,7 @@ public class SpawnItem {
         canDrop[2] = ItemType.Bandage;
         canDrop[3] = ItemType.lamp;
 
-        timeSpawn = 25;
+        timeSpawn = 2;
     }
 
     public void goWork() {
@@ -42,8 +42,6 @@ public class SpawnItem {
             public void run() {
                 while (true) {
                     if (!GameScreen.STOP) {
-                        setTimeSpawn();
-
                         poster.post(spawn());
 
                         try {
@@ -75,18 +73,5 @@ public class SpawnItem {
         Random random = new Random();
 
         return new Vector2(random.nextInt((int) minRadiusSpawn, (int) (GameScreen.WORLD_WIDTH - minRadiusSpawn)), random.nextInt((int) minRadiusSpawn, (int) (GameScreen.WORLD_HEIGHT - minRadiusSpawn)));
-    }
-
-    private void setTimeSpawn() {
-        if (GameScreen.totalTime <= 0 && timeSpawn > 20) {
-            System.out.println("Время спавна вещей: 20");
-            timeSpawn = 20;
-        } else if (GameScreen.totalTime <= 50 && timeSpawn > 10) {
-            System.out.println("Время спавна вещей: 10");
-            timeSpawn = 10;
-        } else if (GameScreen.totalTime <= 100 && timeSpawn > 5) {
-            System.out.println("Время спавна вещей: 5");
-            timeSpawn = 5;
-        }
     }
 }

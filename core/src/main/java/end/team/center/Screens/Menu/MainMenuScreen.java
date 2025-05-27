@@ -2,6 +2,7 @@ package end.team.center.Screens.Menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -22,8 +24,15 @@ public class MainMenuScreen implements Screen {
     private Stage stage;
     private Skin skin;
     private Fon backround;
+    private Music backgroundMusic;
+    private String[] texts = new String[] {
+        "ДОБРО ПОЖАЛОВАТЬ!",
+        "Сбегаешь от правды? \n   Победа!",
+        "Разве... это спасение? \n     Поражение...",
+        "Не это ли сделало их такими?... \n           Поражение..."
+    };
 
-    public MainMenuScreen() {
+    public MainMenuScreen(int code) { // 0 - ничего, 1 - победа, 2 - поражение от ХП, 3 - поражение от радиации
         // Создаем сцену
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage); // Устанавливаем обработчик ввода
@@ -44,6 +53,16 @@ public class MainMenuScreen implements Screen {
         TextureRegion tr = new TextureRegion(fon);
         backround = new Fon(tr, new Vector2(0, 0), size);
 
+        String str;
+
+        if (code == 0)      str = texts[code];
+        else if (code == 1) str = texts[code];
+        else if (code == 2) str = texts[code];
+        else                str = texts[code];
+
+        Label label = new Label(str, new Skin(Gdx.files.internal("UI/AboutGame/label.json")));
+        label.setFontScale(2f);
+
         skin = new Skin(Gdx.files.internal("UI/MainMenu/skinPlayButton.json"));
 
         // Создаем кнопки
@@ -55,6 +74,7 @@ public class MainMenuScreen implements Screen {
         table.center();
 
         // Добавляем кнопки в таблицу с отступами
+        table.add(label).fillY().center().pad(80).row();
         table.add(buttonStart).height(290).width(630); // pad - отступ между кнопками
 
         // Добавляем кнопку на сцену
@@ -68,6 +88,11 @@ public class MainMenuScreen implements Screen {
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new GameScreen());
             }
         });
+
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Sounds/lobby.mp3"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(0.3f);
+        backgroundMusic.play();
     }
 
     @Override
@@ -107,5 +132,7 @@ public class MainMenuScreen implements Screen {
     public void dispose() {
         stage.dispose();
         skin .dispose();
+        backgroundMusic.stop();
+        backgroundMusic.dispose();
     }
 }

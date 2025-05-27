@@ -2,6 +2,7 @@ package end.team.center.Screens.Game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import end.team.center.GameCore.GameEvent.SpawnItem;
 import end.team.center.GameCore.Library.CharacterAnimation;
@@ -33,6 +35,7 @@ import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.Map.BackgroundTiledRenderer;
 import end.team.center.GameCore.Objects.Map.Zone;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
+import end.team.center.GameCore.Objects.OnMap.Entity;
 import end.team.center.GameCore.Objects.OnMap.Hero;
 import end.team.center.GameCore.UIElements.Power;
 import end.team.center.GameCore.UIElements.UIGameScreenElements.Heart;
@@ -50,8 +53,10 @@ public class GameScreen implements Screen {
     private Viewport uiViewport;
 
     private GameCamera gameCamera;
-    public static final float WORLD_WIDTH = 20000;
-    public static final float WORLD_HEIGHT = 20000;
+    public static final float WORLD_WIDTH = 50000;
+    public static final float WORLD_HEIGHT = 50000;
+    public int maxMobSpawn = 100;
+    public int maxDropSpawn = 200;
 
     private SpawnMob spawner;
     public static ArrayList<Enemy> enemies;
@@ -83,6 +88,7 @@ public class GameScreen implements Screen {
     protected PowerSelectScreen PSC;
     private boolean isShow = false;
     private BackgroundTiledRenderer backgroundTiledRenderer;
+    private Music backgroundMusic;
 
 
 
@@ -129,22 +135,6 @@ public class GameScreen implements Screen {
         touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth() - 500, 200, false, "attack");
         uiStage.addActor(touchpadAttack);
 
-        // Разбрасывание камней по карте
-//        Texture textureT1 = new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/rock1.png"));
-//        Texture textureT2 = new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/rock2.png"));
-//
-//        Random r = new Random();
-//
-//        for (int i = 0; i < 45; i++) { // 15 камней каждого вида
-//            worldStage.addActor(new Rock(
-//                textureT1,
-//                new Vector2(r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_WIDTH), r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_HEIGHT)),
-//                28, 20, true));
-//            worldStage.addActor(new Rock(
-//                textureT2,
-//                new Vector2(r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_WIDTH), r.nextInt((int) Entity.BOUNDARY_PADDING, (int) WORLD_HEIGHT)),
-//                28, 20, true));
-//        }
 
         hero = new Hero(
             new Texture(Gdx.files.internal("UI/GameUI/Hero/Right/heroRight.png")),
@@ -323,13 +313,26 @@ public class GameScreen implements Screen {
             zone.add(z);
         }
 
+        Random random = new Random();
+
+        int x = (int) (Math.random() * WORLD_WIDTH / 5);
+        int y = (int) (Math.random() * WORLD_HEIGHT / 5);
+
+        float spawnX = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_WIDTH - x), (int) (WORLD_WIDTH - Entity.BOUNDARY_PADDING - 200)) : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), x);
+        float spawnY = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_HEIGHT - y), (int) (WORLD_HEIGHT - Entity.BOUNDARY_PADDING - 200)) : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), y);
+
         Portal portal = new Portal(
             new Texture(Gdx.files.internal("UI/GameUI/Structure/portal1.png")),
             new Texture(Gdx.files.internal("UI/GameUI/Structure/portal2.png")),
             new Texture(Gdx.files.internal("UI/GameUI/Structure/portal3.png")),
-            new Vector2((float) (Math.random() * WORLD_WIDTH), (float) (Math.random() * WORLD_HEIGHT)),
+            new Vector2(spawnX, spawnY),
             hero,
             171, 189);
+
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Sounds/nightMusic.mp3"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(0.3f);
+        backgroundMusic.play();
 
         worldStage.addActor(portal);
 
@@ -494,6 +497,9 @@ public class GameScreen implements Screen {
         touchpadMove.dispose();
         touchpadAttack.dispose();
         hero.dispose();
+
+        backgroundMusic.stop();
+        backgroundMusic.dispose();
     }
 
     @Override public void show() {
@@ -508,15 +514,33 @@ public class GameScreen implements Screen {
         STOP = true;
 
         ArrayList<Power> powers = this.powers;
+        ArrayList<Power> added = new ArrayList<>();
         Power[] imgB = new Power[3];
 
         for (int i = 0; i < 3; i++) {
-            int index = (int) (Math.random() * powers.size());
-            if (index == powers.size()) index--;
+            boolean ok = true;
 
-            imgB[i] = powers.get(index);
-            powers.remove(index);
+            while (ok) {
+                int index = (int) (Math.random() * powers.size());
+                if (index == powers.size()) index--;
+                if (index < 0) index = 0;
+
+                boolean canAdd = true;
+                for (Power p: added) {
+                    if (p == powers.get(index)) {
+                        canAdd = false;
+                    }
+                }
+
+                if (canAdd) {
+                    imgB[i] = powers.get(index);
+                    added.add(powers.get(index));
+                    ok = false;
+                }
+            }
         }
+
+        added.clear();
 
         if (!isShow) {
             isShow = true;
@@ -549,9 +573,9 @@ public class GameScreen implements Screen {
     public void addToList() {
         for(Object o: wait) {
             if (o != null) {
-                if (o instanceof Enemy) {
+                if (o instanceof Enemy && enemies.size() < maxMobSpawn) {
                     enemies.add((Enemy) o);
-                } else if (o instanceof Drops) {
+                } else if (o instanceof Drops && drop.size() < maxDropSpawn) {
                     drop.add((Drops) o);
                 }
                 worldStage.addActor((Actor) o);

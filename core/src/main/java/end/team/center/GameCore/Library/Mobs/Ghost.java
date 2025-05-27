@@ -46,9 +46,6 @@ public class Ghost extends Enemy {
         ammos = new ArrayList<>();
 
         health = health + (health / 5 * level);
-
-        if (level > 7 && level < 14) damage = 2;
-        else if (level >= 14) damage = 3;
     }
 
     public ArrayList<Ammo> getAmmos() {
