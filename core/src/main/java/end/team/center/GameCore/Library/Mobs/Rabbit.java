@@ -21,8 +21,8 @@ public class Rabbit extends Enemy {
         initialization();
     }
 
-    public Rabbit(Texture texture, EnemyType type, CharacterAnimation anim, Vector2 vector, int level, int exp, float worldHeight, float worldWidth, AI ai) {
-        super(texture, anim, vector, type.getHeight(), type.getWidth(), type.getHealth(), type.getHealth(), type.getDefense(), type.getSpeed(), level, exp, worldHeight, worldWidth, ai);
+    public Rabbit(Texture texture, EnemyType type, Vector2 vector, int level, float worldHeight, float worldWidth, AI ai) {
+        super(texture, type.getAnim(), vector, type.getHeight(), type.getWidth(), type.getHealth(), type.getHealth(), type.getDefense(), type.getSpeed(), level, type.getExp(), worldHeight, worldWidth, ai);
         this.ai = (AI_Rabbit) ai;
 
         initialization();

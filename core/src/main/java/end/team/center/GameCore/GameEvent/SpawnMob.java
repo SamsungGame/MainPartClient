@@ -11,8 +11,10 @@ import java.util.Arrays;
 import end.team.center.GameCore.Library.EnemyType;
 import end.team.center.GameCore.Library.Mobs.Ghost;
 import end.team.center.GameCore.Library.Mobs.Owl;
+import end.team.center.GameCore.Library.Mobs.Rabbit;
 import end.team.center.GameCore.Logic.AI.AI_Ghost;
 import end.team.center.GameCore.Logic.AI.AI_Owl;
+import end.team.center.GameCore.Logic.AI.AI_Rabbit;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
 import end.team.center.GameCore.Objects.OnMap.Hero;
 import end.team.center.Screens.Game.GameScreen;
@@ -34,7 +36,7 @@ public class SpawnMob {
         this.hero = hero;
 
         canSpawn = new ArrayList<>();
-        for(int i = 0; i < 2; i++) { // 2 - коль-во видов мобов
+        for(int i = 0; i < 3; i++) { // 3 - коль-во видов мобов
             canSpawn.add(null);
         }
 
@@ -75,11 +77,14 @@ public class SpawnMob {
         }
 
         if        (GameScreen.totalTime >= 5 && canSpawn.get(0) == null) {
-            System.out.println("Новый моб: Owl");
-            canSpawn.set(0, EnemyType.Owl);
+            System.out.println("Новый моб: Rabbit");
+            canSpawn.set(0, EnemyType.Rabbit);
         } else if (GameScreen.totalTime >= 15 && canSpawn.get(1) == null) {
+            System.out.println("Новый моб: Owl");
+            canSpawn.set(1, EnemyType.Owl);
+        } else if (GameScreen.totalTime >= 25 && canSpawn.get(2) == null) {
             System.out.println("Новый моб: Ghost");
-            canSpawn.set(1, EnemyType.Ghost);
+            canSpawn.set(2, EnemyType.Ghost);
         }
     }
 
@@ -90,6 +95,8 @@ public class SpawnMob {
             return new Owl(type, new Texture(Gdx.files.internal("UI/GameUI/Mobs/Owl/owlLeft_down.png")), randomCord(), levelMobSpawn, GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Owl(hero));
         } else if (type == EnemyType.Ghost) {
             return new Ghost(type, new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ghostWalk.png")), randomCord(), levelMobSpawn, GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Ghost(hero), new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ghostAttack.png"))));
+        } else if (type == EnemyType.Rabbit) {
+            return new Rabbit(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Hare/hareLeft.png")), type, randomCord(), levelMobSpawn, GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH, new AI_Rabbit(hero));
         } else return null;
     }
 
