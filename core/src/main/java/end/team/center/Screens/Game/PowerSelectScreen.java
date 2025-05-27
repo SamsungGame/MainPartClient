@@ -14,6 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import org.w3c.dom.Text;
+
+import end.team.center.GameCore.UIElements.Power;
 import end.team.center.GameCore.UIElements.PowerElement;
 
 public class PowerSelectScreen implements Screen {
@@ -23,26 +26,26 @@ public class PowerSelectScreen implements Screen {
     private Stage stage;
     private SpriteBatch batch;
     private PowerElement[] buffs = new PowerElement[3];
-    private Texture selectBuff, unSelectBuff;
+    private Power[] power;
+    private Texture selectBuff;
     private Image portal;
     private Table table;
     private boolean buffSelected = false;
-    private int distance = 30;
+//    private int distance = 30;
 
-    @Override
-    public void show() {
-        // Создаем сцену
+    public PowerSelectScreen(Power[] textures) {
+        this.power = textures;
+
         stage = new Stage(new ScreenViewport());
 
         selectBuff   = new Texture(Gdx.files.internal("UI/GameUI/SelectPowerUI/selectPower.png"));
-        unSelectBuff = new Texture(Gdx.files.internal("UI/GameUI/SelectPowerUI/power.png"));
 
         portal = new Image(new Texture(Gdx.files.internal("UI/GameUI/SelectPowerUI/portal.png")));
 
         batch = new SpriteBatch();
-        buffs[0] = new PowerElement(unSelectBuff, portal);
-        buffs[1] = new PowerElement(unSelectBuff, portal);
-        buffs[2] = new PowerElement(unSelectBuff, portal);
+        buffs[0] = new PowerElement(textures[0].getTexture(), textures[0], portal);
+        buffs[1] = new PowerElement(textures[1].getTexture(), textures[0], portal);
+        buffs[2] = new PowerElement(textures[2].getTexture(), textures[0], portal);
 
         buffs[0].setTouchable(Touchable.enabled);
         buffs[1].setTouchable(Touchable.enabled);
@@ -110,6 +113,15 @@ public class PowerSelectScreen implements Screen {
     }
 
     @Override
+    public void show() {
+
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -143,7 +155,6 @@ public class PowerSelectScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        unSelectBuff.dispose();
         batch.dispose();
     }
 
@@ -164,7 +175,7 @@ public class PowerSelectScreen implements Screen {
             for (int i = 0; i < buffs.length; i++) {
                 if (buffs[i].isSelected) {
                     buffs[i].isSelected = false;
-                    buffs[i].setTexture(unSelectBuff);
+                    buffs[i].setTexture(buffs[i].getTexture());
                 }
             }
             buffSelected = true;

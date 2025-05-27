@@ -59,7 +59,17 @@ public class AI_Ghost extends AI {
 
     public void shotStart(Ghost ghost) {
 
-        Ammo ammo = new Ammo(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ammo.png")), ghost.fourthTypeAnimation.getKeyFrame(ghost.stateTime, true), ghost, hero, 42, 42, 100);
+        Ammo ammo = new Ammo(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ammo.png")), ghost.therdTypeAnimation.getKeyFrame(ghost.stateTime, true), new Death() {
+            @Override
+            public void die() {
+
+            }
+
+            @Override
+            public void whoDie(Object o) {
+                whoDieAmmo((Ammo) o, ghost);
+            }
+        }, ghost, hero, 42, 42, 400);
         ghost.addAmmo(ammo);
 
         isShotLoad = false;
@@ -74,5 +84,11 @@ public class AI_Ghost extends AI {
                 isReloaded = true;
             }
         }).start();
+    }
+
+    public void whoDieAmmo(Ammo a, Ghost g) {
+        for (Ammo ammo: g.getAmmos()) {
+            if (ammo == a) g.getAmmos().remove(a);
+        }
     }
 }

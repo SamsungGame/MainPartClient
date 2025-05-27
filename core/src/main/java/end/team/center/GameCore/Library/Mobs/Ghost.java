@@ -21,13 +21,6 @@ public class Ghost extends Enemy {
     protected Rectangle stop;
     protected ArrayList<Ammo> ammos;
 
-//    public Ghost(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, int exp, float worldHeight, float worldWidth, AI ai) {
-//        super(texture, anim, vector, height, width, health, damage, defence, speed, level, exp, worldHeight, worldWidth, ai);
-//        this.ai = (AI_Ghost) ai;
-//
-//        initialization();
-//    }
-
     public Ghost(EnemyType type, Texture texture, Vector2 vector, int level, float worldHeight, float worldWidth, AI ai, TextureRegion attack) {
         super(texture, type.getAnim(), vector, type.getHeight(), type.getWidth(), type.getHealth(), type.getDamage(), type.getDefense(), type.getSpeed(), level, type.getExp(), worldHeight, worldWidth, ai);
         this.ai = (AI_Ghost) ai;
@@ -60,6 +53,10 @@ public class Ghost extends Enemy {
         speed = speed + 15 * level;
     }
 
+    public ArrayList<Ammo> getAmmos() {
+        return ammos;
+    }
+
     protected void updateCircle() {
         stop.x = getCenterVector().x;
         stop.y = getCenterVector().y;
@@ -90,6 +87,10 @@ public class Ghost extends Enemy {
             if (!mRight) currentFrame.flip(true, false);
 
             batch.draw(currentFrame, vector.x, vector.y, getWidth(), getHeight());
+
+            for(Ammo a: ammos) {
+                a.draw(batch, parentAlpha);
+            }
         }
     }
 
