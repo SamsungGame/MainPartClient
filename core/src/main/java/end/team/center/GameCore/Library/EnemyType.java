@@ -12,7 +12,7 @@ public enum EnemyType {
     @SuppressWarnings("NewApi")
     Ghost(CharacterAnimation.Ghost, 144, 126, 5, 0, 1, new Random().nextInt(3, 6), 130f),
     @SuppressWarnings("NewApi")
-    Rabbit(CharacterAnimation.Rabbit, 144, 135, 8, 0, 1, new Random().nextInt(1, 3), 160f);
+    Rabbit(CharacterAnimation.Rabbit, 96, 90, 8, 0, 1, new Random().nextInt(1, 3), 160f);
 
     private final CharacterAnimation anim;
     private final int health, defense, damage, exp; // Базовые

@@ -174,14 +174,14 @@ public class GameScreen implements Screen {
         Skin energySkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/energyText.json"));
         energyValue = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), energySkin);
         energyValue.setFontScale(5f);
-        energyValue.setPosition(Gdx.graphics.getWidth() - (EnergyValueImg.getWidth() + energyValue.getWidth() + 50),
-            Gdx.graphics.getHeight() - (energyValue.getHeight() + EnergyValueImg.getHeight() / 2));
+        energyValue.setPosition(Gdx.graphics.getWidth() - (EnergyValueImg.getWidth() + energyValue.getWidth() + 150),
+            Gdx.graphics.getHeight() - (energyValue.getHeight() + EnergyValueImg.getHeight() / 2 + 30));
 
         Skin radiationSkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/energyText.json"));
         radiationValue = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), radiationSkin);
-        radiationValue.setFontScale(4f);
-        radiationValue.setPosition(Gdx.graphics.getWidth() - radiationLevelImg.getWidth() - radiationValue.getWidth() - 100,
-            Gdx.graphics.getHeight() - (energyValue.getHeight() + radiationValue.getHeight() + radiationLevelImg.getHeight() / 2));
+        radiationValue.setFontScale(5f);
+        radiationValue.setPosition(Gdx.graphics.getWidth() - radiationLevelImg.getWidth() - radiationValue.getWidth() - 30,
+            Gdx.graphics.getHeight() - (energyValue.getHeight() + EnergyValueImg.getHeight() + radiationLevelImg.getHeight() / 2 + 50));
 
         uiStage.addActor(radiationValue);
         uiStage.addActor(EnergyValueImg);
