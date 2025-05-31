@@ -124,7 +124,7 @@ public class Hero extends Friendly {
     }
 
     protected void upgradeWeapon() { // 140; +
-        weapon.setDamage((int) (damageBonus + 3 + (float) (expWeapon / 5)));
+        weapon.setDamage((int) (damageBonus + 3 + (float) (expWeapon / 3)));
         System.out.println("Урон оружия: " + weapon.getDamage());
     }
 
