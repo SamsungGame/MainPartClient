@@ -1,5 +1,7 @@
 package end.team.center.screens;
 
+import static end.team.center.MyGame.defaultVolume;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -10,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -20,8 +23,16 @@ public class SettingsScreen implements Screen {
     private final SpriteBatch batch = new SpriteBatch();
     private final BitmapFont fontSettings = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
     private final BitmapFont fontMusic = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
+    private final BitmapFont fontVolume = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
     private final GlyphLayout layoutSettings = new GlyphLayout();
     private final GlyphLayout layoutMusic = new GlyphLayout();
+    private final GlyphLayout layoutVolume = new GlyphLayout();
+    private final float layoutSettingsX;
+    private final float layoutSettingsY;
+    private final float layoutMusicX;
+    private final float layoutMusicY;
+    private final float layoutVolumeX;
+    private final float layoutVolumeY;
     private final Music mainMenuMusic;
     private final Stage stage;
     private final Skin skin;
@@ -35,6 +46,24 @@ public class SettingsScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("buttonStyle/buttonStyle.json"));
+
+        String settingsText = "Настройки";
+        fontSettings.getData().setScale(4.0f);
+        layoutSettings.setText(fontSettings, settingsText);
+        layoutSettingsX = (Gdx.graphics.getWidth() - layoutSettings.width) / 2;
+        layoutSettingsY = Gdx.graphics.getHeight() - layoutSettings.height;
+
+        String musicText = "Музыка:";
+        fontMusic.getData().setScale(1.0f);
+        layoutMusic.setText(fontMusic, musicText);
+        layoutMusicX = (Gdx.graphics.getWidth() - layoutMusic.width) / 2 - 100;
+        layoutMusicY = Gdx.graphics.getHeight() / 2 - layoutMusic.height + 15;
+
+        String volumeText = "Громкость:";
+        fontVolume.getData().setScale(1.0f);
+        layoutVolume.setText(fontVolume, volumeText);
+        layoutVolumeX = (Gdx.graphics.getWidth() - layoutMusic.width) / 2 - 100;
+        layoutVolumeY = Gdx.graphics.getHeight() / 2 - layoutVolume.height - 120;
 
         TextButton backButton = new TextButton("Назад", skin);
         backButton.setSize(200, 150);
@@ -61,19 +90,34 @@ public class SettingsScreen implements Screen {
         musicButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (mainMenuMusic.getVolume() == 0.0f) {
-                    mainMenuMusic.setVolume(0.75f);
+                if (mainMenuMusic.getVolume() == 0f) {
+                    mainMenuMusic.setVolume(defaultVolume);
                     musicButton.setText(turnOffMusic);
                 }
                 else {
-                    mainMenuMusic.setVolume(0.0f);
+                    mainMenuMusic.setVolume(0f);
                     musicButton.setText(turnOnMusic);
                 }
             }
         });
 
+//        Slider volumeSlider = new Slider(0f, 1f, 0.01f, false, skin);
+//        volumeSlider.setValue(defaultVolume);
+//        volumeSlider.setSize(300, 50);
+//        volumeSlider.setPosition(layoutMusicX - volumeSlider.getWidth(),
+//            layoutMusicY - volumeSlider.getHeight());
+//
+//        volumeSlider.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                defaultVolume = volumeSlider.getValue();
+//                mainMenuMusic.setVolume(defaultVolume);
+//            }
+//        });
+
         stage.addActor(backButton);
         stage.addActor(musicButton);
+//        stage.addActor(volumeSlider);
     }
 
     @Override
@@ -86,21 +130,10 @@ public class SettingsScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        String settingsText = "Настройки";
-        layoutSettings.setText(fontSettings, settingsText);
-        float layoutSettingsX = (Gdx.graphics.getWidth() - layoutSettings.width) / 2;
-        float layoutSettingsY = Gdx.graphics.getHeight() - layoutSettings.height;
-
-        String musicText = "Музыка:";
-        layoutMusic.setText(fontMusic, musicText);
-        float layoutMusicX = (Gdx.graphics.getWidth() - layoutMusic.width) / 2 - 100;
-        float layoutMusicY = Gdx.graphics.getHeight() / 2 - layoutMusic.height + 15;
-
         batch.begin();
-        fontSettings.getData().setScale(4.0f);
         fontSettings.draw(batch, layoutSettings, layoutSettingsX, layoutSettingsY);
-        fontMusic.getData().setScale(1.0f);
         fontMusic.draw(batch, layoutMusic, layoutMusicX, layoutMusicY);
+        fontVolume.draw(batch, layoutVolume, layoutVolumeX, layoutVolumeY);
         batch.end();
 
         stage.act();
@@ -131,6 +164,8 @@ public class SettingsScreen implements Screen {
     public void dispose() {
         batch.dispose();
         fontSettings.dispose();
+        fontMusic.dispose();
+        fontVolume.dispose();
         stage.dispose();
         skin.dispose();
     }

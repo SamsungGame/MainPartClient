@@ -8,12 +8,13 @@ import end.team.center.screens.MainMenuScreen;
 
 public class MyGame extends Game {
     public static Music mainMenuMusic;
+    public static float defaultVolume = 0.5f;
 
     @Override
     public void create() {
         mainMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/mainMenuMusic.mp3"));
         mainMenuMusic.setLooping(true);
-        mainMenuMusic.setVolume(0.75f);
+        mainMenuMusic.setVolume(defaultVolume);
         mainMenuMusic.play();
         setScreen(new MainMenuScreen(this));
     }
