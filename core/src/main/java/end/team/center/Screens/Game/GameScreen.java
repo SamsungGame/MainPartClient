@@ -33,6 +33,7 @@ import end.team.center.GameCore.Library.Items.Experience;
 import end.team.center.GameCore.Library.Other.Portal;
 import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.Map.BackgroundTiledRenderer;
+import end.team.center.GameCore.Objects.Map.Tree;
 import end.team.center.GameCore.Objects.Map.Zone;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
 import end.team.center.GameCore.Objects.OnMap.Entity;
@@ -92,6 +93,10 @@ public class GameScreen implements Screen {
 
     private boolean isTimeGo = true;
     private int countZone;
+
+    //Деревья
+    public static ArrayList<Tree> trees;
+    private int countTree = 1000;
 
 
 
@@ -300,6 +305,28 @@ public class GameScreen implements Screen {
         p3.setSize(600, 600);
         powers.add(p3);
 
+        Power p4 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/_.png")) {
+            @Override
+            public void effect() {
+                hero.setSafeInDeadDamage(true);
+
+                hidePowerDialog();
+            }
+        };
+        p4.setSize(600, 600);
+        powers.add(p4);
+
+        Power p5 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/_.png")) {
+            @Override
+            public void effect() {
+                hero.setReturnDamage(true);
+
+                hidePowerDialog();
+            }
+        };
+        p5.setSize(600, 600);
+        powers.add(p5);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -340,6 +367,20 @@ public class GameScreen implements Screen {
         backgroundMusic.play();
 
         wait.addAll(spawnItem.startDropSet());
+
+        // Создание деревьев
+        Texture tree1 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/elka.png"));
+        Texture tree2 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT1.png"));
+
+        for (int i = 0; i < countTree; i++) {
+            Tree t = new Tree(Math.random() * 100 > 50 ? tree1 : tree2,
+                new Vector2((float) (Math.random() * WORLD_WIDTH), (float) (Math.random() * WORLD_HEIGHT)),
+                0, 0,
+                false);
+
+            trees.add(t);
+            worldStage.addActor(t);
+        }
 
         worldStage.addActor(portal);
 
@@ -400,6 +441,8 @@ public class GameScreen implements Screen {
         for (Enemy e : enemies) {
             if (e.getBound().overlaps(hero.getBound())) {
                 e.attack(hero);
+
+                if (hero.returnDamage) e.die();
             }
         }
 

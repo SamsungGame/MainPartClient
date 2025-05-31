@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import end.team.center.GameCore.Library.CharacterAnimation;
+import end.team.center.GameCore.Objects.Map.Tree;
 import end.team.center.Screens.Game.GameScreen;
 
 public abstract class Friendly extends Entity {
@@ -32,13 +33,13 @@ public abstract class Friendly extends Entity {
             mRight = false;
         }
 
-//        // Проверка касания врагов
-//        for(Enemy e: GameScreen.enemies) {
-//            if (e.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
-//                if (e.getBound().contains(new Rectangle(vector.x + deltaX, e.getBound().y, width, height))) deltaX = -deltaX;
-//                if (e.getBound().contains(new Rectangle(e.getBound().x, vector.y + deltaY, width, height))) deltaY = -deltaY;
-//            }
-//        }
+        // Проверка касания деревьев
+        for(Tree t: _) {
+            if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
+                if (t.getBound().contains(new Rectangle(vector.x + deltaX, t.getBound().y, width, height))) deltaX = 0;
+                if (t.getBound().contains(new Rectangle(t.getBound().x, vector.y + deltaY, width, height))) deltaY = 0;
+            }
+        }
 
         vector.set(potentialPosition);
         setPosition(vector.x, vector.y);

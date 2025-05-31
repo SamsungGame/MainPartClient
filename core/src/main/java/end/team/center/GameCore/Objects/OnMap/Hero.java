@@ -28,7 +28,7 @@ public class Hero extends Friendly {
     protected float expBonus = 1, damageBonus = 0;
     protected boolean vampirism = false;
     protected int maxExp;
-    public boolean newLevelFlag = false, shyne = false;
+    public boolean newLevelFlag = false, shyne = false, safeInDeadDamage = false, returnDamage = false;
     private int duration = 30;
     private float elapsedTime = 0;
 
@@ -158,6 +158,9 @@ public class Hero extends Friendly {
     public void setDuration(int duration) {
         this.duration = duration;
     }
+    public void setReturnDamage(boolean returnDamage) {
+        this.returnDamage = returnDamage;
+    }
 
     @Override
     public void move(float deltaX, float deltaY, float delta) {
@@ -190,9 +193,18 @@ public class Hero extends Friendly {
         }
 
         if (this.health <= 0) {
-            ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(2));
-            GameScreen.backgroundMusic.stop();
+            if (!safeInDeadDamage) {
+                ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(2));
+                GameScreen.backgroundMusic.stop();
+            } else {
+                this.health++;
+                safeInDeadDamage = false;
+            }
         }
+    }
+
+    public void setSafeInDeadDamage(boolean set) {
+        this.safeInDeadDamage = set;
     }
 
     @Override
