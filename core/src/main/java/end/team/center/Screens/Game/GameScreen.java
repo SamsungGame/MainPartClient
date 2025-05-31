@@ -43,6 +43,7 @@ import end.team.center.GameCore.UIElements.UIGameScreenElements.Heart;
 import end.team.center.GameCore.UIElements.UIGameScreenElements.TouchpadClass;
 import end.team.center.GameCore.Logic.GameCamera;
 import end.team.center.GameCore.Logic.ShaderManager;
+import end.team.center.Redact.SystemOut.Console;
 
 public class GameScreen implements Screen {
 
@@ -97,6 +98,8 @@ public class GameScreen implements Screen {
     //Деревья
     public static ArrayList<Tree> trees;
     private int countTree = 1000;
+
+    private Portal portal;
 
 
 
@@ -353,7 +356,7 @@ public class GameScreen implements Screen {
         float spawnX = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_WIDTH - x), (int) (WORLD_WIDTH - Entity.BOUNDARY_PADDING - 200)) : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), x);
         float spawnY = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_HEIGHT - y), (int) (WORLD_HEIGHT - Entity.BOUNDARY_PADDING - 200)) : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), y);
 
-        Portal portal = new Portal(
+        portal = new Portal(
             new Texture(Gdx.files.internal("UI/GameUI/Structure/portal1.png")),
             new Texture(Gdx.files.internal("UI/GameUI/Structure/portal2.png")),
             new Texture(Gdx.files.internal("UI/GameUI/Structure/portal3.png")),
@@ -386,6 +389,21 @@ public class GameScreen implements Screen {
 
         spawner.startWork();
         spawnItem.goWork();
+
+        initiaizationConsole();
+    }
+
+    public void initiaizationConsole() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException ignore) {}
+
+                Console.showPlayerAndPortalCords(hero, portal);
+            }
+        });
     }
 
     @SuppressWarnings("DefaultLocale")
