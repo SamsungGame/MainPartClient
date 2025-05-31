@@ -298,9 +298,9 @@ public class GameScreen implements Screen {
         Power p3 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/visible.png")) {
             @Override
             public void effect() {
-                ShaderManager.radiusView1 += 0.1f;
-                ShaderManager.radiusView2 += 0.1f;
-                ShaderManager.radiusView3 += 0.1f;
+                ShaderManager.radiusView1 += 0.2f;
+                ShaderManager.radiusView2 += 0.2f;
+                ShaderManager.radiusView3 += 0.2f;
 
                 hidePowerDialog();
             }
@@ -523,6 +523,7 @@ public class GameScreen implements Screen {
         maskShader.bind();
         maskShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
         maskShader.setUniformf("u_time", TIME);
+        maskShader.setUniformf("u_radius", ShaderManager.radiusView1);
 
         batch.begin();
         batch.draw(worldTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
@@ -533,6 +534,7 @@ public class GameScreen implements Screen {
         batch.setShader(dimmingShader);
         dimmingShader.bind();
         dimmingShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
+        maskShader.setUniformf("u_radius", ShaderManager.radiusView3);
 
         batch.begin();
         batch.draw(worldTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
