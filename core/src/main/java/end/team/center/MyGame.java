@@ -11,7 +11,7 @@ public class MyGame extends Game {
 
     @Override
     public void create() {
-        mainMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("mainMenuMusic.mp3"));
+        mainMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/mainMenuMusic.mp3"));
         mainMenuMusic.setLooping(true);
         mainMenuMusic.setVolume(0.75f);
         mainMenuMusic.play();

@@ -2,7 +2,7 @@ package end.team.center;
 
 import java.util.Random;
 
-public class Zone {
+public abstract class Zone {
     public int x;
     public int y;
     public int size;

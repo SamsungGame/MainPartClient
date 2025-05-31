@@ -2,6 +2,7 @@ package end.team.center.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,7 +15,9 @@ import end.team.center.MyGame;
 import end.team.center.zoneTypes.BossField;
 import end.team.center.zoneTypes.Dungeon;
 import end.team.center.zoneTypes.Garden;
+import end.team.center.zoneTypes.Player;
 import end.team.center.zoneTypes.Portal;
+import end.team.center.zoneTypes.Radiation;
 import end.team.center.zoneTypes.Tree;
 
 public class FieldScreen implements Screen {
@@ -30,17 +33,19 @@ public class FieldScreen implements Screen {
     private final float viewportWidth = Gdx.graphics.getWidth();
     private final float viewportHeight = Gdx.graphics.getHeight();
     private final SpriteBatch batch = new SpriteBatch();
-    private final Texture grassTexture = new Texture("grass.png");
-    private final Texture treeTexture = new Texture("tree.png");
-    private final Texture radiationTexture = new Texture("radiation.png");
-    private final Texture gardenTexture = new Texture("garden.png");
-    private final Texture bossFieldTexture = new Texture("bossField.png");
-    private final Texture dungeonTexture = new Texture("dungeon.png");
+    private final Texture grassTexture = new Texture("field/grass.png");
+    private final Texture treeTexture = new Texture("field/tree.png");
+    private final Texture radiationTexture = new Texture("field/radiation.png");
+    private final Texture gardenTexture = new Texture("field/garden.png");
+    private final Texture bossFieldTexture = new Texture("field/bossField.png");
+    private final Texture dungeonTexture = new Texture("field/dungeon.png");
+    private final Music mainMenuMusic;
+    private final Music gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/gameMusic.mp3"));
     ArrayList<Zone> zones = new ArrayList<>();
     ArrayList<Tree> treeZonesInsidePlayerZone = new ArrayList<>();
 
     public FieldScreen(MyGame game) {
-
+        this.mainMenuMusic = MyGame.mainMenuMusic;
     }
 
     @Override
@@ -80,6 +85,16 @@ public class FieldScreen implements Screen {
         batch.begin();
         drawZones(batch, visibleZones);
         batch.end();
+
+        mainMenuMusic.stop();
+        gameMusic.setLooping(true);
+        if (mainMenuMusic.getVolume() > 0) {
+            gameMusic.setVolume(0.75f);
+        }
+        else {
+            gameMusic.setVolume(0.0f);
+        }
+        gameMusic.play();
     }
 
     @Override
@@ -115,7 +130,7 @@ public class FieldScreen implements Screen {
 
     private void generateZones() {
         Random random = new Random();
-        zones.add(new Zone(9500, 9500, 1000, "Player"));
+        zones.add(new Player());
 
         int x;
         int y;
@@ -209,7 +224,6 @@ public class FieldScreen implements Screen {
             size = 100;
         }
         size += 100;
-        String type = "Radiation";
         for (int i = 0; i < 2000; i++) {
             while (true) {
                 x = random.nextInt(fieldX - size);
@@ -226,10 +240,10 @@ public class FieldScreen implements Screen {
                 }
             }
 
-            zones.add(new Zone(x, y, size, type));
+            zones.add(new Radiation(x, y, size));
         }
 
-        size = 10;
+        size = 1;
         for (int i = 0; i < 9900; i++) {
             while (true) {
                 x = random.nextInt(fieldX - size);

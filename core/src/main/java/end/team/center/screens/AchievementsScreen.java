@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -15,12 +18,14 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import end.team.center.MyGame;
 
 public class AchievementsScreen implements Screen {
+    private final SpriteBatch batch = new SpriteBatch();
+    private final BitmapFont font = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
+    private final GlyphLayout layout = new GlyphLayout();
     private final Stage stage;
     private final Skin skin;
-    private final Texture achievementsTexture = new Texture(Gdx.files.internal("achievements.png"));
-    private final Texture achievementTexture1 = new Texture(Gdx.files.internal("achievement1.png"));
-    private final Texture achievementTexture2 = new Texture(Gdx.files.internal("achievement2.png"));
-    private final Texture achievementTexture3 = new Texture(Gdx.files.internal("achievement3.png"));
+    private final Texture achievementTexture1 = new Texture(Gdx.files.internal("achievements/achievement1.png"));
+    private final Texture achievementTexture2 = new Texture(Gdx.files.internal("achievements/achievement2.png"));
+    private final Texture achievementTexture3 = new Texture(Gdx.files.internal("achievements/achievement3.png"));
 
     public AchievementsScreen(MyGame game) {
         stage = new Stage(new ScreenViewport());
@@ -39,11 +44,6 @@ public class AchievementsScreen implements Screen {
             }
         });
 
-        Image achievementsImage = new Image(achievementsTexture);
-        achievementsImage.setSize(500, 150);
-        achievementsImage.setPosition(Gdx.graphics.getWidth() / 2 - achievementsImage.getWidth() / 2,
-            Gdx.graphics.getHeight() / 2 - achievementsImage.getHeight() / 2 + 250);
-
         Image achievementImage1 = new Image(achievementTexture1);
         achievementImage1.setSize(400, 200);
         achievementImage1.setPosition(Gdx.graphics.getWidth() / 2 - achievementImage1.getWidth() / 2 - 500,
@@ -60,7 +60,6 @@ public class AchievementsScreen implements Screen {
             Gdx.graphics.getHeight() / 2 - achievementImage3.getHeight() / 2);
 
         stage.addActor(backButton);
-        stage.addActor(achievementsImage);
         stage.addActor(achievementImage1);
         stage.addActor(achievementImage2);
         stage.addActor(achievementImage3);
@@ -75,6 +74,17 @@ public class AchievementsScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        font.getData().setScale(4.0f);
+        String achievementsText = "Достижения";
+        layout.setText(font, achievementsText);
+        float x = (Gdx.graphics.getWidth() - layout.width) / 2;
+        float y = Gdx.graphics.getHeight() - layout.height;
+
+        batch.begin();
+        font.draw(batch, layout, x, y);
+        batch.end();
+
         stage.act();
         stage.draw();
     }
@@ -101,9 +111,10 @@ public class AchievementsScreen implements Screen {
 
     @Override
     public void dispose() {
+        batch.dispose();
+        font.dispose();
         stage.dispose();
         skin.dispose();
-        achievementsTexture.dispose();
         achievementTexture1.dispose();
         achievementTexture2.dispose();
         achievementTexture3.dispose();
