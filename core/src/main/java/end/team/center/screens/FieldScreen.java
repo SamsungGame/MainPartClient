@@ -150,8 +150,7 @@ public class FieldScreen implements Screen {
             }
         }
 
-        Portal portal = new Portal(x, y);
-        zones.add(portal);
+        zones.add(new Portal(x, y));
 
         size = 200;
         for (int j = 0; j < 100; j++) {
