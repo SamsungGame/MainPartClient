@@ -34,12 +34,12 @@ public abstract class Friendly extends Entity {
         }
 
         // Проверка касания деревьев
-        for(Tree t: GameScreen.trees) {
-            if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
-                if (t.getBound().contains(new Rectangle(vector.x + deltaX, t.getBound().y, width, height))) deltaX = 0;
-                if (t.getBound().contains(new Rectangle(t.getBound().x, vector.y + deltaY, width, height))) deltaY = 0;
-            }
-        }
+//        for(Tree t: GameScreen.trees) {
+//            if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
+//                if (t.getBound().contains(new Rectangle(vector.x + deltaX, t.getBound().y, width, height))) deltaX = 0;
+//                if (t.getBound().contains(new Rectangle(t.getBound().x, vector.y + deltaY, width, height))) deltaY = 0;
+//            }
+//        }
 
         vector.set(potentialPosition);
         setPosition(vector.x, vector.y);

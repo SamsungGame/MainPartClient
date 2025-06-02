@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.ArrayList;
 import java.util.Random;
 
+import end.team.center.Center;
 import end.team.center.GameCore.GameEvent.SpawnItem;
 import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.GameEvent.Post;
@@ -43,12 +44,16 @@ import end.team.center.GameCore.UIElements.UIGameScreenElements.Heart;
 import end.team.center.GameCore.UIElements.UIGameScreenElements.TouchpadClass;
 import end.team.center.GameCore.Logic.GameCamera;
 import end.team.center.GameCore.Logic.ShaderManager;
+import end.team.center.LocalDB.DatabaseManager;
+import end.team.center.LocalDB.controllers.UserStateController;
+import end.team.center.LocalDB.dao.UserStateDao;
 import end.team.center.Redact.SystemOut.Console;
 
 public class GameScreen implements Screen {
-
+    private final Center center;
+//    private final UserStateController userStateController;
     private TouchpadClass touchpadMove, touchpadAttack;
-    private Hero hero;
+    public Hero hero;
     private Stage worldStage;
     private Stage uiStage;
     private Viewport worldViewport;
@@ -103,8 +108,12 @@ public class GameScreen implements Screen {
 
 
 
+
     @SuppressWarnings("NewApi")
-    public GameScreen() {
+    public GameScreen(Center center) {
+
+        this.center = center;
+
         System.out.println("Размеры экрана: " + Gdx.graphics.getWidth() + "x на " + Gdx.graphics.getHeight() + "y");
 
         countZone = (int) (100 + Math.random() * 100);
@@ -150,6 +159,7 @@ public class GameScreen implements Screen {
 
 
         hero = new Hero(
+            center,
             new Texture(Gdx.files.internal("UI/GameUI/Hero/Right/heroRight.png")),
             CharacterAnimation.Hero,
             new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
@@ -308,7 +318,7 @@ public class GameScreen implements Screen {
         p3.setSize(600, 600);
         powers.add(p3);
 
-        Power p4 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/_.png")) {
+        Power p4 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/saveHeart.png")) {
             @Override
             public void effect() {
                 hero.setSafeInDeadDamage(true);
@@ -319,7 +329,7 @@ public class GameScreen implements Screen {
         p4.setSize(600, 600);
         powers.add(p4);
 
-        Power p5 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/_.png")) {
+        Power p5 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/aura.png")) {
             @Override
             public void effect() {
                 hero.setReturnDamage(true);
@@ -357,6 +367,7 @@ public class GameScreen implements Screen {
         float spawnY = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_HEIGHT - y), (int) (WORLD_HEIGHT - Entity.BOUNDARY_PADDING - 200)) : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), y);
 
         portal = new Portal(
+            center,
             new Texture(Gdx.files.internal("UI/GameUI/Structure/portal1.png")),
             new Texture(Gdx.files.internal("UI/GameUI/Structure/portal2.png")),
             new Texture(Gdx.files.internal("UI/GameUI/Structure/portal3.png")),
@@ -375,15 +386,15 @@ public class GameScreen implements Screen {
         Texture tree1 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/elka.png"));
         Texture tree2 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT1.png"));
 
-        for (int i = 0; i < countTree; i++) {
-            Tree t = new Tree(Math.random() * 100 > 50 ? tree1 : tree2,
-                new Vector2((float) (Math.random() * WORLD_WIDTH), (float) (Math.random() * WORLD_HEIGHT)),
-                0, 0,
-                false);
-
-            trees.add(t);
-            worldStage.addActor(t);
-        }
+//        for (int i = 0; i < countTree; i++) {
+//            Tree t = new Tree(Math.random() * 100 > 50 ? tree1 : tree2,
+//                new Vector2((float) (Math.random() * WORLD_WIDTH), (float) (Math.random() * WORLD_HEIGHT)),
+//                0, 0,
+//                false);
+//
+//            trees.add(t);
+//            worldStage.addActor(t);
+//        }
 
         worldStage.addActor(portal);
 
@@ -392,6 +403,9 @@ public class GameScreen implements Screen {
 
         initiaizationConsole();
     }
+
+
+
 
     public void initiaizationConsole() {
         new Thread(new Runnable() {

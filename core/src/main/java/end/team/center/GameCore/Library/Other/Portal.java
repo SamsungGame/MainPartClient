@@ -14,13 +14,14 @@ import end.team.center.Screens.Game.GameScreen;
 import end.team.center.Screens.Menu.MainMenuScreen;
 
 public class Portal extends StaticObject {
+    private final Center center;
     protected Hero hero;
     protected TextureRegion[] t;
     protected Animation<TextureRegion> tr;
     public float stateTime;
-    public Portal(Texture texture, Texture texture2, Texture texture3, Vector2 vector, Hero hero, float height, float width) {
+    public Portal(Center center, Texture texture, Texture texture2, Texture texture3, Vector2 vector, Hero hero, float height, float width) {
         super(texture, vector, height, width, true);
-
+        this.center = center;
         this.hero = hero;
         t = new TextureRegion[] {
             new TextureRegion(texture),
@@ -38,7 +39,7 @@ public class Portal extends StaticObject {
         super.act(delta);
 
         if (hero.getBound().overlaps(bound)) {
-            ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(1));
+            ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(1, center));
             GameScreen.backgroundMusic.stop();
         }
 
