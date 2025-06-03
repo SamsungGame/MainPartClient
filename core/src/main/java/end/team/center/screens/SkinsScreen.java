@@ -33,6 +33,7 @@ public class SkinsScreen implements Screen {
     private final Image currentImage; // Отображаемый Image
     private int currentIndex;
     private float touchStartX;
+    private final Texture backgroundTexture = new Texture(Gdx.files.internal("background.png"));
 
     public SkinsScreen(MyGame game) {
         stage = new Stage(new ScreenViewport());
@@ -49,7 +50,8 @@ public class SkinsScreen implements Screen {
                 if (Math.abs(deltaX) > 50) {
                     if (deltaX > 0) {
                         showPreviousImage();
-                    } else {
+                    }
+                    else {
                         showNextImage();
                     }
                     return true;
@@ -126,6 +128,8 @@ public class SkinsScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
+        batch.setColor(0.5f, 0.5f, 0.5f, 1f);
+        batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         font.draw(batch, layout, layoutX, layoutY);
         batch.end();
 
@@ -162,5 +166,6 @@ public class SkinsScreen implements Screen {
         font.dispose();
         stage.dispose();
         skin.dispose();
+        backgroundTexture.dispose();
     }
 }

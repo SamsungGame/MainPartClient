@@ -3,6 +3,7 @@ package end.team.center.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,14 +20,23 @@ public class AboutUsScreen implements Screen {
     private final SpriteBatch batch = new SpriteBatch();
     private final BitmapFont font = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
     private final GlyphLayout layout = new GlyphLayout();
+    private final float layoutX;
+    private final float layoutY;
     private final Stage stage;
     private final Skin skin;
+    private final Texture backgroundTexture = new Texture(Gdx.files.internal("background.png"));
 
     public AboutUsScreen(MyGame game) {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("buttonStyle/buttonStyle.json"));
+
+        font.getData().setScale(1.0f);
+        String aboutUsText = "Над игрой работали: \n\nПчельников Сергей \nБаранов Елисей \nАнаньин Данил";
+        layout.setText(font, aboutUsText);
+        layoutX = (Gdx.graphics.getWidth() - layout.width) / 2;
+        layoutY = (Gdx.graphics.getHeight() + layout.height) / 2;
 
         TextButton backButton = new TextButton("Назад", skin);
         backButton.setSize(200, 150);
@@ -52,15 +62,10 @@ public class AboutUsScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        String aboutUsText = "Над игрой работали: \n\nПчельников Сергей \nБаранов Елисей \nАнаньин Данил";
-        layout.setText(font, aboutUsText);
-        float textWidth = layout.width;
-        float textHeight = layout.height;
-        float x = (Gdx.graphics.getWidth() - textWidth) / 2;
-        float y = (Gdx.graphics.getHeight() + textHeight) / 2;
-
         batch.begin();
-        font.draw(batch, layout, x, y);
+        batch.setColor(0.5f, 0.5f, 0.5f, 1f);
+        batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        font.draw(batch, layout, layoutX, layoutY);
         batch.end();
 
         stage.act();
@@ -93,5 +98,6 @@ public class AboutUsScreen implements Screen {
         font.dispose();
         stage.dispose();
         skin.dispose();
+        backgroundTexture.dispose();
     }
 }

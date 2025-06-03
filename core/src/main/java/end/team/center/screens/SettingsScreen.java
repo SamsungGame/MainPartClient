@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -37,6 +38,7 @@ public class SettingsScreen implements Screen {
     private final Skin skin;
     private final String turnOnMusic = "Включить музыку";
     private final String turnOffMusic = "Выключить музыку";
+    private final Texture backgroundTexture = new Texture(Gdx.files.internal("background.png"));
 
     public SettingsScreen(MyGame game) {
         this.mainMenuMusic = MyGame.mainMenuMusic;
@@ -130,6 +132,8 @@ public class SettingsScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
+        batch.setColor(0.5f, 0.5f, 0.5f, 1f);
+        batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         fontSettings.draw(batch, layoutSettings, layoutSettingsX, layoutSettingsY);
         fontMusic.draw(batch, layoutMusic, layoutMusicX, layoutMusicY);
         fontVolume.draw(batch, layoutVolume, layoutVolumeX, layoutVolumeY);
@@ -167,5 +171,6 @@ public class SettingsScreen implements Screen {
         fontVolume.dispose();
         stage.dispose();
         skin.dispose();
+        backgroundTexture.dispose();
     }
 }

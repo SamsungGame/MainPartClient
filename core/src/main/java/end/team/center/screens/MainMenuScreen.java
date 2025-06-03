@@ -5,6 +5,7 @@ import static end.team.center.MyGame.currentSkin;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,6 +26,7 @@ public class MainMenuScreen implements Screen {
     public final float layoutY;
     private final Stage stage;
     private final Skin skin;
+    private final Texture backgroundTexture = new Texture(Gdx.files.internal("background.png"));
 
     public MainMenuScreen(MyGame game) {
         stage = new Stage(new ScreenViewport());
@@ -71,7 +73,7 @@ public class MainMenuScreen implements Screen {
         achievementsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new AchievementsScreen(game));
+                game.setScreen(new DeathScreen(game, "Не это стало причиной их гибели..."));
             }
         });
 
@@ -114,6 +116,8 @@ public class MainMenuScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
+        batch.setColor(0.5f, 0.5f, 0.5f, 1f);
+        batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         font.draw(batch, layout, layoutX, layoutY);
         batch.end();
 
@@ -147,5 +151,6 @@ public class MainMenuScreen implements Screen {
         font.dispose();
         stage.dispose();
         skin.dispose();
+        backgroundTexture.dispose();
     }
 }

@@ -1,6 +1,7 @@
 achievements/achievement1.png
 achievements/achievement2.png
 achievements/achievement3.png
+background.png
 buttonStyle/buttonStyle.atlas
 buttonStyle/buttonStyle.json
 buttonStyle/buttonStyle.png

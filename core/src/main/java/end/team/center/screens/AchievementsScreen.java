@@ -21,8 +21,11 @@ public class AchievementsScreen implements Screen {
     private final SpriteBatch batch = new SpriteBatch();
     private final BitmapFont font = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
     private final GlyphLayout layout = new GlyphLayout();
+    private final float layoutX;
+    private final float layoutY;
     private final Stage stage;
     private final Skin skin;
+    private final Texture backgroundTexture = new Texture(Gdx.files.internal("background.png"));
     private final Texture achievementTexture1 = new Texture(Gdx.files.internal("achievements/achievement1.png"));
     private final Texture achievementTexture2 = new Texture(Gdx.files.internal("achievements/achievement2.png"));
     private final Texture achievementTexture3 = new Texture(Gdx.files.internal("achievements/achievement3.png"));
@@ -32,6 +35,12 @@ public class AchievementsScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("buttonStyle/buttonStyle.json"));
+
+        font.getData().setScale(4.0f);
+        String achievementsText = "Достижения";
+        layout.setText(font, achievementsText);
+        layoutX = (Gdx.graphics.getWidth() - layout.width) / 2;
+        layoutY = Gdx.graphics.getHeight() - layout.height;
 
         TextButton backButton = new TextButton("Назад", skin);
         backButton.setSize(200, 150);
@@ -75,14 +84,10 @@ public class AchievementsScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        font.getData().setScale(4.0f);
-        String achievementsText = "Достижения";
-        layout.setText(font, achievementsText);
-        float x = (Gdx.graphics.getWidth() - layout.width) / 2;
-        float y = Gdx.graphics.getHeight() - layout.height;
-
         batch.begin();
-        font.draw(batch, layout, x, y);
+        batch.setColor(0.5f, 0.5f, 0.5f, 1f);
+        batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        font.draw(batch, layout, layoutX, layoutY);
         batch.end();
 
         stage.act();
@@ -115,6 +120,7 @@ public class AchievementsScreen implements Screen {
         font.dispose();
         stage.dispose();
         skin.dispose();
+        backgroundTexture.dispose();
         achievementTexture1.dispose();
         achievementTexture2.dispose();
         achievementTexture3.dispose();
