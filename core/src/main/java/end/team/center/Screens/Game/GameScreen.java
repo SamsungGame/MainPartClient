@@ -618,6 +618,16 @@ public class GameScreen implements Screen {
         spawner.dispose();
     }
 
+    public static void endTask() {
+        spawnItem.dispose();
+        spawner.dispose();
+
+        backgroundMusic.stop();
+        backgroundMusic.dispose();
+
+        isTimeGo = false;
+    }
+
     @Override public void show() {
 
     }

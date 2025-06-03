@@ -41,6 +41,7 @@ public class Portal extends StaticObject {
         if (hero.getBound().overlaps(bound)) {
             ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(1, center));
             GameScreen.backgroundMusic.stop();
+            GameScreen.endTask();
         }
 
         stateTime += delta;

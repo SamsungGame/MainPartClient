@@ -180,6 +180,7 @@ public class Hero extends Friendly {
 
             ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(3, center));
             GameScreen.backgroundMusic.stop();
+            GameScreen.endTask();
         }
 
         ((Knife) weapon).act(delta);
@@ -201,6 +202,7 @@ public class Hero extends Friendly {
                 userStateController.addCoins(10);
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(2, center));
                 GameScreen.backgroundMusic.stop();
+                GameScreen.endTask();
             } else {
                 this.health++;
                 safeInDeadDamage = false;
