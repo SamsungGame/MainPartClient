@@ -19,6 +19,8 @@ public class MainMenuScreen implements Screen {
     private final SpriteBatch batch = new SpriteBatch();
     private final BitmapFont font = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
     private final GlyphLayout layout = new GlyphLayout();
+    public final float layoutX;
+    public final float layoutY;
     private final Stage stage;
     private final Skin skin;
 
@@ -28,10 +30,16 @@ public class MainMenuScreen implements Screen {
 
         skin = new Skin(Gdx.files.internal("buttonStyle/buttonStyle.json"));
 
+        font.getData().setScale(5.0f);
+        String aboutUsText = "Temporal Forest";
+        layout.setText(font, aboutUsText);
+        layoutX = (Gdx.graphics.getWidth() - layout.width) / 2;
+        layoutY = Gdx.graphics.getHeight() - layout.height;
+
         TextButton newGameButton = new TextButton("Новая игра", skin);
         newGameButton.setSize(300, 150);
         newGameButton.setPosition(Gdx.graphics.getWidth() / 2 - newGameButton.getWidth() / 2,
-            Gdx.graphics.getHeight() / 2 - newGameButton.getHeight() / 2 - newGameButton.getHeight() / 2);
+            Gdx.graphics.getHeight() / 2 - newGameButton.getHeight());
 
         TextButton achievementsButton = new TextButton("Достижения", skin);
         achievementsButton.setSize(300, 150);
@@ -46,6 +54,10 @@ public class MainMenuScreen implements Screen {
         TextButton aboutUsButton = new TextButton("О нас", skin);
         aboutUsButton.setSize(200, 150);
         aboutUsButton.setPosition(50, 0);
+
+        TextButton skinsButton = new TextButton("Скины", skin);
+        skinsButton.setSize(200, 150);
+        skinsButton.setPosition(Gdx.graphics.getWidth() - skinsButton.getWidth() - 50, 0);
 
         newGameButton.addListener(new ChangeListener() {
             @Override
@@ -75,10 +87,18 @@ public class MainMenuScreen implements Screen {
             }
         });
 
+        skinsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new SkinsScreen(game));
+            }
+        });
+
         stage.addActor(newGameButton);
         stage.addActor(achievementsButton);
         stage.addActor(settingsButton);
         stage.addActor(aboutUsButton);
+        stage.addActor(skinsButton);
     }
 
     @Override
@@ -91,14 +111,8 @@ public class MainMenuScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        font.getData().setScale(5.0f);
-        String aboutUsText = "Temporal Forest";
-        layout.setText(font, aboutUsText);
-        float x = (Gdx.graphics.getWidth() - layout.width) / 2;
-        float y = Gdx.graphics.getHeight() - layout.height;
-
         batch.begin();
-        font.draw(batch, layout, x, y);
+        font.draw(batch, layout, layoutX, layoutY);
         batch.end();
 
         stage.act();

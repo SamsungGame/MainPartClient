@@ -47,20 +47,20 @@ public class SettingsScreen implements Screen {
 
         skin = new Skin(Gdx.files.internal("buttonStyle/buttonStyle.json"));
 
-        String settingsText = "Настройки";
         fontSettings.getData().setScale(4.0f);
+        String settingsText = "Настройки";
         layoutSettings.setText(fontSettings, settingsText);
         layoutSettingsX = (Gdx.graphics.getWidth() - layoutSettings.width) / 2;
         layoutSettingsY = Gdx.graphics.getHeight() - layoutSettings.height;
 
-        String musicText = "Музыка:";
         fontMusic.getData().setScale(1.0f);
+        String musicText = "Музыка:";
         layoutMusic.setText(fontMusic, musicText);
         layoutMusicX = (Gdx.graphics.getWidth() - layoutMusic.width) / 2 - 100;
         layoutMusicY = Gdx.graphics.getHeight() / 2 - layoutMusic.height + 15;
 
-        String volumeText = "Громкость:";
         fontVolume.getData().setScale(1.0f);
+        String volumeText = "Громкость:";
         layoutVolume.setText(fontVolume, volumeText);
         layoutVolumeX = (Gdx.graphics.getWidth() - layoutMusic.width) / 2 - 100;
         layoutVolumeY = Gdx.graphics.getHeight() / 2 - layoutVolume.height - 120;
