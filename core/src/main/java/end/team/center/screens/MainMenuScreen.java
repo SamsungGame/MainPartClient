@@ -90,6 +90,7 @@ public class MainMenuScreen implements Screen {
         stage.addActor(achievementsButton);
         stage.addActor(settingsButton);
         stage.addActor(aboutUsButton);
+        stage.addActor(signInButton);
     }
 
     @Override
