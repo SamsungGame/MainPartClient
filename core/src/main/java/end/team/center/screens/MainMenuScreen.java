@@ -47,6 +47,10 @@ public class MainMenuScreen implements Screen {
         aboutUsButton.setSize(200, 150);
         aboutUsButton.setPosition(50, 0);
 
+        TextButton signInButton = new TextButton("Войти", skin);
+        signInButton.setSize(200, 150);
+        signInButton.setPosition(Gdx.graphics.getWidth() - signInButton.getWidth() - 50, 0);
+
         newGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -72,6 +76,13 @@ public class MainMenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new AboutUsScreen(game));
+            }
+        });
+
+        signInButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new SignInScreen(game));
             }
         });
 
