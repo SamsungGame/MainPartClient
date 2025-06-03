@@ -1,5 +1,7 @@
 package end.team.center.screens;
 
+import static end.team.center.MyGame.currentSkin;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -31,8 +33,8 @@ public class MainMenuScreen implements Screen {
         skin = new Skin(Gdx.files.internal("buttonStyle/buttonStyle.json"));
 
         font.getData().setScale(5.0f);
-        String aboutUsText = "Temporal Forest";
-        layout.setText(font, aboutUsText);
+        String titleText = "Temporal Forest";
+        layout.setText(font, titleText);
         layoutX = (Gdx.graphics.getWidth() - layout.width) / 2;
         layoutY = Gdx.graphics.getHeight() - layout.height;
 

@@ -1,5 +1,7 @@
 package end.team.center.screens;
 
+import static end.team.center.MyGame.currentVolume;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -46,11 +48,13 @@ public class FieldScreen implements Screen {
 
     public FieldScreen(MyGame game) {
         this.mainMenuMusic = MyGame.mainMenuMusic;
+
+        generateZones();
     }
 
     @Override
     public void show() {
-        generateZones();
+
     }
 
     @Override
@@ -89,7 +93,7 @@ public class FieldScreen implements Screen {
         mainMenuMusic.stop();
         gameMusic.setLooping(true);
         if (mainMenuMusic.getVolume() > 0) {
-            gameMusic.setVolume(0.75f);
+            gameMusic.setVolume(currentVolume);
         }
         else {
             gameMusic.setVolume(0.0f);

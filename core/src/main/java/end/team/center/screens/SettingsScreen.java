@@ -1,6 +1,6 @@
 package end.team.center.screens;
 
-import static end.team.center.MyGame.defaultVolume;
+import static end.team.center.MyGame.currentVolume;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -91,7 +90,7 @@ public class SettingsScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (mainMenuMusic.getVolume() == 0f) {
-                    mainMenuMusic.setVolume(defaultVolume);
+                    mainMenuMusic.setVolume(currentVolume);
                     musicButton.setText(turnOffMusic);
                 }
                 else {
@@ -102,7 +101,7 @@ public class SettingsScreen implements Screen {
         });
 
 //        Slider volumeSlider = new Slider(0f, 1f, 0.01f, false, skin);
-//        volumeSlider.setValue(defaultVolume);
+//        volumeSlider.setValue(currentVolume);
 //        volumeSlider.setSize(300, 50);
 //        volumeSlider.setPosition(layoutMusicX - volumeSlider.getWidth(),
 //            layoutMusicY - volumeSlider.getHeight());
@@ -110,8 +109,8 @@ public class SettingsScreen implements Screen {
 //        volumeSlider.addListener(new ChangeListener() {
 //            @Override
 //            public void changed(ChangeEvent event, Actor actor) {
-//                defaultVolume = volumeSlider.getValue();
-//                mainMenuMusic.setVolume(defaultVolume);
+//                currentVolume = volumeSlider.getValue();
+//                mainMenuMusic.setVolume(currentVolume);
 //            }
 //        });
 
