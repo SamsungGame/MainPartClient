@@ -1,11 +1,11 @@
-package end.team.center.LocalDB.controllers;
+package end.team.center.ProgramSetting.LocalDB.controllers;
 
 
 import java.util.List;
 
-import end.team.center.LocalDB.dao.SkinDao;
-import end.team.center.LocalDB.dao.UserSkinDao;
-import end.team.center.LocalDB.models.Skin;
+import end.team.center.ProgramSetting.LocalDB.dao.SkinDao;
+import end.team.center.ProgramSetting.LocalDB.dao.UserSkinDao;
+import end.team.center.ProgramSetting.LocalDB.models.Skin;
 
 public class SkinController {
 

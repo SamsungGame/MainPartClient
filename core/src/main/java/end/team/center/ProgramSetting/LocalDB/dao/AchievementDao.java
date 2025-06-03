@@ -1,6 +1,6 @@
-package end.team.center.LocalDB.dao;
+package end.team.center.ProgramSetting.LocalDB.dao;
 
-import end.team.center.LocalDB.models.Achievement;
+import end.team.center.ProgramSetting.LocalDB.models.Achievement;
 
 public interface AchievementDao {
     void insertAchievement(Achievement achievement);

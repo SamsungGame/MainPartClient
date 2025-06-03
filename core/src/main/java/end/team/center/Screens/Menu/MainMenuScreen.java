@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import end.team.center.Center;
 import end.team.center.GameCore.UIElements.Fon;
-import end.team.center.LocalDB.controllers.UserStateController;
+import end.team.center.ProgramSetting.LocalDB.controllers.UserStateController;
 import end.team.center.Screens.Game.GameScreen;
 
 public class MainMenuScreen implements Screen {

@@ -1,4 +1,4 @@
-package end.team.center.LocalDB.models;
+package end.team.center.ProgramSetting.LocalDB.models;
 
 public class Skin {
     public int id;

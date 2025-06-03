@@ -3,8 +3,8 @@ package end.team.center.android.db;
 import androidx.room.Room;
 import android.content.Context;
 
-import end.team.center.LocalDB.DatabaseManager;
-import end.team.center.LocalDB.dao.UserStateDao;
+import end.team.center.ProgramSetting.LocalDB.DatabaseManager;
+import end.team.center.ProgramSetting.LocalDB.dao.UserStateDao;
 import end.team.center.android.db.adapters.UserStateDaoImpl;
 
 public class DatabaseManagerImpl implements DatabaseManager {

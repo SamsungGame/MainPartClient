@@ -3,8 +3,8 @@ package end.team.center;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import end.team.center.LocalDB.DatabaseManager;
-import end.team.center.LocalDB.controllers.UserStateController;
+import end.team.center.ProgramSetting.LocalDB.DatabaseManager;
+import end.team.center.ProgramSetting.LocalDB.controllers.UserStateController;
 import end.team.center.Screens.Menu.MainMenuScreen;
 
 public class Center extends Game {

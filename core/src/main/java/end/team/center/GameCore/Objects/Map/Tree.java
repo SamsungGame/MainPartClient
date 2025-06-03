@@ -12,12 +12,7 @@ public class Tree extends StaticObject {
     public Tree(Texture texture, Vector2 vector, float height, float width, boolean canWalk) {
         super(texture, vector, height, width, canWalk);
 
-        bound = new Rectangle(vector.x, vector.y, width, height);
-    }
-
-    public void updateRectangle() {
-        bound.x = vector.x;
-        bound.y = vector.y;
+        bound = new Rectangle(vector.x + width / 3, vector.y, width / 3, height / 2);
     }
 
     @Override
@@ -28,7 +23,5 @@ public class Tree extends StaticObject {
     @Override
     public void act(float delta) {
         super.act(delta);
-
-        updateRectangle();
     }
 }

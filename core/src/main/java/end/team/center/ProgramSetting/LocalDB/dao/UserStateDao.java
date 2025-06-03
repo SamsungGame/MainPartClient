@@ -1,7 +1,7 @@
-package end.team.center.LocalDB.dao;
+package end.team.center.ProgramSetting.LocalDB.dao;
 
 
-import end.team.center.LocalDB.models.UserState;
+import end.team.center.ProgramSetting.LocalDB.models.UserState;
 
 public interface UserStateDao {
     UserState getUserState();

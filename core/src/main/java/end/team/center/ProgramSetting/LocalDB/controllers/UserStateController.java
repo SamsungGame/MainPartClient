@@ -1,7 +1,7 @@
-package end.team.center.LocalDB.controllers;
+package end.team.center.ProgramSetting.LocalDB.controllers;
 
-import end.team.center.LocalDB.dao.UserStateDao;
-import end.team.center.LocalDB.models.UserState;
+import end.team.center.ProgramSetting.LocalDB.dao.UserStateDao;
+import end.team.center.ProgramSetting.LocalDB.models.UserState;
 
 public class UserStateController {
     private final UserStateDao userStateDao;

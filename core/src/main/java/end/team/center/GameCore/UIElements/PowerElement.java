@@ -23,10 +23,10 @@ public class PowerElement extends Actor {
         setSize(texture.getWidth(), texture.getHeight());
         setOrigin((getX() + getWidth()) / 2, (getY() + getHeight()) / 2);
     }
-    public PowerElement(Texture texture, Power p, Image portal, String name) {
+    public PowerElement(Texture texture, Power p, Image portal, String description) {
         this.p = p;
         this.texture = texture;
-        this.name = name;
+        this.description = description;
         this.portal = portal;
         setSize(texture.getWidth(), texture.getHeight());
         setOrigin((getX() + getWidth()) / 2, (getY() + getHeight()) / 2);
@@ -39,6 +39,13 @@ public class PowerElement extends Actor {
         this.portal = portal;
         setSize(texture.getWidth(), texture.getHeight());
         setOrigin((getX() + getWidth()) / 2, (getY() + getHeight()) / 2);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+    public Power getPower() {
+        return p;
     }
 
     public Texture getTexture() {

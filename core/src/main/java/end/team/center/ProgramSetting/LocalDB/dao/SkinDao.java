@@ -1,9 +1,9 @@
-package end.team.center.LocalDB.dao;
+package end.team.center.ProgramSetting.LocalDB.dao;
 
 
 import java.util.List;
 
-import end.team.center.LocalDB.models.Skin;
+import end.team.center.ProgramSetting.LocalDB.models.Skin;
 
 public interface SkinDao {
     void insertSkin(Skin skin);

@@ -13,6 +13,7 @@ import end.team.center.GameCore.Library.Items.Experience;
 import end.team.center.GameCore.Logic.AI.AI;
 import end.team.center.GameCore.Logic.GMath;
 import end.team.center.GameCore.Objects.Effects.Death;
+import end.team.center.GameCore.Objects.Map.Tree;
 import end.team.center.Screens.Game.GameScreen;
 
 public abstract class Enemy extends Entity {
@@ -59,15 +60,13 @@ public abstract class Enemy extends Entity {
                     mRight = false;
                 }
 
-//                // Проверка касания врагов
-//                for(Enemy e: GameScreen.enemies) {
-//                    if (e != this) {
-//                        if (e.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
-//                            if (e.getBound().overlaps(new Rectangle(vector.x + deltaX, e.getBound().y, width, height))) deltaX = -deltaX;
-//                            if (e.getBound().overlaps(new Rectangle(e.getBound().x, vector.y + deltaY, width, height))) deltaY = -deltaY;
-//                        }
-//                    }
-//                }
+                // Проверка касания деревьев
+                for(Tree t: GameScreen.trees) {
+                    if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
+                        if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y, width, height))) deltaX = 0;
+                        if (t.getBound().overlaps(new Rectangle(vector.x, vector.y + deltaY, width, height))) deltaY = 0;
+                    }
+                }
 
                 vector.add(new Vector2(deltaX, deltaY));
                 setPosition(vector.x, vector.y);

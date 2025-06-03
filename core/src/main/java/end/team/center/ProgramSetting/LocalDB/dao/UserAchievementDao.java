@@ -1,4 +1,4 @@
-package end.team.center.LocalDB.dao;
+package end.team.center.ProgramSetting.LocalDB.dao;
 
 public interface UserAchievementDao {
     void unlockAchievement(int achievementId);

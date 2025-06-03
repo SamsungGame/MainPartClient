@@ -1,8 +1,8 @@
-package end.team.center.LocalDB.controllers;
+package end.team.center.ProgramSetting.LocalDB.controllers;
 
-import end.team.center.LocalDB.dao.AchievementDao;
-import end.team.center.LocalDB.dao.UserAchievementDao;
-import end.team.center.LocalDB.models.Achievement;
+import end.team.center.ProgramSetting.LocalDB.dao.AchievementDao;
+import end.team.center.ProgramSetting.LocalDB.dao.UserAchievementDao;
+import end.team.center.ProgramSetting.LocalDB.models.Achievement;
 
 public class AchievementController {
 

@@ -1,7 +1,7 @@
-package end.team.center.LocalDB;
+package end.team.center.ProgramSetting.LocalDB;
 
 
-import end.team.center.LocalDB.dao.UserStateDao;
+import end.team.center.ProgramSetting.LocalDB.dao.UserStateDao;
 
 public interface DatabaseManager {
     UserStateDao getUserStateDao();

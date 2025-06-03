@@ -103,6 +103,7 @@ public class Ghost extends Enemy {
         for(int i = 0; i < size; i++) {
             if (ammos.get(i) == null) {
                 ammos.remove(i);
+                size--;
             } else {
                 ammos.get(i).act(delta);
             }

@@ -13,7 +13,7 @@ import end.team.center.GameCore.Library.WeaponType;
 import end.team.center.GameCore.Logic.ShaderManager;
 import end.team.center.GameCore.Objects.InInventary.Weapon;
 import end.team.center.GameCore.Objects.Map.Zone;
-import end.team.center.LocalDB.controllers.UserStateController;
+import end.team.center.ProgramSetting.LocalDB.controllers.UserStateController;
 import end.team.center.Screens.Game.GameScreen;
 import end.team.center.Screens.Menu.MainMenuScreen;
 

@@ -1,7 +1,7 @@
 package end.team.center.android.db.adapters;
 
-import end.team.center.LocalDB.dao.UserStateDao;
-import end.team.center.LocalDB.models.UserState;
+import end.team.center.ProgramSetting.LocalDB.dao.UserStateDao;
+import end.team.center.ProgramSetting.LocalDB.models.UserState;
 import end.team.center.android.db.dao.UserStateDaoRoom;
 import end.team.center.android.db.entity.UserStateEntity;
 

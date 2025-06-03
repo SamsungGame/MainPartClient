@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -23,11 +25,11 @@ public class PowerSelectScreen implements Screen {
     /*
     Предпологается что png у PowerElements равен 130 на 130 пикселей (картинка (.png) может быть ЛЮБОГО КВАДРАТНОГО размера)
      */
+    private Label label;
     private Stage stage;
     private SpriteBatch batch;
     private PowerElement[] buffs = new PowerElement[3];
     private Power[] power;
-    private Texture selectBuff;
     private Image portal;
     private Table table;
     private boolean buffSelected = false;
@@ -38,14 +40,16 @@ public class PowerSelectScreen implements Screen {
 
         stage = new Stage(new ScreenViewport());
 
-        selectBuff   = new Texture(Gdx.files.internal("UI/GameUI/SelectPowerUI/selectPower.png"));
+        label = new Label("", new Skin(Gdx.files.internal("UI/AboutGame/label.json")));
+        label.setFontScale(1);
 
         portal = new Image(new Texture(Gdx.files.internal("UI/GameUI/Structure/portal3.png")));
+        portal.setSize(190, 210);
 
         batch = new SpriteBatch();
-        buffs[0] = new PowerElement(textures[0].getTexture(), textures[0], portal);
-        buffs[1] = new PowerElement(textures[1].getTexture(), textures[0], portal);
-        buffs[2] = new PowerElement(textures[2].getTexture(), textures[0], portal);
+        buffs[0] = new PowerElement(textures[0].getUnActiveTexture(), textures[0], portal, textures[0].getDescp());
+        buffs[1] = new PowerElement(textures[1].getUnActiveTexture(), textures[1], portal, textures[1].getDescp());
+        buffs[2] = new PowerElement(textures[2].getUnActiveTexture(), textures[2], portal, textures[2].getDescp());
 
         buffs[0].setTouchable(Touchable.enabled);
         buffs[1].setTouchable(Touchable.enabled);
@@ -105,9 +109,12 @@ public class PowerSelectScreen implements Screen {
             .fillX().center();
 
         table.add(buffs[2])
-            .height(130).width(130);
+            .height(130).width(130).pad(20).row();
+
+        setLabelPos();
 
         stage.addActor(table);
+        stage.addActor(label);
 
         Gdx.input.setInputProcessor(stage); // Устанавливаем обработчик ввода
     }
@@ -162,7 +169,10 @@ public class PowerSelectScreen implements Screen {
         if (!buffSelected) { // Если не был выбран ни один бафф - мы выделяем текущий
             buffSelected = true;
             buffs[id].isSelected = true;
-            buffs[id].setTexture(selectBuff);
+            buffs[id].setTexture(buffs[id].getPower().getActiveTexture());
+
+            label.setText(buffs[id].getDescription());
+            setLabelPos();
         }
         else if (buffs[id].isSelected) { // Если мы нажимаем на бафф второй раз - мы выбираем его
             buffs[id].startAnimation();
@@ -175,13 +185,21 @@ public class PowerSelectScreen implements Screen {
             for (int i = 0; i < buffs.length; i++) {
                 if (buffs[i].isSelected) {
                     buffs[i].isSelected = false;
-                    buffs[i].setTexture(buffs[i].getTexture());
+                    buffs[i].setTexture(buffs[i].getPower().getUnActiveTexture());
                 }
             }
             buffSelected = true;
             buffs[id].isSelected = true;
-            buffs[id].setTexture(selectBuff);
+            buffs[id].setTexture(buffs[id].getPower().getActiveTexture());
+
+            label.setText(buffs[id].getDescription());
+            setLabelPos();
         }
         table.invalidate();
+    }
+
+    private void setLabelPos() {
+        label.setPosition((float) Gdx.graphics.getWidth() / 2 - label.getPrefWidth() / 2, 50);
+        System.out.println("Lbael: " + label.getX() + "/" + label.getY());
     }
 }

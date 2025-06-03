@@ -9,16 +9,28 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class Power extends Actor {
     private Texture trd;
+    private Texture aTrd;
+    private String desc;
 
-    public Power(Texture imageUp) {
+    public Power(Texture imageUp, Texture imageDown, String descp) {
         this.trd = imageUp;
+        this.aTrd = imageDown;
+        this.desc = descp;
     }
 
     public void effect() {
 
     }
 
-    public Texture getTexture() {
+    public Texture getUnActiveTexture() {
         return trd;
+    }
+
+    public Texture getActiveTexture() {
+        return aTrd;
+    }
+
+    public String getDescp() {
+        return desc;
     }
 }

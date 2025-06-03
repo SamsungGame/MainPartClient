@@ -44,9 +44,6 @@ import end.team.center.GameCore.UIElements.UIGameScreenElements.Heart;
 import end.team.center.GameCore.UIElements.UIGameScreenElements.TouchpadClass;
 import end.team.center.GameCore.Logic.GameCamera;
 import end.team.center.GameCore.Logic.ShaderManager;
-import end.team.center.LocalDB.DatabaseManager;
-import end.team.center.LocalDB.controllers.UserStateController;
-import end.team.center.LocalDB.dao.UserStateDao;
 import end.team.center.Redact.SystemOut.Console;
 
 public class GameScreen implements Screen {
@@ -271,7 +268,9 @@ public class GameScreen implements Screen {
         powers = new ArrayList<>();
 
         // Добавление существующих усилений
-        Power p = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/expMore.png")) {
+        Power p = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/expMore.png"),
+            new Texture("UI/GameUI/SelectPowerUI/Effect/expMore_active.png"),
+            "Увеличивает получаемый тобой опыт в 2 раза") {
             @Override
             public void effect() {
                 hero.setExpBonus(hero.getExpBonus() * 2);
@@ -282,7 +281,9 @@ public class GameScreen implements Screen {
         p.setSize(600, 600);
         powers.add(p);
 
-        Power p1 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/HPforAttack.png")) {
+        Power p1 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/HPforAttack.png"),
+            new Texture("UI/GameUI/SelectPowerUI/Effect/HPforAttack_active.png"),
+            "Вы получаете вампиризм") {
             @Override
             public void effect() {
                 hero.setVampirism(true);
@@ -293,7 +294,9 @@ public class GameScreen implements Screen {
         p1.setSize(600, 600);
         powers.add(p1);
 
-        Power p2 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/speedHP.png")) {
+        Power p2 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/speedHP.png"),
+            new Texture("UI/GameUI/SelectPowerUI/Effect/speedHP_active.png"),
+            "Ваша скорость увеличиваеться в 2 раза, но вы теряете 1 HP") {
             @Override
             public void effect() {
                 hero.setHealth(hero.getHealth() - 1);
@@ -305,7 +308,9 @@ public class GameScreen implements Screen {
         p2.setSize(600, 600);
         powers.add(p2);
 
-        Power p3 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/visible.png")) {
+        Power p3 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/visible.png"),
+            new Texture("UI/GameUI/SelectPowerUI/Effect/visible_active.png"),
+            "Вы увеличиваете свой радиус обзора (В РАЗРАБОТКЕ!)") {
             @Override
             public void effect() {
                 ShaderManager.radiusView1 += 0.2f;
@@ -318,7 +323,9 @@ public class GameScreen implements Screen {
         p3.setSize(600, 600);
         powers.add(p3);
 
-        Power p4 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/saveHeart.png")) {
+        Power p4 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/saveHeart.png"),
+            new Texture("UI/GameUI/SelectPowerUI/Effect/saveHeart_active.png"),
+            "Вы получаете 1 перерождение в случае смерти (не скадывается)") {
             @Override
             public void effect() {
                 hero.setSafeInDeadDamage(true);
@@ -329,7 +336,9 @@ public class GameScreen implements Screen {
         p4.setSize(600, 600);
         powers.add(p4);
 
-        Power p5 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/aura.png")) {
+        Power p5 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/aura.png"),
+            new Texture("UI/GameUI/SelectPowerUI/Effect/aura_active.png"),
+            "Мобы умирают, если попадают по вам") {
             @Override
             public void effect() {
                 hero.setReturnDamage(true);
@@ -358,22 +367,36 @@ public class GameScreen implements Screen {
             zone.add(z);
         }
 
-        Random random = new Random();
+        boolean isGenerated = false;
 
-        int x = (int) (Math.random() * WORLD_WIDTH / 5);
-        int y = (int) (Math.random() * WORLD_HEIGHT / 5);
+        while (!isGenerated) {
+            try {
+                Random random = new Random();
 
-        float spawnX = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_WIDTH - x), (int) (WORLD_WIDTH - Entity.BOUNDARY_PADDING - 200)) : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), x);
-        float spawnY = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_HEIGHT - y), (int) (WORLD_HEIGHT - Entity.BOUNDARY_PADDING - 200)) : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), y);
+                int x = (int) (Math.random() * WORLD_WIDTH / 5);
+                int y = (int) (Math.random() * WORLD_HEIGHT / 5);
 
-        portal = new Portal(
-            center,
-            new Texture(Gdx.files.internal("UI/GameUI/Structure/portal1.png")),
-            new Texture(Gdx.files.internal("UI/GameUI/Structure/portal2.png")),
-            new Texture(Gdx.files.internal("UI/GameUI/Structure/portal3.png")),
-            new Vector2(spawnX, spawnY),
-            hero,
-            171, 189);
+                float spawnX = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_WIDTH - x), (int) (WORLD_WIDTH - Entity.BOUNDARY_PADDING - 200)) : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), x);
+                float spawnY = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_HEIGHT - y), (int) (WORLD_HEIGHT - Entity.BOUNDARY_PADDING - 200)) : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), y);
+
+                portal = new Portal(
+                    center,
+                    new Texture(Gdx.files.internal("UI/GameUI/Structure/portal1.png")),
+                    new Texture(Gdx.files.internal("UI/GameUI/Structure/portal2.png")),
+                    new Texture(Gdx.files.internal("UI/GameUI/Structure/portal3.png")),
+                    new Vector2(spawnX, spawnY),
+                    hero,
+                    171, 189);
+
+                isGenerated = true;
+            } catch (Exception e) {
+                System.out.println("Ожидаемая ошибка при генерации портала - пересоздание");
+                System.out.println("Ошибка: ");
+                e.printStackTrace();
+                System.out.println("---------------------");
+                isGenerated = false;
+            }
+        }
 
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Sounds/nightMusic.mp3"));
         backgroundMusic.setLooping(true);
@@ -383,18 +406,22 @@ public class GameScreen implements Screen {
         wait.addAll(spawnItem.startDropSet());
 
         // Создание деревьев
+        trees = new ArrayList<>();
+
         Texture tree1 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/elka.png"));
         Texture tree2 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT1.png"));
 
-//        for (int i = 0; i < countTree; i++) {
-//            Tree t = new Tree(Math.random() * 100 > 50 ? tree1 : tree2,
-//                new Vector2((float) (Math.random() * WORLD_WIDTH), (float) (Math.random() * WORLD_HEIGHT)),
-//                0, 0,
-//                false);
-//
-//            trees.add(t);
-//            worldStage.addActor(t);
-//        }
+        for (int i = 0; i < countTree; i++) {
+            Texture tree = Math.random() * 100 > 50 ? tree1 : tree2;
+
+            Tree t = new Tree(tree,
+                new Vector2((float) (Math.random() * WORLD_WIDTH), (float) (Math.random() * WORLD_HEIGHT)),
+                tree.getHeight() * 10, tree.getHeight() * 10,
+                false);
+
+            trees.add(t);
+            worldStage.addActor(t);
+        }
 
         worldStage.addActor(portal);
 
