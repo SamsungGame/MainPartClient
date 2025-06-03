@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import end.team.center.GameCore.Objects.OnMap.StaticObject;
 
 public class Tree extends StaticObject {
-    private Rectangle bound;
     public Tree(Texture texture, Vector2 vector, float height, float width, boolean canWalk) {
         super(texture, vector, height, width, canWalk);
 

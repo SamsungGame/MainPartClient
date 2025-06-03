@@ -39,10 +39,6 @@ public abstract class GameObject extends Actor {
     public Rectangle getBound() {
         return bound;
     }
-    public void reSizeBound() {
-        bound.height = height;
-        bound.width = width;
-    }
 
     @Override
     public void act(float delta) {
