@@ -1,6 +1,5 @@
-achievements/achievement1.png
-achievements/achievement2.png
-achievements/achievement3.png
+achievements/obtained/door_mini.png
+achievements/obtained/exit_mini.png
 background.png
 buttonStyle/buttonStyle.atlas
 buttonStyle/buttonStyle.json

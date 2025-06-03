@@ -122,6 +122,7 @@ public class DeathScreen implements Screen {
     public void dispose() {
         batch.dispose();
         fontDeath.dispose();
+        fontCause.dispose();
         stage.dispose();
         skin.dispose();
         backgroundTexture.dispose();

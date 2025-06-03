@@ -11,6 +11,7 @@ public abstract class Zone {
     public int radiationY;
     public int radiationSize;
     Random random = new Random();
+
     public Zone(int x, int y, int size, String type) {
         this.x = x;
         this.y = y;

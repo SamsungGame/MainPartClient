@@ -73,7 +73,7 @@ public class MainMenuScreen implements Screen {
         achievementsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new DeathScreen(game, "Не это стало причиной их гибели..."));
+                game.setScreen(new AchievementsScreen(game));
             }
         });
 

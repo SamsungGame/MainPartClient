@@ -15,20 +15,26 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.util.ArrayList;
+
+import end.team.center.Achievement;
 import end.team.center.MyGame;
 
 public class AchievementsScreen implements Screen {
     private final SpriteBatch batch = new SpriteBatch();
-    private final BitmapFont font = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
-    private final GlyphLayout layout = new GlyphLayout();
-    private final float layoutX;
-    private final float layoutY;
+    private final BitmapFont fontAchievements = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
+    private final BitmapFont fontDescription = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
+    private final GlyphLayout layoutAchievements = new GlyphLayout();
+    private final float layoutAchievementsX;
+    private final float layoutAchievementsY;
+//    private final float layoutDescriptionX;
+//    private final float layoutDescriptionY;
     private final Stage stage;
     private final Skin skin;
     private final Texture backgroundTexture = new Texture(Gdx.files.internal("background.png"));
-    private final Texture achievementTexture1 = new Texture(Gdx.files.internal("achievements/achievement1.png"));
-    private final Texture achievementTexture2 = new Texture(Gdx.files.internal("achievements/achievement2.png"));
-    private final Texture achievementTexture3 = new Texture(Gdx.files.internal("achievements/achievement3.png"));
+    private final Texture achievementDoorObtainedTexture = new Texture(Gdx.files.internal("achievements/obtained/door_mini.png"));
+    private final Texture achievementExitObtainedTexture = new Texture(Gdx.files.internal("achievements/obtained/exit_mini.png"));
+    ArrayList<Achievement> achievements = new ArrayList<>();
 
     public AchievementsScreen(MyGame game) {
         stage = new Stage(new ScreenViewport());
@@ -36,11 +42,11 @@ public class AchievementsScreen implements Screen {
 
         skin = new Skin(Gdx.files.internal("buttonStyle/buttonStyle.json"));
 
-        font.getData().setScale(4.0f);
+        fontAchievements.getData().setScale(4.0f);
         String achievementsText = "Достижения";
-        layout.setText(font, achievementsText);
-        layoutX = (Gdx.graphics.getWidth() - layout.width) / 2;
-        layoutY = Gdx.graphics.getHeight() - layout.height;
+        layoutAchievements.setText(fontAchievements, achievementsText);
+        layoutAchievementsX = (Gdx.graphics.getWidth() - layoutAchievements.width) / 2;
+        layoutAchievementsY = Gdx.graphics.getHeight() - layoutAchievements.height;
 
         TextButton backButton = new TextButton("Назад", skin);
         backButton.setSize(200, 150);
@@ -53,25 +59,21 @@ public class AchievementsScreen implements Screen {
             }
         });
 
-        Image achievementImage1 = new Image(achievementTexture1);
-        achievementImage1.setSize(400, 200);
-        achievementImage1.setPosition(Gdx.graphics.getWidth() / 2 - achievementImage1.getWidth() / 2 - 500,
-            Gdx.graphics.getHeight() / 2 - achievementImage1.getHeight() / 2);
+        Image achievementDoorObtainedImage = new Image(achievementDoorObtainedTexture);
+        achievementDoorObtainedImage.setSize(150, 150);
+        achievementDoorObtainedImage.setPosition(100, Gdx.graphics.getHeight() / 2 - achievementDoorObtainedImage.getHeight() / 2);
 
-        Image achievementImage2 = new Image(achievementTexture2);
-        achievementImage2.setSize(400, 200);
-        achievementImage2.setPosition(Gdx.graphics.getWidth() / 2 - achievementImage2.getWidth() / 2,
-            Gdx.graphics.getHeight() / 2 - achievementImage2.getHeight() / 2);
-
-        Image achievementImage3 = new Image(achievementTexture3);
-        achievementImage3.setSize(400, 200);
-        achievementImage3.setPosition(Gdx.graphics.getWidth() / 2 - achievementImage3.getWidth() / 2 + 500,
-            Gdx.graphics.getHeight() / 2 - achievementImage3.getHeight() / 2);
+        achievements.add(new Achievement("Прошёл сквозь завесу", "Заверши забег и выберись", false, achievementDoorObtainedImage, achievementDoorObtainedImage));
 
         stage.addActor(backButton);
-        stage.addActor(achievementImage1);
-        stage.addActor(achievementImage2);
-        stage.addActor(achievementImage3);
+        for (Achievement achievement : achievements) {
+            if (achievement.isObtained) {
+                stage.addActor(achievement.achievementIfObtained);
+            }
+            else {
+                stage.addActor(achievement.achievementIfNotObtained);
+            }
+        }
     }
 
     @Override
@@ -87,7 +89,7 @@ public class AchievementsScreen implements Screen {
         batch.begin();
         batch.setColor(0.5f, 0.5f, 0.5f, 1f);
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        font.draw(batch, layout, layoutX, layoutY);
+        fontAchievements.draw(batch, layoutAchievements, layoutAchievementsX, layoutAchievementsY);
         batch.end();
 
         stage.act();
@@ -117,12 +119,12 @@ public class AchievementsScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
-        font.dispose();
+        fontAchievements.dispose();
+        fontDescription.dispose();
         stage.dispose();
         skin.dispose();
         backgroundTexture.dispose();
-        achievementTexture1.dispose();
-        achievementTexture2.dispose();
-        achievementTexture3.dispose();
+        achievementDoorObtainedTexture.dispose();
+        achievementExitObtainedTexture.dispose();
     }
 }
