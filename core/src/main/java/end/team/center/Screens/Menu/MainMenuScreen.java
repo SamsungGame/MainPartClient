@@ -126,10 +126,10 @@ public class MainMenuScreen implements Screen {
         mainTable.setFillParent(true);
         mainTable.center();
 
-        mainTable.add(conclusionText).padBottom(100).row();
+        mainTable.add(conclusionText).padBottom(10).row();
 
-        mainTable.add(buttonSkin) .width(400).height(200).pad(20).row();
-        mainTable.add(buttonStart).width(400).height(200).pad(20).row();
+        mainTable.add(buttonSkin) .width(400).height(200).pad(5).row();
+        mainTable.add(buttonStart).width(400).height(200).pad(5).row();
         mainTable.add(buttonAch)  .width(400).height(200);
 
         // Добавляем на stage сначала фон, затем таблицы
