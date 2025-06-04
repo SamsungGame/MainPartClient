@@ -110,7 +110,7 @@ public class AchievementsScreen implements Screen {
             achievementsIfObtainedImages.get(i).setPosition(225 + i * achievementsIfObtainedImages.get(i).getWidth() + i * achievementsIfObtainedImages.get(i).getWidth() / 2,
                 Gdx.graphics.getHeight() / 2 - achievementsIfObtainedImages.get(i).getHeight() / 2);
             achievementsIfNotObtainedImages.get(i).setSize(150, 150);
-            achievementsIfNotObtainedImages.get(i).setPosition(225 + i * achievementsIfNotObtainedImages.get(i).getWidth() + + i * achievementsIfObtainedImages.get(i).getWidth() / 2,
+            achievementsIfNotObtainedImages.get(i).setPosition(225 + i * achievementsIfNotObtainedImages.get(i).getWidth() + i * achievementsIfObtainedImages.get(i).getWidth() / 2,
                 Gdx.graphics.getHeight() / 2 - achievementsIfNotObtainedImages.get(i).getHeight() / 2);
         }
         for (int i = 0; i < achievementsIfObtainedImages.size(); i++) {
