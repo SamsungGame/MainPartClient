@@ -60,12 +60,12 @@ public class GameScreen implements Screen {
     private GameCamera gameCamera;
     public static final float WORLD_WIDTH = 50000;
     public static final float WORLD_HEIGHT = 50000;
-    public int maxMobSpawn = 250;
+    public int maxMobSpawn = 60;
     public static float coinForEnemyValue = 0;
     public static float coinForTime = 0;
     public static float coinForGame = 0;
 
-    public int maxDropSpawn = 1000;
+    public int maxDropSpawn = 1500;
 
     private static SpawnMob spawner;
     public static ArrayList<Enemy> enemies;

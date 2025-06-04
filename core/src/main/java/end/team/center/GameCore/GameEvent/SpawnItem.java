@@ -22,7 +22,7 @@ public class SpawnItem {
     private Post poster;
     private Hero hero;
     private ItemType[] canDrop;
-    private int timeSpawn;
+    private float timeSpawn;
     private boolean isSpawn = true;
 
     public SpawnItem(Post poster, Hero hero) {
@@ -35,7 +35,7 @@ public class SpawnItem {
         canDrop[2] = ItemType.Bandage;
         canDrop[3] = ItemType.lamp;
 
-        timeSpawn = 1;
+        timeSpawn = 0.5f;
     }
 
     public void goWork() {
@@ -47,7 +47,7 @@ public class SpawnItem {
                         poster.post(spawn());
 
                         try {
-                            Thread.sleep(timeSpawn * 1000L);
+                            Thread.sleep((long) (timeSpawn * 1000L));
                         } catch (InterruptedException ignore) {
                         }
                     }
@@ -80,7 +80,7 @@ public class SpawnItem {
     public ArrayList<Drops> startDropSet() {
         ArrayList<Drops> dropsStart = new ArrayList<>();
 
-        for(int i = 0; i < 600; i++) {
+        for(int i = 0; i < 900; i++) {
             dropsStart.add(spawn());
         }
 

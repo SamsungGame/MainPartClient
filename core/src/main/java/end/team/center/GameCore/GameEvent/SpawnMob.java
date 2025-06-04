@@ -22,7 +22,7 @@ import end.team.center.Screens.Game.GameScreen;
 public class SpawnMob {
     private final int minRadiusSpawnMobY = Gdx.graphics.getHeight();
     private final int minRadiusSpawnMobX = Gdx.graphics.getWidth();
-    private final int maxCountMobInMap = 100;
+    private final int maxCountMobInMap = 60;
     private int countEnemy = 0;
     private final int maxRadiusSpawn = (int) Math.min(GameScreen.WORLD_HEIGHT, GameScreen.WORLD_WIDTH);
     private float timeSpawn;
@@ -41,7 +41,7 @@ public class SpawnMob {
             canSpawn.add(null);
         }
 
-        timeSpawn = 3.5f;
+        timeSpawn = 5f;
     }
 
     public void startWork() {
