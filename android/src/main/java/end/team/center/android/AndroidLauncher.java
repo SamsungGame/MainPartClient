@@ -5,8 +5,8 @@ import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import end.team.center.Center;
-import end.team.center.Screens.Menu.MainMenuScreen;
-import end.team.center.android.db.DatabaseManagerImpl;
+import end.team.center.ProgramSetting.LocalDB.GameRepository;
+import end.team.center.android.db.GameRepositoryImpl;
 
 /** Launches the Android application. */
 public class AndroidLauncher extends AndroidApplication {
@@ -16,7 +16,9 @@ public class AndroidLauncher extends AndroidApplication {
         AndroidApplicationConfiguration configuration = new AndroidApplicationConfiguration();
         configuration.useImmersiveMode = true; // Recommended, but not required.
 
-        DatabaseManagerImpl dbManager = new DatabaseManagerImpl(this);
-        initialize(new Center(dbManager), configuration);
+        GameRepository gameRepository = new GameRepositoryImpl(this);
+        Center center = new Center();
+        center.setGameRepository(gameRepository);
+        initialize(center, configuration);
     }
 }

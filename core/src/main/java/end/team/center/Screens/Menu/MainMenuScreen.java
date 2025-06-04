@@ -17,12 +17,12 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import end.team.center.Center;
 import end.team.center.GameCore.UIElements.Fon;
-import end.team.center.ProgramSetting.LocalDB.controllers.UserStateController;
+import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Screens.Game.GameScreen;
 
 public class MainMenuScreen implements Screen {
-    private final Center center;
-    private final UserStateController controller;
+    private GameRepository gameRepository;
+    private Center center;
     private Stage stage;
     private Skin skin;
     private Fon background;
@@ -36,9 +36,9 @@ public class MainMenuScreen implements Screen {
         "Не это сделало их такими... \n              Поражение..."
     };
 
-    public MainMenuScreen(int code, Center center) {
-        this.center = center;
-        this.controller = center.getUserStateController();
+    public MainMenuScreen(int code, GameRepository repo) {
+
+        this.gameRepository = repo;
 
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
@@ -75,7 +75,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 backgroundMusic.stop();
-                center.setScreen(new GameScreen(center));
+                ((Center) Gdx.app.getApplicationListener()).setScreen(new GameScreen(repo));
             }
         });
 
@@ -99,7 +99,7 @@ public class MainMenuScreen implements Screen {
     }
 
     private void updateCoinsDisplay() {
-        int coins = controller.getUserState().getCoins();
+        int coins = gameRepository.getCoins();
         coinsText.setText("Монеты: " + coins);
     }
 

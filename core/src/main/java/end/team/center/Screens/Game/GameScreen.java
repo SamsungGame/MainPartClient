@@ -44,11 +44,11 @@ import end.team.center.GameCore.UIElements.UIGameScreenElements.Heart;
 import end.team.center.GameCore.UIElements.UIGameScreenElements.TouchpadClass;
 import end.team.center.GameCore.Logic.GameCamera;
 import end.team.center.GameCore.Logic.ShaderManager;
+import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Redact.SystemOut.Console;
 
 public class GameScreen implements Screen {
-    private final Center center;
-//    private final UserStateController userStateController;
+    private GameRepository gameRepository;
     private TouchpadClass touchpadMove, touchpadAttack;
     public Hero hero;
     private Stage worldStage;
@@ -62,9 +62,9 @@ public class GameScreen implements Screen {
     public int maxMobSpawn = 250;
     public int maxDropSpawn = 1000;
 
-    private SpawnMob spawner;
+    private static SpawnMob spawner;
     public static ArrayList<Enemy> enemies;
-    private SpawnItem spawnItem;
+    private static SpawnItem spawnItem;
     public static ArrayList<Drops> drop;
     private Heart hearts;
     private ArrayList<Object> wait;
@@ -94,7 +94,7 @@ public class GameScreen implements Screen {
     private BackgroundTiledRenderer backgroundTiledRenderer;
     public static Music backgroundMusic;
 
-    private boolean isTimeGo = true;
+    private static boolean isTimeGo = true;
     private int countZone;
 
     //Деревья
@@ -107,9 +107,9 @@ public class GameScreen implements Screen {
 
 
     @SuppressWarnings("NewApi")
-    public GameScreen(Center center) {
+    public GameScreen(GameRepository repo) {
 
-        this.center = center;
+        this.gameRepository = repo;
 
         System.out.println("Размеры экрана: " + Gdx.graphics.getWidth() + "x на " + Gdx.graphics.getHeight() + "y");
 
@@ -156,7 +156,7 @@ public class GameScreen implements Screen {
 
 
         hero = new Hero(
-            center,
+            repo,
             new Texture(Gdx.files.internal("UI/GameUI/Hero/Right/heroRight.png")),
             CharacterAnimation.Hero,
             new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
@@ -380,7 +380,7 @@ public class GameScreen implements Screen {
                 float spawnY = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_HEIGHT - y), (int) (WORLD_HEIGHT - Entity.BOUNDARY_PADDING - 200)) : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), y);
 
                 portal = new Portal(
-                    center,
+                    repo,
                     new Texture(Gdx.files.internal("UI/GameUI/Structure/portal1.png")),
                     new Texture(Gdx.files.internal("UI/GameUI/Structure/portal2.png")),
                     new Texture(Gdx.files.internal("UI/GameUI/Structure/portal3.png")),

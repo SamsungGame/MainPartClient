@@ -1,39 +1,35 @@
 package end.team.center;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import end.team.center.ProgramSetting.LocalDB.DatabaseManager;
-import end.team.center.ProgramSetting.LocalDB.controllers.UserStateController;
+import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Screens.Menu.MainMenuScreen;
 
 public class Center extends Game {
 
     public SpriteBatch batch;
-    private final DatabaseManager databaseManager;
-    private final UserStateController userStateController;
+    private GameRepository gameRepository;
 
-    public Center(DatabaseManager databaseManager) {
-        this.databaseManager = databaseManager;
-        this.userStateController = new UserStateController(getDatabaseManager().getUserStateDao());
+    public Center() {
+
+    }
+    public void setGameRepository(GameRepository repo) {
+        this.gameRepository = repo;
     }
     @Override
     public void create() {
-        // Создание спрайт-объекта, который будет использоваться для отрисовки
         batch = new SpriteBatch();
-        setScreen(new MainMenuScreen(0, this));
+        setScreen(new MainMenuScreen(0, gameRepository));
 
-    }
-    public UserStateController getUserStateController() {
-        return userStateController;
-    }
-    public DatabaseManager getDatabaseManager() {
-        return databaseManager;
+        int coins = gameRepository.getCoins();
+        Gdx.app.log("Game", "Монеты: " + coins);
     }
 
     @Override
     public void render() {
-        super.render(); // Рендерит текущий экран
+        super.render();
     }
 
     @Override

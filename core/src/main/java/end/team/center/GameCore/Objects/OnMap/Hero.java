@@ -13,12 +13,13 @@ import end.team.center.GameCore.Library.WeaponType;
 import end.team.center.GameCore.Logic.ShaderManager;
 import end.team.center.GameCore.Objects.InInventary.Weapon;
 import end.team.center.GameCore.Objects.Map.Zone;
-import end.team.center.ProgramSetting.LocalDB.controllers.UserStateController;
+import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Screens.Game.GameScreen;
 import end.team.center.Screens.Menu.MainMenuScreen;
 
 public class Hero extends Friendly {
-    private final Center center;
+
+    private GameRepository gameRepository;
     protected boolean isInvulnerability = false;
     protected int radiationProtect = 1;
     protected float antiRadiationCostumePower = 100.0f;
@@ -32,14 +33,13 @@ public class Hero extends Friendly {
     public boolean newLevelFlag = false, shyne = false, safeInDeadDamage = false, returnDamage = false;
     private int duration = 30;
     private float elapsedTime = 0;
-    private final UserStateController userStateController;
+
 //    public static int coins = 10;
 
 
-    public Hero(Center center, Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, float worldWidth, float worldHeight) {
+    public Hero(GameRepository repo, Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, float worldWidth, float worldHeight) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
-        this.center = center;
-        this.userStateController = center.getUserStateController();
+        this.gameRepository = repo;
         weapon = new Knife(WeaponType.knife, this);
         exp = 0;
         level = 1;
@@ -178,7 +178,7 @@ public class Hero extends Friendly {
         antiRadiationCostumePower -= (float) (((radiationLevel * 0.4) / radiationProtect) * delta);
         if (antiRadiationCostumePower < 0) {
 
-            ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(3, center));
+            ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(3, gameRepository));
             GameScreen.backgroundMusic.stop();
             GameScreen.endTask();
         }
@@ -199,8 +199,7 @@ public class Hero extends Friendly {
 
         if (this.health <= 0) {
             if (!safeInDeadDamage) {
-                userStateController.addCoins(10);
-                ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(2, center));
+                ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(2, gameRepository));
                 GameScreen.backgroundMusic.stop();
                 GameScreen.endTask();
             } else {
