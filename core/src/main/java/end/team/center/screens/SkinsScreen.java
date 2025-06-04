@@ -1,6 +1,8 @@
 package end.team.center.screens;
 
 import static end.team.center.MyGame.currentSkin;
+import static end.team.center.MyGame.isBought;
+import static end.team.center.MyGame.prices;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -20,6 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import org.w3c.dom.Text;
+
 import end.team.center.MyGame;
 
 public class SkinsScreen implements Screen {
@@ -37,6 +41,7 @@ public class SkinsScreen implements Screen {
     private int currentIndex;
     private float touchStartX;
     private final Texture backgroundTexture = new Texture(Gdx.files.internal("background.png"));
+    private final TextButton buyButton;
 
     public SkinsScreen(MyGame game) {
         stage = new Stage(new ScreenViewport());
@@ -135,6 +140,18 @@ public class SkinsScreen implements Screen {
         currentImage.setPosition(Gdx.graphics.getWidth() / 2 - currentImage.getWidth() / 2,
                 Gdx.graphics.getHeight() / 2 - currentImage.getHeight() / 2);
 
+        buyButton = new TextButton("", skin);
+        buyButton.setSize(200, 150);
+        buyButton.setPosition(Gdx.graphics.getWidth() / 2 - buyButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - currentImage.getY());
+
+        buyButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                isBought.remove(currentSkin - 1);
+                isBought.add(currentSkin - 1, true);
+            }
+        });
+
         stage.addActor(backButton);
         stage.addActor(leftButton);
         stage.addActor(rightButton);
@@ -172,6 +189,13 @@ public class SkinsScreen implements Screen {
         font.draw(batch, layout, layoutX, layoutY);
         batch.end();
 
+        buyButton.setText(prices.get(currentSkin - 1));
+        if (currentSkin != 1 && !isBought.get(currentSkin - 1)) {
+            stage.addActor(buyButton);
+        }
+        else {
+            buyButton.remove();
+        }
         stage.act();
         stage.draw();
     }
