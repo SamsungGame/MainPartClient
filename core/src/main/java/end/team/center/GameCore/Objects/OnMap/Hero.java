@@ -74,6 +74,9 @@ public class Hero extends Friendly {
         }).start();
     }
 
+    public boolean getIsInvulnerability() {
+        return isInvulnerability;
+    }
     public int getLevelSheild() {
         return sheildLevel;
     }

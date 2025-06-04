@@ -55,7 +55,7 @@ public abstract class Enemy extends Entity {
                 isTreeTouch = false;
                 isMoving = deltaX != 0 || deltaY != 0;
 
-                if (deltaX > 0) {
+                if (deltaX >= 0) {
                     mRight = true;
                 } else if (deltaX < 0) {
                     mRight = false;

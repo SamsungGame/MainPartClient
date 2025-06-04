@@ -528,7 +528,7 @@ public class GameScreen implements Screen {
             if (e.getBound().overlaps(hero.getBound())) {
                 if (hero.getLevelSheild() == 0) {
                     e.attack(hero);
-                } else {
+                } else if (!hero.getIsInvulnerability()) {
                     hero.setSheildLevel(hero.getLevelSheild() - 1);
                     hero.frameInvulnerability(2);
                 }
