@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -29,6 +30,8 @@ public class SkinsScreen implements Screen {
     public final float layoutY;
     private final Stage stage;
     private final Skin skin;
+    private final Skin leftButtonSkin;
+    private final Skin rightButtonSkin;
     private final Texture[] images; // Массив из 2 изображений
     private final Image currentImage; // Отображаемый Image
     private int currentIndex;
@@ -66,6 +69,18 @@ public class SkinsScreen implements Screen {
         });
 
         skin = new Skin(Gdx.files.internal("buttonStyle/buttonStyle.json"));
+        leftButtonSkin = new Skin();
+        leftButtonSkin.add("button_up", new Texture(Gdx.files.internal("buttons/leftButton.png")));
+        leftButtonSkin.add("button_down", new Texture(Gdx.files.internal("buttons/leftButton.png")));
+        ImageButton.ImageButtonStyle leftButtonStyle = new ImageButton.ImageButtonStyle();
+        leftButtonStyle.imageUp = leftButtonSkin.getDrawable("button_up");
+        leftButtonStyle.imageDown = leftButtonSkin.getDrawable("button_down");
+        rightButtonSkin = new Skin();
+        rightButtonSkin.add("button_up", new Texture(Gdx.files.internal("buttons/rightButton.png")));
+        rightButtonSkin.add("button_down", new Texture(Gdx.files.internal("buttons/rightButton.png")));
+        ImageButton.ImageButtonStyle rightButtonStyle = new ImageButton.ImageButtonStyle();
+        rightButtonStyle.imageUp = rightButtonSkin.getDrawable("button_up");
+        rightButtonStyle.imageDown = rightButtonSkin.getDrawable("button_down");
 
         font.getData().setScale(4.0f);
         String skinsText = "Скины";
@@ -77,10 +92,32 @@ public class SkinsScreen implements Screen {
         backButton.setSize(200, 150);
         backButton.setPosition(50,  Gdx.graphics.getHeight() - backButton.getHeight());
 
+        ImageButton leftButton = new ImageButton(leftButtonStyle);
+        leftButton.setSize(100, 100);
+        leftButton.setPosition(100, Gdx.graphics.getHeight() / 2 - leftButton.getHeight() / 2);
+
+        ImageButton rightButton = new ImageButton(rightButtonStyle);
+        rightButton.setSize(100, 100);
+        rightButton.setPosition(Gdx.graphics.getWidth() - rightButton.getWidth() - 100, Gdx.graphics.getHeight() / 2 - rightButton.getHeight() / 2);
+
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new MainMenuScreen(game));
+            }
+        });
+
+        leftButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                showPreviousImage();
+            }
+        });
+
+        rightButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                showNextImage();
             }
         });
 
@@ -99,6 +136,8 @@ public class SkinsScreen implements Screen {
                 Gdx.graphics.getHeight() / 2 - currentImage.getHeight() / 2);
 
         stage.addActor(backButton);
+        stage.addActor(leftButton);
+        stage.addActor(rightButton);
         stage.addActor(currentImage);
     }
 
@@ -166,6 +205,8 @@ public class SkinsScreen implements Screen {
         font.dispose();
         stage.dispose();
         skin.dispose();
+        leftButtonSkin.dispose();
+        rightButtonSkin.dispose();
         backgroundTexture.dispose();
     }
 }
