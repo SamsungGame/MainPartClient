@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import end.team.center.Center;
 import end.team.center.GameCore.Objects.OnMap.Hero;
@@ -42,6 +43,23 @@ public class Portal extends StaticObject {
         if (hero.getBound().overlaps(bound)) {
             gameRepository.addCoins(((int) GameScreen.coinForGame * 2));
             ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(1, gameRepository));
+
+            if (!GameScreen.gameRepository.getAchievements().get(1)) {
+                GameScreen.showAchivs = true;
+                GameScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/exit_open.png"));
+                GameScreen.idAchivs = 1;
+            }
+            if (!GameScreen.gameRepository.getAchievements().get(2) && !GameScreen.isPickupItem) {
+                GameScreen.showAchivs = true;
+                GameScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/knife_open.png"));
+                GameScreen.idAchivs = 2;
+            }
+            if (!GameScreen.gameRepository.getAchievements().get(5) && !GameScreen.isKill) {
+                GameScreen.showAchivs = true;
+                GameScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/clear_open.png"));
+                GameScreen.idAchivs = 5;
+            }
+
             GameScreen.backgroundMusic.stop();
             GameScreen.endTask();
         }

@@ -9,6 +9,7 @@ import java.util.Random;
 import end.team.center.GameCore.Library.ItemType;
 import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.OnMap.Hero;
+import end.team.center.Screens.Game.GameScreen;
 
 public class Bandage extends Drops {
     public Bandage(Texture texture, Vector2 vector, Hero hero, int width, int height) {
@@ -33,6 +34,8 @@ public class Bandage extends Drops {
 
         if (bound.overlaps(hero.getBound())) {
             hero.setHealth(hero.getHealth() + 1);
+
+            GameScreen.isPickupItem = true;
 
             remove();
         }

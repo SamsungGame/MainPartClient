@@ -8,6 +8,7 @@ import end.team.center.GameCore.Library.ItemType;
 import end.team.center.GameCore.Logic.ShaderManager;
 import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.OnMap.Hero;
+import end.team.center.Screens.Game.GameScreen;
 
 public class Lamp extends Drops {
     public Lamp(Texture texture, Vector2 vector, Hero hero, int width, int height) {
@@ -45,6 +46,7 @@ public class Lamp extends Drops {
 
                 hero.setDuration(d);
             }
+            GameScreen.isPickupItem = true;
 
             remove();
         }

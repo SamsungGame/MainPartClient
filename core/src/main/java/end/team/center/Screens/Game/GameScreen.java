@@ -49,7 +49,7 @@ import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Redact.SystemOut.Console;
 
 public class GameScreen implements Screen {
-    private GameRepository gameRepository;
+    public static GameRepository gameRepository;
     private TouchpadClass touchpadMove, touchpadAttack;
     public Hero hero;
     private Stage worldStage;
@@ -106,7 +106,15 @@ public class GameScreen implements Screen {
     public static ArrayList<Tree> trees;
     private int countTree = 1000;
 
-    private Portal portal;
+    public static Portal portal;
+
+    public static boolean showAchivs = false;
+    public static Image imageAchivs;
+    public static int idAchivs;
+
+    public static boolean isPickupItem = false;
+    public static boolean isKill = false;
+    boolean start = false;
 
 
 
@@ -136,9 +144,6 @@ public class GameScreen implements Screen {
 
         int tileWidth = 250;
         int tileHeight = 250;
-
-//        int cols = (int) (WORLD_WIDTH / tileWidth);
-//        int rows = (int) (WORLD_HEIGHT / tileHeight);
 
         backgroundTiledRenderer = new BackgroundTiledRenderer(tiles, tileWidth, tileHeight);
 
@@ -490,9 +495,18 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         addToList();
+
+        if (showAchivs) showNewAchivs();
+
         TIME += delta;
 
         coinForTime += delta/20;
+
+        if (totalTime >= 600 && !gameRepository.getAchievements().get(3)) {
+            showAchivs = true;
+            imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/time_open.png"));
+            idAchivs = 3;
+        }
 
         if (hero.newLevelFlag) {
             showPowerDialog(delta);
@@ -531,6 +545,8 @@ public class GameScreen implements Screen {
                         e.die();
                         Experience exp = new Experience(ItemType.exp, new Vector2(e.getCenterVector()), hero, e.getExp());
                         worldStage.addActor(exp);
+
+                        isKill = true;
                     }
                 }
             }
@@ -765,5 +781,32 @@ public class GameScreen implements Screen {
             }
         }
         wait.clear();
+    }
+
+    public void showNewAchivs() {
+        if (!start) {
+            imageAchivs.setSize(imageAchivs.getWidth() * 5, imageAchivs.getHeight() * 5);
+            imageAchivs.setPosition(Gdx.graphics.getWidth() / 2 - imageAchivs.getWidth() / 2, imageAchivs.getHeight() + 20);
+            uiStage.addActor(imageAchivs);
+
+            start = true;
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(4000);
+                } catch (InterruptedException ignored) {}
+
+                showAchivs = false;
+                start = false;
+
+                imageAchivs.remove();
+
+                gameRepository.unlockAchievement(idAchivs);
+                idAchivs = -1;
+            }
+        }).start();
     }
 }

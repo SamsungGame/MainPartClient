@@ -6,11 +6,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import end.team.center.Center;
 import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.Library.Items.Knife;
 import end.team.center.GameCore.Library.WeaponType;
+import end.team.center.GameCore.Logic.GMath;
 import end.team.center.GameCore.Logic.ShaderManager;
 import end.team.center.GameCore.Objects.InInventary.Weapon;
 import end.team.center.GameCore.Objects.Map.Zone;
@@ -255,6 +257,13 @@ public class Hero extends Friendly {
             if (!safeInDeadDamage) {
                 gameRepository.addCoins(((int) GameScreen.coinForGame));
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(2, gameRepository));
+
+                if (GMath.checkVectorDistance(getCenterVector(), GameScreen.portal.getCenterVector(), 800, 800) && !GameScreen.gameRepository.getAchievements().get(4)) {
+                    GameScreen.showAchivs = true;
+                    GameScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/door_open.png"));
+                    GameScreen.idAchivs = 4;
+                }
+
                 GameScreen.backgroundMusic.stop();
                 GameScreen.endTask();
             } else {

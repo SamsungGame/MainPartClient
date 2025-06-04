@@ -40,18 +40,18 @@ public class AchievementsScreen implements Screen {
     private final Skin skin;
     private final Texture backgroundTexture = new Texture(Gdx.files.internal("UI/MainMenu/fon.jpg"));
     private final String[] achievementsIfObtainedTexturePaths = {
-        "UI/GameUI/Achievements/mini/clear_mini.png",
-        "UI/GameUI/Achievements/mini/door_mini.png",
-        "UI/GameUI/Achievements/mini/exit_mini.png",
-        "UI/GameUI/Achievements/mini/knife_mini.png",
-        "UI/GameUI/Achievements/mini/time_mini.png"
+            "UI/GameUI/Achievements/mini/exit_mini.png",
+            "UI/GameUI/Achievements/mini/knife_mini.png",
+            "UI/GameUI/Achievements/mini/time_mini.png",
+            "UI/GameUI/Achievements/mini/door_mini.png",
+            "UI/GameUI/Achievements/mini/clear_mini.png",
     };
     private final String[] achievementsIfNotObtainedTexturePaths = {
-        "UI/GameUI/Achievements/mini/notActive/notActive_clear.png",
-        "UI/GameUI/Achievements/mini/notActive/notActive_door.png",
-        "UI/GameUI/Achievements/mini/notActive/notActive_exit.png",
-        "UI/GameUI/Achievements/mini/notActive/notActive_knife.png",
-        "UI/GameUI/Achievements/mini/notActive/notActive_time.png"
+            "UI/GameUI/Achievements/mini/notActive/notActive_exit.png",
+            "UI/GameUI/Achievements/mini/notActive/notActive_knife.png",
+            "UI/GameUI/Achievements/mini/notActive/notActive_time.png",
+            "UI/GameUI/Achievements/mini/notActive/notActive_door.png",
+            "UI/GameUI/Achievements/mini/notActive/notActive_clear.png",
     };
 
     ArrayList<Image> achievementsIfObtainedImages = new ArrayList<>();
@@ -64,7 +64,7 @@ public class AchievementsScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        skin = new Skin(Gdx.files.internal("UI/MainMenu/back.json"));
+        skin = new Skin(Gdx.files.internal("UI/MainMenu/backButton.json"));
 
         fontAchievements.getData().setScale(4.0f);
         String achievementsText = "Достижения";
@@ -107,7 +107,7 @@ public class AchievementsScreen implements Screen {
             achievements.add(new Achievement(
                 GameData.ACHIEVEMENTS.get(i).name,
                 GameData.ACHIEVEMENTS.get(i).description,
-                Boolean.TRUE.equals(repo.getAchievements().get(i)), // ← safe!
+                Boolean.TRUE.equals(repo.getAchievements().get(i + 1)), // ← safe!
                 achievementsIfObtainedImages.get(i),
                 achievementsIfNotObtainedImages.get(i)
             ));
