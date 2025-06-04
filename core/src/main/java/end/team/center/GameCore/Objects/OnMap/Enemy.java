@@ -35,6 +35,8 @@ public abstract class Enemy extends Entity {
         this.exp = exp;
 
         runSpeed = speed * 4;
+
+        bound = new Rectangle((float) (vector.x + (width * 0.75) / 2), (float) (vector.y + (height * 0.75) / 2), (float) (width * 0.75), (float) (height * 0.75));
     }
 
 
