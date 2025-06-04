@@ -33,8 +33,6 @@ public class AchievementsScreen implements Screen {
     private final GlyphLayout layoutDescription = new GlyphLayout();
     private final float layoutAchievementsX;
     private final float layoutAchievementsY;
-    private final float layoutDescriptionX;
-    private final float layoutDescriptionY;
     private final Stage stage;
     private final Skin skin;
     private final Texture backgroundTexture = new Texture(Gdx.files.internal("background.png"));
@@ -117,9 +115,6 @@ public class AchievementsScreen implements Screen {
             achievements.add(new Achievement(achievementsNames[i], achievementsDescriptions[i], false, achievementsIfObtainedImages.get(i), achievementsIfNotObtainedImages.get(i)));
         }
 
-        layoutDescriptionX = achievements.get(0).achievementIfObtained.getX() + 10;
-        layoutDescriptionY = achievements.get(0).achievementIfObtained.getY() - layoutDescription.height - 10;
-
         stage.addActor(backButton);
         for (Achievement achievement : achievements) {
             achievement.achievementIfObtained.addListener(new ClickListener() {
@@ -167,6 +162,8 @@ public class AchievementsScreen implements Screen {
                 descriptionText += "\n\n" + achievement.description;
             }
             layoutDescription.setText(fontDescription, descriptionText);
+            float layoutDescriptionX = Gdx.graphics.getWidth() / 2 - layoutDescription.width / 2;
+            float layoutDescriptionY = achievements.get(2).achievementIfObtained.getY() - layoutDescription.height - 10;
             fontDescription.draw(batch, layoutDescription, layoutDescriptionX, layoutDescriptionY);
 
             Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
