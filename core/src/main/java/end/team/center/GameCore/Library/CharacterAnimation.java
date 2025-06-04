@@ -11,7 +11,7 @@ import end.team.center.GameCore.Library.Animations.AnimationsOwl;
 public enum CharacterAnimation {
     Hero(AnimationsHero.rightFrames, AnimationsHero.leftFrames, AnimationsHero.rightStay, AnimationsHero.leftStay),
     Knight(AnimationHeroKnight.rightFrames, AnimationHeroKnight.leftFrames, AnimationHeroKnight.rightStay, AnimationHeroKnight.leftStay),
-    Owl(AnimationsOwl.rightTurn, AnimationsOwl.leftTurn, AnimationsOwl.rightDive, AnimationsOwl.leftDive),
+   Owl(AnimationsOwl.rightTurn, AnimationsOwl.leftTurn, AnimationsOwl.rightDive, AnimationsOwl.leftDive),
     Ghost(AnimationGhost.ghostWalk, AnimationGhost.ghostAttack, AnimationGhost.ammo, AnimationGhost.ghostWalk),
     Rabbit(AnimationRabbit.walkRight, AnimationRabbit.walkLeft, AnimationRabbit.walkRight, AnimationRabbit.walkLeft);
 

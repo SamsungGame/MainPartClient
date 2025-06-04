@@ -158,10 +158,10 @@ public class GameScreen implements Screen {
         uiStage = new Stage(uiViewport);
         Gdx.input.setInputProcessor(uiStage);
 
-        touchpadMove = new TouchpadClass(200, 400, "move");
+        touchpadMove = new TouchpadClass(200, 200, false, "move");
         uiStage.addActor(touchpadMove);
 
-        touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth() - 300, 400, "attack");
+        touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth() - 500, 200, false, "attack");
         uiStage.addActor(touchpadAttack);
 
         if (!Config.skinIsKnight) {
@@ -514,7 +514,8 @@ public class GameScreen implements Screen {
         }
 
         coinForGame = coinForEnemyValue + coinForTime;
-        TouchpadClass.handleTouchpads(uiStage);
+        touchpadMove.TouchpadLogic(uiStage);
+        touchpadAttack.TouchpadLogic(uiStage);
         // Получаем значения от джойстиков
         float moveX = touchpadMove.getKnobPercentX();
         float moveY = touchpadMove.getKnobPercentY();
