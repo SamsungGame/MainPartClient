@@ -89,13 +89,19 @@ public class GameRepositoryImpl implements GameRepository {
     }
 
     private Map<Integer, Boolean> getUnlockMap(String type) {
-        List<UnlockStateEntity> list = dao.getUnlocksByType(type);
         Map<Integer, Boolean> map = new HashMap<>();
-        for (UnlockStateEntity e : list) {
-            map.put(e.itemId, e.unlocked);
+        int[] ids = type.equals("achievement") ? GameData.ACHIEVEMENT_IDS : GameData.SKIN_IDS;
+
+        for (int id : ids) {
+            UnlockStateEntity e = dao.getUnlock(type, id);
+            // Если e == null или e.unlocked == null, записываем false
+            boolean unlocked = e != null && Boolean.TRUE.equals(e.unlocked);
+            map.put(id, unlocked);
         }
+
         return map;
     }
+
 
     private void setUnlock(String type, int id) {
         UnlockStateEntity e = dao.getUnlock(type, id);

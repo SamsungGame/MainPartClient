@@ -104,7 +104,13 @@ public class AchievementsScreen implements Screen {
         }
 
         for (int i = 0; i < achievementsIfObtainedImages.size(); i++) {
-            achievements.add(new Achievement(GameData.ACHIEVEMENTS.get(i).name, GameData.ACHIEVEMENTS.get(i).description, repo.getAchievements().get(i), achievementsIfObtainedImages.get(i), achievementsIfNotObtainedImages.get(i)));
+            achievements.add(new Achievement(
+                GameData.ACHIEVEMENTS.get(i).name,
+                GameData.ACHIEVEMENTS.get(i).description,
+                Boolean.TRUE.equals(repo.getAchievements().get(i)), // ← safe!
+                achievementsIfObtainedImages.get(i),
+                achievementsIfNotObtainedImages.get(i)
+            ));
         }
 
         stage.addActor(backButton);
