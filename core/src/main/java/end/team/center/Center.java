@@ -22,9 +22,6 @@ public class Center extends Game {
     public void create() {
         batch = new SpriteBatch();
         setScreen(new MainMenuScreen(0, gameRepository));
-
-        int coins = gameRepository.getCoins();
-        Gdx.app.log("Game", "Монеты: " + coins);
     }
 
     @Override
