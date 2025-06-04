@@ -31,8 +31,8 @@ public class SettingsScreen implements Screen {
     private final float layoutSettingsY;
     private final float layoutMusicX;
     private final float layoutMusicY;
-    private final float layoutVolumeX;
-    private final float layoutVolumeY;
+//    private final float layoutVolumeX;
+//    private final float layoutVolumeY;
     private final Music mainMenuMusic;
     private final Stage stage;
     private final Skin skin;
@@ -60,11 +60,11 @@ public class SettingsScreen implements Screen {
         layoutMusicX = (Gdx.graphics.getWidth() - layoutMusic.width) / 2 - 100;
         layoutMusicY = Gdx.graphics.getHeight() / 2 - layoutMusic.height + 15;
 
-        fontVolume.getData().setScale(1.0f);
-        String volumeText = "Громкость:";
-        layoutVolume.setText(fontVolume, volumeText);
-        layoutVolumeX = (Gdx.graphics.getWidth() - layoutMusic.width) / 2 - 100;
-        layoutVolumeY = Gdx.graphics.getHeight() / 2 - layoutVolume.height - 120;
+//        fontVolume.getData().setScale(1.0f);
+//        String volumeText = "Громкость:";
+//        layoutVolume.setText(fontVolume, volumeText);
+//        layoutVolumeX = (Gdx.graphics.getWidth() - layoutMusic.width) / 2 - 100;
+//        layoutVolumeY = Gdx.graphics.getHeight() / 2 - layoutVolume.height - 120;
 
         TextButton backButton = new TextButton("Назад", skin);
         backButton.setSize(200, 150);
@@ -136,7 +136,7 @@ public class SettingsScreen implements Screen {
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         fontSettings.draw(batch, layoutSettings, layoutSettingsX, layoutSettingsY);
         fontMusic.draw(batch, layoutMusic, layoutMusicX, layoutMusicY);
-        fontVolume.draw(batch, layoutVolume, layoutVolumeX, layoutVolumeY);
+//        fontVolume.draw(batch, layoutVolume, layoutVolumeX, layoutVolumeY);
         batch.end();
 
         stage.act();
