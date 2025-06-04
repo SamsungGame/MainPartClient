@@ -41,6 +41,7 @@ public class SkinsScreen implements Screen {
     private final Texture backgroundTexture = new Texture(Gdx.files.internal("UI/MainMenu/fon.jpg"));
     private final Label buyButton;
     private GameRepository repo;
+    private boolean twoSkinBy = false;
 
     public SkinsScreen(GameRepository repo) {
         this.repo = repo;
@@ -74,7 +75,7 @@ public class SkinsScreen implements Screen {
             }
         });
 
-        skin = new Skin(Gdx.files.internal("UI/MainMenu/back.json"));
+        skin = new Skin(Gdx.files.internal("UI/MainMenu/backButton.json"));
 
         leftButtonSkin = new Skin();
         leftButtonSkin.add("button_up", new Texture(Gdx.files.internal("UI/Achivements/left.png")));
@@ -108,7 +109,8 @@ public class SkinsScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                MainMenuScreen.activeSkin = currentImage;
+                if (repo.getSkins().get(currentIndex)) MainMenuScreen.activeSkin = currentImage;
+
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(0, repo));
             }
         });
@@ -161,7 +163,7 @@ public class SkinsScreen implements Screen {
         stage.addActor(rightButton);
         stage.addActor(currentImage);
 
-        if (Center.currentSkin != 1 && repo.getSkins().get(1)) {
+        if (repo.getSkins().get(1)) {
             stage.addActor(buyButton);
         }
         else {
