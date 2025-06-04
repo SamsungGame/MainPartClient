@@ -7,48 +7,48 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class AnimationHeroKnight {
 
     public static final TextureRegion[] leftStay = new TextureRegion[] {
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNightLeft.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNightLeft_down.png")))
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNighLeft.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNighLeft_down.png")))
     };
 
     public static final TextureRegion[] rightStay = new TextureRegion[] {
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNightRight.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNightRight_down.png")))
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNighRight.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNighRight_down.png")))
     };
 
     public static final TextureRegion[] rightFrames = new TextureRegion[] {
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNightRight1_down.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNightRight_down.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNightRight.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNighRight1_down.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNighRight_down.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNighRight.png"))),
 
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNightRight2.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNightRight2_down.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNightRight_down.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNighRight2.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNighRight2_down.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNighRight_down.png"))),
 
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNightRight_down.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNightRight1_down.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNightRight.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNighRight_down.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNighRight1_down.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNighRight.png"))),
 
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNightRight2.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNightRight2_down.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNightRight_down.png")))
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNighRight2.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNighRight2_down.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNighRight_down.png")))
     };
 
     public static final TextureRegion[] leftFrames = new TextureRegion[] {
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNightLeft1_down.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNightLeft_down.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNightLeft.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNighLeft1_down.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNighLeft_down.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNighLeft.png"))),
 
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNightLeft2.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNightLeft2_down.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNightLeft_down.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNighLeft2.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNighLeft2_down.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNighLeft_down.png"))),
 
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNightLeft_down.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNightLeft1_down.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNightLeft.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNighLeft_down.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNighLeft1_down.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNighLeft.png"))),
 
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNightLeft2.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNightLeft2_down.png"))),
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNightLeft_down.png")))
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNighLeft2.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNighLeft2_down.png"))),
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNighLeft_down.png")))
     };
 }

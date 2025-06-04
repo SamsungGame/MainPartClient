@@ -70,7 +70,7 @@ public class MainMenuScreen implements Screen {
 
         // Количество монет из БД
         coinsText = new Label("", labelSkin);
-        coinsText.setFontScale(3f);
+        coinsText.setFontScale(2f);
         updateCoinsDisplay();
 
         // Кнопка старта
