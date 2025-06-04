@@ -39,7 +39,14 @@ public class GameRepositoryImpl implements GameRepository {
                 UnlockStateEntity e = new UnlockStateEntity();
                 e.type = "skin";
                 e.itemId = id;
-                e.unlocked = false;
+
+                // Сделать дефолтный скин открытым
+                if (id == 1) {
+                    e.unlocked = true;
+                } else {
+                    e.unlocked = false;
+                }
+
                 dao.insertUnlock(e);
             }
         }
