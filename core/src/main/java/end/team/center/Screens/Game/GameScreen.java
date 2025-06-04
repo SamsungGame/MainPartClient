@@ -152,10 +152,10 @@ public class GameScreen implements Screen {
         uiStage = new Stage(uiViewport);
         Gdx.input.setInputProcessor(uiStage);
 
-        touchpadMove = new TouchpadClass(200, 200, false, "move");
+        touchpadMove = new TouchpadClass(200, 400, "move");
         uiStage.addActor(touchpadMove);
 
-        touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth() - 500, 200, false, "attack");
+        touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth() - 300, 400, "attack");
         uiStage.addActor(touchpadAttack);
 
 
@@ -465,7 +465,7 @@ public class GameScreen implements Screen {
         }
 
         coinForGame = coinForEnemyValue + coinForTime;
-
+        TouchpadClass.handleTouchpads(uiStage);
         // Получаем значения от джойстиков
         float moveX = touchpadMove.getKnobPercentX();
         float moveY = touchpadMove.getKnobPercentY();
@@ -594,12 +594,7 @@ public class GameScreen implements Screen {
         batch.setShader(null);
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
-        // Джойстики
-        touchpadMove.TouchpadLogic(uiStage);
-        touchpadAttack.TouchpadLogic(uiStage);
-        touchpadMove.touchpadSetBounds();
-        touchpadAttack.touchpadSetBounds();
-
+        // Джойстик
         // UI поверх всего
         uiStage.act(delta);
         uiStage.draw();
