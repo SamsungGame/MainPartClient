@@ -199,7 +199,7 @@ public class PowerSelectScreen implements Screen {
     }
 
     private void setLabelPos() {
-        label.setPosition((float) Gdx.graphics.getWidth() / 2 - label.getPrefWidth() / 2, 50);
+        label.setPosition((float) Gdx.graphics.getWidth() / 2 - label.getPrefWidth() / 2, 80);
         System.out.println("Lbael: " + label.getX() + "/" + label.getY());
     }
 }

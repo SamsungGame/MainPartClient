@@ -280,6 +280,7 @@ public class GameScreen implements Screen {
                 hero.setExpBonus(hero.getExpBonus() * 2);
 
                 hidePowerDialog();
+                powers.remove(this);
             }
         };
         p.setSize(600, 600);
@@ -293,6 +294,7 @@ public class GameScreen implements Screen {
                 hero.setVampirism(true);
 
                 hidePowerDialog();
+                powers.remove(this);
             }
         };
         p1.setSize(600, 600);
@@ -307,6 +309,7 @@ public class GameScreen implements Screen {
                 hero.setSpeed(hero.getSpeed() * 2);
 
                 hidePowerDialog();
+                powers.remove(this);
             }
         };
         p2.setSize(600, 600);
@@ -322,6 +325,7 @@ public class GameScreen implements Screen {
                 ShaderManager.radiusView3 += 0.2f;
 
                 hidePowerDialog();
+                powers.remove(this);
             }
         };
         p3.setSize(600, 600);
@@ -335,6 +339,7 @@ public class GameScreen implements Screen {
                 hero.setSafeInDeadDamage(true);
 
                 hidePowerDialog();
+                powers.remove(this);
             }
         };
         p4.setSize(600, 600);
@@ -352,6 +357,20 @@ public class GameScreen implements Screen {
         };
         p5.setSize(600, 600);
         powers.add(p5);
+
+        Power p6 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/timeShield.png"),
+            new Texture("UI/GameUI/SelectPowerUI/Effect/timeShield_active.png"),
+            "Вы получаете щит который улучшаетсья каждую минуту \n Улучшения сбрасываються при получении урона!") {
+            @Override
+            public void effect() {
+                hero.activeBuffShield();
+
+                hidePowerDialog();
+                powers.remove(this);
+            }
+        };
+        p6.setSize(600, 600);
+        powers.add(p6);
 
         new Thread(new Runnable() {
             @Override
@@ -507,9 +526,21 @@ public class GameScreen implements Screen {
         // Урон от врагов
         for (Enemy e : enemies) {
             if (e.getBound().overlaps(hero.getBound())) {
-                e.attack(hero);
+                if (hero.getLevelSheild() == 0) {
+                    e.attack(hero);
+                } else {
+                    hero.setSheildLevel(hero.getLevelSheild() - 1);
+                    hero.frameInvulnerability(2);
+                }
 
-                if (hero.returnDamage) e.die();
+                if (hero.returnDamage) {
+                    e.die();
+
+                    for (Enemy ee : enemies) {
+                        if (ee.getBound().overlaps(hero.deathZone)) ee.die();
+                    }
+                }
+                if (hero.getActiveSheild()) hero.offShield();
             }
         }
 
@@ -645,9 +676,14 @@ public class GameScreen implements Screen {
 
         ArrayList<Power> powers = this.powers;
         ArrayList<Power> added = new ArrayList<>();
-        Power[] imgB = new Power[3];
 
-        for (int i = 0; i < 3; i++) {
+        int countPower = Math.min(powers.size(), 3);
+
+        if (countPower == 0) hidePowerDialog();
+
+        Power[] imgB = new Power[countPower];
+
+        for (int i = 0; i < countPower; i++) {
             boolean ok = true;
 
             while (ok) {

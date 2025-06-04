@@ -21,7 +21,7 @@ public abstract class Enemy extends Entity {
 
     protected AI ai;
     protected int level;
-    protected boolean stan = false;
+    protected boolean stan = false, isTreeTouch = false;
     protected float timeToReload = 0;
     protected float timePlayerInvulnerability = 1f;
     protected int damage, exp;
@@ -52,6 +52,7 @@ public abstract class Enemy extends Entity {
     public void move(float deltaX, float deltaY, float delta) {
         if (isLive) {
             if (!stan && STAN_IS_STOP_MOB) {
+                isTreeTouch = false;
                 isMoving = deltaX != 0 || deltaY != 0;
 
                 if (deltaX > 0) {
@@ -65,6 +66,7 @@ public abstract class Enemy extends Entity {
                     if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
                         if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y, width, height))) deltaX = 0;
                         if (t.getBound().overlaps(new Rectangle(vector.x, vector.y + deltaY, width, height))) deltaY = 0;
+                        isTreeTouch = true;
                     }
                 }
 

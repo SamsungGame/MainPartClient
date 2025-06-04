@@ -82,6 +82,15 @@ public class Owl extends Enemy {
 
             move(v.x, v.y, delta);
         }
+
+        if (isTreeTouch && ((AI_Owl) ai).isAttaking) {
+            ((AI_Owl) ai).isAttaking = false;
+
+            ((AI_Owl) ai).lockAttack = null;
+            ((AI_Owl) ai).isAttaking = false;
+            ((AI_Owl) ai).isDiveAttacking = false;
+            ((AI_Owl) ai).timeToReloadDive = 5;
+        }
     }
 
     @Override
