@@ -85,7 +85,7 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        skin = new Skin(Gdx.files.internal("UI/MainMenu/ach.json"));
+        skin = new Skin(Gdx.files.internal("UI/MainMenu/skinButton.json"));
         ImageButton buttonSkin = new ImageButton(skin);
 
         buttonSkin.addListener(new ClickListener() {
@@ -97,7 +97,7 @@ public class MainMenuScreen implements Screen {
         });
         buttonSkin.setSize(200, 200);
 
-        skin = new Skin(Gdx.files.internal("UI/MainMenu/skn.json"));
+        skin = new Skin(Gdx.files.internal("UI/MainMenu/achievButton.json"));
         ImageButton buttonAch = new ImageButton(skin);
 
         buttonAch.addListener(new ClickListener() {
@@ -128,9 +128,9 @@ public class MainMenuScreen implements Screen {
 
         mainTable.add(conclusionText).padBottom(10).row();
 
-        mainTable.add(buttonSkin) .width(400).height(200).pad(5).row();
-        mainTable.add(buttonStart).width(400).height(200).pad(5).row();
-        mainTable.add(buttonAch)  .width(400).height(200);
+        mainTable.add(buttonSkin) .width(170).height(170).pad(5).row();
+        mainTable.add(buttonStart).width(500).height(250).pad(5).row();
+        mainTable.add(buttonAch)  .width(170).height(170);
 
         // Добавляем на stage сначала фон, затем таблицы
         stage.addActor(background);

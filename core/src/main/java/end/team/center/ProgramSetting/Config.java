@@ -5,4 +5,5 @@ public class Config {
     public static boolean playSound = true;
 
     public static final int FRAME_RATE = 30;
+    public static boolean skinIsKnight = false;
 }

@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import end.team.center.Center;
+import end.team.center.ProgramSetting.Config;
 import end.team.center.ProgramSetting.LocalDB.GameRepository;
 
 public class SkinsScreen implements Screen {
@@ -109,7 +110,12 @@ public class SkinsScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (repo.getSkins().get(currentIndex)) MainMenuScreen.activeSkin = currentImage;
+                if (repo.getSkins().get(currentIndex + 1)) {
+                    MainMenuScreen.activeSkin = currentImage;
+
+                    if (currentIndex == 0) Config.skinIsKnight = false;
+                    else                   Config.skinIsKnight = true;
+                }
 
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(0, repo));
             }
@@ -146,13 +152,14 @@ public class SkinsScreen implements Screen {
 
         buyButton = new Label("Купить: 0", new Skin(Gdx.files.internal("UI/AboutGame/label.json")));
         buyButton.setSize(200, 150);
-        buyButton.setPosition(Gdx.graphics.getWidth() / 2 - buyButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - currentImage.getY());
+        buyButton.setFontScale(2f);
+        buyButton.setPosition(Gdx.graphics.getWidth() / 2 - buyButton.getPrefWidth() / 2, Gdx.graphics.getHeight() / 2 - currentImage.getY());
 
         buyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (repo.getCoins() >= 100) {
-                    repo.unlockSkin(1);
+                if (currentIndex == 1 && repo.getCoins() >= 100 && !repo.getSkins().get(currentIndex + 1)) {
+                    repo.unlockSkin(2);
                     repo.spendCoins(100);
                 }
             }
@@ -163,12 +170,7 @@ public class SkinsScreen implements Screen {
         stage.addActor(rightButton);
         stage.addActor(currentImage);
 
-        if (repo.getSkins().get(1)) {
-            stage.addActor(buyButton);
-        }
-        else {
-            buyButton.remove();
-        }
+        stage.addActor(buyButton);
     }
 
     private void showNextImage() {
@@ -202,7 +204,12 @@ public class SkinsScreen implements Screen {
         font.draw(batch, layout, layoutX, layoutY);
         batch.end();
 
-        buyButton.setText(Center.prices.get(Center.currentSkin - 1));
+        if (!repo.getSkins().get(currentIndex + 1)) {
+            buyButton.setText("Цена: " + Center.prices.get(Center.currentSkin - 1));
+        } else {
+            buyButton.setText("Куплено!");
+        }
+        buyButton.setPosition(Gdx.graphics.getWidth() / 2 - buyButton.getPrefWidth() / 2, Gdx.graphics.getHeight() / 2 - currentImage.getY());
 
         stage.act();
         stage.draw();

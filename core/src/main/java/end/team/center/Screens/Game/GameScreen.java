@@ -44,6 +44,7 @@ import end.team.center.GameCore.UIElements.UIGameScreenElements.Heart;
 import end.team.center.GameCore.UIElements.UIGameScreenElements.TouchpadClass;
 import end.team.center.GameCore.Logic.GameCamera;
 import end.team.center.GameCore.Logic.ShaderManager;
+import end.team.center.ProgramSetting.Config;
 import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Redact.SystemOut.Console;
 
@@ -158,16 +159,27 @@ public class GameScreen implements Screen {
         touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth() - 300, 400, "attack");
         uiStage.addActor(touchpadAttack);
 
-
-        hero = new Hero(
-            repo,
-            new Texture(Gdx.files.internal("UI/GameUI/Hero/Right/heroRight.png")),
-            CharacterAnimation.Hero,
-            new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
-            140, 120 ,3,
-            1, 0, 300f,
-            WORLD_WIDTH, WORLD_HEIGHT
-        );
+        if (!Config.skinIsKnight) {
+            hero = new Hero(
+                repo,
+                new Texture(Gdx.files.internal("UI/GameUI/Hero/Right/heroRight.png")),
+                CharacterAnimation.Hero,
+                new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
+                140, 120, 3,
+                1, 0, 300f,
+                WORLD_WIDTH, WORLD_HEIGHT
+            );
+        } else {
+            hero = new Hero(
+                repo,
+                new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNighRight.png")),
+                CharacterAnimation.Knight,
+                new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
+                140, 120, 3,
+                1, 0, 300f,
+                WORLD_WIDTH, WORLD_HEIGHT
+            );
+        }
 
         worldStage.addActor(hero);
 
