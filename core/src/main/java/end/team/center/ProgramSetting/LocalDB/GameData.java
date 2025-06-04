@@ -10,7 +10,7 @@ public class GameData {
     // Информация об ачивках
     public static final List<AchievementData> ACHIEVEMENTS = Arrays.asList(
         new AchievementData(1, "Прошёл сквозь завесу", "Заверши забег и выберись"),
-        new AchievementData(2, "Нож — всё, что было нужно", "Заверши забег, не подняв ни одного предмета"),
+        new AchievementData(2, "Ничего, кроме ножа", "Заверши забег, не подняв ни одного предмета"),
         new AchievementData(3, "Тишина длиной в вечность", "Выжить 10 минут"),
         new AchievementData(3, "Дверь была открыта...", "Умри у самого выхода"),
         new AchievementData(3, "Руки остались чистыми", " выберись, никого не убив")

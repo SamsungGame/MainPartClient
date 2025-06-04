@@ -9,12 +9,15 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -36,7 +39,7 @@ public class SkinsScreen implements Screen {
     private int currentIndex;
     private float touchStartX;
     private final Texture backgroundTexture = new Texture(Gdx.files.internal("UI/MainMenu/fon.jpg"));
-    private final TextButton buyButton;
+    private final Label buyButton;
     private GameRepository repo;
 
     public SkinsScreen(GameRepository repo) {
@@ -71,7 +74,7 @@ public class SkinsScreen implements Screen {
             }
         });
 
-        skin = new Skin(Gdx.files.internal("_.json"));
+        skin = new Skin(Gdx.files.internal("UI/MainMenu/back.json"));
 
         leftButtonSkin = new Skin();
         leftButtonSkin.add("button_up", new Texture(Gdx.files.internal("UI/Achivements/left.png")));
@@ -138,13 +141,14 @@ public class SkinsScreen implements Screen {
         currentImage.setPosition(Gdx.graphics.getWidth() / 2 - currentImage.getWidth() / 2,
                 Gdx.graphics.getHeight() / 2 - currentImage.getHeight() / 2);
 
-        buyButton = new TextButton("Купить: 0", skin);
+
+        buyButton = new Label("Купить: 0", new Skin(Gdx.files.internal("UI/AboutGame/label.json")));
         buyButton.setSize(200, 150);
         buyButton.setPosition(Gdx.graphics.getWidth() / 2 - buyButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - currentImage.getY());
 
-        buyButton.addListener(new ChangeListener() {
+        buyButton.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
+            public void clicked(InputEvent event, float x, float y) {
                 if (repo.getCoins() >= 100) {
                     repo.unlockSkin(1);
                     repo.spendCoins(100);
