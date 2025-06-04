@@ -1,0 +1,27 @@
+
+backButton.png
+size: 1024, 1024
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+achievButton
+  rotate: false
+  xy: 1, 501
+  size: 520, 520
+  orig: 520, 520
+  offset: 0, 0
+  index: -1
+backButton
+  rotate: false
+  xy: 523, 681
+  size: 500, 340
+  orig: 500, 340
+  offset: 0, 0
+  index: -1
+skinButton
+  rotate: false
+  xy: 1, 239
+  size: 440, 260
+  orig: 440, 260
+  offset: 0, 0
+  index: -1
