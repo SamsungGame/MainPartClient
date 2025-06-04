@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
@@ -32,8 +33,37 @@ public class AchievementsScreen implements Screen {
     private final Stage stage;
     private final Skin skin;
     private final Texture backgroundTexture = new Texture(Gdx.files.internal("background.png"));
-    private final Texture achievementDoorObtainedTexture = new Texture(Gdx.files.internal("achievements/obtained/door_mini.png"));
-    private final Texture achievementExitObtainedTexture = new Texture(Gdx.files.internal("achievements/obtained/exit_mini.png"));
+    private final String[] achievementsNames = {
+        "Прошёл сквозь завесу",
+        "Нож — всё, что было нужно",
+        "Тишина длиной в вечность",
+        "Дверь была открыта...",
+        "Руки остались чистыми"
+    };
+    private final String[] achievementsDescriptions = {
+        "Заверши забег и выберись",
+        "Заверши забег, не подняв ни одного предмета",
+        "Выживи 10 минут",
+        "Умри у самого выхода",
+        "Выберись, никого не убив"
+    };
+    private final String[] achievementsIfObtainedTexturePaths = {
+        "achievements/obtained/clear_mini.png",
+        "achievements/obtained/door_mini.png",
+        "achievements/obtained/exit_mini.png",
+        "achievements/obtained/knife_mini.png",
+        "achievements/obtained/time_mini.png"
+    };
+    private final String[] achievementsIfNotObtainedTexturePaths = {
+        "achievements/notObtained/grayscale_clear.png",
+        "achievements/notObtained/grayscale_door.png",
+        "achievements/notObtained/grayscale_exit.png",
+        "achievements/notObtained/grayscale_knife.png",
+        "achievements/notObtained/grayscale_time.png"
+    };
+
+    ArrayList<Image> achievementsIfObtainedImages = new ArrayList<>();
+    ArrayList<Image> achievementsIfNotObtainedImages = new ArrayList<>();
     ArrayList<Achievement> achievements = new ArrayList<>();
 
     public AchievementsScreen(MyGame game) {
@@ -59,18 +89,42 @@ public class AchievementsScreen implements Screen {
             }
         });
 
-        Image achievementDoorObtainedImage = new Image(achievementDoorObtainedTexture);
-        achievementDoorObtainedImage.setSize(150, 150);
-        achievementDoorObtainedImage.setPosition(100, Gdx.graphics.getHeight() / 2 - achievementDoorObtainedImage.getHeight() / 2);
-
-        achievements.add(new Achievement("Прошёл сквозь завесу", "Заверши забег и выберись", false, achievementDoorObtainedImage, achievementDoorObtainedImage));
+        for (String path : achievementsIfObtainedTexturePaths) {
+            achievementsIfObtainedImages.add(new Image(new Texture(Gdx.files.internal(path))));
+        }
+        for (String path : achievementsIfNotObtainedTexturePaths) {
+            achievementsIfNotObtainedImages.add(new Image(new Texture(Gdx.files.internal(path))));
+        }
+        for (int i = 0; i < achievementsIfObtainedImages.size(); i++) {
+            achievementsIfObtainedImages.get(i).setSize(150, 150);
+            achievementsIfObtainedImages.get(i).setPosition(100 + i * achievementsIfObtainedImages.get(i).getWidth(),
+                Gdx.graphics.getHeight() / 2 - achievementsIfObtainedImages.get(i).getHeight() / 2);
+            achievementsIfNotObtainedImages.get(i).setSize(150, 150);
+            achievementsIfNotObtainedImages.get(i).setPosition(100 + i * achievementsIfNotObtainedImages.get(i).getWidth(),
+                Gdx.graphics.getHeight() / 2 - achievementsIfNotObtainedImages.get(i).getHeight() / 2);
+        }
+        for (int i = 0; i < achievementsIfObtainedImages.size(); i++) {
+            achievements.add(new Achievement(achievementsNames[i], achievementsDescriptions[i], false, achievementsIfObtainedImages.get(i), achievementsIfNotObtainedImages.get(i)));
+        }
 
         stage.addActor(backButton);
         for (Achievement achievement : achievements) {
             if (achievement.isObtained) {
+                achievement.achievementIfObtained.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+
+                    }
+                });
                 stage.addActor(achievement.achievementIfObtained);
             }
             else {
+                achievement.achievementIfNotObtained.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+
+                    }
+                });
                 stage.addActor(achievement.achievementIfNotObtained);
             }
         }
@@ -124,7 +178,11 @@ public class AchievementsScreen implements Screen {
         stage.dispose();
         skin.dispose();
         backgroundTexture.dispose();
-        achievementDoorObtainedTexture.dispose();
-        achievementExitObtainedTexture.dispose();
+        for (Image image : achievementsIfObtainedImages) {
+            new TextureRegionDrawable((TextureRegionDrawable) image.getDrawable()).getRegion().getTexture().dispose();
+        }
+        for (Image image : achievementsIfNotObtainedImages) {
+            new TextureRegionDrawable((TextureRegionDrawable) image.getDrawable()).getRegion().getTexture().dispose();
+        }
     }
 }

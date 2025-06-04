@@ -1,5 +1,13 @@
+achievements/notObtained/grayscale_clear.png
+achievements/notObtained/grayscale_door.png
+achievements/notObtained/grayscale_exit.png
+achievements/notObtained/grayscale_knife.png
+achievements/notObtained/grayscale_time.png
+achievements/obtained/clear_mini.png
 achievements/obtained/door_mini.png
 achievements/obtained/exit_mini.png
+achievements/obtained/knife_mini.png
+achievements/obtained/time_mini.png
 background.png
 buttonStyle/buttonStyle.atlas
 buttonStyle/buttonStyle.json
