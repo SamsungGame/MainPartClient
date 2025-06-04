@@ -40,6 +40,7 @@ public class Portal extends StaticObject {
         super.act(delta);
 
         if (hero.getBound().overlaps(bound)) {
+            gameRepository.addCoins(((int) GameScreen.coinForGame * 2));
             ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(1, gameRepository));
             GameScreen.backgroundMusic.stop();
             GameScreen.endTask();

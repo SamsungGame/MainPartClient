@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -56,15 +57,19 @@ public class MainMenuScreen implements Screen {
         background = new Fon(tr, new Vector2(0, 0), size);
 
         // Текст результата
+
         String str = (code >= 0 && code < texts.length) ? texts[code] : texts[0];
         Skin labelSkin = new Skin(Gdx.files.internal("UI/AboutGame/label.json"));
 
         conclusionText = new Label(str, labelSkin);
-        conclusionText.setFontScale(2f);
+        conclusionText.setFontScale(2.5f);
+
+        Texture coinT = new Texture("UI/GameUI/OtherGameItems/coin.png");
+        Image coinImg = new Image(coinT);
 
         // Количество монет из БД
         coinsText = new Label("", labelSkin);
-        coinsText.setFontScale(2f);
+        coinsText.setFontScale(3f);
         updateCoinsDisplay();
 
         // Кнопка старта
@@ -79,17 +84,29 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        // UI-компоновка
-        Table table = new Table();
-        table.setFillParent(true);
-        table.center();
+// Таблица для монет в правом верхнем углу
+        Table coinsTable = new Table();
+        coinsTable.top().right();
+        coinsTable.setFillParent(true);
 
-        table.add(coinsText).pad(10).row();
-        table.add(conclusionText).pad(80).row();
-        table.add(buttonStart).height(290).width(630);
+        coinImg.setSize(120, 120);
+        coinsTable.add(coinsText).padRight(30).padTop(30);
+        coinsTable.add(coinImg).size(120, 120).padTop(30).padRight(60);
 
+// Основная таблица для текста и кнопки (центр по горизонтали и вертикали)
+        Table mainTable = new Table();
+        mainTable.setFillParent(true);
+        mainTable.center();
+
+        mainTable.add(conclusionText).padBottom(100).row();
+
+        mainTable.add(buttonStart).width(600).height(300);
+
+// Добавляем на stage сначала фон, затем таблицы
         stage.addActor(background);
-        stage.addActor(table);
+        stage.addActor(mainTable);
+        stage.addActor(coinsTable);
+
 
         // Музыка
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Sounds/lobby.mp3"));
@@ -100,7 +117,7 @@ public class MainMenuScreen implements Screen {
 
     private void updateCoinsDisplay() {
         int coins = gameRepository.getCoins();
-        coinsText.setText("Монеты: " + coins);
+        coinsText.setText(coins);
     }
 
     @Override public void show() {}

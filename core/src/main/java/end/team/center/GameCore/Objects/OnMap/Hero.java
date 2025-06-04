@@ -177,7 +177,7 @@ public class Hero extends Friendly {
         setRadiationLevel();
         antiRadiationCostumePower -= (float) (((radiationLevel * 0.4) / radiationProtect) * delta);
         if (antiRadiationCostumePower < 0) {
-
+            gameRepository.addCoins(((int) GameScreen.coinForGame));
             ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(3, gameRepository));
             GameScreen.backgroundMusic.stop();
             GameScreen.endTask();
@@ -199,6 +199,7 @@ public class Hero extends Friendly {
 
         if (this.health <= 0) {
             if (!safeInDeadDamage) {
+                gameRepository.addCoins(((int) GameScreen.coinForGame));
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(2, gameRepository));
                 GameScreen.backgroundMusic.stop();
                 GameScreen.endTask();

@@ -60,6 +60,10 @@ public class GameScreen implements Screen {
     public static final float WORLD_WIDTH = 50000;
     public static final float WORLD_HEIGHT = 50000;
     public int maxMobSpawn = 250;
+    public static float coinForEnemyValue = 0;
+    public static float coinForTime = 0;
+    public static float coinForGame = 0;
+
     public int maxDropSpawn = 1000;
 
     private static SpawnMob spawner;
@@ -453,10 +457,14 @@ public class GameScreen implements Screen {
         addToList();
         TIME += delta;
 
+        coinForTime += delta/20;
+
         if (hero.newLevelFlag) {
             showPowerDialog(delta);
             return;
         }
+
+        coinForGame = coinForEnemyValue + coinForTime;
 
         // Получаем значения от джойстиков
         float moveX = touchpadMove.getKnobPercentX();
@@ -508,6 +516,7 @@ public class GameScreen implements Screen {
         // Удаление мертвых врагов
         enemies.removeIf(e -> {
             if (!e.isLive()) {
+                coinForEnemyValue+=0.1f;
                 e.remove();
                 return true;
             }
