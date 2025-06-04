@@ -4,6 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.ArrayList;
+
 import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Screens.Menu.MainMenuScreen;
 
@@ -12,9 +14,14 @@ public class Center extends Game {
     public SpriteBatch batch;
     private GameRepository gameRepository;
 
-    public Center() {
+    public static int currentSkin = 1;
+    public static ArrayList<String> prices = new ArrayList<>();
 
+    public Center() {
+        prices.add("0");
+        prices.add("100");
     }
+
     public void setGameRepository(GameRepository repo) {
         this.gameRepository = repo;
     }

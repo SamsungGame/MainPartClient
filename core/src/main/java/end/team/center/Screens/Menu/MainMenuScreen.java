@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -23,12 +24,12 @@ import end.team.center.Screens.Game.GameScreen;
 
 public class MainMenuScreen implements Screen {
     private GameRepository gameRepository;
-    private Center center;
     private Stage stage;
     private Skin skin;
     private Fon background;
     private Music backgroundMusic;
     private Label conclusionText, coinsText;
+    public static Image activeSkin;
 
     private static final String[] texts = {
         "ДОБРО ПОЖАЛОВАТЬ!",
@@ -38,7 +39,7 @@ public class MainMenuScreen implements Screen {
     };
 
     public MainMenuScreen(int code, GameRepository repo) {
-
+        if (activeSkin == null) activeSkin = new Image(new Texture(Gdx.files.internal("UI/GameUI/Hero/Left/heroLeftKnife.png")));
         this.gameRepository = repo;
 
         stage = new Stage(new ScreenViewport());
@@ -84,7 +85,34 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-// Таблица для монет в правом верхнем углу
+        skin = new Skin(Gdx.files.internal("UI/MainMenu/ach.json"));
+        ImageButton buttonSkin = new ImageButton(skin);
+
+        buttonSkin.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                backgroundMusic.stop();
+                ((Center) Gdx.app.getApplicationListener()).setScreen(new SkinsScreen(repo));
+            }
+        });
+        buttonSkin.setSize(200, 200);
+
+        skin = new Skin(Gdx.files.internal("UI/MainMenu/skn.json"));
+        ImageButton buttonAch = new ImageButton(skin);
+
+        buttonAch.addListener(new ClickListener() {
+            @Override
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                backgroundMusic.stop();
+                ((Center) Gdx.app.getApplicationListener()).setScreen(new AchievementsScreen(repo));
+            }
+        });
+        buttonAch.setSize(200, 200);
+
+        activeSkin.setSize(300, 320);
+        activeSkin.setPosition(Gdx.graphics.getWidth() - activeSkin.getWidth() - 50, (float) Gdx.graphics.getHeight() / 2 - activeSkin.getHeight() / 2 - 100);
+
+        // Таблица для монет в правом верхнем углу
         Table coinsTable = new Table();
         coinsTable.top().right();
         coinsTable.setFillParent(true);
@@ -93,19 +121,22 @@ public class MainMenuScreen implements Screen {
         coinsTable.add(coinsText).padRight(30).padTop(30);
         coinsTable.add(coinImg).size(120, 120).padTop(30).padRight(60);
 
-// Основная таблица для текста и кнопки (центр по горизонтали и вертикали)
+        // Основная таблица для текста и кнопки (центр по горизонтали и вертикали)
         Table mainTable = new Table();
         mainTable.setFillParent(true);
         mainTable.center();
 
         mainTable.add(conclusionText).padBottom(100).row();
 
-        mainTable.add(buttonStart).width(600).height(300);
+        mainTable.add(buttonSkin) .width(400).height(200).pad(20).row();
+        mainTable.add(buttonStart).width(400).height(200).pad(20).row();
+        mainTable.add(buttonAch)  .width(400).height(200);
 
-// Добавляем на stage сначала фон, затем таблицы
+        // Добавляем на stage сначала фон, затем таблицы
         stage.addActor(background);
         stage.addActor(mainTable);
         stage.addActor(coinsTable);
+        stage.addActor(activeSkin);
 
 
         // Музыка

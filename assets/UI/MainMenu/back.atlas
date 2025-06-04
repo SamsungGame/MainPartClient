@@ -1,0 +1,13 @@
+
+back.png
+size: 32, 32
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+backButton
+  rotate: false
+  xy: 1, 7
+  size: 25, 17
+  orig: 25, 17
+  offset: 0, 0
+  index: -1

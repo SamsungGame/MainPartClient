@@ -1,0 +1,13 @@
+
+ach.png
+size: 32, 32
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+skinButton
+  rotate: false
+  xy: 1, 8
+  size: 22, 13
+  orig: 22, 13
+  offset: 0, 0
+  index: -1

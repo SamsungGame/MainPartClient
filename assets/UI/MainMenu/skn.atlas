@@ -1,0 +1,13 @@
+
+skn.png
+size: 16, 16
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+achievButton
+  rotate: false
+  xy: 1, 1
+  size: 13, 13
+  orig: 13, 13
+  offset: 0, 0
+  index: -1
