@@ -104,7 +104,7 @@ public class GameScreen implements Screen {
 
     //Деревья
     public static ArrayList<Tree> trees;
-    private int countTree = 1000;
+    private int countTree = 3000;
 
     public static Portal portal;
 
@@ -179,7 +179,7 @@ public class GameScreen implements Screen {
         } else {
             hero = new Hero(
                 repo,
-                new Texture(Gdx.files.internal("UI/GameUI/Hero/NightRight/heroNighRight.png")),
+                new Texture(Gdx.files.internal("UI/GameUI/Hero/KnightRight/heroNighRight.png")),
                 CharacterAnimation.Knight,
                 new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
                 140, 120, 3,
@@ -432,9 +432,8 @@ public class GameScreen implements Screen {
                 int x = (int) (Math.random() * WORLD_WIDTH / 5);
                 int y = (int) (Math.random() * WORLD_HEIGHT / 5);
 
-                float spawnX = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_WIDTH - x), (int) (WORLD_WIDTH - Entity.BOUNDARY_PADDING - 200)) : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), x);
-                float spawnY = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_HEIGHT - y), (int) (WORLD_HEIGHT - Entity.BOUNDARY_PADDING - 200)) : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), y);
-
+                float spawnX =2400;
+                float spawnY = 2400;
                 portal = new Portal(
                     repo,
                     new Texture(Gdx.files.internal("UI/GameUI/Structure/portal1.png")),
@@ -471,19 +470,34 @@ public class GameScreen implements Screen {
 
         Texture[] treesTexture = new Texture[] {tree1, tree2, tree3, tree4};
 
+        Vector2 center = new Vector2(WORLD_WIDTH / 2f, WORLD_HEIGHT / 2f);
+        float minDistance = 400f;
+
         for (int i = 0; i < countTree; i++) {
             Texture treeTexture = treesTexture[new Random().nextInt(treesTexture.length)];
 
+            Vector2 spawnPos;
+            float distance;
+
+            // Генерируем позицию, пока она не будет вне зоны 400px от центра
+            do {
+                spawnPos = new Vector2(
+                    (float) (Math.random() * WORLD_WIDTH),
+                    (float) (Math.random() * WORLD_HEIGHT)
+                );
+                distance = spawnPos.dst(center);
+            } while (distance < minDistance);
+
             Tree tree = new Tree(
                 treeTexture,
-                new Vector2((float) (Math.random() * WORLD_WIDTH), (float) (Math.random() * WORLD_HEIGHT)),
+                spawnPos,
                 treeTexture.getHeight() * 10,
                 treeTexture.getWidth() * 10,
                 false
             );
 
             trees.add(tree);
-            worldStage.addActor(tree);  // Добавляем дерево на сцену мира
+            worldStage.addActor(tree);
         }
 
 
@@ -522,7 +536,7 @@ public class GameScreen implements Screen {
 
         coinForTime += delta/20;
 
-        if (totalTime >= 600 && !gameRepository.getAchievements().get(3)) {
+        if (totalTime >= 10 && !gameRepository.getAchievements().get(3)) {
            showAchivs = true;
 //            imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/time_open.png"));
             idAchivs = 3;

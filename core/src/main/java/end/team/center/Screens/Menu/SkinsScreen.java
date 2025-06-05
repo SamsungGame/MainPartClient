@@ -138,7 +138,7 @@ public class SkinsScreen implements Screen {
         // Загружаем 2 изображения
         images = new Texture[] {
             new Texture(Gdx.files.internal("UI/GameUI/Hero/Left/heroLeftKnife.png")),
-            new Texture(Gdx.files.internal("UI/GameUI/Hero/NightLeft/heroNighLeft.png"))
+            new Texture(Gdx.files.internal("UI/GameUI/Hero/KnightLeft/heroNighLeft.png"))
         };
 
         currentIndex = Center.currentSkin - 1; // Начинаем с первого изображения
@@ -158,9 +158,9 @@ public class SkinsScreen implements Screen {
         buyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (currentIndex == 1 && repo.getCoins() >= 100 && !repo.getSkins().get(currentIndex + 1)) {
+                if (currentIndex == 1 && repo.getCoins() >= 0 && !repo.getSkins().get(currentIndex + 1)) {
                     repo.unlockSkin(2);
-                    repo.spendCoins(100);
+                    repo.spendCoins(0);
                 }
             }
         });
