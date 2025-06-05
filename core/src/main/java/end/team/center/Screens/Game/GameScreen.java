@@ -454,11 +454,12 @@ public class GameScreen implements Screen {
         Texture tree2 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT1.png"));
         Texture tree3 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT2.png"));
         Texture tree4 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT3.png"));
+        Texture tree5 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT4.png"));
 
-        Texture[] treesTexture = new Texture[] {tree1, tree2, tree3, tree4};
+        Texture[] treesTexture = new Texture[] {tree1, tree2, tree3, tree4, tree5};
 
         for (int i = 0; i < countTree; i++) {
-            Texture tree = treesTexture[new Random().nextInt(0, 3)];
+            Texture tree = treesTexture[new Random().nextInt(treesTexture.length)];
 
             Tree t = new Tree(tree,
                 new Vector2((float) (Math.random() * WORLD_WIDTH), (float) (Math.random() * WORLD_HEIGHT)),
