@@ -230,7 +230,7 @@ public class Hero extends Friendly {
         super.act(delta);
 
         setRadiationLevel();
-        antiRadiationCostumePower -= (float) (((radiationLevel * 0.4) / radiationProtect) * delta);
+        antiRadiationCostumePower -= (float) (((radiationLevel * 0.2) / radiationProtect) * delta);
         if (antiRadiationCostumePower < 0) {
             gameRepository.addCoins(((int) GameScreen.coinForGame));
             ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(3, gameRepository));
