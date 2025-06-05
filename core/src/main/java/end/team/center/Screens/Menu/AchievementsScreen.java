@@ -72,7 +72,7 @@ public class AchievementsScreen implements Screen {
         layoutAchievementsX = (Gdx.graphics.getWidth() - layoutAchievements.width) / 2;
         layoutAchievementsY = Gdx.graphics.getHeight() - layoutAchievements.height;
 
-        fontDescription.getData().setScale(1.0f);
+        fontDescription.getData().setScale(2.0f);
         layoutDescription.setText(fontDescription, "");
 
         ImageButton backButton = new ImageButton(skin);
@@ -158,7 +158,7 @@ public class AchievementsScreen implements Screen {
             Achievement achievement = achievements.get(selectedPosition);
             String descriptionText = achievement.name;
             if (achievement.isObtained) {
-                descriptionText += "\n\n" + achievement.description;
+                descriptionText += "\n" + achievement.description;
             }
             layoutDescription.setText(fontDescription, descriptionText);
             float layoutDescriptionX = Gdx.graphics.getWidth() / 2 - layoutDescription.width / 2;

@@ -116,6 +116,8 @@ public class GameScreen implements Screen {
     public static boolean isKill = false;
     boolean start = false;
 
+    public int timeShowNewAch = 4; // sec
+
 
 
 
@@ -797,7 +799,7 @@ public class GameScreen implements Screen {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(4000);
+                    Thread.sleep(timeShowNewAch * 1000);
                 } catch (InterruptedException ignored) {}
 
                 showAchivs = false;
