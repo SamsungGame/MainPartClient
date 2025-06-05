@@ -391,6 +391,20 @@ public class GameScreen implements Screen {
         p6.setSize(600, 600);
         powers.add(p6);
 
+        Power p7 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/powerForAttack.png"),
+            new Texture("UI/GameUI/SelectPowerUI/Effect/powerForAttack_active.png"),
+            "Вы получаете немного энергии за каждый удар мобов") {
+            @Override
+            public void effect() {
+                hero.activeCollectEnergy();
+
+                hidePowerDialog();
+                powers.remove(this);
+            }
+        };
+        p7.setSize(600, 600);
+        powers.add(p7);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -551,6 +565,10 @@ public class GameScreen implements Screen {
                         worldStage.addActor(exp);
 
                         isKill = true;
+                    }
+
+                    if (hero.getEnergyCollect()) {
+                        hero.addAntiRadiationCostumePower(0.5f);
                     }
                 }
             }

@@ -32,7 +32,7 @@ public class Hero extends Friendly {
     protected int expWeapon = 0, levelWeapon = 0;
     protected int exp, level, maxHP;
     protected float expBonus = 1, damageBonus = 0;
-    protected boolean vampirism = false, activeBaffShield = false;
+    protected boolean vampirism = false, activeBaffShield = false, collectEnergy = false;
     protected int maxExp, sheildLevel;
     public boolean newLevelFlag = false, shyne = false, safeInDeadDamage = false, returnDamage = false;
     private int duration = 30;
@@ -74,6 +74,14 @@ public class Hero extends Friendly {
                 }
             }
         }).start();
+    }
+
+    public void activeCollectEnergy() {
+        collectEnergy = true;
+    }
+
+    public boolean getEnergyCollect() {
+        return collectEnergy;
     }
 
     public boolean getIsInvulnerability() {
@@ -121,6 +129,9 @@ public class Hero extends Friendly {
 
     public float getAntiRadiationCostumePower() {
         return antiRadiationCostumePower;
+    }
+    public void addAntiRadiationCostumePower(float i) {
+        antiRadiationCostumePower += i;
     }
     public Weapon getWep() {
         return weapon;
