@@ -461,28 +461,31 @@ public class GameScreen implements Screen {
 
         wait.addAll(spawnItem.startDropSet());
 
-        // Создание деревьев
+
         trees = new ArrayList<>();
 
-        Texture tree1 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/elka.png"));
-        Texture tree2 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT1.png"));
-        Texture tree3 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT2.png"));
-        Texture tree4 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT3.png"));
-        Texture tree5 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT4.png"));
+        Texture tree1 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT1.png"));
+        Texture tree2 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT2.png"));
+        Texture tree3 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT3.png"));
+        Texture tree4 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT4.png"));
 
-        Texture[] treesTexture = new Texture[] {tree1, tree2, tree3, tree4, tree5};
+        Texture[] treesTexture = new Texture[] {tree1, tree2, tree3, tree4};
 
         for (int i = 0; i < countTree; i++) {
-            Texture tree = treesTexture[new Random().nextInt(treesTexture.length)];
+            Texture treeTexture = treesTexture[new Random().nextInt(treesTexture.length)];
 
-            Tree t = new Tree(tree,
+            Tree tree = new Tree(
+                treeTexture,
                 new Vector2((float) (Math.random() * WORLD_WIDTH), (float) (Math.random() * WORLD_HEIGHT)),
-                tree.getHeight() * 10, tree.getHeight() * 10,
-                false);
+                treeTexture.getHeight() * 10,
+                treeTexture.getWidth() * 10,
+                false
+            );
 
-            trees.add(t);
-            worldStage.addActor(t);
+            trees.add(tree);
+            worldStage.addActor(tree);  // Добавляем дерево на сцену мира
         }
+
 
         worldStage.addActor(portal);
 

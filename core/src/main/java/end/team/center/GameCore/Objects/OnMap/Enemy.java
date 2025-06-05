@@ -63,12 +63,15 @@ public abstract class Enemy extends Entity {
                     mRight = false;
                 }
 
-                // Проверка касания деревьев
-                for(Tree t: GameScreen.trees) {
-                    if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
-                        if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y, width, height))) deltaX = 0;
-                        if (t.getBound().overlaps(new Rectangle(vector.x, vector.y + deltaY, width, height))) deltaY = 0;
-                        isTreeTouch = true;
+                if (GameScreen.trees != null) {
+                    for (Tree t : GameScreen.trees) {
+                        if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
+                            if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y, width, height)))
+                                deltaX = 0;
+                            if (t.getBound().overlaps(new Rectangle(vector.x, vector.y + deltaY, width, height)))
+                                deltaY = 0;
+                            isTreeTouch = true;
+                        }
                     }
                 }
 
