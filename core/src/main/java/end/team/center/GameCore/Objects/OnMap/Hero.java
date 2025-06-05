@@ -163,7 +163,6 @@ public class Hero extends Friendly {
     public void newLevel() {
         if(exp >= maxExp) {
             level++;
-            maxExp = (int) (maxExp * level * 1.3);
             exp = 0;
             newLevelFlag = true;
         }

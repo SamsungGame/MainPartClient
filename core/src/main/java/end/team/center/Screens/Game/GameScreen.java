@@ -418,8 +418,8 @@ public class GameScreen implements Screen {
                 int x = (int) (Math.random() * WORLD_WIDTH / 5);
                 int y = (int) (Math.random() * WORLD_HEIGHT / 5);
 
-                float spawnX = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_WIDTH - x), (int) (WORLD_WIDTH - Entity.BOUNDARY_PADDING - 200)) : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), x);
-                float spawnY = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_HEIGHT - y), (int) (WORLD_HEIGHT - Entity.BOUNDARY_PADDING - 200)) : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), y);
+                float spawnX = 2400;
+                float spawnY = 2400;
 
                 portal = new Portal(
                     repo,
