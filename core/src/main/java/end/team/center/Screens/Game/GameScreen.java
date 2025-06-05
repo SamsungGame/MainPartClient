@@ -352,7 +352,7 @@ public class GameScreen implements Screen {
 
         Power p4 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/saveHeart.png"),
             new Texture("UI/GameUI/SelectPowerUI/Effect/saveHeart_active.png"),
-            "Вы получаете 1 перерождение в случае смерти (не скадывается)") {
+            "Вы получаете 1 перерождение в случае смерти") {
             @Override
             public void effect() {
                 hero.setSafeInDeadDamage(true);
@@ -505,8 +505,8 @@ public class GameScreen implements Screen {
         coinForTime += delta/20;
 
         if (totalTime >= 600 && !gameRepository.getAchievements().get(3)) {
-            showAchivs = true;
-            imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/time_open.png"));
+           showAchivs = true;
+//            imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/time_open.png"));
             idAchivs = 3;
         }
 
@@ -788,9 +788,9 @@ public class GameScreen implements Screen {
 
     public void showNewAchivs() {
         if (!start) {
-            imageAchivs.setSize(imageAchivs.getWidth() * 5, imageAchivs.getHeight() * 5);
-            imageAchivs.setPosition(Gdx.graphics.getWidth() / 2 - imageAchivs.getWidth() / 2, imageAchivs.getHeight() + 20);
-            uiStage.addActor(imageAchivs);
+//            imageAchivs.setSize(imageAchivs.getWidth() * 5, imageAchivs.getHeight() * 5);
+//            imageAchivs.setPosition(Gdx.graphics.getWidth() / 2 - imageAchivs.getWidth() / 2, imageAchivs.getHeight() + 20);
+//            uiStage.addActor(imageAchivs);
 
             start = true;
         }
@@ -805,7 +805,7 @@ public class GameScreen implements Screen {
                 showAchivs = false;
                 start = false;
 
-                imageAchivs.remove();
+//                imageAchivs.remove();
 
                 gameRepository.unlockAchievement(idAchivs);
                 idAchivs = -1;
