@@ -57,6 +57,9 @@ public class MainMenuScreen implements Screen {
         TextureRegion tr = new TextureRegion(fon);
         background = new Fon(tr, new Vector2(0, 0), size);
 
+        activeSkin.setSize(300, 320);
+        activeSkin.setPosition(Gdx.graphics.getWidth() - activeSkin.getWidth() - 50, (float) Gdx.graphics.getHeight() / 2 - activeSkin.getHeight() / 2 - 20);
+
         // Текст результата
 
         String str = (code >= 0 && code < texts.length) ? texts[code] : texts[0];
@@ -95,7 +98,8 @@ public class MainMenuScreen implements Screen {
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new SkinsScreen(repo));
             }
         });
-        buttonSkin.setSize(200, 200);
+        buttonSkin.setSize(140, 140);
+        buttonSkin.setPosition(activeSkin.getX() + activeSkin.getWidth() / 2 - buttonSkin.getWidth() / 2, (float) Gdx.graphics.getHeight() / 2 - activeSkin.getHeight() - 20);
 
         skin = new Skin(Gdx.files.internal("UI/MainMenu/achievButton.json"));
         ImageButton buttonAch = new ImageButton(skin);
@@ -107,10 +111,8 @@ public class MainMenuScreen implements Screen {
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new AchievementsScreen(repo));
             }
         });
-        buttonAch.setSize(200, 200);
-
-        activeSkin.setSize(300, 320);
-        activeSkin.setPosition(Gdx.graphics.getWidth() - activeSkin.getWidth() - 50, (float) Gdx.graphics.getHeight() / 2 - activeSkin.getHeight() / 2 - 100);
+        buttonAch.setSize(120, 120);
+        buttonAch.setPosition(buttonAch.getWidth(), buttonAch.getHeight());
 
         // Таблица для монет в правом верхнем углу
         Table coinsTable = new Table();
@@ -126,17 +128,17 @@ public class MainMenuScreen implements Screen {
         mainTable.setFillParent(true);
         mainTable.center();
 
-        mainTable.add(conclusionText).padBottom(10).row();
+        mainTable.add(conclusionText).padBottom(50).row();
 
-        mainTable.add(buttonSkin) .width(170).height(170).pad(5).row();
-        mainTable.add(buttonStart).width(500).height(250).pad(5).row();
-        mainTable.add(buttonAch)  .width(170).height(170);
+        mainTable.add(buttonStart).width(500).height(250);
 
         // Добавляем на stage сначала фон, затем таблицы
         stage.addActor(background);
         stage.addActor(mainTable);
         stage.addActor(coinsTable);
         stage.addActor(activeSkin);
+        stage.addActor(buttonAch);
+        stage.addActor(buttonSkin);
 
 
         // Музыка
