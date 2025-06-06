@@ -90,7 +90,7 @@ public abstract class Enemy extends Entity {
         if (isLive) {
             super.act(delta);
 
-            if (!GMath.checkVectorDistance(ai.getHero().getCenterVector(), getCenterVector(), 600, 600)) {
+            if (!GMath.checkVectorDistance(ai.getHero().getCenterVector(), getCenterVector(), 800, 800)) {
                 speed = runSpeed;
             } else {
                 speed = runSpeed / 4;

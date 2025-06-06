@@ -33,9 +33,9 @@ public class Lamp extends Drops {
 
         if (bound.overlaps(hero.getBound())) {
             if (!hero.shyne) {
-                ShaderManager.radiusView1 += 80f;
-                ShaderManager.radiusView2 += 80f;
-                ShaderManager.radiusView3 +=80f;
+                ShaderManager.radiusView1 *= 1.1f;
+                ShaderManager.radiusView2 *= 1.1f;
+                ShaderManager.radiusView3 *= 1.1f;
 
                 hero.startShyne();
             } else {

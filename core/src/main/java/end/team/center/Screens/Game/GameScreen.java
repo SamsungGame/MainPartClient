@@ -104,7 +104,7 @@ public class GameScreen implements Screen {
 
     //Деревья
     public static ArrayList<Tree> trees;
-    private int countTree = 3000;
+    private int countTree = 4000;
 
     public static Portal portal;
 
@@ -336,12 +336,12 @@ public class GameScreen implements Screen {
 
         Power p3 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/visible.png"),
             new Texture("UI/GameUI/SelectPowerUI/Effect/visible_active.png"),
-            "Вы увеличиваете свой радиус обзора (В РАЗРАБОТКЕ!)") {
+            "Вы увеличиваете свой радиус обзора") {
             @Override
             public void effect() {
-                ShaderManager.radiusView1 += 0.2f;
-                ShaderManager.radiusView2 += 0.2f;
-                ShaderManager.radiusView3 += 0.2f;
+                ShaderManager.radiusView1 *= 1.2f;
+                ShaderManager.radiusView2 *= 1.2f;
+                ShaderManager.radiusView3 *= 1.2f;
 
                 hidePowerDialog();
                 powers.remove(this);
@@ -673,11 +673,11 @@ public class GameScreen implements Screen {
 
         batch.setProjectionMatrix(uiStage.getCamera().combined);
 
-        batch.setShader(maskShader);
-        maskShader.bind();
-        maskShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
-        maskShader.setUniformf("u_time", TIME);
-        maskShader.setUniformf("u_radius", ShaderManager.radiusView1);
+        batch.setShader(ShaderManager.maskShader);
+        ShaderManager.maskShader.bind();
+        ShaderManager.maskShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
+        ShaderManager.maskShader.setUniformf("u_time", TIME);
+        ShaderManager.maskShader.setUniformf("u_baseRadius", ShaderManager.radiusView1);
 
         batch.begin();
         batch.draw(worldTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
@@ -685,10 +685,11 @@ public class GameScreen implements Screen {
         batch.end();
 
         // Шейдер затемнения
-        batch.setShader(dimmingShader);
-        dimmingShader.bind();
-        dimmingShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
-        maskShader.setUniformf("u_radius", ShaderManager.radiusView3);
+        batch.setShader(ShaderManager.dimmingShader);
+        ShaderManager.dimmingShader.bind();
+        ShaderManager.dimmingShader.setUniformf("u_heroPos", heroXNorm, heroYNorm);
+        ShaderManager.dimmingShader.setUniformf("u_innerRadius", ShaderManager.radiusView3);
+
 
         batch.begin();
         batch.draw(worldTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),

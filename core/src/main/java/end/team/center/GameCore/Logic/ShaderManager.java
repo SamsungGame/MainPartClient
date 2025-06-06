@@ -38,6 +38,7 @@ public class ShaderManager {
                 "uniform float u_aspectRatio;\n" +
                 "uniform float u_time;\n" +
                 "uniform vec2 u_heroPos;\n" +
+                "uniform float u_baseRadius;\n" +
 
                 "varying vec4 v_color;\n" +
                 "varying vec2 v_texCoord0;\n" +
@@ -48,10 +49,9 @@ public class ShaderManager {
                 "    vec2 scaledCenter = vec2(center.x, center.y * u_aspectRatio);\n" +
                 "    float dist = distance(scaledCoords, scaledCenter);\n" +
 
-                "    float baseRadius ="+radiusView1+";\n" +
                 "    float amplitude = 0.01;\n" +
                 "    float period = 2.0;\n" +
-                "    float radius = baseRadius + amplitude * sin(6.2831 * u_time / period);\n" +
+                "    float radius = u_baseRadius + amplitude * sin(6.2831 * u_time / period);\n" +
                 "    float edge = 0.05;\n" +
 
                 "    if (dist > radius + edge) discard;\n" +
@@ -75,6 +75,8 @@ public class ShaderManager {
 
                 "uniform float u_aspectRatio;\n" +
                 "uniform vec2 u_heroPos;\n" +
+                "uniform float u_baseRadius;\n" +
+
                 "varying vec4 v_color;\n" +
                 "varying vec2 v_texCoord0;\n" +
 
@@ -84,7 +86,7 @@ public class ShaderManager {
                 "    vec2 scaledCenter = vec2(center.x, center.y * u_aspectRatio);\n" +
                 "    float dist = distance(scaledCoords, scaledCenter);\n" +
 
-                "    float radius = "+radiusView2+";\n" +
+                "    float radius = u_baseRadius;\n" +
                 "    if (dist <= radius) discard;\n" +
                 "    else gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);\n" +
                 "}";
@@ -98,6 +100,7 @@ public class ShaderManager {
                 "uniform sampler2D u_texture;\n" +
                 "uniform float u_aspectRatio;\n" +
                 "uniform vec2 u_heroPos;\n" +
+                "uniform float u_innerRadius;\n" +
 
                 "varying vec4 v_color;\n" +
                 "varying vec2 v_texCoord0;\n" +
@@ -108,12 +111,11 @@ public class ShaderManager {
                 "    vec2 scaledCenter = vec2(center.x, center.y * u_aspectRatio);\n" +
 
                 "    float dist = distance(scaledCoords, scaledCenter);\n" +
-                "    float innerRadius ="+radiusView3+";\n" +
                 "    float outerRadius = 0.5;\n" +
                 "    float edgeSoftness = 0.5;\n" +
 
                 "    float alpha = smoothstep(outerRadius, outerRadius - edgeSoftness, dist);\n" +
-                "    if (dist < innerRadius) alpha = 0.0;\n" +
+                "    if (dist < u_innerRadius) alpha = 0.0;\n" +
 
                 "    vec3 dimColor = vec3(0.0);\n" +
                 "    float dimIntensity = 0.8;\n" +
@@ -121,10 +123,12 @@ public class ShaderManager {
                 "    gl_FragColor = vec4(dimColor, alpha * dimIntensity);\n" +
                 "}";
 
+        // Компиляция
         maskShader = new ShaderProgram(vertexShaderCode, fragmentMask);
         hardMaskShader = new ShaderProgram(vertexShaderCode, fragmentHardMask);
         dimmingShader = new ShaderProgram(vertexShaderCode, fragmentDimming);
 
+        // Проверка ошибок
         if (!maskShader.isCompiled()) Gdx.app.error("MaskShader", maskShader.getLog());
         if (!hardMaskShader.isCompiled()) Gdx.app.error("HardMaskShader", hardMaskShader.getLog());
         if (!dimmingShader.isCompiled()) Gdx.app.error("DimmingShader", dimmingShader.getLog());

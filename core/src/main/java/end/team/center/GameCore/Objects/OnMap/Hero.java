@@ -257,9 +257,9 @@ public class Hero extends Friendly {
             if (elapsedTime > duration) {
                 shyne = false;
                 duration = 30;
-                ShaderManager.radiusView1 = -0.08f;
-                ShaderManager.radiusView2 = -0.08f;
-                ShaderManager.radiusView3 = -0.08f;
+                ShaderManager.radiusView1 /= 1.1f;
+                ShaderManager.radiusView2 /= 1.1f;
+                ShaderManager.radiusView3 /= 1.1f;
             }
         }
 

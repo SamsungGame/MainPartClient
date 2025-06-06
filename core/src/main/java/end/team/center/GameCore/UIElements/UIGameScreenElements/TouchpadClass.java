@@ -27,7 +27,7 @@ public class TouchpadClass extends Touchpad {
     private String type;
     private int pointer = -1;
     public TouchpadClass(float x, float y, boolean isTouchpadActive, String type) {
-        super(10, createTouchpadStyle());
+        super(5, createTouchpadStyle());
         setBounds(x, y, touchSize, touchSize);
         this.isTouchpadActive = isTouchpadActive;
         this.type = type;
