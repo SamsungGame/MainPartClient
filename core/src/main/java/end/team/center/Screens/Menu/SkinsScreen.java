@@ -158,9 +158,9 @@ public class SkinsScreen implements Screen {
         buyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (currentIndex == 1 && repo.getCoins() >= 100 && !repo.getSkins().get(currentIndex + 1)) {
+                if (currentIndex == 1 && repo.getCoins() >= 10 && !repo.getSkins().get(currentIndex + 1)) {
                     repo.unlockSkin(2);
-                    repo.spendCoins(100);
+                    repo.spendCoins(10);
                 }
             }
         });
