@@ -6,15 +6,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class AnimationGhost {
 
-    public static TextureRegion[] ghostWalkLeft = new TextureRegion[] {
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ghostWalkLeft.png")))
-    };
-    public static TextureRegion[] ghostWalkRight = new TextureRegion[] {
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ghostWalkRight.png")))
+    public static TextureRegion[] ghostWalk = new TextureRegion[] {
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ghostWalk.png")))
     };
 
     public static TextureRegion[] ghostAttack = new TextureRegion[] {
-        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ghostAttackRight.png")))
+        new TextureRegion(new Texture(Gdx.files.internal("UI/GameUI/Mobs/Ghost/ghostAttack.png")))
     };
 
     public static TextureRegion[] ammo = new TextureRegion[] {
