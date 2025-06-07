@@ -38,14 +38,8 @@ public class Lamp extends Drops {
                 ShaderManager.radiusView3 *= 1.1f;
 
                 hero.startShyne();
-            } else {
-                int d = hero.getDuration();
-
-                d += 5;
-                if (d > 30) d = 30;
-
-                hero.setDuration(d);
             }
+
             GameScreen.isPickupItem = true;
 
             remove();

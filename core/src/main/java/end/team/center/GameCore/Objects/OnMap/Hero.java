@@ -262,6 +262,7 @@ public class Hero extends Friendly {
                 ShaderManager.radiusView1 /= 1.1f;
                 ShaderManager.radiusView2 /= 1.1f;
                 ShaderManager.radiusView3 /= 1.1f;
+                elapsedTime = 0;
             }
         }
 
