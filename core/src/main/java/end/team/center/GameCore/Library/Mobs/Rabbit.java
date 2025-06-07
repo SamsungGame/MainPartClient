@@ -1,5 +1,6 @@
 package end.team.center.GameCore.Library.Mobs;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -48,6 +49,20 @@ public class Rabbit extends Enemy {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if (isLive) {
+
+            OrthographicCamera camera = (OrthographicCamera) getStage().getCamera();
+
+            float camLeft = camera.position.x - camera.viewportWidth / 2 * camera.zoom;
+            float camRight = camera.position.x + camera.viewportWidth / 2 * camera.zoom;
+            float camBottom = camera.position.y - camera.viewportHeight / 2 * camera.zoom;
+            float camTop = camera.position.y + camera.viewportHeight / 2 * camera.zoom;
+
+            // Рисуем только если дерево в зоне видимости камеры
+            if (getX() + getWidth() < camLeft || getX() > camRight ||
+                getY() + getHeight() < camBottom || getY() > camTop) {
+                return;
+            }
+
             TextureRegion currentFrame;
 
             if (isMoving) {

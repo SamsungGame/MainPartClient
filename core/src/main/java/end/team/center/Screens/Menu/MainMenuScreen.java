@@ -23,13 +23,20 @@ import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Screens.Game.GameScreen;
 
 public class MainMenuScreen implements Screen {
-    private GameRepository gameRepository;
+    public static GameRepository gameRepository;
     private Stage stage;
     private Skin skin;
     private Fon background;
     private Music backgroundMusic;
     private Label conclusionText, coinsText;
     public static Image activeSkin;
+
+    public static boolean showAchivs = false;
+    public static Image imageAchivs;
+    public static int idAchivs;
+    boolean start = false;
+
+    public int timeShowNewAch = 4; // sec
 
     private static final String[] texts = {
         "ДОБРО ПОЖАЛОВАТЬ!",
@@ -169,5 +176,32 @@ public class MainMenuScreen implements Screen {
         stage.dispose();
         skin.dispose();
         backgroundMusic.dispose();
+    }
+
+    public void showNewAchivs() {
+        if (!start) {
+            imageAchivs.setSize(imageAchivs.getWidth() * 5, imageAchivs.getHeight() * 5);
+            imageAchivs.setPosition(Gdx.graphics.getWidth() / 2 - imageAchivs.getWidth() / 2, imageAchivs.getHeight() + 20);
+            stage.addActor(imageAchivs);
+
+            start = true;
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(timeShowNewAch * 1000);
+                } catch (InterruptedException ignored) {}
+
+                showAchivs = false;
+                start = false;
+
+                imageAchivs.remove();
+
+                gameRepository.unlockAchievement(idAchivs);
+                idAchivs = -1;
+            }
+        }).start();
     }
 }

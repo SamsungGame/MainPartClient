@@ -60,7 +60,7 @@ public class GameScreen implements Screen {
     private GameCamera gameCamera;
     public static final float WORLD_WIDTH = 50000;
     public static final float WORLD_HEIGHT = 50000;
-    public int maxMobSpawn = 60;
+    public int maxMobSpawn = 30;
     public static float coinForEnemyValue = 0;
     public static float coinForTime = 0;
     public static float coinForGame = 0;
@@ -827,9 +827,9 @@ public class GameScreen implements Screen {
 
     public void showNewAchivs() {
         if (!start) {
-//            imageAchivs.setSize(imageAchivs.getWidth() * 5, imageAchivs.getHeight() * 5);
-//            imageAchivs.setPosition(Gdx.graphics.getWidth() / 2 - imageAchivs.getWidth() / 2, imageAchivs.getHeight() + 20);
-//            uiStage.addActor(imageAchivs);
+            imageAchivs.setSize(imageAchivs.getWidth() * 5, imageAchivs.getHeight() * 5);
+            imageAchivs.setPosition(Gdx.graphics.getWidth() / 2 - imageAchivs.getWidth() / 2, imageAchivs.getHeight() + 20);
+            uiStage.addActor(imageAchivs);
 
             start = true;
         }
@@ -844,7 +844,7 @@ public class GameScreen implements Screen {
                 showAchivs = false;
                 start = false;
 
-//                imageAchivs.remove();
+                imageAchivs.remove();
 
                 gameRepository.unlockAchievement(idAchivs);
                 idAchivs = -1;

@@ -44,20 +44,20 @@ public class Portal extends StaticObject {
             gameRepository.addCoins(((int) GameScreen.coinForGame * 2));
             ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(1, gameRepository));
 
-            if (!GameScreen.gameRepository.getAchievements().get(1)) {
-                GameScreen.showAchivs = true;
-                GameScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/exit_open.png"));
-                GameScreen.idAchivs = 1;
+            if (!MainMenuScreen.gameRepository.getAchievements().get(1)) {
+                MainMenuScreen.showAchivs = true;
+                MainMenuScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/exit_open.png"));
+                MainMenuScreen.idAchivs = 1;
             }
-            if (!GameScreen.gameRepository.getAchievements().get(2) && !GameScreen.isPickupItem) {
-                GameScreen.showAchivs = true;
-                GameScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/knife_open.png"));
-                GameScreen.idAchivs = 2;
+            if (!MainMenuScreen.gameRepository.getAchievements().get(2) && !GameScreen.isPickupItem) {
+                MainMenuScreen.showAchivs = true;
+                MainMenuScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/knife_open.png"));
+                MainMenuScreen.idAchivs = 2;
             }
-            if (!GameScreen.gameRepository.getAchievements().get(5) && !GameScreen.isKill) {
-                GameScreen.showAchivs = true;
-                GameScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/clear_open.png"));
-                GameScreen.idAchivs = 5;
+            if (!MainMenuScreen.gameRepository.getAchievements().get(5) && !GameScreen.isKill) {
+                MainMenuScreen.showAchivs = true;
+                MainMenuScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/clear_open.png"));
+                MainMenuScreen.idAchivs = 5;
             }
 
             GameScreen.backgroundMusic.stop();

@@ -102,6 +102,8 @@ public abstract class Weapon extends Interactable {
     public void updateAttackGhost() {
         attackGhost.x = vectorGhost.x;
         attackGhost.y = vectorGhost.y;
+        attackGhost.width = width;
+        attackGhost.height = height;
     }
 
     public void showGhost(float x, float y) {

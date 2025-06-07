@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import end.team.center.GameCore.Objects.OnMap.Hero;
 
 public abstract class Interactable extends Actor {
-    protected int height, width;
+    public int height, width;
     protected Hero hero;
 
     public Interactable(Hero hero, int width, int height) {
@@ -32,7 +32,7 @@ public abstract class Interactable extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
-
+        setSize(width, height);
     }
 
     public void dispose() {
