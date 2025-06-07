@@ -371,6 +371,7 @@ public class GameScreen implements Screen {
             public void effect() {
                 hero.setReturnDamage(true);
 
+                powers.remove(this);
                 hidePowerDialog();
             }
         };
