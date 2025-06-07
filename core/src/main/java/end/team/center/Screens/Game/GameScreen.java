@@ -442,7 +442,7 @@ public class GameScreen implements Screen {
                     new Texture(Gdx.files.internal("UI/GameUI/Structure/portal1.png")),
                     new Texture(Gdx.files.internal("UI/GameUI/Structure/portal2.png")),
                     new Texture(Gdx.files.internal("UI/GameUI/Structure/portal3.png")),
-                    new Vector2(spawnX, spawnY),
+                    new Vector2(spawnX, spawnY),  
                     hero,
                     171, 189);
 
@@ -512,9 +512,6 @@ public class GameScreen implements Screen {
         initiaizationConsole();
     }
 
-
-
-
     public void initiaizationConsole() {
         new Thread(new Runnable() {
             @Override
@@ -533,15 +530,17 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         addToList();
 
+        if (totalTime < 2) isPickupItem = false;
+
         if (showAchivs) showNewAchivs();
 
         TIME += delta;
 
         coinForTime += delta/20;
 
-        if (totalTime >= 600 && !gameRepository.getAchievements().get(3)) {
-           showAchivs = true;
-//            imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/time_open.png"));
+        if (totalTime >= 10 && !gameRepository.getAchievements().get(3) && !start) {
+            showAchivs = true;
+            imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/time_open.png"));
             idAchivs = 3;
         }
 
@@ -797,6 +796,8 @@ public class GameScreen implements Screen {
         isShow = false;
 
         PSC = null;
+
+        hero.frameInvulnerability(3);
 
         Gdx.input.setInputProcessor(uiStage);
     }

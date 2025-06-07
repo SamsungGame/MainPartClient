@@ -272,9 +272,9 @@ public class Hero extends Friendly {
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(2, gameRepository));
 
                 if (GMath.checkVectorDistance(getCenterVector(), GameScreen.portal.getCenterVector(), 800, 800) && !GameScreen.gameRepository.getAchievements().get(4)) {
-                    GameScreen.showAchivs = true;
-                    GameScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/door_open.png"));
-                    GameScreen.idAchivs = 4;
+                    MainMenuScreen.showAchivs = true;
+                    MainMenuScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/door_open.png"));
+                    MainMenuScreen.idAchivs = 4;
                 }
 
                 GameScreen.backgroundMusic.stop();
