@@ -1,6 +1,7 @@
 package end.team.center.GameCore.Library.Items;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
@@ -20,6 +21,7 @@ public class Knife extends Weapon {
     protected boolean startAnim = false;
     protected Vector2 aniPos;
     protected ForwardEffect fe;
+    private final Sound sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/knife_sound.mp3"));
 
     public Knife(Texture canTexture, Texture cantTexture, Texture texture, Hero hero, int width, int height, int damage, float reload, float distance) {
         super(canTexture, cantTexture, hero, width, height, damage, reload);
@@ -47,6 +49,7 @@ public class Knife extends Weapon {
     }
 
     public void startAnimation() {
+        sound.play();
         startAnim = true;
         aniPos = new Vector2(hero.getCenterVector());
 

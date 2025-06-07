@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -34,6 +35,7 @@ import end.team.center.GameCore.Library.Items.Experience;
 import end.team.center.GameCore.Library.Other.Portal;
 import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.Map.BackgroundTiledRenderer;
+import end.team.center.GameCore.Objects.Map.NebulaActor;
 import end.team.center.GameCore.Objects.Map.Tree;
 import end.team.center.GameCore.Objects.Map.Zone;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
@@ -60,12 +62,12 @@ public class GameScreen implements Screen {
     private GameCamera gameCamera;
     public static final float WORLD_WIDTH = 30000;
     public static final float WORLD_HEIGHT = 30000;
-    public int maxMobSpawn = 30;
+    public int maxMobSpawn = 300;
     public static float coinForEnemyValue = 0;
     public static float coinForTime = 0;
     public static float coinForGame = 0;
 
-    public int maxDropSpawn = 1500;
+    public int maxDropSpawn = 300;
 
     private static SpawnMob spawner;
     public static ArrayList<Enemy> enemies;
@@ -442,7 +444,7 @@ public class GameScreen implements Screen {
                     new Texture(Gdx.files.internal("UI/GameUI/Structure/portal1.png")),
                     new Texture(Gdx.files.internal("UI/GameUI/Structure/portal2.png")),
                     new Texture(Gdx.files.internal("UI/GameUI/Structure/portal3.png")),
-                    new Vector2(spawnX, spawnY),  
+                    new Vector2(spawnX, spawnY),
                     hero,
                     171, 189);
 
@@ -502,7 +504,14 @@ public class GameScreen implements Screen {
             trees.add(tree);
             worldStage.addActor(tree);
         }
-
+        for (int i = 0; i < 300; i++) {
+            NebulaActor nebula = new NebulaActor(
+                MathUtils.random(400, 800),
+                MathUtils.random(400, 800),
+                0.45f
+            );
+            worldStage.addActor(nebula);
+        }
 
         worldStage.addActor(portal);
 
@@ -627,6 +636,7 @@ public class GameScreen implements Screen {
             return false;
         });
 
+        expBar.setRange(0, hero.getMaxExp());
         expBar.setValue(hero.getExp());
         hero.newLevel();
         energyValue.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));

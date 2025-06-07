@@ -1,5 +1,7 @@
 package end.team.center.GameCore.Library.Items;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
@@ -14,6 +16,7 @@ public class Experience extends Drops {
     protected static final int DISTANCE_TO_PICKUP = 190;
     protected int count;
     protected static final int speed = 80;
+    private final Sound sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/exp.mp3"));
     public Experience(Texture texture, Vector2 vector, Hero hero, int width, int height, int count) {
         super(texture, vector, hero, width, height);
         this.count = count;
@@ -52,6 +55,7 @@ public class Experience extends Drops {
         }
         if (hero.getBound().overlaps(bound)) {
             hero.addExp(count);
+            sound.play();
             System.out.println("Выдано " + count + "exp");
             remove();
         }

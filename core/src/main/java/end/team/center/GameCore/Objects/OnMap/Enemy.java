@@ -34,7 +34,7 @@ public abstract class Enemy extends Entity {
         this.damage = damage;
         this.exp = exp;
 
-        runSpeed = speed * 4;
+        runSpeed = speed * 8;
 
         bound = new Rectangle((float) (vector.x + (width * 0.75) / 2), (float) (vector.y + (height * 0.75) / 2), (float) (width * 0.75), (float) (height * 0.75));
     }
@@ -93,7 +93,7 @@ public abstract class Enemy extends Entity {
             if (!GMath.checkVectorDistance(ai.getHero().getCenterVector(), getCenterVector(), 800, 800)) {
                 speed = runSpeed;
             } else {
-                speed = runSpeed / 4;
+                speed = runSpeed / 8;
             }
         }
     }
