@@ -444,8 +444,10 @@ public class GameScreen implements Screen {
                 int x = (int) (Math.random() * WORLD_WIDTH / 5);
                 int y = (int) (Math.random() * WORLD_HEIGHT / 5);
 
-                float spawnX = 14000;
-                float spawnY = 14000;
+                float spawnX = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_WIDTH - x), (int) (WORLD_WIDTH - Entity.BOUNDARY_PADDING - 200))
+                    : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), x);;
+                float spawnY = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_HEIGHT - y), (int) (WORLD_HEIGHT - Entity.BOUNDARY_PADDING - 200))
+                    : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), y);;
                 portal = new Portal(
                     repo,
                     new Texture(Gdx.files.internal("UI/GameUI/Structure/portal1.png")),
@@ -560,7 +562,7 @@ public class GameScreen implements Screen {
 
         coinForTime += delta/20;
 
-        if (totalTime >= 10 && !gameRepository.getAchievements().get(3) && !start) {
+        if (totalTime >= 600 && !gameRepository.getAchievements().get(3) && !start) {
             showAchivs = true;
             imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/time_open.png"));
             idAchivs = 3;

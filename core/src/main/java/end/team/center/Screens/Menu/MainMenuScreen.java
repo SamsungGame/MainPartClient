@@ -91,6 +91,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 backgroundMusic.stop();
+                backgroundMusic.dispose();
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new GameScreen(repo));
             }
         });

@@ -247,7 +247,9 @@ public class Hero extends Friendly {
             gameRepository.addCoins(((int) GameScreen.coinForGame));
             ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(3, gameRepository));
             GameScreen.backgroundMusic.stop();
+            GameScreen.backgroundMusic.dispose();
             GameScreen.backgroundMusicInstrumental.stop();
+            GameScreen.backgroundMusicInstrumental.dispose();
             GameScreen.endTask();
         }
 
@@ -278,7 +280,9 @@ public class Hero extends Friendly {
                 }
 
                 GameScreen.backgroundMusic.stop();
+                GameScreen.backgroundMusic.dispose();
                 GameScreen.backgroundMusicInstrumental.stop();
+                GameScreen.backgroundMusicInstrumental.dispose();
                 GameScreen.endTask();
             } else {
                 this.health++;
