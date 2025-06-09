@@ -250,6 +250,8 @@ public class Hero extends Friendly {
             GameScreen.backgroundMusic.dispose();
             GameScreen.backgroundMusicInstrumental.stop();
             GameScreen.backgroundMusicInstrumental.dispose();
+            ShaderManager.radiusView1 = 0.2f;
+            ShaderManager.radiusView3 = 0.15f;
             GameScreen.endTask();
         }
 
@@ -283,6 +285,8 @@ public class Hero extends Friendly {
                 GameScreen.backgroundMusic.dispose();
                 GameScreen.backgroundMusicInstrumental.stop();
                 GameScreen.backgroundMusicInstrumental.dispose();
+                ShaderManager.radiusView1 = 0.2f;
+                ShaderManager.radiusView3 = 0.15f;
                 GameScreen.endTask();
             } else {
                 this.health++;

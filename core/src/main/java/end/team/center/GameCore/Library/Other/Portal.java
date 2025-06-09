@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import end.team.center.Center;
+import end.team.center.GameCore.Logic.ShaderManager;
 import end.team.center.GameCore.Objects.OnMap.Hero;
 import end.team.center.GameCore.Objects.OnMap.StaticObject;
 import end.team.center.ProgramSetting.LocalDB.GameRepository;
@@ -62,6 +63,9 @@ public class Portal extends StaticObject {
             GameScreen.backgroundMusic.dispose();
             GameScreen.backgroundMusicInstrumental.stop();
             GameScreen.backgroundMusicInstrumental.dispose();
+
+            ShaderManager.radiusView1 = 0.2f;
+            ShaderManager.radiusView3 = 0.15f;
             GameScreen.endTask();
         }
 
