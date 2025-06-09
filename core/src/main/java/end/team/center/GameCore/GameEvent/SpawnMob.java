@@ -73,7 +73,7 @@ public class SpawnMob {
 
     protected void setNewMob() {
         if (GameScreen.totalTime % 20 == 0) {
-            levelMobSpawn = (int) (GameScreen.totalTime / 20);
+            levelMobSpawn = (int) (GameScreen.totalTime / 15);
             System.out.println("Уровень врагов: " + levelMobSpawn);
         }
 

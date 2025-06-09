@@ -49,7 +49,8 @@ public class Knife extends Weapon {
     }
 
     public void startAnimation() {
-        sound.play();
+        long id = sound.play();
+        sound.setVolume(id, 0.3f);
         startAnim = true;
         aniPos = new Vector2(hero.getCenterVector());
 

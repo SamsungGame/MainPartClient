@@ -101,7 +101,6 @@ public class MainMenuScreen implements Screen {
         buttonSkin.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                backgroundMusic.stop();
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new SkinsScreen(repo));
             }
         });
@@ -114,7 +113,6 @@ public class MainMenuScreen implements Screen {
         buttonAch.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                backgroundMusic.stop();
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new AchievementsScreen(repo));
             }
         });

@@ -62,12 +62,12 @@ public class GameScreen implements Screen {
     private GameCamera gameCamera;
     public static final float WORLD_WIDTH = 30000;
     public static final float WORLD_HEIGHT = 30000;
-    public int maxMobSpawn = 300;
+    public int maxMobSpawn = 120;
     public static float coinForEnemyValue = 0;
     public static float coinForTime = 0;
     public static float coinForGame = 0;
 
-    public int maxDropSpawn = 300;
+    public int maxDropSpawn = 200;
 
     private static SpawnMob spawner;
     public static ArrayList<Enemy> enemies;
@@ -100,6 +100,7 @@ public class GameScreen implements Screen {
     private boolean isShow = false;
     private BackgroundTiledRenderer backgroundTiledRenderer;
     public static Music backgroundMusic;
+    public static Music backgroundMusicInstrumental;
 
     private static boolean isTimeGo = true;
     private int countZone;
@@ -136,14 +137,12 @@ public class GameScreen implements Screen {
         Texture brick2 = new Texture("UI/GameUI/Grow/dirt2_big.png");
         Texture brick3 = new Texture("UI/GameUI/Grow/dirt3_big.png");
         Texture brick4 = new Texture("UI/GameUI/Grow/dirt4_big.png");
-        Texture brick5 = new Texture("UI/GameUI/Grow/dirt5_big.png");
 
         TextureRegion[] tiles = new TextureRegion[] {
             new TextureRegion(brick1),
             new TextureRegion(brick2),
             new TextureRegion(brick3),
             new TextureRegion(brick4),
-            new TextureRegion(brick5)
         };
 
         int tileWidth = 250;
@@ -323,11 +322,21 @@ public class GameScreen implements Screen {
 
         Power p2 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/speedHP.png"),
             new Texture("UI/GameUI/SelectPowerUI/Effect/speedHP_active.png"),
-            "Ваша скорость увеличиваеться в 2 раза, но вы теряете 1 HP") {
+            "Ваша скорость увеличиваеться в 1.4 раза, но вы теряете 1 максимальное HP") {
             @Override
             public void effect() {
-                hero.setHealth(hero.getHealth() - 1);
-                hero.setSpeed(hero.getSpeed() * 2);
+                hero.setSpeed(hero.getSpeed() * 1.5f);
+
+                hero.setMaxHealth(hero.getMaxHealth() - 1);
+
+                if (hero.getHealth() > hero.getMaxHealth()) {
+                    hero.setHealth(hero.getMaxHealth());
+                }
+
+// Обновляем UI:
+                hearts.setMaxHearts(hero.getMaxHealth());
+                hearts.setCurrentHealth(hero.getHealth());
+
 
                 hidePowerDialog();
                 powers.remove(this);
@@ -435,10 +444,8 @@ public class GameScreen implements Screen {
                 int x = (int) (Math.random() * WORLD_WIDTH / 5);
                 int y = (int) (Math.random() * WORLD_HEIGHT / 5);
 
-                float spawnX = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_WIDTH - x), (int) (WORLD_WIDTH - Entity.BOUNDARY_PADDING - 200))
-                    : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), x);
-                float spawnY = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_HEIGHT - y), (int) (WORLD_HEIGHT - Entity.BOUNDARY_PADDING - 200))
-                    : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), y);
+                float spawnX = 14000;
+                float spawnY = 14000;
                 portal = new Portal(
                     repo,
                     new Texture(Gdx.files.internal("UI/GameUI/Structure/portal1.png")),
@@ -457,11 +464,17 @@ public class GameScreen implements Screen {
                 isGenerated = false;
             }
         }
+        backgroundMusicInstrumental = Gdx.audio.newMusic(Gdx.files.internal("Sounds/instrumentalGame.mp3"));
+        backgroundMusicInstrumental.setLooping(true);
+        backgroundMusicInstrumental.setVolume(0.5f);
+        backgroundMusicInstrumental.play();
 
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Sounds/nightMusic.mp3"));
         backgroundMusic.setLooping(true);
-        backgroundMusic.setVolume(0.3f);
+        backgroundMusic.setVolume(0.1f);
         backgroundMusic.play();
+
+
 
         wait.addAll(spawnItem.startDropSet());
 
@@ -553,10 +566,11 @@ public class GameScreen implements Screen {
             idAchivs = 3;
         }
 
-        if (hero.newLevelFlag) {
+        if (hero.newLevelFlag && !powers.isEmpty()) {
             showPowerDialog(delta);
             return;
         }
+        if (powers.isEmpty()) expBar.setRange(0, 0);
 
         coinForGame = coinForEnemyValue + coinForTime;
         touchpadMove.TouchpadLogic(uiStage);
@@ -583,7 +597,7 @@ public class GameScreen implements Screen {
                     e.setHealth(e.getHealth() - hero.getWep().getDamage());
                     e.stan(1);
 
-                    if (Math.random() * 100 > 80 && hero.getHealth() < 3 && hero.getVampirism()) {
+                    if (Math.random() * 100 > 90 && hero.getHealth() < 3 && hero.getVampirism()) {
                         hero.setHealth(hero.getHealth() + 1);
                     }
 
@@ -642,7 +656,7 @@ public class GameScreen implements Screen {
         energyValue.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
         radiationValue.setText(hero.getRadiationLevel());
         hearts.updateAnimation(delta);
-        hearts.updateHealth(hero.getHealth());
+        hearts.setCurrentHealth(hero.getHealth());
 
         // Обновление камеры
         gameCamera.updateCameraPosition(hero.getX(), hero.getY(), hero.getWidth(), hero.getHeight());
@@ -709,7 +723,10 @@ public class GameScreen implements Screen {
         batch.setShader(null);
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
-        // Джойстик
+        if (PSC != null && PSC.isFinished()) {
+            hidePowerDialog();
+        }
+
         // UI поверх всего
         uiStage.act(delta);
         uiStage.draw();
@@ -733,6 +750,9 @@ public class GameScreen implements Screen {
         backgroundMusic.stop();
         backgroundMusic.dispose();
 
+        backgroundMusicInstrumental.stop();
+        backgroundMusicInstrumental.dispose();
+
         spawnItem.dispose();
         spawner.dispose();
     }
@@ -743,6 +763,9 @@ public class GameScreen implements Screen {
 
         backgroundMusic.stop();
         backgroundMusic.dispose();
+
+        backgroundMusicInstrumental.stop();
+        backgroundMusicInstrumental.dispose();
 
         isTimeGo = false;
     }
@@ -805,6 +828,9 @@ public class GameScreen implements Screen {
         hero.newLevelFlag = false;
         isShow = false;
 
+        if (PSC != null) {
+            PSC.dispose();  // Очистка ресурсов PSC
+        }
         PSC = null;
 
         hero.frameInvulnerability(3);

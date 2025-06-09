@@ -39,7 +39,6 @@ public class Lamp extends Drops {
 
                 hero.startShyne();
             }
-
             GameScreen.isPickupItem = true;
 
             remove();

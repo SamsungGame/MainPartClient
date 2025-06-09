@@ -59,6 +59,7 @@ public class Portal extends StaticObject {
             }
 
             GameScreen.backgroundMusic.stop();
+            GameScreen.backgroundMusicInstrumental.stop();
             GameScreen.endTask();
         }
 

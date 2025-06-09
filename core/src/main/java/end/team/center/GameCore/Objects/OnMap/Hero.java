@@ -175,9 +175,8 @@ public class Hero extends Friendly {
         if(exp >= maxExp) {
             level++;
             exp = 0;
+            maxExp+=3;
             newLevelFlag = true;
-
-            maxExp += 5;
         }
     }
 
@@ -248,6 +247,7 @@ public class Hero extends Friendly {
             gameRepository.addCoins(((int) GameScreen.coinForGame));
             ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(3, gameRepository));
             GameScreen.backgroundMusic.stop();
+            GameScreen.backgroundMusicInstrumental.stop();
             GameScreen.endTask();
         }
 
@@ -272,12 +272,13 @@ public class Hero extends Friendly {
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(2, gameRepository));
 
                 if (GMath.checkVectorDistance(getCenterVector(), GameScreen.portal.getCenterVector(), 800, 800) && !GameScreen.gameRepository.getAchievements().get(4)) {
-                    MainMenuScreen.showAchivs = true;
-                    MainMenuScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/door_open.png"));
-                    MainMenuScreen.idAchivs = 4;
+                    GameScreen.showAchivs = true;
+                    GameScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/door_open.png"));
+                    GameScreen.idAchivs = 4;
                 }
 
                 GameScreen.backgroundMusic.stop();
+                GameScreen.backgroundMusicInstrumental.stop();
                 GameScreen.endTask();
             } else {
                 this.health++;
