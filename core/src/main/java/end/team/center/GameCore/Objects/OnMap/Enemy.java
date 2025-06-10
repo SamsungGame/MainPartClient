@@ -2,6 +2,8 @@ package end.team.center.GameCore.Objects.OnMap;
 
 import static end.team.center.Screens.Game.GameScreen.hero;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
@@ -28,6 +30,7 @@ public abstract class Enemy extends Entity {
     protected float timePlayerInvulnerability = 1f;
     protected int damage, exp;
     protected float runSpeed;
+    Sound soundUron = Gdx.audio.newSound(Gdx.files.internal("Sounds/uron.mp3"));
 
     public Enemy(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, int exp, float worldHeight, float worldWidth, AI ai) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
@@ -46,6 +49,10 @@ public abstract class Enemy extends Entity {
         if (isLive) {
             if (!hero.isInvulnerability && !stan) {
                 hero.health -= this.damage;
+
+                long id = soundUron.play();
+                soundUron.setVolume(id, 1f);
+
                 hero.frameInvulnerability(timePlayerInvulnerability);
 
                 timeToReload = 0;

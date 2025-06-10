@@ -3,6 +3,7 @@ package end.team.center.Screens.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -53,6 +54,7 @@ import end.team.center.Redact.SystemOut.Console;
 
 public class GameScreen implements Screen {
     public static GameRepository gameRepository;
+
     private TouchpadClass touchpadMove, touchpadAttack;
     public static Hero hero;
     private Stage worldStage, noAct;
@@ -679,6 +681,7 @@ public class GameScreen implements Screen {
         // Урон от врагов
         for (Enemy e : enemies) {
             if (e.getBound().overlaps(hero.getBound())) {
+
                 if (hero.getLevelSheild() == 0) {
                     e.attack(hero);
                 } else if (!hero.getIsInvulnerability()) {
