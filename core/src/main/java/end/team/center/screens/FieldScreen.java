@@ -8,6 +8,12 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -35,18 +41,22 @@ public class FieldScreen implements Screen {
     private final float viewportWidth = Gdx.graphics.getWidth();
     private final float viewportHeight = Gdx.graphics.getHeight();
     private final SpriteBatch batch = new SpriteBatch();
+    private Stage stage;
+    private Skin skin;
     private final Texture grassTexture = new Texture("field/grass.png");
     private final Texture treeTexture = new Texture("field/tree.png");
     private final Texture radiationTexture = new Texture("field/radiation.png");
     private final Texture gardenTexture = new Texture("field/garden.png");
     private final Texture bossFieldTexture = new Texture("field/bossField.png");
     private final Texture dungeonTexture = new Texture("field/dungeon.png");
+    private final MyGame game;
     private final Music mainMenuMusic;
     private final Music gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/gameMusic.mp3"));
     ArrayList<Zone> zones = new ArrayList<>();
     ArrayList<Tree> treeZonesInsidePlayerZone = new ArrayList<>();
 
     public FieldScreen(MyGame game) {
+        this.game = game;
         this.mainMenuMusic = MyGame.mainMenuMusic;
 
         generateZones();
@@ -54,7 +64,23 @@ public class FieldScreen implements Screen {
 
     @Override
     public void show() {
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
 
+        skin = new Skin(Gdx.files.internal("buttonStyle/buttonStyle.json"));
+
+        TextButton pauseButton = new TextButton("Пауза", skin);
+        pauseButton.setSize(200, 150);
+        pauseButton.setPosition(50,  Gdx.graphics.getHeight() - pauseButton.getHeight());
+
+        pauseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new PauseScreen(game, FieldScreen.this));
+            }
+        });
+
+        stage.addActor(pauseButton);
     }
 
     @Override
@@ -90,6 +116,9 @@ public class FieldScreen implements Screen {
         drawZones(batch, visibleZones);
         batch.end();
 
+        stage.act();
+        stage.draw();
+
         mainMenuMusic.stop();
         gameMusic.setLooping(true);
         if (mainMenuMusic.getVolume() > 0) {
@@ -124,6 +153,8 @@ public class FieldScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
+        stage.dispose();
+        skin.dispose();
         grassTexture.dispose();
         treeTexture.dispose();
         radiationTexture.dispose();

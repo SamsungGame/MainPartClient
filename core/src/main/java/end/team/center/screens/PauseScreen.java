@@ -7,41 +7,50 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import end.team.center.MyGame;
 
-public class LoadingScreen implements Screen {
+public class PauseScreen implements Screen {
     private final SpriteBatch batch = new SpriteBatch();
     private final BitmapFont font = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
     private final GlyphLayout layout = new GlyphLayout();
     public final float layoutX;
     public final float layoutY;
+    private final Stage stage;
+    private final Skin skin;
     private final Texture backgroundTexture = new Texture(Gdx.files.internal("background.png"));
-    private FieldScreen fieldScreen;
 
-    public LoadingScreen(MyGame game) {
-        font.getData().setScale(2.0f);
-        String loadingText = "Подождите, идёт загрузка...";
-        layout.setText(font, loadingText);
+    public PauseScreen(MyGame game, FieldScreen fieldScreen) {
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
+
+        skin = new Skin(Gdx.files.internal("buttonStyle/buttonStyle.json"));
+
+        font.getData().setScale(4.0f);
+        String pauseText = "Пауза";
+        layout.setText(font, pauseText);
         layoutX = (Gdx.graphics.getWidth() - layout.width) / 2;
-        layoutY = (Gdx.graphics.getHeight() - layout.height) / 2;
+        layoutY = Gdx.graphics.getHeight() - layout.height;
 
-        Timer.schedule(new Task() {
-            @Override
-            public void run() {
-                fieldScreen = new FieldScreen(game);
-            }
-        }, 1);
+        TextButton continueButton = new TextButton("Продолжить игру", skin);
+        continueButton.setSize(350, 150);
+        continueButton.setPosition(Gdx.graphics.getWidth() / 2 - continueButton.getWidth() / 2,
+            Gdx.graphics.getHeight() / 2 - continueButton.getHeight());
 
-        Timer.schedule(new Task() {
+        continueButton.addListener(new ChangeListener() {
             @Override
-            public void run() {
+            public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(fieldScreen);
             }
-        }, 10);
+        });
+
+        stage.addActor(continueButton);
     }
 
     @Override
@@ -59,6 +68,9 @@ public class LoadingScreen implements Screen {
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         font.draw(batch, layout, layoutX, layoutY);
         batch.end();
+
+        stage.act();
+        stage.draw();
     }
 
     @Override
@@ -85,6 +97,7 @@ public class LoadingScreen implements Screen {
     public void dispose() {
         batch.dispose();
         font.dispose();
-        backgroundTexture.dispose();
+        stage.dispose();
+        skin.dispose();
     }
 }
