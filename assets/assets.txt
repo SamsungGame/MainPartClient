@@ -16,6 +16,7 @@ buttonStyle/pixel_font.fnt
 buttonStyle/pixel_font1.png
 buttonStyle/pixel_font2.png
 buttons/leftButton.png
+buttons/pauseButton.png
 buttons/rightButton.png
 buttons/skinsButton.png
 field/bossField.png

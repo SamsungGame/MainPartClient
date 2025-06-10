@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -43,6 +44,7 @@ public class FieldScreen implements Screen {
     private final SpriteBatch batch = new SpriteBatch();
     private Stage stage;
     private Skin skin;
+    private Skin pauseButtonSkin;
     private final Texture grassTexture = new Texture("field/grass.png");
     private final Texture treeTexture = new Texture("field/tree.png");
     private final Texture radiationTexture = new Texture("field/radiation.png");
@@ -68,10 +70,16 @@ public class FieldScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("buttonStyle/buttonStyle.json"));
+        pauseButtonSkin = new Skin();
+        pauseButtonSkin.add("button_up", new Texture(Gdx.files.internal("buttons/pauseButton.png")));
+        pauseButtonSkin.add("button_down", new Texture(Gdx.files.internal("buttons/pauseButton.png")));
+        ImageButton.ImageButtonStyle pauseButtonStyle = new ImageButton.ImageButtonStyle();
+        pauseButtonStyle.imageUp = pauseButtonSkin.getDrawable("button_up");
+        pauseButtonStyle.imageDown = pauseButtonSkin.getDrawable("button_down");
 
-        TextButton pauseButton = new TextButton("Пауза", skin);
-        pauseButton.setSize(200, 150);
-        pauseButton.setPosition(50,  Gdx.graphics.getHeight() - pauseButton.getHeight());
+        ImageButton pauseButton = new ImageButton(pauseButtonStyle);
+        pauseButton.setSize(100, 125);
+        pauseButton.setPosition(50,  Gdx.graphics.getHeight() - pauseButton.getHeight() - 50);
 
         pauseButton.addListener(new ChangeListener() {
             @Override
@@ -155,6 +163,7 @@ public class FieldScreen implements Screen {
         batch.dispose();
         stage.dispose();
         skin.dispose();
+        pauseButtonSkin.dispose();
         grassTexture.dispose();
         treeTexture.dispose();
         radiationTexture.dispose();
