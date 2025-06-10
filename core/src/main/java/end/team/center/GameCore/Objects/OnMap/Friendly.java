@@ -6,10 +6,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import end.team.center.GameCore.Library.CharacterAnimation;
+import end.team.center.GameCore.Logic.Chunk;
 import end.team.center.GameCore.Objects.Map.Tree;
 import end.team.center.Screens.Game.GameScreen;
 
 public abstract class Friendly extends Entity {
+    private Chunk nowChunk;
 
     public Friendly(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, float worldHeight, float worldWidth) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
@@ -34,9 +36,9 @@ public abstract class Friendly extends Entity {
         }
 
         // Проверка касания деревьев
-        int size = GameScreen.trees.size();
+        int size = nowChunk.getTrees().size();
         for(int ii = 0; ii < size; ii++) {
-            Tree t = GameScreen.trees.get(ii);
+            Tree t = nowChunk.getTrees().get(ii);
 
             if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height)) && GameScreen.totalTime < 2) {
                 t.remove();
@@ -75,5 +77,13 @@ public abstract class Friendly extends Entity {
     @Override
     public void dispose() {
         super.dispose();
+    }
+
+    public Chunk getChunk() {
+        return nowChunk;
+    }
+
+    public void setChunk(Chunk c) {
+        nowChunk = c;
     }
 }

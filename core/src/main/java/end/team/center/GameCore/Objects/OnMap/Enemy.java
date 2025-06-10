@@ -1,5 +1,7 @@
 package end.team.center.GameCore.Objects.OnMap;
 
+import static end.team.center.Screens.Game.GameScreen.hero;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
@@ -63,15 +65,13 @@ public abstract class Enemy extends Entity {
                     mRight = false;
                 }
 
-                if (GameScreen.trees != null) {
-                    for (Tree t : GameScreen.trees) {
-                        if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
-                            if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y, width, height)))
-                                deltaX = 0;
-                            if (t.getBound().overlaps(new Rectangle(vector.x, vector.y + deltaY, width, height)))
-                                deltaY = 0;
-                            isTreeTouch = true;
-                        }
+                for (Tree t : hero.getChunk().getTrees()) {
+                    if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
+                        if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y, width, height)))
+                            deltaX = 0;
+                        if (t.getBound().overlaps(new Rectangle(vector.x, vector.y + deltaY, width, height)))
+                            deltaY = 0;
+                        isTreeTouch = true;
                     }
                 }
 

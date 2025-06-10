@@ -31,11 +31,17 @@ public abstract class Drops extends Interactable {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+
+        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
+    }
+
+    public Rectangle getBound() {
+        return bound;
     }
 
     @Override

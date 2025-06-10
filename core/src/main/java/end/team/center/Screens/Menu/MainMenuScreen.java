@@ -27,7 +27,7 @@ public class MainMenuScreen implements Screen {
     private Stage stage;
     private Skin skin;
     private Fon background;
-    private Music backgroundMusic;
+    private static Music backgroundMusic;
     private Label conclusionText, coinsText;
     public static Image activeSkin;
 
@@ -82,10 +82,14 @@ public class MainMenuScreen implements Screen {
         coinsText = new Label("", labelSkin);
         coinsText.setFontScale(2f);
         updateCoinsDisplay();
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Sounds/lobby.mp3"));
-        backgroundMusic.setLooping(true);
-        backgroundMusic.setVolume(0.3f);
-        backgroundMusic.play();
+
+        if (backgroundMusic == null) {
+            backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Sounds/lobby.mp3"));
+            backgroundMusic.setLooping(true);
+            backgroundMusic.setVolume(0.3f);
+            backgroundMusic.play();
+        }
+
         // Кнопка старта
         skin = new Skin(Gdx.files.internal("UI/MainMenu/skinPlayButton.json"));
         Button buttonStart = new Button(skin);
@@ -95,6 +99,7 @@ public class MainMenuScreen implements Screen {
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 backgroundMusic.stop();
                 backgroundMusic.dispose();
+                backgroundMusic = null;
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new GameScreen(repo));
             }
         });
@@ -105,8 +110,6 @@ public class MainMenuScreen implements Screen {
         buttonSkin.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                backgroundMusic.stop();
-                backgroundMusic.dispose();
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new SkinsScreen(repo));
 
             }
@@ -120,8 +123,6 @@ public class MainMenuScreen implements Screen {
         buttonAch.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                backgroundMusic.stop();
-                backgroundMusic.dispose();
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new AchievementsScreen(repo));
             }
         });

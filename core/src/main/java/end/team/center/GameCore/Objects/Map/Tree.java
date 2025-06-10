@@ -40,6 +40,10 @@ public class Tree extends StaticObject {
         batch.draw(texture, getX(), getY(), getWidth(), getHeight());
     }
 
+    public Rectangle getBound() {
+        return bound;
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);

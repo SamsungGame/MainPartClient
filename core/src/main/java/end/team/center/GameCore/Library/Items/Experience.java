@@ -11,6 +11,7 @@ import end.team.center.GameCore.Logic.GMath;
 import end.team.center.GameCore.Objects.Effects.Death;
 import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.OnMap.Hero;
+import end.team.center.Screens.Game.GameScreen;
 
 public class Experience extends Drops {
     protected static final int DISTANCE_TO_PICKUP = 190;
@@ -30,8 +31,6 @@ public class Experience extends Drops {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-
-        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
     }
 
     @Override
@@ -58,6 +57,7 @@ public class Experience extends Drops {
             sound.play();
             System.out.println("Выдано " + count + "exp");
             remove();
+            GameScreen.drop.remove(this);
         }
     }
 

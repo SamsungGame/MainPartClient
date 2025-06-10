@@ -23,8 +23,6 @@ public class Bandage extends Drops {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-
-        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
     }
 
     @SuppressWarnings("NewApi")
@@ -38,6 +36,7 @@ public class Bandage extends Drops {
             GameScreen.isPickupItem = true;
 
             remove();
+            GameScreen.drop.remove(this);
         }
     }
 
