@@ -20,7 +20,8 @@ public class Chunk extends Stage {
 
     public Chunk(float x, float y, float width, float height, Viewport viewport) {
         super(viewport);
-        bound = new Rectangle(x - width / 2, y - height / 2, width * 2, height * 2);
+
+        bound = new Rectangle(x - width, y - height, width, height);
         actorsTree = new ArrayList<>();
         actorsItem = new ArrayList<>();
     }

@@ -152,7 +152,6 @@ public class GameScreen implements Screen {
             }
         }
 
-
         System.out.println("Размеры экрана: " + Gdx.graphics.getWidth() + "x на " + Gdx.graphics.getHeight() + "y");
 
         countZone = (int) (100 + Math.random() * 100);
@@ -180,6 +179,7 @@ public class GameScreen implements Screen {
 
         worldViewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCamera.getCamera());
         worldStage = new Stage(worldViewport);
+        noAct = new Stage(worldViewport);
 
         uiViewport = new ScreenViewport();
         uiStage = new Stage(uiViewport);
@@ -561,6 +561,7 @@ public class GameScreen implements Screen {
                     c.addActor(tree);
                 }
             }
+            worldStage.addActor(tree);
         }
         for (int i = 0; i < 300; i++) {
             NebulaActor nebula = new NebulaActor(
@@ -702,6 +703,8 @@ public class GameScreen implements Screen {
 
         if (hero.getAntiRadiationCostumePower() < 10) {
             energyValue.setColor(1f, 0f, 0f, 1f);
+        } else if (hero.getAntiRadiationCostumePower() < 60) {
+            energyValue.setColor(1f, 1f, 0f, 1f);
         } else {
             energyValue.setColor(1f, 1f, 1f, 1f);
         }
@@ -935,6 +938,10 @@ public class GameScreen implements Screen {
 
     public void setSpawnItem(Drops d) {
         wait.add(d);
+
+        for (Chunk c: chunks) {
+            if (c.getBound().overlaps(d.getBound())) c.addActor(d);
+        }
     }
 
     public void addToList() {
@@ -945,7 +952,6 @@ public class GameScreen implements Screen {
                     worldStage.addActor((Actor) wait.get(i));
                 } else if (wait.get(i) instanceof Drops && drop.size() < maxDropSpawn) {
                     drop.add((Drops) wait.get(i));
-                    worldStage.addActor((Actor) wait.get(i));
                 }
             }
         }
