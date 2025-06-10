@@ -31,7 +31,7 @@ public class PauseScreen implements Screen {
     private final Skin skin;
     private final Texture backgroundTexture = new Texture(Gdx.files.internal("UI/MainMenu/fon.png"));
 
-    public PauseScreen(Center game, GameScreen fieldScreen) {
+    public PauseScreen(GameScreen fieldScreen) {
         backgroundMusic.stop();
 
         stage = new Stage(new ScreenViewport());
@@ -58,14 +58,14 @@ public class PauseScreen implements Screen {
         backToMainMenuScreenButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new MainMenuScreen(0, gameRepository));
+                ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(0, gameRepository));
             }
         });
 
         continueButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(fieldScreen);
+                ((Center) Gdx.app.getApplicationListener()).setScreen(fieldScreen);
             }
         });
 

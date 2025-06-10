@@ -25,7 +25,7 @@ public class LoadingScreen implements Screen {
     private final Texture backgroundTexture = new Texture(Gdx.files.internal("UI/MainMenu/fon.png"));
     private GameScreen fieldScreen;
 
-    public LoadingScreen(Center game) {
+    public LoadingScreen() {
         font.getData().setScale(2.0f);
         String loadingText = "Подождите, идёт загрузка...";
         layout.setText(font, loadingText);
@@ -42,7 +42,7 @@ public class LoadingScreen implements Screen {
         Timer.schedule(new Task() {
             @Override
             public void run() {
-                game.setScreen(fieldScreen);
+                ((Center) Gdx.app.getApplicationListener()).setScreen(fieldScreen);
             }
         }, 10);
     }

@@ -34,7 +34,7 @@ public class DeathScreen implements Screen {
     private final Skin skin;
     private final Texture backgroundTexture = new Texture(Gdx.files.internal("UI/MainMenu/fon.png"));
 
-    public DeathScreen(Center game, String cause) {
+    public DeathScreen(String cause) {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
@@ -65,14 +65,14 @@ public class DeathScreen implements Screen {
         backToMainMenuScreenButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new MainMenuScreen(0, gameRepository));
+                ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(0, gameRepository));
             }
         });
 
         restartButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new GameScreen(gameRepository));
+                ((Center) Gdx.app.getApplicationListener()).setScreen(new GameScreen(gameRepository));
             }
         });
 
