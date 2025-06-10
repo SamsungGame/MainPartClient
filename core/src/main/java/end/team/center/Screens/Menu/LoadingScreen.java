@@ -18,11 +18,11 @@ import end.team.center.Screens.Game.GameScreen;
 public class LoadingScreen implements Screen {
     public static GameRepository gameRepository;
     private final SpriteBatch batch = new SpriteBatch();
-    private final BitmapFont font = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
+    private final BitmapFont font = new BitmapFont(Gdx.files.internal("UI/AboutGame/pixel_font.fnt"));
     private final GlyphLayout layout = new GlyphLayout();
     public final float layoutX;
     public final float layoutY;
-    private final Texture backgroundTexture = new Texture(Gdx.files.internal("background.png"));
+    private final Texture backgroundTexture = new Texture(Gdx.files.internal("UI/MainMenu/fon.png"));
     private GameScreen fieldScreen;
 
     public LoadingScreen(Center game) {

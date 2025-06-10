@@ -22,8 +22,8 @@ import end.team.center.Screens.Game.GameScreen;
 public class DeathScreen implements Screen {
     public static GameRepository gameRepository;
     private final SpriteBatch batch = new SpriteBatch();
-    private final BitmapFont fontDeath = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
-    private final BitmapFont fontCause = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
+    private final BitmapFont fontDeath = new BitmapFont(Gdx.files.internal("UI/AboutGame/pixel_font.fnt"));
+    private final BitmapFont fontCause = new BitmapFont(Gdx.files.internal("UI/AboutGame/pixel_font.fnt"));
     private final GlyphLayout layoutDeath = new GlyphLayout();
     private final GlyphLayout layoutCause = new GlyphLayout();
     public final float layoutDeathX;
@@ -32,7 +32,7 @@ public class DeathScreen implements Screen {
     public final float layoutCauseY;
     private final Stage stage;
     private final Skin skin;
-    private final Texture backgroundTexture = new Texture(Gdx.files.internal("background.png"));
+    private final Texture backgroundTexture = new Texture(Gdx.files.internal("UI/MainMenu/fon.png"));
 
     public DeathScreen(Center game, String cause) {
         stage = new Stage(new ScreenViewport());
