@@ -46,7 +46,7 @@ public class Hero extends Friendly {
         weapon = new Knife(WeaponType.knife, this);
         exp = 0;
         level = 1;
-        maxExp = 1;
+        maxExp = 10;
         sheildLevel = 0;
         maxHP = 3;
         deathZone = new Rectangle(vector.x - 50, vector.y - 40, 220, 220);
@@ -175,7 +175,7 @@ public class Hero extends Friendly {
         if(exp >= maxExp) {
             level++;
             exp = 0;
-            maxExp+=3;
+            maxExp += 3;
             newLevelFlag = true;
         }
     }
@@ -204,7 +204,7 @@ public class Hero extends Friendly {
         if (!was) radiationLevel = 1;
     }
 
-    public void addCostumePower(int add) {
+    public void addCostumePower(float add) {
         antiRadiationCostumePower += add;
 
         if (antiRadiationCostumePower > 100) antiRadiationCostumePower = 100;

@@ -53,8 +53,8 @@ import end.team.center.Redact.SystemOut.Console;
 public class GameScreen implements Screen {
     public static GameRepository gameRepository;
     private TouchpadClass touchpadMove, touchpadAttack;
-    public Hero hero;
-    private Stage worldStage;
+    public static Hero hero;
+    private Stage worldStage, noAct;
     private Stage uiStage;
     private Viewport worldViewport;
     private Viewport uiViewport;
@@ -120,11 +120,14 @@ public class GameScreen implements Screen {
     boolean start = false;
 
     public int timeShowNewAch = 4; // sec
+
     private float touchForMoveX;
     private float touchForMoveY;
 
     private float touchForAttackX;
     private float touchForAttackY;
+
+    public static ArrayList<Chunk> chunks;
 
 
 
@@ -133,6 +136,19 @@ public class GameScreen implements Screen {
     public GameScreen(GameRepository repo) {
 
         this.gameRepository = repo;
+
+        gameCamera = new GameCamera(WORLD_WIDTH, WORLD_HEIGHT);
+
+        worldViewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCamera.getCamera());
+        noAct = new Stage(worldViewport);
+
+        chunks = new ArrayList<>();
+        for (int i = 0; i < WORLD_WIDTH; i += (int) (WORLD_WIDTH / 20)) {
+            for (int y = 0; y < WORLD_HEIGHT; y += (int) (WORLD_HEIGHT / 20)) {
+                chunks.add(new Chunk(i, y, WORLD_WIDTH / 20, WORLD_HEIGHT / 20, worldViewport));
+            }
+        }
+
 
         System.out.println("Размеры экрана: " + Gdx.graphics.getWidth() + "x на " + Gdx.graphics.getHeight() + "y");
 
@@ -537,7 +553,11 @@ public class GameScreen implements Screen {
             );
 
             trees.add(tree);
-            worldStage.addActor(tree);
+            for (Chunk c: chunks) {
+                if (c.getBound().overlaps(tree.getBound())) {
+                    c.addActor(tree);
+                }
+            }
         }
         for (int i = 0; i < 300; i++) {
             NebulaActor nebula = new NebulaActor(
@@ -574,13 +594,19 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         addToList();
 
+        for (Chunk c: chunks) {
+            if (c.getBound().overlaps(hero.getBound())) {
+                hero.setChunk(c);
+            }
+        }
+
         if (totalTime < 2) isPickupItem = false;
 
         if (showAchivs) showNewAchivs();
 
         TIME += delta;
 
-        coinForTime += delta/20;
+        coinForTime += delta / 20;
 
         if (totalTime >= 600 && !gameRepository.getAchievements().get(3) && !start) {
             showAchivs = true;
@@ -592,6 +618,7 @@ public class GameScreen implements Screen {
             showPowerDialog(delta);
             return;
         }
+
         if (powers.isEmpty()) expBar.setRange(0, 0);
 
         coinForGame = coinForEnemyValue + coinForTime;
@@ -608,16 +635,17 @@ public class GameScreen implements Screen {
         float moveX = touchpadMove.getKnobPercentX();
         float moveY = touchpadMove.getKnobPercentY();
 
-        float normalizedX = (touchpadAttack.getKnobPercentX() + 1) / 2;
-        float normalizedY = (touchpadAttack.getKnobPercentY() + 1) / 2;
-        float dx = normalizedX * 2 - 1;
-        float dy = normalizedY * 2 - 1;
+
 
         // Движение героя
         hero.move(moveX, moveY, delta);
 
         // Атака
-        if (touchpadAttack.isTouchpadActive()) {
+        if (touchpadAttack.isTouchpadActive() && touchpadAttack.getKnobPercentX() != 0 && touchpadAttack.getKnobPercentY() != 0) {
+            float normalizedX = (touchpadAttack.getKnobPercentX() + 1) / 2;
+            float normalizedY = (touchpadAttack.getKnobPercentY() + 1) / 2;
+            float dx = normalizedX * 2 - 1;
+            float dy = normalizedY * 2 - 1;
             hero.useWeapon(dx, dy);
         } else if (hero.getWep().getShow() && hero.getWep().isCanAttack()) {
             hero.startAttackAnim();
@@ -639,7 +667,7 @@ public class GameScreen implements Screen {
                     }
 
                     if (hero.getEnergyCollect()) {
-                        hero.addAntiRadiationCostumePower(0.5f);
+                        hero.addCostumePower(0.5f);
                     }
                 }
             }
@@ -669,6 +697,12 @@ public class GameScreen implements Screen {
             }
         }
 
+        if (hero.getAntiRadiationCostumePower() < 10) {
+            energyValue.setColor(1f, 0f, 0f, 1f);
+        } else {
+            energyValue.setColor(1f, 1f, 1f, 1f);
+        }
+
         // Удаление мертвых врагов
         enemies.removeIf(e -> {
             if (!e.isLive()) {
@@ -683,7 +717,15 @@ public class GameScreen implements Screen {
         expBar.setValue(hero.getExp());
         hero.newLevel();
         energyValue.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
+
+        int l = hero.getRadiationLevel();
         radiationValue.setText(hero.getRadiationLevel());
+        if (l == 1)      radiationValue.setColor(1f, 1f,   1f,   1f);
+        else if (l == 2) radiationValue.setColor(1f, 0.8f, 0.8f, 1f);
+        else if (l == 3) radiationValue.setColor(1f, 0.5f, 0.5f, 1f);
+        else if (l == 4) radiationValue.setColor(1f, 0.3f, 0.3f, 1f);
+        else if (l == 5) radiationValue.setColor(1f, 0,    0,    1f);
+
         hearts.updateAnimation(delta);
         hearts.setCurrentHealth(hero.getHealth());
 
@@ -705,6 +747,9 @@ public class GameScreen implements Screen {
             // Сцена с героями, врагами и т.п.
             worldStage.act(delta);
             worldStage.draw();
+
+            hero.getChunk().act(delta);
+            hero.getChunk().draw();
 
             batch.end();
             frameBuffer.end();
