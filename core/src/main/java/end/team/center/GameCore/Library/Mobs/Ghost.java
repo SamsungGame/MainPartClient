@@ -1,5 +1,7 @@
 package end.team.center.GameCore.Library.Mobs;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -21,6 +23,7 @@ public class Ghost extends Enemy {
     protected AI_Ghost ai;
     protected Rectangle stop;
     protected ArrayList<Ammo> ammos;
+    Sound soundAmmo = Gdx.audio.newSound(Gdx.files.internal("Sounds/ghostAttack.mp3"));
 
     public Ghost(EnemyType type, Texture texture, Vector2 vector, int level, float worldHeight, float worldWidth, AI ai, TextureRegion attack) {
         super(texture, type.getAnim(), vector, type.getHeight(), type.getWidth(), type.getHealth(), type.getDamage(), type.getDefense(), type.getSpeed(), level, type.getExp(), worldHeight, worldWidth, ai);
@@ -31,6 +34,7 @@ public class Ghost extends Enemy {
     }
 
     public void addAmmo(Ammo a) {
+
         ammos.add(a);
     }
 
