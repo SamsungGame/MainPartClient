@@ -6,4 +6,5 @@ public class Config {
 
     public static final int FRAME_RATE = 30;
     public static boolean skinIsKnight = false;
+    public static boolean skinIsCyber = false;
 }

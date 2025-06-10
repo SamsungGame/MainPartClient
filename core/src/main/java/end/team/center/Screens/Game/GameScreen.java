@@ -167,21 +167,56 @@ public class GameScreen implements Screen {
         touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth() - 500, 200, false, "attack");
         uiStage.addActor(touchpadAttack);
 
-        if (!Config.skinIsKnight) {
+//        if (!Config.skinIsKnight) {
+//            hero = new Hero(
+//                repo,
+//                new Texture(Gdx.files.internal("UI/GameUI/Hero/Right/heroRight.png")),
+//                CharacterAnimation.Hero,
+//                new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
+//                140, 120, 3,
+//                1, 0, 300f,
+//                WORLD_WIDTH, WORLD_HEIGHT
+//            );
+//        } else {
+//            hero = new Hero(
+//                repo,
+//                new Texture(Gdx.files.internal("UI/GameUI/Hero/KnightRight/heroNighRight.png")),
+//                CharacterAnimation.Knight,
+//                new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
+//                140, 120, 3,
+//                1, 0, 300f,
+//                WORLD_WIDTH, WORLD_HEIGHT
+//            );
+//        }
+
+        if (Config.skinIsKnight) {
             hero = new Hero(
                 repo,
-                new Texture(Gdx.files.internal("UI/GameUI/Hero/Right/heroRight.png")),
-                CharacterAnimation.Hero,
+                new Texture(Gdx.files.internal("UI/GameUI/Hero/KnightRight/heroNighRight.png")),
+                CharacterAnimation.Knight,
                 new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
                 140, 120, 3,
                 1, 0, 300f,
                 WORLD_WIDTH, WORLD_HEIGHT
             );
-        } else {
+
+
+        } else if(Config.skinIsCyber){
             hero = new Hero(
                 repo,
-                new Texture(Gdx.files.internal("UI/GameUI/Hero/KnightRight/heroNighRight.png")),
-                CharacterAnimation.Knight,
+                new Texture(Gdx.files.internal("UI/GameUI/Hero/KnightRight/cyberRight.png")),
+                CharacterAnimation.Cyber,
+                new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
+                140, 120, 3,
+                1, 0, 300f,
+                WORLD_WIDTH, WORLD_HEIGHT
+            );
+        }
+        else {
+            hero = new Hero(
+                repo,
+                new Texture(Gdx.files.internal("UI/GameUI/Hero/Right/heroRight.png")),
+                CharacterAnimation.Hero,
                 new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
                 140, 120, 3,
                 1, 0, 300f,

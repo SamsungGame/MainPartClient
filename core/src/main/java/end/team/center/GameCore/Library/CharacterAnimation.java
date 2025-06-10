@@ -3,6 +3,7 @@ package end.team.center.GameCore.Library;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import end.team.center.GameCore.Library.Animations.AnimationGhost;
+import end.team.center.GameCore.Library.Animations.AnimationHeroCyber;
 import end.team.center.GameCore.Library.Animations.AnimationHeroKnight;
 import end.team.center.GameCore.Library.Animations.AnimationRabbit;
 import end.team.center.GameCore.Library.Animations.AnimationsHero;
@@ -11,6 +12,7 @@ import end.team.center.GameCore.Library.Animations.AnimationsOwl;
 public enum CharacterAnimation {
     Hero(AnimationsHero.rightFrames, AnimationsHero.leftFrames, AnimationsHero.rightStay, AnimationsHero.leftStay),
     Knight(AnimationHeroKnight.rightFrames, AnimationHeroKnight.leftFrames, AnimationHeroKnight.rightStay, AnimationHeroKnight.leftStay),
+    Cyber(AnimationHeroCyber.rightFrames, AnimationHeroCyber.leftFrames, AnimationHeroCyber.rightStay, AnimationHeroCyber.leftStay),
    Owl(AnimationsOwl.rightTurn, AnimationsOwl.leftTurn, AnimationsOwl.rightDive, AnimationsOwl.leftDive),
     Ghost(AnimationGhost.ghostWalk, AnimationGhost.ghostAttack, AnimationGhost.ammo, AnimationGhost.ghostWalk),
     Rabbit(AnimationRabbit.walkRight, AnimationRabbit.walkLeft, AnimationRabbit.walkRight, AnimationRabbit.walkLeft);
