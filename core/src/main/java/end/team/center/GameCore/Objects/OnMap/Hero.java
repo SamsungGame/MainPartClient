@@ -1,6 +1,7 @@
 package end.team.center.GameCore.Objects.OnMap;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -38,6 +39,7 @@ public class Hero extends Friendly {
     private int duration = 30;
     private float elapsedTime = 0;
     private Texture activeSheild, sheild1, sheild2, sheild3;
+    Sound soundUronShield = Gdx.audio.newSound(Gdx.files.internal("Sounds/uron.mp3"));
 
 
     public Hero(GameRepository repo, Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, float worldWidth, float worldHeight) {
@@ -93,6 +95,8 @@ public class Hero extends Friendly {
 
     public void setSheildLevel(int sheildLevel) {
         this.sheildLevel = sheildLevel;
+        long id = soundUronShield.play();
+        soundUronShield.setVolume(id, 1f);
     }
 
     public void offShield() {

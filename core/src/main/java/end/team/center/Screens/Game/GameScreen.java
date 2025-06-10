@@ -3,6 +3,7 @@ package end.team.center.Screens.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -53,6 +54,7 @@ import end.team.center.Redact.SystemOut.Console;
 
 public class GameScreen implements Screen {
     public static GameRepository gameRepository;
+
     private TouchpadClass touchpadMove, touchpadAttack;
     public static Hero hero;
     private Stage worldStage, noAct;
@@ -637,15 +639,14 @@ public class GameScreen implements Screen {
         float moveX = touchpadMove.getKnobPercentX();
         float moveY = touchpadMove.getKnobPercentY();
 
-
+        float normalizedX = (touchpadAttack.getKnobPercentX() + 1) / 2;
+        float normalizedY = (touchpadAttack.getKnobPercentY() + 1) / 2;
 
         // Движение героя
         hero.move(moveX, moveY, delta);
 
         // Атака
         if (touchpadAttack.isTouchpadActive() && touchpadAttack.getKnobPercentX() != 0 && touchpadAttack.getKnobPercentY() != 0) {
-            float normalizedX = (touchpadAttack.getKnobPercentX() + 1) / 2;
-            float normalizedY = (touchpadAttack.getKnobPercentY() + 1) / 2;
             float dx = normalizedX * 2 - 1;
             float dy = normalizedY * 2 - 1;
             hero.useWeapon(dx, dy);
@@ -681,6 +682,7 @@ public class GameScreen implements Screen {
         // Урон от врагов
         for (Enemy e : enemies) {
             if (e.getBound().overlaps(hero.getBound())) {
+
                 if (hero.getLevelSheild() == 0) {
                     e.attack(hero);
                 } else if (!hero.getIsInvulnerability()) {
