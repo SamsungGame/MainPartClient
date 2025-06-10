@@ -113,10 +113,17 @@ public class SkinsScreen implements Screen {
                 if (repo.getSkins().get(currentIndex + 1)) {
                     MainMenuScreen.activeSkin = currentImage;
 
-                    if (currentIndex == 0) Config.skinIsKnight = false;
-                    else                   Config.skinIsKnight = true;
+                    if (currentIndex == 0) {
+                        Config.skinIsKnight = false;
+                        Config.skinIsCyber = false;
+                    } else if (currentIndex == 1) {
+                        Config.skinIsKnight = true;
+                        Config.skinIsCyber = false;
+                    } else if (currentIndex == 2) {
+                        Config.skinIsKnight = false;
+                        Config.skinIsCyber = true;
+                    }
                 }
-
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(0, repo));
             }
         });
@@ -138,14 +145,15 @@ public class SkinsScreen implements Screen {
         // Загружаем 2 изображения
         images = new Texture[] {
             new Texture(Gdx.files.internal("UI/GameUI/Hero/Left/heroLeftKnife.png")),
-            new Texture(Gdx.files.internal("UI/GameUI/Hero/KnightLeft/heroNighLeft.png"))
+            new Texture(Gdx.files.internal("UI/GameUI/Hero/KnightLeft/heroNighLeft.png")),
+            new Texture(Gdx.files.internal("UI/GameUI/Hero/CyberLeft/cyberLeft.png"))
         };
 
         currentIndex = Center.currentSkin - 1; // Начинаем с первого изображения
 
         // Создаём Image для отображения текущего изображения
         currentImage = new Image(new TextureRegionDrawable(images[currentIndex]));
-        currentImage.setSize(200, 200);
+        currentImage.setSize(180, 192);
         currentImage.setPosition(Gdx.graphics.getWidth() / 2 - currentImage.getWidth() / 2,
                 Gdx.graphics.getHeight() / 2 - currentImage.getHeight() / 2);
 
@@ -159,8 +167,12 @@ public class SkinsScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (currentIndex == 1 && repo.getCoins() >= 10 && !repo.getSkins().get(currentIndex + 1)) {
-                    repo.unlockSkin(2);
+                    repo.unlockSkin(currentIndex + 1);
                     repo.spendCoins(10);
+                }
+                if (currentIndex == 2 && repo.getCoins() >= 0 && !repo.getSkins().get(currentIndex + 1)) {
+                    repo.unlockSkin(currentIndex + 1);
+                    repo.spendCoins(0);
                 }
             }
         });

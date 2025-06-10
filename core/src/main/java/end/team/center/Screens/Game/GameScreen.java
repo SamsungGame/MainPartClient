@@ -120,6 +120,11 @@ public class GameScreen implements Screen {
     boolean start = false;
 
     public int timeShowNewAch = 4; // sec
+    private float touchForMoveX;
+    private float touchForMoveY;
+
+    private float touchForAttackX;
+    private float touchForAttackY;
 
 
 
@@ -167,27 +172,6 @@ public class GameScreen implements Screen {
         touchpadAttack = new TouchpadClass(Gdx.graphics.getWidth() - 500, 200, false, "attack");
         uiStage.addActor(touchpadAttack);
 
-//        if (!Config.skinIsKnight) {
-//            hero = new Hero(
-//                repo,
-//                new Texture(Gdx.files.internal("UI/GameUI/Hero/Right/heroRight.png")),
-//                CharacterAnimation.Hero,
-//                new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
-//                140, 120, 3,
-//                1, 0, 300f,
-//                WORLD_WIDTH, WORLD_HEIGHT
-//            );
-//        } else {
-//            hero = new Hero(
-//                repo,
-//                new Texture(Gdx.files.internal("UI/GameUI/Hero/KnightRight/heroNighRight.png")),
-//                CharacterAnimation.Knight,
-//                new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
-//                140, 120, 3,
-//                1, 0, 300f,
-//                WORLD_WIDTH, WORLD_HEIGHT
-//            );
-//        }
 
         if (Config.skinIsKnight) {
             hero = new Hero(
@@ -204,7 +188,7 @@ public class GameScreen implements Screen {
         } else if(Config.skinIsCyber){
             hero = new Hero(
                 repo,
-                new Texture(Gdx.files.internal("UI/GameUI/Hero/KnightRight/cyberRight.png")),
+                new Texture(Gdx.files.internal("UI/GameUI/Hero/CyberRight/cyberRight.png")),
                 CharacterAnimation.Cyber,
                 new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
                 140, 120, 3,
@@ -613,7 +597,14 @@ public class GameScreen implements Screen {
         coinForGame = coinForEnemyValue + coinForTime;
         touchpadMove.TouchpadLogic(uiStage);
         touchpadAttack.TouchpadLogic(uiStage);
+
+        touchForMoveX = touchpadMove.x - 150;
+        touchForMoveY = touchpadMove.y - 150;
+
+        touchForAttackX = touchpadAttack.x - 150;
+        touchForAttackY = touchpadAttack.y - 150;
         // Получаем значения от джойстиков
+
         float moveX = touchpadMove.getKnobPercentX();
         float moveY = touchpadMove.getKnobPercentY();
 
@@ -817,6 +808,8 @@ public class GameScreen implements Screen {
 
     @SuppressWarnings("NewApi")
     public void showPowerDialog(float delta) {
+        uiStage.getRoot().removeActor(touchpadMove);
+        uiStage.getRoot().removeActor(touchpadAttack);
         STOP = true;
 
         ArrayList<Power> powers = this.powers;
@@ -862,9 +855,19 @@ public class GameScreen implements Screen {
     }
 
     public void hidePowerDialog() {
+
+        uiStage.addActor(touchpadMove);
+        touchpadMove.setPosition(touchForMoveX, touchForMoveY);
+
+        uiStage.addActor(touchpadAttack);
+        touchpadAttack.setPosition(touchForAttackX, touchForAttackY);
+
         STOP = false;
         hero.newLevelFlag = false;
         isShow = false;
+
+        touchpadMove.TouchpadLogic(uiStage);
+        touchpadAttack.TouchpadLogic(uiStage);
 
         if (PSC != null) {
             PSC.dispose();  // Очистка ресурсов PSC

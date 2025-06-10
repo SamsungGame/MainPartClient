@@ -46,7 +46,7 @@ public class Hero extends Friendly {
         weapon = new Knife(WeaponType.knife, this);
         exp = 0;
         level = 1;
-        maxExp = 10;
+        maxExp = 1;
         sheildLevel = 0;
         maxHP = 3;
         deathZone = new Rectangle(vector.x - 50, vector.y - 40, 220, 220);

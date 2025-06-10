@@ -19,9 +19,9 @@ public class TouchpadClass extends Touchpad {
 
     public static List<TouchpadClass> touchpads = new ArrayList<>();
     public float touchSize = 300;
-    private float x;
-    private float y;
-    private boolean isTouchpadActive;
+    public float x = 0;
+    public float y = 0;
+    public boolean isTouchpadActive;
     float xp = this.x;
     float yp = this.y;
     private String type;
