@@ -636,15 +636,14 @@ public class GameScreen implements Screen {
         float moveX = touchpadMove.getKnobPercentX();
         float moveY = touchpadMove.getKnobPercentY();
 
-
+        float normalizedX = (touchpadAttack.getKnobPercentX() + 1) / 2;
+        float normalizedY = (touchpadAttack.getKnobPercentY() + 1) / 2;
 
         // Движение героя
         hero.move(moveX, moveY, delta);
 
         // Атака
         if (touchpadAttack.isTouchpadActive() && touchpadAttack.getKnobPercentX() != 0 && touchpadAttack.getKnobPercentY() != 0) {
-            float normalizedX = (touchpadAttack.getKnobPercentX() + 1) / 2;
-            float normalizedY = (touchpadAttack.getKnobPercentY() + 1) / 2;
             float dx = normalizedX * 2 - 1;
             float dy = normalizedY * 2 - 1;
             hero.useWeapon(dx, dy);
