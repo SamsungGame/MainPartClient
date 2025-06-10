@@ -38,10 +38,22 @@ public class PauseScreen implements Screen {
         layoutX = (Gdx.graphics.getWidth() - layout.width) / 2;
         layoutY = Gdx.graphics.getHeight() - layout.height;
 
+        TextButton backToMainMenuScreenButton = new TextButton("В главное меню", skin);
+        backToMainMenuScreenButton.setSize(300, 150);
+        backToMainMenuScreenButton.setPosition(Gdx.graphics.getWidth() / 2 - backToMainMenuScreenButton.getWidth() / 2,
+            Gdx.graphics.getHeight() / 2 - backToMainMenuScreenButton.getHeight() * 1.5f - 15);
+
         TextButton continueButton = new TextButton("Продолжить игру", skin);
-        continueButton.setSize(350, 150);
-        continueButton.setPosition(Gdx.graphics.getWidth() / 2 - continueButton.getWidth() / 2,
-            Gdx.graphics.getHeight() / 2 - continueButton.getHeight());
+        continueButton.setSize(300, 150);
+        continueButton.setPosition(Gdx.graphics.getWidth() / 2 - backToMainMenuScreenButton.getWidth() / 2,
+            backToMainMenuScreenButton.getY() - continueButton.getHeight() / 2 - 15);
+
+        backToMainMenuScreenButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new MainMenuScreen(game));
+            }
+        });
 
         continueButton.addListener(new ChangeListener() {
             @Override
@@ -50,6 +62,7 @@ public class PauseScreen implements Screen {
             }
         });
 
+        stage.addActor(backToMainMenuScreenButton);
         stage.addActor(continueButton);
     }
 
