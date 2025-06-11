@@ -12,8 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
@@ -41,10 +43,13 @@ public class FieldScreen implements Screen {
     private float maxY;
     private final float viewportWidth = Gdx.graphics.getWidth();
     private final float viewportHeight = Gdx.graphics.getHeight();
+    private boolean isPaused = false;
     private final SpriteBatch batch = new SpriteBatch();
     private Stage stage;
+    private Stage pauseStage;
     private Skin skin;
     private Skin pauseButtonSkin;
+    private final Texture backgroundTexture = new Texture(Gdx.files.internal("background.png"));
     private final Texture grassTexture = new Texture("field/grass.png");
     private final Texture treeTexture = new Texture("field/tree.png");
     private final Texture radiationTexture = new Texture("field/radiation.png");
@@ -67,6 +72,7 @@ public class FieldScreen implements Screen {
     @Override
     public void show() {
         stage = new Stage(new ScreenViewport());
+        pauseStage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("buttonStyle/buttonStyle.json"));
@@ -84,11 +90,50 @@ public class FieldScreen implements Screen {
         pauseButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new PauseScreen(game, FieldScreen.this));
+                togglePause(true);
             }
         });
 
         stage.addActor(pauseButton);
+
+        Table pauseTable = new Table();
+        pauseTable.setBackground(new TextureRegionDrawable(backgroundTexture));
+        pauseTable.setSize(400, 300);
+        pauseTable.setPosition(
+                (Gdx.graphics.getWidth() - pauseTable.getWidth()) / 2,
+                (Gdx.graphics.getHeight() - pauseTable.getHeight()) / 2
+        );
+
+        TextButton backToMainMenuScreenButton = new TextButton("В главное меню", skin);
+        backToMainMenuScreenButton.setSize(300, 150);
+        backToMainMenuScreenButton.setPosition(Gdx.graphics.getWidth() / 2 - backToMainMenuScreenButton.getWidth() / 2,
+                Gdx.graphics.getHeight() / 2 - backToMainMenuScreenButton.getHeight() * 1.5f - 15);
+
+        TextButton continueButton = new TextButton("Продолжить игру", skin);
+        continueButton.setSize(300, 150);
+        continueButton.setPosition(Gdx.graphics.getWidth() / 2 - backToMainMenuScreenButton.getWidth() / 2,
+                backToMainMenuScreenButton.getY() - continueButton.getHeight() / 2 - 15);
+
+        backToMainMenuScreenButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new MainMenuScreen(game));
+            }
+        });
+
+        continueButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                togglePause(false);
+            }
+        });
+
+        pauseTable.defaults().pad(10).width(300).height(150);
+        pauseTable.add(backToMainMenuScreenButton).row();
+        pauseTable.add(continueButton);
+        pauseTable.pack();
+
+        pauseStage.addActor(pauseTable);
     }
 
     @Override
@@ -124,8 +169,14 @@ public class FieldScreen implements Screen {
         drawZones(batch, visibleZones);
         batch.end();
 
-        stage.act();
-        stage.draw();
+        if (isPaused) {
+            pauseStage.act();
+            pauseStage.draw();
+        }
+        else {
+            stage.act();
+            stage.draw();
+        }
 
         mainMenuMusic.stop();
         gameMusic.setLooping(true);
@@ -162,8 +213,10 @@ public class FieldScreen implements Screen {
     public void dispose() {
         batch.dispose();
         stage.dispose();
+        pauseStage.dispose();
         skin.dispose();
         pauseButtonSkin.dispose();
+        backgroundTexture.dispose();
         grassTexture.dispose();
         treeTexture.dispose();
         radiationTexture.dispose();
@@ -388,5 +441,15 @@ public class FieldScreen implements Screen {
             }
         }
         return visibleZones;
+    }
+
+    private void togglePause(boolean pause) {
+        isPaused = pause;
+        if (pause) {
+            Gdx.input.setInputProcessor(pauseStage);
+        }
+        else {
+            Gdx.input.setInputProcessor(stage);
+        }
     }
 }
