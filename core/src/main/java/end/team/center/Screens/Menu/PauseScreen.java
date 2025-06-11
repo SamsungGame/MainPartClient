@@ -1,8 +1,9 @@
 package end.team.center.Screens.Menu;
 
+import static end.team.center.Screens.Game.GameScreen.backgroundMusic;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -19,48 +20,40 @@ import end.team.center.Center;
 import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Screens.Game.GameScreen;
 
-public class DeathScreen implements Screen {
+public class PauseScreen implements Screen {
     public static GameRepository gameRepository;
     private final SpriteBatch batch = new SpriteBatch();
-    private final BitmapFont fontDeath = new BitmapFont(Gdx.files.internal("UI/AboutGame/pixel_font.fnt"));
-    private final BitmapFont fontCause = new BitmapFont(Gdx.files.internal("UI/AboutGame/pixel_font.fnt"));
-    private final GlyphLayout layoutDeath = new GlyphLayout();
-    private final GlyphLayout layoutCause = new GlyphLayout();
-    public final float layoutDeathX;
-    public final float layoutDeathY;
-    public final float layoutCauseX;
-    public final float layoutCauseY;
+    private final BitmapFont font = new BitmapFont(Gdx.files.internal("UI/AboutGame/pixel_font.fnt"));
+    private final GlyphLayout layout = new GlyphLayout();
+    public final float layoutX;
+    public final float layoutY;
     private final Stage stage;
     private final Skin skin;
     private final Texture backgroundTexture = new Texture(Gdx.files.internal("UI/MainMenu/fon.png"));
 
-    public DeathScreen(String cause) {
+    public PauseScreen(GameScreen fieldScreen) {
+        backgroundMusic.stop();
+
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("buttonStyle/buttonStyle.json"));
 
-        fontDeath.getData().setScale(4.0f);
-        fontDeath.setColor(Color.RED);
-        String deathText = "Вы умерли...";
-        layoutDeath.setText(fontDeath, deathText);
-        layoutDeathX = (Gdx.graphics.getWidth() - layoutDeath.width) / 2;
-        layoutDeathY = Gdx.graphics.getHeight() - layoutDeath.height;
-
-        fontCause.getData().setScale(2.0f);
-        layoutCause.setText(fontCause, cause);
-        layoutCauseX = (Gdx.graphics.getWidth() - layoutCause.width) / 2;
-        layoutCauseY = (Gdx.graphics.getHeight() + layoutCause.height) / 2;
+        font.getData().setScale(4.0f);
+        String pauseText = "Пауза";
+        layout.setText(font, pauseText);
+        layoutX = (Gdx.graphics.getWidth() - layout.width) / 2;
+        layoutY = Gdx.graphics.getHeight() - layout.height;
 
         TextButton backToMainMenuScreenButton = new TextButton("В главное меню", skin);
         backToMainMenuScreenButton.setSize(300, 150);
         backToMainMenuScreenButton.setPosition(Gdx.graphics.getWidth() / 2 - backToMainMenuScreenButton.getWidth() / 2,
             Gdx.graphics.getHeight() / 2 - backToMainMenuScreenButton.getHeight() * 1.5f - 15);
 
-        TextButton restartButton = new TextButton("Сыграть ещё раз", skin);
-        restartButton.setSize(300, 150);
-        restartButton.setPosition(Gdx.graphics.getWidth() / 2 - backToMainMenuScreenButton.getWidth() / 2,
-            backToMainMenuScreenButton.getY() - restartButton.getHeight() / 2 - 15);
+        TextButton continueButton = new TextButton("Продолжить игру", skin);
+        continueButton.setSize(300, 150);
+        continueButton.setPosition(Gdx.graphics.getWidth() / 2 - backToMainMenuScreenButton.getWidth() / 2,
+            backToMainMenuScreenButton.getY() - continueButton.getHeight() / 2 - 15);
 
         backToMainMenuScreenButton.addListener(new ChangeListener() {
             @Override
@@ -69,21 +62,19 @@ public class DeathScreen implements Screen {
             }
         });
 
-        restartButton.addListener(new ChangeListener() {
+        continueButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ((Center) Gdx.app.getApplicationListener()).setScreen(new GameScreen(gameRepository));
+                ((Center) Gdx.app.getApplicationListener()).setScreen(fieldScreen);
             }
         });
 
         stage.addActor(backToMainMenuScreenButton);
-        stage.addActor(restartButton);
+        stage.addActor(continueButton);
     }
 
     @Override
-    public void show() {
-
-    }
+    public void show() {}
 
     @Override
     public void render(float delta) {
@@ -91,10 +82,9 @@ public class DeathScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        batch.setColor(0.2f, 0.2f, 0.2f, 1f);
+        batch.setColor(0.5f, 0.5f, 0.5f, 1f);
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        fontDeath.draw(batch, layoutDeath, layoutDeathX, layoutDeathY);
-        fontCause.draw(batch, layoutCause, layoutCauseX, layoutCauseY);
+        font.draw(batch, layout, layoutX, layoutY);
         batch.end();
 
         stage.act();
@@ -124,10 +114,8 @@ public class DeathScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
-        fontDeath.dispose();
-        fontCause.dispose();
+        font.dispose();
         stage.dispose();
         skin.dispose();
-        backgroundTexture.dispose();
     }
 }

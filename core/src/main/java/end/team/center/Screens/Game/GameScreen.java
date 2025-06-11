@@ -15,9 +15,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -49,6 +51,7 @@ import end.team.center.GameCore.Logic.ShaderManager;
 import end.team.center.ProgramSetting.Config;
 import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Redact.SystemOut.Console;
+import end.team.center.Screens.Menu.PauseScreen;
 
 public class GameScreen implements Screen {
     public static GameRepository gameRepository;
@@ -130,7 +133,7 @@ public class GameScreen implements Screen {
 
     public static ArrayList<Chunk> chunks;
 
-
+    private final Skin pauseButtonSkin;
 
 
     @SuppressWarnings("NewApi")
@@ -235,6 +238,26 @@ public class GameScreen implements Screen {
         }
 
         worldStage.addActor(hero);
+
+        pauseButtonSkin = new Skin();
+        pauseButtonSkin.add("button_up", new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/pauseButton.png")));
+        pauseButtonSkin.add("button_down", new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/pauseButton.png")));
+        ImageButton.ImageButtonStyle pauseButtonStyle = new ImageButton.ImageButtonStyle();
+        pauseButtonStyle.imageUp = pauseButtonSkin.getDrawable("button_up");
+        pauseButtonStyle.imageDown = pauseButtonSkin.getDrawable("button_down");
+
+        ImageButton pauseButton = new ImageButton(pauseButtonStyle);
+        pauseButton.setSize(100, 125);
+        pauseButton.setPosition(50,  Gdx.graphics.getHeight() - pauseButton.getHeight() - 50);
+
+        pauseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ((Center) Gdx.app.getApplicationListener()).setScreen(new PauseScreen(GameScreen.this));
+            }
+        });
+
+        uiStage.addActor(pauseButton);
 
         Texture heartFull = new Texture("UI/GameUI/OtherGameItems/heart_full.png");
         Texture heartEmpty = new Texture("UI/GameUI/OtherGameItems/heart_empty.png");
@@ -846,6 +869,8 @@ public class GameScreen implements Screen {
 
         spawnItem.dispose();
         spawner.dispose();
+
+        pauseButtonSkin.dispose();
     }
 
     public static void endTask() {
