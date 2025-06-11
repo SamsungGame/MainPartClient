@@ -20,6 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -54,6 +56,7 @@ import end.team.center.GameCore.Logic.ShaderManager;
 import end.team.center.ProgramSetting.Config;
 import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Redact.SystemOut.Console;
+import end.team.center.Screens.Menu.MainMenuScreen;
 import end.team.center.Screens.Menu.PauseScreen;
 
 public class GameScreen implements Screen {
@@ -63,6 +66,7 @@ public class GameScreen implements Screen {
     public static Hero hero;
     private Stage worldStage, noAct;
     private Stage uiStage;
+    private Stage pauseStage;
     private Viewport worldViewport;
     private Viewport uiViewport;
 
@@ -138,7 +142,6 @@ public class GameScreen implements Screen {
 
     public static ArrayList<Chunk> chunks;
 
-    private final Skin pauseButtonSkin;
 
 
     @SuppressWarnings("NewApi")
@@ -244,25 +247,6 @@ public class GameScreen implements Screen {
 
         worldStage.addActor(hero);
 
-        pauseButtonSkin = new Skin();
-        pauseButtonSkin.add("button_up", new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/pauseButton.png")));
-        pauseButtonSkin.add("button_down", new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/pauseButton.png")));
-        ImageButton.ImageButtonStyle pauseButtonStyle = new ImageButton.ImageButtonStyle();
-        pauseButtonStyle.imageUp = pauseButtonSkin.getDrawable("button_up");
-        pauseButtonStyle.imageDown = pauseButtonSkin.getDrawable("button_down");
-
-        ImageButton pauseButton = new ImageButton(pauseButtonStyle);
-        pauseButton.setSize(100, 125);
-        pauseButton.setPosition(50,  Gdx.graphics.getHeight() - pauseButton.getHeight() - 50);
-
-        pauseButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ((Center) Gdx.app.getApplicationListener()).setScreen(new PauseScreen(GameScreen.this));
-            }
-        });
-
-        uiStage.addActor(pauseButton);
 
         Texture heartFull = new Texture("UI/GameUI/OtherGameItems/heart_full.png");
         Texture heartEmpty = new Texture("UI/GameUI/OtherGameItems/heart_empty.png");
@@ -606,6 +590,58 @@ public class GameScreen implements Screen {
         spawner.startWork();
         spawnItem.goWork();
 
+        Skin pauseSkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/pauseSkin.json"));
+        ImageButton pauseButton = new ImageButton(pauseSkin);
+        pauseButton.setSize(100, 125);
+        pauseButton.setPosition(10,  Gdx.graphics.getHeight() - pauseButton.getHeight() - 200);
+
+        pauseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                togglePause(true);
+            }
+        });
+
+        uiStage.addActor(pauseButton);
+
+        Table pauseTable = new Table();
+        pauseTable.setSize(400, 300);
+        pauseTable.setPosition(
+            (Gdx.graphics.getWidth() - pauseTable.getWidth()) / 2,
+            (Gdx.graphics.getHeight() - pauseTable.getHeight()) / 2
+        );
+
+        TextButton backToMainMenuScreenButton = new TextButton("В главное меню", radiationSkin);
+        backToMainMenuScreenButton.setSize(300, 150);
+        backToMainMenuScreenButton.setPosition(Gdx.graphics.getWidth() / 2 - backToMainMenuScreenButton.getWidth() / 2,
+            Gdx.graphics.getHeight() / 2 - backToMainMenuScreenButton.getHeight() * 1.5f - 15);
+
+        TextButton continueButton = new TextButton("Продолжить игру", radiationSkin);
+        continueButton.setSize(300, 150);
+        continueButton.setPosition(Gdx.graphics.getWidth() / 2 - backToMainMenuScreenButton.getWidth() / 2,
+            backToMainMenuScreenButton.getY() - continueButton.getHeight() / 2 - 15);
+
+        backToMainMenuScreenButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ((Center) Gdx.app.getApplicationListener()).setScreen(new GameScreen(repo));
+            }
+        });
+
+        continueButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                togglePause(false);
+            }
+        });
+
+        pauseTable.defaults().pad(10).width(300).height(150);
+        pauseTable.add(backToMainMenuScreenButton).row();
+        pauseTable.add(continueButton);
+        pauseTable.pack();
+
+        pauseStage.addActor(pauseTable);
+
         initiaizationConsole();
     }
 
@@ -628,10 +664,6 @@ public class GameScreen implements Screen {
         addToList();
         if (hero.newLevelFlag && !powers.isEmpty()) {
             showPowerDialog(delta);
-            return;
-        }
-        if (Config.pause) {
-            showPauseDialog();
             return;
         }
 
@@ -869,7 +901,6 @@ public class GameScreen implements Screen {
         spawnItem.dispose();
         spawner.dispose();
 
-        pauseButtonSkin.dispose();
         cloud.dispose();
     }
 
@@ -939,8 +970,14 @@ public class GameScreen implements Screen {
 
         PSC.render(delta);
     }
-    public void showPauseDialog() {
-
+    private void togglePause(boolean pause) {
+        STOP = pause;
+        if (pause) {
+            Gdx.input.setInputProcessor(pauseStage);
+        }
+        else {
+            Gdx.input.setInputProcessor(uiStage);
+        }
     }
 
     public void hidePowerDialog() {
