@@ -14,12 +14,14 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -27,6 +29,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.ArrayList;
 import java.util.Random;
 
+import end.team.center.Center;
 import end.team.center.GameCore.GameEvent.SpawnItem;
 import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.GameEvent.Post;
@@ -37,7 +40,7 @@ import end.team.center.GameCore.Library.Other.Portal;
 import end.team.center.GameCore.Logic.Chunk;
 import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.Map.BackgroundTiledRenderer;
-import end.team.center.GameCore.Objects.Map.NebulaActor;
+import end.team.center.GameCore.Objects.Map.NebulaCloud;
 import end.team.center.GameCore.Objects.Map.Tree;
 import end.team.center.GameCore.Objects.Map.Zone;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
@@ -88,8 +91,10 @@ public class GameScreen implements Screen {
     private ShaderProgram maskShader;
     private ShaderProgram hardMaskShader;
     private ShaderProgram dimmingShader;
+    private NebulaCloud cloud;
 
     public static float totalTime = 0f;
+
     public static float TIME = 0f;
 
     // Dialog для усиления
@@ -593,14 +598,8 @@ public class GameScreen implements Screen {
             }
             worldStage.addActor(tree);
         }
-        for (int i = 0; i < 300; i++) {
-            NebulaActor nebula = new NebulaActor(
-                MathUtils.random(400, 800),
-                MathUtils.random(400, 800),
-                0.45f
-            );
-            worldStage.addActor(nebula);
-        }
+        cloud = new NebulaCloud(600);
+        cloud.addToStage(worldStage);
 
         worldStage.addActor(portal);
 
@@ -871,6 +870,7 @@ public class GameScreen implements Screen {
         spawner.dispose();
 
         pauseButtonSkin.dispose();
+        cloud.dispose();
     }
 
     public static void endTask() {
@@ -882,7 +882,6 @@ public class GameScreen implements Screen {
 
         backgroundMusicInstrumental.stop();
         backgroundMusicInstrumental.dispose();
-
         isTimeGo = false;
     }
 
