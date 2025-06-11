@@ -3,7 +3,6 @@ package end.team.center.Screens.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -26,7 +25,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.ArrayList;
 import java.util.Random;
 
-import end.team.center.Center;
 import end.team.center.GameCore.GameEvent.SpawnItem;
 import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.GameEvent.Post;
@@ -214,8 +212,17 @@ public class GameScreen implements Screen {
                 1, 0, 300f,
                 WORLD_WIDTH, WORLD_HEIGHT
             );
-        }
-        else {
+        } else if (Config.skinIsGhost) {
+            hero = new Hero(
+                repo,
+                new Texture(Gdx.files.internal("UI/GameUI/Hero/GhostRight/heroGhostRight.png")),
+                CharacterAnimation.GhostHero,
+                new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
+                140, 120, 3,
+                1, 0, 300f,
+                WORLD_WIDTH, WORLD_HEIGHT
+            );
+        } else {
             hero = new Hero(
                 repo,
                 new Texture(Gdx.files.internal("UI/GameUI/Hero/Right/heroRight.png")),
@@ -597,6 +604,14 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         addToList();
+        if (hero.newLevelFlag && !powers.isEmpty()) {
+            showPowerDialog(delta);
+            return;
+        }
+        if (Config.pause) {
+            showPauseDialog();
+            return;
+        }
 
         for (Chunk c: chunks) {
             if (c.getBound().overlaps(hero.getBound())) {
@@ -618,10 +633,6 @@ public class GameScreen implements Screen {
             idAchivs = 3;
         }
 
-        if (hero.newLevelFlag && !powers.isEmpty()) {
-            showPowerDialog(delta);
-            return;
-        }
 
         if (powers.isEmpty()) expBar.setRange(0, 0);
 
@@ -903,6 +914,9 @@ public class GameScreen implements Screen {
         }
 
         PSC.render(delta);
+    }
+    public void showPauseDialog() {
+
     }
 
     public void hidePowerDialog() {

@@ -5,7 +5,7 @@ import java.util.*;
 public class GameData {
     // ID ачивок и скинов — фиксированный список
     public static final int[] ACHIEVEMENT_IDS = {1, 2, 3, 4, 5};
-    public static final int[] SKIN_IDS = {1, 2, 3};
+    public static final int[] SKIN_IDS = {1, 2, 3, 4};
 
     // Информация об ачивках
     public static final List<AchievementData> ACHIEVEMENTS = Arrays.asList(
@@ -20,7 +20,8 @@ public class GameData {
     public static final List<SkinData> SKINS = Arrays.asList(
         new SkinData(1, "Обычный"),
         new SkinData(2, "Рыцарь"),
-        new SkinData(3, "Кибер")
+        new SkinData(3, "Кибер"),
+        new SkinData(4, "Призрак")
     );
 
     public static AchievementData getAchievementById(int id) {
