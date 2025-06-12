@@ -1,0 +1,31 @@
+{
+com.badlogic.gdx.graphics.g2d.BitmapFont: {
+	Micro5-Regular1: {
+		file: Micro5-Regular(1).fnt
+		scaledSize: -1
+		markupEnabled: false
+		flip: false
+	}
+	pixel_font: {
+		file: pixel_font.fnt
+		scaledSize: -1
+		markupEnabled: false
+		flip: false
+	}
+}
+com.badlogic.gdx.graphics.Color: {
+	RGBA_236_236_236_255: {
+		r: 0.9254902
+		g: 0.9254902
+		b: 0.9254902
+		a: 1
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+	default: {
+		font: pixel_font
+		fontColor: RGBA_236_236_236_255
+		downFontColor: RGBA_236_236_236_255
+	}
+}
+}

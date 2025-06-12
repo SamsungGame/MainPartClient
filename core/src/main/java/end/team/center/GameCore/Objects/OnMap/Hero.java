@@ -96,7 +96,7 @@ public class Hero extends Friendly {
     public void setSheildLevel(int sheildLevel) {
         this.sheildLevel = sheildLevel;
         long id = soundUronShield.play();
-        soundUronShield.setVolume(id, 1f);
+        soundUronShield.setVolume(id, 0.5f);
     }
 
     public void offShield() {

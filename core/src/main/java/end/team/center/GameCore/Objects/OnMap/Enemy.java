@@ -30,7 +30,7 @@ public abstract class Enemy extends Entity {
     protected float timePlayerInvulnerability = 1f;
     protected int damage, exp;
     protected float runSpeed;
-    Sound soundUron = Gdx.audio.newSound(Gdx.files.internal("Sounds/uron.mp3"));
+    Sound soundUron = Gdx.audio.newSound(Gdx.files.internal("Sounds/udar.mp3"));
 
     public Enemy(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, int exp, float worldHeight, float worldWidth, AI ai) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
@@ -41,7 +41,8 @@ public abstract class Enemy extends Entity {
 
         runSpeed = speed * 8;
 
-        bound = new Rectangle((float) (vector.x + (width * 0.75) / 2), (float) (vector.y + (height * 0.75) / 2), (float) (width * 0.75), (float) (height * 0.75));
+        bound = new Rectangle((float) (vector.x + (width * 0.6) / 2),
+            (float) (vector.y + (height * 0.6) / 2), (float) (width * 0.6), (float) (height * 0.6));
     }
 
 
@@ -51,7 +52,7 @@ public abstract class Enemy extends Entity {
                 hero.health -= this.damage;
 
                 long id = soundUron.play();
-                soundUron.setVolume(id, 1f);
+                soundUron.setVolume(id, 0.5f);
 
                 hero.frameInvulnerability(timePlayerInvulnerability);
 

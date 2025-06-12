@@ -14,7 +14,7 @@ public class Tree extends StaticObject {
     public Tree(Texture texture, Vector2 vector, float height, float width, boolean canWalk) {
         super(texture, vector, height, width, canWalk);
 
-        bound = new Rectangle(vector.x + width / 3.4f, vector.y, width / 3.4f, height / 2.4f);
+        bound = new Rectangle(vector.x + width / 3.5f, vector.y, width / 3.5f, height / 2.4f);
 
         // Отключаем обработку касаний, чтобы не мешать вводу джойстика
         setTouchable(Touchable.disabled);

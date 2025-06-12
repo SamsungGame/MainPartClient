@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.Logic.Chunk;
 import end.team.center.GameCore.Objects.Map.Tree;
-import end.team.center.Screens.Game.GameScreen;
 
 public abstract class Friendly extends Entity {
     private Chunk nowChunk;
@@ -20,40 +19,51 @@ public abstract class Friendly extends Entity {
     public void move(float deltaX, float deltaY, float delta) {
         isMoving = deltaX != 0 || deltaY != 0;
 
-        Vector2 potentialPosition = new Vector2(vector.x + deltaX * speed * delta,
-            vector.y + deltaY * speed * delta);
+        float moveSpeed = speed * delta;
 
-        // Ограничения по границам мира
-        potentialPosition.x = Math.max(BOUNDARY_PADDING,
-            Math.min(potentialPosition.x, worldWidth - BOUNDARY_PADDING - width));
-        potentialPosition.y = Math.max(BOUNDARY_PADDING,
-            Math.min(potentialPosition.y, worldHeight - BOUNDARY_PADDING - height));
-
+        // Направление движения
         if (deltaX > 0) {
             mRight = true;
         } else if (deltaX < 0) {
             mRight = false;
         }
 
-        // Проверка касания деревьев
-        int size = nowChunk.getTrees().size();
-        for(int ii = 0; ii < size; ii++) {
-            Tree t = nowChunk.getTrees().get(ii);
+        // === Перемещение по X ===
+        float newX = vector.x + deltaX * moveSpeed;
+        newX = Math.max(BOUNDARY_PADDING, Math.min(newX, worldWidth - BOUNDARY_PADDING - width));
+        Rectangle futureX = new Rectangle(newX, vector.y, width, height);
+        boolean blockedX = false;
 
-            if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height)) && GameScreen.totalTime < 2) {
-                t.remove();
-                size--;
-            } // Испарвление застревания в дереве в начале игры
-
-            if (t.getBound().overlaps(new Rectangle(potentialPosition.x, potentialPosition.y, width, height))) {
-                if (t.getBound().overlaps(new Rectangle(potentialPosition.x, vector.y, width, height))) potentialPosition.x = vector.x;
-                if (t.getBound().overlaps(new Rectangle(vector.x, potentialPosition.y, width, height))) potentialPosition.y = vector.y;
+        for (Tree t : nowChunk.getTrees()) {
+            if (t.getBound().overlaps(futureX)) {
+                blockedX = true;
+                break;
             }
         }
 
-        vector.set(potentialPosition);
-        setPosition(vector.x, vector.y);
+        if (!blockedX) {
+            vector.x = newX;
+        }
 
+        // === Перемещение по Y ===
+        float newY = vector.y + deltaY * moveSpeed;
+        newY = Math.max(BOUNDARY_PADDING, Math.min(newY, worldHeight - BOUNDARY_PADDING - height));
+        Rectangle futureY = new Rectangle(vector.x, newY, width, height);
+        boolean blockedY = false;
+
+        for (Tree t : nowChunk.getTrees()) {
+            if (t.getBound().overlaps(futureY)) {
+                blockedY = true;
+                break;
+            }
+        }
+
+        if (!blockedY) {
+            vector.y = newY;
+        }
+
+        // Применяем новую позицию
+        setPosition(vector.x, vector.y);
         updateBound();
 
         stateTime += delta;

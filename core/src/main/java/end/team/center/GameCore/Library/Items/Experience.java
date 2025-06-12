@@ -14,9 +14,9 @@ import end.team.center.GameCore.Objects.OnMap.Hero;
 import end.team.center.Screens.Game.GameScreen;
 
 public class Experience extends Drops {
-    protected static final int DISTANCE_TO_PICKUP = 190;
+    protected static final int DISTANCE_TO_PICKUP = 250;
     protected int count;
-    protected static final int speed = 80;
+    protected static final int speed = 150;
     private final Sound sound = Gdx.audio.newSound(Gdx.files.internal("Sounds/exp.mp3"));
     public Experience(Texture texture, Vector2 vector, Hero hero, int width, int height, int count) {
         super(texture, vector, hero, width, height);
@@ -54,7 +54,8 @@ public class Experience extends Drops {
         }
         if (hero.getBound().overlaps(bound)) {
             hero.addExp(count);
-            sound.play();
+            long id = sound.play();
+            sound.setVolume(id, 0.5f);
             System.out.println("Выдано " + count + "exp");
             remove();
             GameScreen.drop.remove(this);

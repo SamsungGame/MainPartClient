@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -23,7 +24,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -131,16 +134,13 @@ public class GameScreen implements Screen {
     public static boolean isPickupItem = false;
     public static boolean isKill = false;
     boolean start = false;
+    boolean isPause = false;
 
     public int timeShowNewAch = 4; // sec
 
-    private float touchForMoveX;
-    private float touchForMoveY;
-
-    private float touchForAttackX;
-    private float touchForAttackY;
 
     public static ArrayList<Chunk> chunks;
+    public static ImageButton pauseButton;
 
 
 
@@ -193,6 +193,8 @@ public class GameScreen implements Screen {
         uiViewport = new ScreenViewport();
         uiStage = new Stage(uiViewport);
         Gdx.input.setInputProcessor(uiStage);
+
+        pauseStage = new Stage(uiViewport);
 
         touchpadMove = new TouchpadClass(200, 200, false, "move");
         uiStage.addActor(touchpadMove);
@@ -582,7 +584,7 @@ public class GameScreen implements Screen {
             }
             worldStage.addActor(tree);
         }
-        cloud = new NebulaCloud(600);
+        cloud = new NebulaCloud(450);
         cloud.addToStage(worldStage);
 
         worldStage.addActor(portal);
@@ -591,8 +593,8 @@ public class GameScreen implements Screen {
         spawnItem.goWork();
 
         Skin pauseSkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/pauseSkin.json"));
-        ImageButton pauseButton = new ImageButton(pauseSkin);
-        pauseButton.setSize(100, 125);
+        pauseButton = new ImageButton(pauseSkin);
+        pauseButton.setSize(75, 94);
         pauseButton.setPosition(10,  Gdx.graphics.getHeight() - pauseButton.getHeight() - 200);
 
         pauseButton.addListener(new ChangeListener() {
@@ -605,42 +607,45 @@ public class GameScreen implements Screen {
         uiStage.addActor(pauseButton);
 
         Table pauseTable = new Table();
-        pauseTable.setSize(400, 300);
-        pauseTable.setPosition(
-            (Gdx.graphics.getWidth() - pauseTable.getWidth()) / 2,
-            (Gdx.graphics.getHeight() - pauseTable.getHeight()) / 2
-        );
+        pauseTable.setFillParent(true);  // Таблица занимает весь экран
+        pauseTable.center();              // Выравнивание всей таблицы по центру
 
-        TextButton backToMainMenuScreenButton = new TextButton("В главное меню", radiationSkin);
-        backToMainMenuScreenButton.setSize(300, 150);
-        backToMainMenuScreenButton.setPosition(Gdx.graphics.getWidth() / 2 - backToMainMenuScreenButton.getWidth() / 2,
-            Gdx.graphics.getHeight() / 2 - backToMainMenuScreenButton.getHeight() * 1.5f - 15);
+        Skin buttonSkin = new Skin(Gdx.files.internal("UI/AboutGame/pauseStyle.json"));
 
-        TextButton continueButton = new TextButton("Продолжить игру", radiationSkin);
-        continueButton.setSize(300, 150);
-        continueButton.setPosition(Gdx.graphics.getWidth() / 2 - backToMainMenuScreenButton.getWidth() / 2,
-            backToMainMenuScreenButton.getY() - continueButton.getHeight() / 2 - 15);
+        TextButton backToMainMenuScreenButton = new TextButton("В главное меню", buttonSkin);
+        TextButton continueButton = new TextButton("Продолжить игру", buttonSkin);
 
-        backToMainMenuScreenButton.addListener(new ChangeListener() {
+        backToMainMenuScreenButton.getLabel().setFontScale(3f);
+        continueButton.getLabel().setFontScale(3f);
+
+        backToMainMenuScreenButton.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ((Center) Gdx.app.getApplicationListener()).setScreen(new GameScreen(repo));
+            public void clicked(InputEvent event, float x, float y) {
+                ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(0, gameRepository));
+                STOP = false;
+                GameScreen.endTask();
             }
         });
 
-        continueButton.addListener(new ChangeListener() {
+        continueButton.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
+            public void clicked(InputEvent event, float x, float y) {
                 togglePause(false);
             }
         });
 
-        pauseTable.defaults().pad(10).width(300).height(150);
+// Чтобы текст внутри кнопок был по центру:
+        backToMainMenuScreenButton.getLabel().setAlignment(Align.center);
+        continueButton.getLabel().setAlignment(Align.center);
+
+        pauseTable.defaults().pad(50).expandX().fillX();
+        pauseTable.padTop(50);
+
         pauseTable.add(backToMainMenuScreenButton).row();
         pauseTable.add(continueButton);
-        pauseTable.pack();
 
         pauseStage.addActor(pauseTable);
+
 
         initiaizationConsole();
     }
@@ -681,6 +686,7 @@ public class GameScreen implements Screen {
 
         coinForTime += delta / 20;
 
+
         if (totalTime >= 600 && !gameRepository.getAchievements().get(3) && !start) {
             showAchivs = true;
             imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/time_open.png"));
@@ -691,30 +697,39 @@ public class GameScreen implements Screen {
         if (powers.isEmpty()) expBar.setRange(0, 0);
 
         coinForGame = coinForEnemyValue + coinForTime;
-        touchpadMove.TouchpadLogic(uiStage);
-        touchpadAttack.TouchpadLogic(uiStage);
 
-        touchForMoveX = touchpadMove.x - 150;
-        touchForMoveY = touchpadMove.y - 150;
 
-        touchForAttackX = touchpadAttack.x - 150;
-        touchForAttackY = touchpadAttack.y - 150;
+        if(!isPause){
+            uiStage.act(delta);
+            uiStage.draw();
+
+            touchpadMove.TouchpadLogic(uiStage);
+            touchpadAttack.TouchpadLogic(uiStage);
+
+            uiStage.addActor(touchpadMove);
+            uiStage.addActor(touchpadAttack);
+        }
+
+
         // Получаем значения от джойстиков
 
         float moveX = touchpadMove.getKnobPercentX();
         float moveY = touchpadMove.getKnobPercentY();
 
-        float normalizedX = (touchpadAttack.getKnobPercentX() + 1) / 2;
-        float normalizedY = (touchpadAttack.getKnobPercentY() + 1) / 2;
 
-        // Движение героя
+
         hero.move(moveX, moveY, delta);
+        float deadZone = 0.1f; // минимальное отклонение от центра
 
-        // Атака
-        if (touchpadAttack.isTouchpadActive() && touchpadAttack.getKnobPercentX() != 0 && touchpadAttack.getKnobPercentY() != 0) {
+        if (touchpadAttack.isTouchpadActive()) {
+            float normalizedX = (touchpadAttack.getKnobPercentX() + 1) / 2;
+            float normalizedY = (touchpadAttack.getKnobPercentY() + 1) / 2;
             float dx = normalizedX * 2 - 1;
             float dy = normalizedY * 2 - 1;
-            hero.useWeapon(dx, dy);
+
+            if (Math.abs(dx) > deadZone || Math.abs(dy) > deadZone) {
+                hero.useWeapon(dx, dy);
+            }
         } else if (hero.getWep().getShow() && hero.getWep().isCanAttack()) {
             hero.startAttackAnim();
             for (Enemy e : enemies) {
@@ -745,66 +760,67 @@ public class GameScreen implements Screen {
         }
 
         // Урон от врагов
-        for (Enemy e : enemies) {
-            if (e.getBound().overlaps(hero.getBound())) {
-
-                if (hero.getLevelSheild() == 0) {
-                    e.attack(hero);
-                } else if (!hero.getIsInvulnerability()) {
-                    hero.setSheildLevel(hero.getLevelSheild() - 1);
-                    hero.frameInvulnerability(2);
-                }
-
-                if (hero.returnDamage) {
-                    e.die();
-
-                    for (Enemy ee : enemies) {
-                        if (ee.getBound().overlaps(hero.deathZone)) ee.die();
-                    }
-                }
-                if (hero.getActiveSheild()) hero.offShield();
-            }
-        }
-
-        if (hero.getAntiRadiationCostumePower() < 10) {
-            energyValue.setColor(1f, 0f, 0f, 1f);
-        } else if (hero.getAntiRadiationCostumePower() < 60) {
-            energyValue.setColor(1f, 1f, 0f, 1f);
-        } else {
-            energyValue.setColor(1f, 1f, 1f, 1f);
-        }
-
-        // Удаление мертвых врагов
-        enemies.removeIf(e -> {
-            if (!e.isLive()) {
-                coinForEnemyValue+=0.1f;
-                e.remove();
-                return true;
-            }
-            return false;
-        });
-
-        expBar.setRange(0, hero.getMaxExp());
-        expBar.setValue(hero.getExp());
-        hero.newLevel();
-        energyValue.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
-
-        int l = hero.getRadiationLevel();
-        radiationValue.setText(hero.getRadiationLevel());
-        if (l == 1)      radiationValue.setColor(1f, 1f,   1f,   1f);
-        else if (l == 2) radiationValue.setColor(1f, 0.8f, 0.8f, 1f);
-        else if (l == 3) radiationValue.setColor(1f, 0.5f, 0.5f, 1f);
-        else if (l == 4) radiationValue.setColor(1f, 0.3f, 0.3f, 1f);
-        else if (l == 5) radiationValue.setColor(1f, 0,    0,    1f);
-
-        hearts.updateAnimation(delta);
-        hearts.setCurrentHealth(hero.getHealth());
-
-        // Обновление камеры
-        gameCamera.updateCameraPosition(hero.getX(), hero.getY(), hero.getWidth(), hero.getHeight());
 
         // Рендер в буфер
         if (!STOP) {
+            for (Enemy e : enemies) {
+                if (e.getBound().overlaps(hero.getBound())) {
+
+                    if (hero.getLevelSheild() == 0) {
+                        e.attack(hero);
+                    } else if (!hero.getIsInvulnerability()) {
+                        hero.setSheildLevel(hero.getLevelSheild() - 1);
+                        hero.frameInvulnerability(2);
+                    }
+
+                    if (hero.returnDamage) {
+                        e.die();
+
+                        for (Enemy ee : enemies) {
+                            if (ee.getBound().overlaps(hero.deathZone)) ee.die();
+                        }
+                    }
+                    if (hero.getActiveSheild()) hero.offShield();
+                }
+            }
+
+            if (hero.getAntiRadiationCostumePower() < 10) {
+                energyValue.setColor(1f, 0f, 0f, 1f);
+            } else if (hero.getAntiRadiationCostumePower() < 60) {
+                energyValue.setColor(1f, 1f, 0f, 1f);
+            } else {
+                energyValue.setColor(1f, 1f, 1f, 1f);
+            }
+
+            // Удаление мертвых врагов
+            enemies.removeIf(e -> {
+                if (!e.isLive()) {
+                    coinForEnemyValue+=0.1f;
+                    e.remove();
+                    return true;
+                }
+                return false;
+            });
+
+            expBar.setRange(0, hero.getMaxExp());
+            expBar.setValue(hero.getExp());
+            hero.newLevel();
+            energyValue.setText(String.format("%.1f", hero.getAntiRadiationCostumePower()));
+
+            int l = hero.getRadiationLevel();
+            radiationValue.setText(hero.getRadiationLevel());
+            if (l == 1)      radiationValue.setColor(1f, 1f,   1f,   1f);
+            else if (l == 2) radiationValue.setColor(1f, 0.8f, 0.8f, 1f);
+            else if (l == 3) radiationValue.setColor(1f, 0.5f, 0.5f, 1f);
+            else if (l == 4) radiationValue.setColor(1f, 0.3f, 0.3f, 1f);
+            else if (l == 5) radiationValue.setColor(1f, 0,    0,    1f);
+
+            hearts.updateAnimation(delta);
+            hearts.setCurrentHealth(hero.getHealth());
+
+            // Обновление камеры
+            gameCamera.updateCameraPosition(hero.getX(), hero.getY(), hero.getWidth(), hero.getHeight());
+
             frameBuffer.begin();
             Gdx.gl.glClearColor(0, 0, 0, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -872,9 +888,16 @@ public class GameScreen implements Screen {
             hidePowerDialog();
         }
 
+
+        if (isPause) {
+            pauseStage.act(delta);
+            pauseStage.draw();
+        }
         // UI поверх всего
         uiStage.act(delta);
         uiStage.draw();
+
+
     }
 
     @Override
@@ -971,11 +994,17 @@ public class GameScreen implements Screen {
         PSC.render(delta);
     }
     private void togglePause(boolean pause) {
-        STOP = pause;
+
         if (pause) {
+            STOP = true;
+            isPause = true;
             Gdx.input.setInputProcessor(pauseStage);
+            uiStage.getRoot().removeActor(touchpadMove);
+            uiStage.getRoot().removeActor(touchpadAttack);
         }
         else {
+            STOP = false;
+            isPause = false;
             Gdx.input.setInputProcessor(uiStage);
         }
     }
@@ -983,10 +1012,8 @@ public class GameScreen implements Screen {
     public void hidePowerDialog() {
 
         uiStage.addActor(touchpadMove);
-        touchpadMove.setPosition(touchForMoveX, touchForMoveY);
 
         uiStage.addActor(touchpadAttack);
-        touchpadAttack.setPosition(touchForAttackX, touchForAttackY);
 
         STOP = false;
         hero.newLevelFlag = false;
