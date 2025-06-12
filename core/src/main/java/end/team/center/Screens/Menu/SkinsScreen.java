@@ -128,7 +128,7 @@ public class SkinsScreen implements Screen {
                     }
                     else if (currentIndex == 3) {
                         Config.skinIsKnight = false;
-                        Config.skinIsGhost = true;
+                        Config.skinIsGhost = false;
                         Config.skinIsCyber = true;
                     }
                 }
