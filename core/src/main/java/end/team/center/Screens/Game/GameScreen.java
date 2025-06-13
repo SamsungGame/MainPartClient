@@ -464,7 +464,7 @@ public class GameScreen implements Screen {
 
         Power p7 = new Power(new Texture("UI/GameUI/SelectPowerUI/Effect/powerForAttack.png"),
             new Texture("UI/GameUI/SelectPowerUI/Effect/powerForAttack_active.png"),
-            "Вы получаете немного энергии за каждый удар мобов") {
+            "Вы получаете немного энергии за каждый удар по мобам") {
             @Override
             public void effect() {
                 hero.activeCollectEnergy();

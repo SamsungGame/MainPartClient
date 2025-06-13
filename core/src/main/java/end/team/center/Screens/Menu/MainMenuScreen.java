@@ -39,10 +39,10 @@ public class MainMenuScreen implements Screen {
     public int timeShowNewAch = 4; // sec
 
     private static final String[] texts = {
-        "ДОБРО ПОЖАЛОВАТЬ!",
-        "Сбегаешь от правды? \n   Победа!",
-        "Разве... это спасение? \n     Поражение...",
-        "Не это сделало их такими... \n              Поражение..."
+        "ТАК ЛИ НУЖНО БЕЖАТЬ?",
+        "Сбегаешь от правды? \n         Победа!",
+        "Разве... это спасение? \n          Поражение...",
+        "Не это сделало их такими... \n         Поражение..."
     };
 
     public MainMenuScreen(int code, GameRepository repo) {

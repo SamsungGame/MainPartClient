@@ -35,7 +35,7 @@ public class PowerSelectScreen implements Screen {
         batch = new SpriteBatch();
 
         label = new Label("", new Skin(Gdx.files.internal("UI/AboutGame/label.json")));
-        label.setFontScale(1);
+        label.setFontScale(1.7f);
 
         portal = new Image(new Texture(Gdx.files.internal("UI/GameUI/Structure/portal3.png")));
         portal.setSize(190, 210);
@@ -139,7 +139,7 @@ public class PowerSelectScreen implements Screen {
         stage.draw();
 
         if (finishedAnimation) {
-            
+
         }
     }
 

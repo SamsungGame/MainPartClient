@@ -5,7 +5,7 @@
   <application
       android:allowBackup="true"
       android:fullBackupContent="true"
-      android:icon="@drawable/icon"
+      android:icon="@drawable/icon_portal"
       android:isGame="true"
       android:appCategory="game"
       android:label="@string/app_name"
@@ -13,8 +13,8 @@
       android:theme="@style/GdxTheme">
     <activity
         android:name="end.team.center.android.AndroidLauncher"
+        android:screenOrientation="sensorLandscape"
         android:label="@string/app_name"
-        android:screenOrientation="landscape"
         android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout"
         android:exported="true">
         <intent-filter>
