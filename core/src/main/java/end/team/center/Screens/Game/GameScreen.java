@@ -838,6 +838,9 @@ public class GameScreen implements Screen {
             hero.getChunk().act(delta);
             hero.getChunk().draw();
 
+            noAct.act(delta);
+            noAct.draw();
+
             batch.end();
             frameBuffer.end();
         }
@@ -1044,6 +1047,8 @@ public class GameScreen implements Screen {
         for (Chunk c: chunks) {
             if (c.getBound().overlaps(d.getBound())) c.addActor(d);
         }
+
+        noAct.addActor(d);
     }
 
     public void addToList() {
