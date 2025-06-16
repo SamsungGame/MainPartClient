@@ -60,7 +60,7 @@ public class NebulaCloud {
         }
 
         for (int i = 0; i < blobCount; i++) {
-            int radius = MathUtils.random(400, 600);
+            int radius = MathUtils.random(300, 400);
             int clusterIndex = MathUtils.random(clusterCount - 1);
             float angle = MathUtils.random(0f, MathUtils.PI2);
             float dist = MathUtils.random(10, width / 4f);

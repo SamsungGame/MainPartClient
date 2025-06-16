@@ -20,49 +20,73 @@ public abstract class Friendly extends Entity {
         isMoving = deltaX != 0 || deltaY != 0;
 
         float moveSpeed = speed * delta;
+        float actualMoveX = deltaX * moveSpeed;
+        float actualMoveY = deltaY * moveSpeed;
 
-        // Направление движения
+        // Направление движения для анимации
         if (deltaX > 0) {
             mRight = true;
         } else if (deltaX < 0) {
             mRight = false;
         }
 
-        // === Перемещение по X ===
-        float newX = vector.x + deltaX * moveSpeed;
+        // Временные переменные для новой позиции
+        float tempX = vector.x;
+        float tempY = vector.y;
+
+        // === Проверка и перемещение по X ===
+        float newX = tempX + actualMoveX;
         newX = Math.max(BOUNDARY_PADDING, Math.min(newX, worldWidth - BOUNDARY_PADDING - width));
-        Rectangle futureX = new Rectangle(newX, vector.y, width, height);
-        boolean blockedX = false;
 
-        for (Tree t : nowChunk.getTrees()) {
-            if (t.getBound().overlaps(futureX)) {
-                blockedX = true;
-                break;
+        Rectangle nextXBound = new Rectangle(newX, tempY, width, height); // Проверяем только изменение X
+        boolean collidedX = false;
+
+        if (nowChunk != null) {
+            for (Tree t : nowChunk.getTrees()) {
+                Rectangle treeBound = t.getBound();
+                if (nextXBound.overlaps(treeBound)) {
+                    collidedX = true;
+                    // Если произошло столкновение по X, корректируем позицию X
+                    if (actualMoveX > 0) { // Движение вправо
+                        newX = treeBound.x - width; // Прижимаем к левой границе дерева
+                    } else if (actualMoveX < 0) { // Движение влево
+                        newX = treeBound.x + treeBound.width; // Прижимаем к правой границе дерева
+                    }
+                    // Устанавливаем nextXBound на скорректированную позицию для дальнейших проверок (хотя здесь это не критично)
+                    nextXBound.x = newX;
+                    break; // Столкновение найдено, выходим из цикла
+                }
             }
         }
+        tempX = newX; // Применяем скорректированный X
 
-        if (!blockedX) {
-            vector.x = newX;
-        }
-
-        // === Перемещение по Y ===
-        float newY = vector.y + deltaY * moveSpeed;
+        // === Проверка и перемещение по Y ===
+        float newY = tempY + actualMoveY;
         newY = Math.max(BOUNDARY_PADDING, Math.min(newY, worldHeight - BOUNDARY_PADDING - height));
-        Rectangle futureY = new Rectangle(vector.x, newY, width, height);
-        boolean blockedY = false;
 
-        for (Tree t : nowChunk.getTrees()) {
-            if (t.getBound().overlaps(futureY)) {
-                blockedY = true;
-                break;
+        Rectangle nextYBound = new Rectangle(tempX, newY, width, height); // Проверяем изменение Y, учитывая уже скорректированный X
+        boolean collidedY = false;
+
+        if (nowChunk != null) {
+            for (Tree t : nowChunk.getTrees()) {
+                Rectangle treeBound = t.getBound();
+                if (nextYBound.overlaps(treeBound)) {
+                    collidedY = true;
+                    // Если произошло столкновение по Y, корректируем позицию Y
+                    if (actualMoveY > 0) { // Движение вверх
+                        newY = treeBound.y - height; // Прижимаем к нижней границе дерева
+                    } else if (actualMoveY < 0) { // Движение вниз
+                        newY = treeBound.y + treeBound.height; // Прижимаем к верхней границе дерева
+                    }
+                    nextYBound.y = newY; // Устанавливаем nextYBound на скорректированную позицию
+                    break; // Столкновение найдено, выходим из цикла
+                }
             }
         }
+        tempY = newY; // Применяем скорректированный Y
 
-        if (!blockedY) {
-            vector.y = newY;
-        }
-
-        // Применяем новую позицию
+        // Обновляем позицию объекта на основе скорректированных временных переменных
+        vector.set(tempX, tempY);
         setPosition(vector.x, vector.y);
         updateBound();
 

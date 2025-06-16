@@ -95,6 +95,23 @@ public class GameRepositoryImpl implements GameRepository {
         setUnlock("skin", id);
     }
 
+    @Override
+    public int getCurrentSelectedSkinId() { // Изменено имя метода для ясности
+        CurrentSkinEntity entity = dao.getCurrentSkinEntity();
+        // Возвращаем ID скина, если он есть, иначе дефолтный скин 1
+        return entity != null ? entity.skinId : 0;
+    }
+
+    @Override
+    public void setCurrentSelectedSkinId(int skinId) { // Изменено имя метода для ясности
+        CurrentSkinEntity entity = dao.getCurrentSkinEntity();
+        if (entity == null) {
+            entity = new CurrentSkinEntity();
+        }
+        entity.skinId = skinId;
+        dao.insertCurrentSkinEntity(entity);
+    }
+
     private Map<Integer, Boolean> getUnlockMap(String type) {
         Map<Integer, Boolean> map = new HashMap<>();
         int[] ids = type.equals("achievement") ? GameData.ACHIEVEMENT_IDS : GameData.SKIN_IDS;

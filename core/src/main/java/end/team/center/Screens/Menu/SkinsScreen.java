@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import end.team.center.Center;
 import end.team.center.ProgramSetting.Config;
+import end.team.center.ProgramSetting.LocalDB.GameData;
 import end.team.center.ProgramSetting.LocalDB.GameRepository;
 
 public class SkinsScreen implements Screen {
@@ -35,7 +36,6 @@ public class SkinsScreen implements Screen {
     private final Skin skin;
     private final Skin leftButtonSkin;
     private final Skin rightButtonSkin;
-    private final Texture[] images; // Массив из 2 изображений
     private final Image currentImage; // Отображаемый Image
     private int currentIndex;
     private float touchStartX;
@@ -111,7 +111,8 @@ public class SkinsScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (repo.getSkins().get(currentIndex + 1)) {
-                    MainMenuScreen.activeSkin = currentImage;
+                    repo.setCurrentSelectedSkinId(currentIndex);
+
 
                     if (currentIndex == 0) {
                         Config.skinIsKnight = false;
@@ -133,6 +134,7 @@ public class SkinsScreen implements Screen {
                     }
                 }
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(0, repo));
+
             }
         });
 
@@ -150,19 +152,11 @@ public class SkinsScreen implements Screen {
             }
         });
 
-        // Загружаем изображения
-        images = new Texture[] {
-            new Texture(Gdx.files.internal("UI/GameUI/Hero/Left/heroLeftKnife.png")),
-            new Texture(Gdx.files.internal("UI/GameUI/Hero/GhostLeft/heroGhostLeft.png")),
-            new Texture(Gdx.files.internal("UI/GameUI/Hero/KnightLeft/heroNighLeft.png")),
-            new Texture(Gdx.files.internal("UI/GameUI/Hero/CyberLeft/cyberLeft.png")),
-
-        };
 
         currentIndex = Center.currentSkin - 1; // Начинаем с первого изображения
 
         // Создаём Image для отображения текущего изображения
-        currentImage = new Image(new TextureRegionDrawable(images[currentIndex]));
+        currentImage = new Image(new TextureRegionDrawable(MainMenuScreen.images[currentIndex]));
         currentImage.setSize(180, 192);
         currentImage.setPosition(Gdx.graphics.getWidth() / 2 - currentImage.getWidth() / 2,
                 Gdx.graphics.getHeight() / 2 - currentImage.getHeight() / 2);
@@ -176,15 +170,15 @@ public class SkinsScreen implements Screen {
         buyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (currentIndex == 1 && repo.getCoins() >= 50 && !repo.getSkins().get(currentIndex + 1)) {
+                if (currentIndex == 1 && repo.getCoins() >= 0 && !repo.getSkins().get(currentIndex + 1)) {
                     repo.unlockSkin(currentIndex + 1);
                     repo.spendCoins(50);
                 }
-                if (currentIndex == 2 && repo.getCoins() >= 100 && !repo.getSkins().get(currentIndex + 1)) {
+                if (currentIndex == 2 && repo.getCoins() >= 0 && !repo.getSkins().get(currentIndex + 1)) {
                     repo.unlockSkin(currentIndex + 1);
                     repo.spendCoins(100);
                 }
-                if (currentIndex == 3 && repo.getCoins() >= 150 && !repo.getSkins().get(currentIndex + 1)) {
+                if (currentIndex == 3 && repo.getCoins() >= 0 && !repo.getSkins().get(currentIndex + 1)) {
                     repo.unlockSkin(currentIndex + 1);
                     repo.spendCoins(150);
                 }
@@ -200,17 +194,17 @@ public class SkinsScreen implements Screen {
     }
 
     private void showNextImage() {
-        currentIndex = (currentIndex + 1) % images.length; // Циклический переход
+        currentIndex = (currentIndex + 1) % MainMenuScreen.images.length; // Циклический переход
         updateImage();
     }
 
     private void showPreviousImage() {
-        currentIndex = (currentIndex - 1 + images.length) % images.length; // Циклический переход назад
+        currentIndex = (currentIndex - 1 + MainMenuScreen.images.length) % MainMenuScreen.images.length; // Циклический переход назад
         updateImage();
     }
 
     private void updateImage() {
-        currentImage.setDrawable(new TextureRegionDrawable(images[currentIndex]));
+        currentImage.setDrawable(new TextureRegionDrawable(MainMenuScreen.images[currentIndex]));
         Center.currentSkin = currentIndex + 1;
     }
 
@@ -265,9 +259,6 @@ public class SkinsScreen implements Screen {
 
     @Override
     public void dispose() {
-        for (Texture texture : images) {
-            texture.dispose();
-        }
         batch.dispose();
         font.dispose();
         stage.dispose();

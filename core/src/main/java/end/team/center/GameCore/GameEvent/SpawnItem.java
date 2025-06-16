@@ -35,15 +35,16 @@ public class SpawnItem {
         canDrop[2] = ItemType.Bandage;
         canDrop[3] = ItemType.lamp;
 
-        timeSpawn = 0.5f;
+        timeSpawn = 0.05f;
     }
 
     public void goWork() {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                if (hero.heroLive || !GameScreen.STOP) {
                 while (isSpawn) {
-                    if (!GameScreen.STOP) {
+
                         poster.post(spawn());
 
                         try {

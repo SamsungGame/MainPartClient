@@ -1,5 +1,7 @@
 package end.team.center.GameCore.Objects.OnMap;
 
+import static end.team.center.Screens.Game.GameScreen.endForStaticParams;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -39,12 +41,14 @@ public class Hero extends Friendly {
     private int duration = 30;
     private float elapsedTime = 0;
     private Texture activeSheild, sheild1, sheild2, sheild3;
+    public boolean heroLive;
     Sound soundUronShield = Gdx.audio.newSound(Gdx.files.internal("Sounds/uron.mp3"));
 
 
     public Hero(GameRepository repo, Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, float worldWidth, float worldHeight) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
         this.gameRepository = repo;
+        heroLive = true;
         weapon = new Knife(WeaponType.knife, this);
         exp = 0;
         level = 1;
@@ -250,13 +254,10 @@ public class Hero extends Friendly {
         if (antiRadiationCostumePower < 0) {
             gameRepository.addCoins(((int) GameScreen.coinForGame));
             ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(3, gameRepository));
-            GameScreen.backgroundMusic.stop();
-            GameScreen.backgroundMusic.dispose();
-            GameScreen.backgroundMusicInstrumental.stop();
-            GameScreen.backgroundMusicInstrumental.dispose();
+
             ShaderManager.radiusView1 = 0.2f;
             ShaderManager.radiusView3 = 0.15f;
-            GameScreen.endTask();
+
         }
 
         ((Knife) weapon).act(delta);
@@ -277,7 +278,8 @@ public class Hero extends Friendly {
         if (this.health <= 0) {
             if (!safeInDeadDamage) {
                 gameRepository.addCoins(((int) GameScreen.coinForGame));
-                ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(2, gameRepository));
+
+
 
                 if (GMath.checkVectorDistance(getCenterVector(), GameScreen.portal.getCenterVector(), 800, 800) && !GameScreen.gameRepository.getAchievements().get(4)) {
                     GameScreen.showAchivs = true;
@@ -285,13 +287,11 @@ public class Hero extends Friendly {
                     GameScreen.idAchivs = 4;
                 }
 
-                GameScreen.backgroundMusic.stop();
-                GameScreen.backgroundMusic.dispose();
-                GameScreen.backgroundMusicInstrumental.stop();
-                GameScreen.backgroundMusicInstrumental.dispose();
+
                 ShaderManager.radiusView1 = 0.2f;
                 ShaderManager.radiusView3 = 0.15f;
-                GameScreen.endTask();
+
+               heroLive = false;
             } else {
                 this.health++;
                 safeInDeadDamage = false;

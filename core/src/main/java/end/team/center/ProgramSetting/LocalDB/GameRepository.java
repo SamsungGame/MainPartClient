@@ -12,4 +12,7 @@ public interface GameRepository {
 
     Map<Integer, Boolean> getSkins();
     void unlockSkin(int id);
+    int getCurrentSelectedSkinId(); // Получить ID текущего выбранного скина
+    void setCurrentSelectedSkinId(int skinId); // Сохранить ID текущего выбранного скина
+
 }

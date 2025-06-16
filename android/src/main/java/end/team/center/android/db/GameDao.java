@@ -28,4 +28,10 @@ public interface GameDao {
     // Вставить или обновить запись unlock
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUnlock(UnlockStateEntity entity);
+
+    @Query("SELECT * FROM current_skin WHERE id = 0")
+    CurrentSkinEntity getCurrentSkinEntity();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertCurrentSkinEntity(CurrentSkinEntity entity);
 }

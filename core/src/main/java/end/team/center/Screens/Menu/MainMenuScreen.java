@@ -15,10 +15,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import end.team.center.Center;
 import end.team.center.GameCore.UIElements.Fon;
+import end.team.center.ProgramSetting.LocalDB.GameData;
 import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Screens.Game.GameScreen;
 
@@ -35,6 +37,13 @@ public class MainMenuScreen implements Screen {
     public static Image imageAchivs;
     public static int idAchivs;
     boolean start = false;
+    public static final Texture[] images = new Texture[] {
+        new Texture(Gdx.files.internal("UI/GameUI/Hero/Left/heroLeftKnife.png")),
+        new Texture(Gdx.files.internal("UI/GameUI/Hero/GhostLeft/heroGhostLeft.png")),
+        new Texture(Gdx.files.internal("UI/GameUI/Hero/KnightLeft/heroNighLeft.png")),
+        new Texture(Gdx.files.internal("UI/GameUI/Hero/CyberLeft/cyberLeft.png"))
+
+    };
 
     public int timeShowNewAch = 4; // sec
 
@@ -45,8 +54,10 @@ public class MainMenuScreen implements Screen {
         "Не это сделало их такими... \n         Поражение..."
     };
 
+
+
     public MainMenuScreen(int code, GameRepository repo) {
-        if (activeSkin == null) activeSkin = new Image(new Texture(Gdx.files.internal("UI/GameUI/Hero/Left/heroLeftKnife.png")));
+        activeSkin = new Image(new TextureRegionDrawable(MainMenuScreen.images[repo.getCurrentSelectedSkinId()]));
         this.gameRepository = repo;
 
         stage = new Stage(new ScreenViewport());

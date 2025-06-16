@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -40,18 +39,18 @@ public class AchievementsScreen implements Screen {
     private final Skin skin;
     private final Texture backgroundTexture = new Texture(Gdx.files.internal("UI/MainMenu/fon.jpg"));
     private final String[] achievementsIfObtainedTexturePaths = {
-            "UI/GameUI/Achievements/mini/exit_mini.png",
-            "UI/GameUI/Achievements/mini/knife_mini.png",
-            "UI/GameUI/Achievements/mini/time_mini.png",
-            "UI/GameUI/Achievements/mini/door_mini.png",
-            "UI/GameUI/Achievements/mini/clear_mini.png",
+        "UI/GameUI/Achievements/mini/exit_mini.png",
+        "UI/GameUI/Achievements/mini/knife_mini.png",
+        "UI/GameUI/Achievements/mini/time_mini.png",
+        "UI/GameUI/Achievements/mini/door_mini.png",
+        "UI/GameUI/Achievements/mini/clear_mini.png",
     };
     private final String[] achievementsIfNotObtainedTexturePaths = {
-            "UI/GameUI/Achievements/mini/notActive/notActive_exit.png",
-            "UI/GameUI/Achievements/mini/notActive/notActive_knife.png",
-            "UI/GameUI/Achievements/mini/notActive/notActive_time.png",
-            "UI/GameUI/Achievements/mini/notActive/notActive_door.png",
-            "UI/GameUI/Achievements/mini/notActive/notActive_clear.png",
+        "UI/GameUI/Achievements/mini/notActive/notActive_exit.png",
+        "UI/GameUI/Achievements/mini/notActive/notActive_knife.png",
+        "UI/GameUI/Achievements/mini/notActive/notActive_time.png",
+        "UI/GameUI/Achievements/mini/notActive/notActive_door.png",
+        "UI/GameUI/Achievements/mini/notActive/notActive_clear.png",
     };
 
     ArrayList<Image> achievementsIfObtainedImages = new ArrayList<>();
@@ -94,14 +93,24 @@ public class AchievementsScreen implements Screen {
             achievementsIfNotObtainedImages.add(new Image(new Texture(Gdx.files.internal(path))));
         }
 
-        for (int i = 0; i < achievementsIfObtainedImages.size(); i++) {
-            achievementsIfObtainedImages.get(i).setSize(150, 150);
-            achievementsIfObtainedImages.get(i).setPosition(225 + i * achievementsIfObtainedImages.get(i).getWidth() + i * achievementsIfObtainedImages.get(i).getWidth() / 2,
-                Gdx.graphics.getHeight() / 2 - achievementsIfObtainedImages.get(i).getHeight() / 2);
-            achievementsIfNotObtainedImages.get(i).setSize(150, 150);
-            achievementsIfNotObtainedImages.get(i).setPosition(225 + i * achievementsIfNotObtainedImages.get(i).getWidth() + i * achievementsIfObtainedImages.get(i).getWidth() / 2,
-                Gdx.graphics.getHeight() / 2 - achievementsIfNotObtainedImages.get(i).getHeight() / 2);
+        // --- Изменения начинаются здесь ---
+        float achievementWidth = 150; // Ширина каждой иконки достижения
+        float spacing = achievementWidth / 2; // Промежуток между иконками (равный половине ширины иконки)
+        int numberOfAchievements = achievementsIfObtainedImages.size();
+        float totalWidth = (numberOfAchievements * achievementWidth) + ((numberOfAchievements - 1) * spacing);
+        float startX = (Gdx.graphics.getWidth() - totalWidth) / 2; // Начальная X-координата для центрирования
+
+        for (int i = 0; i < numberOfAchievements; i++) {
+            float currentX = startX + i * (achievementWidth + spacing);
+
+            achievementsIfObtainedImages.get(i).setSize(achievementWidth, achievementWidth);
+            achievementsIfObtainedImages.get(i).setPosition(currentX,
+                Gdx.graphics.getHeight() / 2 - achievementWidth / 2); // Центрирование по Y
+            achievementsIfNotObtainedImages.get(i).setSize(achievementWidth, achievementWidth);
+            achievementsIfNotObtainedImages.get(i).setPosition(currentX,
+                Gdx.graphics.getHeight() / 2 - achievementWidth / 2); // Центрирование по Y
         }
+        // --- Изменения заканчиваются здесь ---
 
         for (int i = 0; i < achievementsIfObtainedImages.size(); i++) {
             achievements.add(new Achievement(
@@ -162,7 +171,8 @@ public class AchievementsScreen implements Screen {
             }
             layoutDescription.setText(fontDescription, descriptionText);
             float layoutDescriptionX = Gdx.graphics.getWidth() / 2 - layoutDescription.width / 2;
-            float layoutDescriptionY = achievements.get(2).achievementIfObtained.getY() - layoutDescription.height - 10;
+            // Убедитесь, что эта Y-координата не перекрывает ачивки и находится ниже
+            float layoutDescriptionY = Gdx.graphics.getHeight() / 2 - (achievements.get(0).achievementIfObtained.getHeight() / 2) - layoutDescription.height - 30; // 30 - это дополнительный отступ
             fontDescription.draw(batch, layoutDescription, layoutDescriptionX, layoutDescriptionY);
 
             Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -183,7 +193,7 @@ public class AchievementsScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().update(width, height, true); // Обновление вьюпорта при изменении размера экрана
     }
 
     @Override
@@ -210,10 +220,16 @@ public class AchievementsScreen implements Screen {
         skin.dispose();
         backgroundTexture.dispose();
         for (Image image : achievementsIfObtainedImages) {
-            new TextureRegionDrawable((TextureRegionDrawable) image.getDrawable()).getRegion().getTexture().dispose();
+            // Проверяем, что drawable является TextureRegionDrawable перед приведением
+            if (image.getDrawable() instanceof TextureRegionDrawable) {
+                new TextureRegionDrawable((TextureRegionDrawable) image.getDrawable()).getRegion().getTexture().dispose();
+            }
         }
         for (Image image : achievementsIfNotObtainedImages) {
-            new TextureRegionDrawable((TextureRegionDrawable) image.getDrawable()).getRegion().getTexture().dispose();
+            // Проверяем, что drawable является TextureRegionDrawable перед приведением
+            if (image.getDrawable() instanceof TextureRegionDrawable) {
+                new TextureRegionDrawable((TextureRegionDrawable) image.getDrawable()).getRegion().getTexture().dispose();
+            }
         }
     }
 }

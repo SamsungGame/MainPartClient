@@ -10,12 +10,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
@@ -25,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -60,7 +57,6 @@ import end.team.center.ProgramSetting.Config;
 import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Redact.SystemOut.Console;
 import end.team.center.Screens.Menu.MainMenuScreen;
-import end.team.center.Screens.Menu.PauseScreen;
 
 public class GameScreen implements Screen {
     public static GameRepository gameRepository;
@@ -81,11 +77,11 @@ public class GameScreen implements Screen {
     public static float coinForTime = 0;
     public static float coinForGame = 0;
 
-    public int maxDropSpawn = 200;
+    public int maxDropSpawn = 400;
 
     private static SpawnMob spawner;
     public static ArrayList<Enemy> enemies;
-    private static SpawnItem spawnItem;
+    private SpawnItem spawnItem;
     public static ArrayList<Drops> drop;
     private Heart hearts;
     private ArrayList<Object> wait;
@@ -101,6 +97,7 @@ public class GameScreen implements Screen {
     private NebulaCloud cloud;
 
     public static float totalTime = 0f;
+    public float timeForAch = 0f;
 
     public static float TIME = 0f;
 
@@ -115,14 +112,14 @@ public class GameScreen implements Screen {
     protected PowerSelectScreen PSC;
     private boolean isShow = false;
     private BackgroundTiledRenderer backgroundTiledRenderer;
-    public static Music backgroundMusic;
-    public static Music backgroundMusicInstrumental;
+    public Music backgroundMusic;
+    public Music backgroundMusicInstrumental;
 
     private static boolean isTimeGo = true;
     private int countZone;
 
     //Деревья
-    public static ArrayList<Tree> trees;
+    public ArrayList<Tree> trees;
     private int countTree = 4000;
 
     public static Portal portal;
@@ -139,9 +136,8 @@ public class GameScreen implements Screen {
     public int timeShowNewAch = 4; // sec
 
 
-    public static ArrayList<Chunk> chunks;
+    public ArrayList<Chunk> chunks;
     public static ImageButton pauseButton;
-
 
 
     @SuppressWarnings("NewApi")
@@ -170,7 +166,7 @@ public class GameScreen implements Screen {
         Texture brick3 = new Texture("UI/GameUI/Grow/dirt3_big.png");
         Texture brick4 = new Texture("UI/GameUI/Grow/dirt4_big.png");
 
-        TextureRegion[] tiles = new TextureRegion[] {
+        TextureRegion[] tiles = new TextureRegion[]{
             new TextureRegion(brick1),
             new TextureRegion(brick2),
             new TextureRegion(brick3),
@@ -203,57 +199,50 @@ public class GameScreen implements Screen {
         uiStage.addActor(touchpadAttack);
 
 
-        if (Config.skinIsKnight) {
-            hero = new Hero(
-                repo,
-                new Texture(Gdx.files.internal("UI/GameUI/Hero/KnightRight/heroNighRight.png")),
-                CharacterAnimation.Knight,
-                new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
-                140, 120, 3,
-                1, 0, 300f,
-                WORLD_WIDTH, WORLD_HEIGHT
-            );
+        int selectedSkinId = repo.getCurrentSelectedSkinId();
 
+        CharacterAnimation characterAnimation;
+        Texture heroImage;
 
-        } else if(Config.skinIsCyber){
-            hero = new Hero(
-                repo,
-                new Texture(Gdx.files.internal("UI/GameUI/Hero/CyberRight/cyberRight.png")),
-                CharacterAnimation.Cyber,
-                new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
-                140, 120, 3,
-                1, 0, 300f,
-                WORLD_WIDTH, WORLD_HEIGHT
-            );
-        } else if (Config.skinIsGhost) {
-            hero = new Hero(
-                repo,
-                new Texture(Gdx.files.internal("UI/GameUI/Hero/GhostRight/heroGhostRight.png")),
-                CharacterAnimation.GhostHero,
-                new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
-                140, 120, 3,
-                1, 0, 300f,
-                WORLD_WIDTH, WORLD_HEIGHT
-            );
-        } else {
-            hero = new Hero(
-                repo,
-                new Texture(Gdx.files.internal("UI/GameUI/Hero/Right/heroRight.png")),
-                CharacterAnimation.Hero,
-                new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
-                140, 120, 3,
-                1, 0, 300f,
-                WORLD_WIDTH, WORLD_HEIGHT
-            );
+        switch (selectedSkinId) {
+            case 1:
+                characterAnimation = CharacterAnimation.Hero;
+                heroImage = MainMenuScreen.images[0];
+                break;
+            case 2:
+                characterAnimation = CharacterAnimation.Knight;
+                heroImage = MainMenuScreen.images[1];
+                break;
+            case 3:
+                characterAnimation = CharacterAnimation.Cyber;
+                heroImage = MainMenuScreen.images[2];
+                break;
+            case 4:
+                characterAnimation = CharacterAnimation.GhostHero;
+                heroImage = MainMenuScreen.images[3];
+                break;
+            default:
+                characterAnimation = CharacterAnimation.Hero;
+                heroImage = MainMenuScreen.images[0];
+                break;
         }
 
+        hero = new Hero(
+            repo,
+            heroImage,
+            characterAnimation,
+            new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
+            140, 120, 3,
+            1, 0, 300f,
+            WORLD_WIDTH, WORLD_HEIGHT
+        );
         worldStage.addActor(hero);
 
 
         Texture heartFull = new Texture("UI/GameUI/OtherGameItems/heart_full.png");
         Texture heartEmpty = new Texture("UI/GameUI/OtherGameItems/heart_empty.png");
         Texture heartFullBit = new Texture("UI/GameUI/OtherGameItems/heart_full_bit.png");
-        hearts = new Heart(heartFull, heartEmpty,heartFullBit, hero.getHealth());
+        hearts = new Heart(heartFull, heartEmpty, heartFullBit, hero.getHealth());
         uiStage.addActor(hearts);
 
         Texture EnergyValue = new Texture("UI/GameUI/OtherGameItems/energy.png");
@@ -263,7 +252,7 @@ public class GameScreen implements Screen {
 
         Texture radiationLevel = new Texture("UI/GameUI/OtherGameItems/warning.png");
         Image radiationLevelImg = new Image(radiationLevel);
-        radiationLevelImg.setSize(90,78);
+        radiationLevelImg.setSize(90, 78);
         radiationLevelImg.setPosition((float) Gdx.graphics.getWidth() - 120, Gdx.graphics.getHeight() - (130 + EnergyValueImg.getHeight()));
 
         Skin energySkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/energyText.json"));
@@ -286,19 +275,19 @@ public class GameScreen implements Screen {
         Texture ExpTexture1 = new Texture("UI/GameUI/OtherGameItems/expBorderLeft.png");
         Image image = new Image(ExpTexture1);
         image.setSize(20, 20);
-        image.setPosition((float) Gdx.graphics.getWidth() /2 - 420, Gdx.graphics.getHeight() - 110);
+        image.setPosition((float) Gdx.graphics.getWidth() / 2 - 420, Gdx.graphics.getHeight() - 110);
         uiStage.addActor(image);
 
         Skin skin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/expProgress.json"));
         expBar = new ProgressBar(0, hero.getMaxExp(), 1, false, skin);
         expBar.setSize(800, 60);
-        expBar.setPosition((float) Gdx.graphics.getWidth() /2 - 400, Gdx.graphics.getHeight() - 130);
+        expBar.setPosition((float) Gdx.graphics.getWidth() / 2 - 400, Gdx.graphics.getHeight() - 130);
         uiStage.addActor(expBar);
 
         Texture ExpTexture2 = new Texture("UI/GameUI/OtherGameItems/expBorderRight.png");
         Image image2 = new Image(ExpTexture2);
-        image2.setSize(20,20);
-        image2.setPosition((float) Gdx.graphics.getWidth() /2 + 400, Gdx.graphics.getHeight() - 110);
+        image2.setSize(20, 20);
+        image2.setPosition((float) Gdx.graphics.getWidth() / 2 + 400, Gdx.graphics.getHeight() - 110);
         uiStage.addActor(image2);
 
         drop = new ArrayList<>();
@@ -311,6 +300,7 @@ public class GameScreen implements Screen {
             public void post(Enemy[] enemy) {
                 setSpawnMob(enemy);
             }
+
             @Override
             public void post(Drops drops) {
 
@@ -484,7 +474,8 @@ public class GameScreen implements Screen {
 
                     try {
                         Thread.sleep(1000);
-                    } catch (InterruptedException ignore) {}
+                    } catch (InterruptedException ignore) {
+                    }
                 }
             }
         }).start();
@@ -537,7 +528,6 @@ public class GameScreen implements Screen {
         backgroundMusic.play();
 
 
-
         wait.addAll(spawnItem.startDropSet());
 
 
@@ -548,7 +538,7 @@ public class GameScreen implements Screen {
         Texture tree3 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT3.png"));
         Texture tree4 = new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT4.png"));
 
-        Texture[] treesTexture = new Texture[] {tree1, tree2, tree3, tree4};
+        Texture[] treesTexture = new Texture[]{tree1, tree2, tree3, tree4};
 
         Vector2 center = new Vector2(WORLD_WIDTH / 2f, WORLD_HEIGHT / 2f);
         float minDistance = 400f;
@@ -577,7 +567,7 @@ public class GameScreen implements Screen {
             );
 
             trees.add(tree);
-            for (Chunk c: chunks) {
+            for (Chunk c : chunks) {
                 if (c.getBound().overlaps(tree.getBound())) {
                     c.addActor(tree);
                 }
@@ -595,7 +585,7 @@ public class GameScreen implements Screen {
         Skin pauseSkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/pauseSkin.json"));
         pauseButton = new ImageButton(pauseSkin);
         pauseButton.setSize(75, 94);
-        pauseButton.setPosition(10,  Gdx.graphics.getHeight() - pauseButton.getHeight() - 200);
+        pauseButton.setPosition(10, Gdx.graphics.getHeight() - pauseButton.getHeight() - 200);
 
         pauseButton.addListener(new ChangeListener() {
             @Override
@@ -622,8 +612,7 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(0, gameRepository));
-                STOP = false;
-                GameScreen.endTask();
+                endForStaticParams();
             }
         });
 
@@ -656,7 +645,8 @@ public class GameScreen implements Screen {
             public void run() {
                 try {
                     Thread.sleep(3000);
-                } catch (InterruptedException ignore) {}
+                } catch (InterruptedException ignore) {
+                }
 
                 Console.showPlayerAndPortalCords(hero, portal);
             }
@@ -666,13 +656,18 @@ public class GameScreen implements Screen {
     @SuppressWarnings("DefaultLocale")
     @Override
     public void render(float delta) {
-        addToList();
+        if(!hero.heroLive) {
+            endForStaticParams();
+            ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(2, gameRepository));
+            return;
+        }
+
         if (hero.newLevelFlag && !powers.isEmpty()) {
             showPowerDialog(delta);
             return;
         }
 
-        for (Chunk c: chunks) {
+        for (Chunk c : chunks) {
             if (c.getBound().overlaps(hero.getBound())) {
                 hero.setChunk(c);
             }
@@ -683,11 +678,12 @@ public class GameScreen implements Screen {
         if (showAchivs) showNewAchivs();
 
         TIME += delta;
+        timeForAch += delta;
 
         coinForTime += delta / 20;
 
 
-        if (totalTime >= 600 && !gameRepository.getAchievements().get(3) && !start) {
+        if (timeForAch >= 10 && !gameRepository.getAchievements().get(3) && !start) {
             showAchivs = true;
             imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/time_open.png"));
             idAchivs = 3;
@@ -699,15 +695,14 @@ public class GameScreen implements Screen {
         coinForGame = coinForEnemyValue + coinForTime;
 
 
-        if(!isPause){
+        if (!isPause) {
             uiStage.act(delta);
             uiStage.draw();
 
             touchpadMove.TouchpadLogic(uiStage);
             touchpadAttack.TouchpadLogic(uiStage);
 
-            uiStage.addActor(touchpadMove);
-            uiStage.addActor(touchpadAttack);
+
         }
 
 
@@ -715,7 +710,6 @@ public class GameScreen implements Screen {
 
         float moveX = touchpadMove.getKnobPercentX();
         float moveY = touchpadMove.getKnobPercentY();
-
 
 
         hero.move(moveX, moveY, delta);
@@ -768,18 +762,14 @@ public class GameScreen implements Screen {
 
                     if (hero.getLevelSheild() == 0) {
                         e.attack(hero);
-                    } else if (!hero.getIsInvulnerability()) {
+                    }
+                    else if (hero.returnDamage && hero.getLevelSheild() == 0) {
+                        e.die();
+                    }else if (!hero.getIsInvulnerability()) {
                         hero.setSheildLevel(hero.getLevelSheild() - 1);
                         hero.frameInvulnerability(2);
                     }
 
-                    if (hero.returnDamage) {
-                        e.die();
-
-                        for (Enemy ee : enemies) {
-                            if (ee.getBound().overlaps(hero.deathZone)) ee.die();
-                        }
-                    }
                     if (hero.getActiveSheild()) hero.offShield();
                 }
             }
@@ -795,7 +785,7 @@ public class GameScreen implements Screen {
             // Удаление мертвых врагов
             enemies.removeIf(e -> {
                 if (!e.isLive()) {
-                    coinForEnemyValue+=0.1f;
+                    coinForEnemyValue += 0.1f;
                     e.remove();
                     return true;
                 }
@@ -809,14 +799,16 @@ public class GameScreen implements Screen {
 
             int l = hero.getRadiationLevel();
             radiationValue.setText(hero.getRadiationLevel());
-            if (l == 1)      radiationValue.setColor(1f, 1f,   1f,   1f);
+            if (l == 1) radiationValue.setColor(1f, 1f, 1f, 1f);
             else if (l == 2) radiationValue.setColor(1f, 0.8f, 0.8f, 1f);
             else if (l == 3) radiationValue.setColor(1f, 0.5f, 0.5f, 1f);
             else if (l == 4) radiationValue.setColor(1f, 0.3f, 0.3f, 1f);
-            else if (l == 5) radiationValue.setColor(1f, 0,    0,    1f);
+            else if (l == 5) radiationValue.setColor(1f, 0, 0, 1f);
 
             hearts.updateAnimation(delta);
             hearts.setCurrentHealth(hero.getHealth());
+
+            addToList();
 
             // Обновление камеры
             gameCamera.updateCameraPosition(hero.getX(), hero.getY(), hero.getWidth(), hero.getHeight());
@@ -837,10 +829,10 @@ public class GameScreen implements Screen {
 
             hero.getChunk().act(delta);
             hero.getChunk().draw();
-
-            noAct.act(delta);
-            noAct.draw();
-
+            if (noAct != null) {
+                noAct.act(delta);
+                noAct.draw();
+            }
             batch.end();
             frameBuffer.end();
         }
@@ -910,44 +902,115 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+
+
+    }
+    public static void endForStaticParams() {
+        hero.heroLive = true;
         isTimeGo = false;
+        STOP = false;
 
-        worldStage.dispose();
-        uiStage.dispose();
-        touchpadMove.dispose();
-        touchpadAttack.dispose();
-        hero.dispose();
-
-        backgroundMusic.stop();
-        backgroundMusic.dispose();
-
-        backgroundMusicInstrumental.stop();
-        backgroundMusicInstrumental.dispose();
-
-        spawnItem.dispose();
-        spawner.dispose();
-
-        cloud.dispose();
+//        coinForEnemyValue = 0;
+//        coinForTime = 0;
+//        coinForGame = 0;
+//        totalTime = 0f;
+//        TIME = 0f;
     }
 
-    public static void endTask() {
-        spawnItem.dispose();
-        spawner.dispose();
-
-        backgroundMusic.stop();
-        backgroundMusic.dispose();
-
-        backgroundMusicInstrumental.stop();
-        backgroundMusicInstrumental.dispose();
-        isTimeGo = false;
-    }
 
     @Override public void show() {
 
     }
     @Override public void pause() {}
     @Override public void resume() {}
-    @Override public void hide() {}
+    @Override public void hide() {
+
+        timeForAch = 0;
+
+        if (worldStage != null) {
+            worldStage.dispose();
+            worldStage = null;
+        }
+        if (uiStage != null) {
+            uiStage.dispose();
+            uiStage = null;
+        }
+        if (pauseStage != null) {
+            pauseStage.dispose();
+            pauseStage = null;
+        }
+        if (noAct != null) {
+            noAct.dispose();
+            noAct = null;
+        }
+
+        if (touchpadMove != null) {
+            touchpadMove.dispose();
+            touchpadMove = null;
+        }
+        if (touchpadAttack != null) {
+            touchpadAttack.dispose();
+            touchpadAttack = null;
+        }
+
+
+        if (backgroundMusic != null) {
+            backgroundMusic.stop();
+            backgroundMusic.dispose();
+            backgroundMusic = null;
+        }
+        if (backgroundMusicInstrumental != null) {
+            backgroundMusicInstrumental.stop();
+            backgroundMusicInstrumental.dispose();
+            backgroundMusicInstrumental = null;
+        }
+
+//        if (spawner != null) {
+//            spawner.dispose();
+//            spawner = null;
+//        }
+        if (spawnItem != null) {
+            spawnItem.dispose();
+            spawnItem = null;
+        }
+
+        if (PSC != null) {
+            PSC.dispose();
+            PSC = null;
+        }
+
+        if (cloud != null) {
+            cloud.dispose();
+            cloud = null;
+        }
+
+        if (frameBuffer != null) {
+            frameBuffer.dispose();
+            frameBuffer = null;
+        }
+        if (hardMaskBuffer != null) {
+            hardMaskBuffer.dispose();
+            hardMaskBuffer = null;
+        }
+
+
+        for (Texture treeTex : new Texture[]{new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT1.png")), new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT2.png")), new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT3.png")), new Texture(Gdx.files.internal("UI/GameUI/Mobs/Tree/treeT4.png"))}) {
+            treeTex.dispose();
+        }
+
+        if (portal != null) {
+            portal.dispose();
+            portal = null;
+        }
+
+//        if (enemies != null) enemies.clear();
+//        if (drop != null) drop.clear();
+        if (zone != null) zone.clear();
+        if (trees != null) trees.clear();
+        if (chunks != null) chunks.clear();
+        if (powers != null) powers.clear();
+//        if (wait != null) wait.clear();
+    }
 
     @SuppressWarnings("NewApi")
     public void showPowerDialog(float delta) {
@@ -1006,6 +1069,8 @@ public class GameScreen implements Screen {
             uiStage.getRoot().removeActor(touchpadAttack);
         }
         else {
+            uiStage.addActor(touchpadMove);
+            uiStage.addActor(touchpadAttack);
             STOP = false;
             isPause = false;
             Gdx.input.setInputProcessor(uiStage);
@@ -1047,8 +1112,7 @@ public class GameScreen implements Screen {
         for (Chunk c: chunks) {
             if (c.getBound().overlaps(d.getBound())) c.addActor(d);
         }
-
-        noAct.addActor(d);
+        if (noAct != null) noAct.addActor(d);
     }
 
     public void addToList() {

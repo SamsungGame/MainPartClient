@@ -59,14 +59,9 @@ public class Portal extends StaticObject {
                 MainMenuScreen.idAchivs = 5;
             }
 
-            GameScreen.backgroundMusic.stop();
-            GameScreen.backgroundMusic.dispose();
-            GameScreen.backgroundMusicInstrumental.stop();
-            GameScreen.backgroundMusicInstrumental.dispose();
 
             ShaderManager.radiusView1 = 0.2f;
             ShaderManager.radiusView3 = 0.15f;
-            GameScreen.endTask();
         }
 
         stateTime += delta;
