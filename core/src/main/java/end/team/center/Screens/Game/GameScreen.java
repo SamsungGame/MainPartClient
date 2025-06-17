@@ -543,7 +543,7 @@ public class GameScreen implements Screen {
                     new Texture(Gdx.files.internal("UI/GameUI/Structure/portal1.png")),
                     new Texture(Gdx.files.internal("UI/GameUI/Structure/portal2.png")),
                     new Texture(Gdx.files.internal("UI/GameUI/Structure/portal3.png")),
-                    new Vector2(spawnX, spawnY),
+                    new Vector2(14000, 14000),
                     hero,
                     171, 189);
 
@@ -795,7 +795,7 @@ public class GameScreen implements Screen {
         // Урон от врагов
 
         // Рендер в буфер
-        if (!STOP) {
+        if (worldStage != null || !STOP) {
             for (Enemy e : enemies) {
                 if (e.getBound().overlaps(hero.getBound())) {
 
@@ -863,8 +863,10 @@ public class GameScreen implements Screen {
             backgroundTiledRenderer.render(batch, gameCamera.getCamera());
 
             // Сцена с героями, врагами и т.п.
-            worldStage.act(delta);
-            worldStage.draw();
+                worldStage.act(delta);
+                worldStage.draw();
+
+
 
             hero.getChunk().act(delta);
             hero.getChunk().draw();
@@ -951,6 +953,7 @@ public class GameScreen implements Screen {
         coinForEnemyValue = 0;
         coinForTime = 0;
         coinForGame = 0;
+        isKill = false;
 //        totalTime = 0f;
 //        TIME = 0f;
     }
