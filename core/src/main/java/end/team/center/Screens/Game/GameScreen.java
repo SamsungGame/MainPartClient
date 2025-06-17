@@ -60,7 +60,8 @@ import end.team.center.Screens.Menu.MainMenuScreen;
 
 public class GameScreen implements Screen {
     public static GameRepository gameRepository;
-
+    public static boolean endForHero = false;
+    public static int endCode = 0;
     private TouchpadClass touchpadMove, touchpadAttack;
     public static Hero hero;
     private Stage worldStage, noAct;
@@ -650,8 +651,8 @@ public class GameScreen implements Screen {
         backToMainMenuScreenButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(0, gameRepository));
-                endForStaticParams();
+                GameScreen.endCode = 0;
+                GameScreen.endForHero = true;
             }
         });
 
@@ -695,9 +696,10 @@ public class GameScreen implements Screen {
     @SuppressWarnings("DefaultLocale")
     @Override
     public void render(float delta) {
-        if(!hero.heroLive) {
-            endForStaticParams();
-            ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(2, gameRepository));
+
+        //ОБЯЗАТЕЛЬНО В САМОМ НАЧАЛЕ
+        if(endForHero) {
+            endGame();
             return;
         }
 
@@ -947,9 +949,11 @@ public class GameScreen implements Screen {
 
     }
     public static void endForStaticParams() {
-        hero.heroLive = true;
+        endForHero = false;
         isTimeGo = false;
         STOP = false;
+        ShaderManager.radiusView1 = 0.2f;
+        ShaderManager.radiusView3 = 0.15f;
         coinForEnemyValue = 0;
         coinForTime = 0;
         coinForGame = 0;
@@ -1194,5 +1198,11 @@ public class GameScreen implements Screen {
                 idAchivs = -1;
             }
         }).start();
+    }
+    public void endGame() {
+        if(endForHero) {
+            endForStaticParams();
+            ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(endCode, gameRepository));
+        }
     }
 }

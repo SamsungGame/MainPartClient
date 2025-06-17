@@ -1,7 +1,5 @@
 package end.team.center.GameCore.Objects.OnMap;
 
-import static end.team.center.Screens.Game.GameScreen.endForStaticParams;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,7 +22,6 @@ import end.team.center.Screens.Game.GameScreen;
 import end.team.center.Screens.Menu.MainMenuScreen;
 
 public class Hero extends Friendly {
-
     private GameRepository gameRepository;
     protected boolean isInvulnerability = false;
     protected int radiationProtect = 1;
@@ -41,14 +38,12 @@ public class Hero extends Friendly {
     private int duration = 30;
     private float elapsedTime = 0;
     private Texture activeSheild, sheild1, sheild2, sheild3;
-    public boolean heroLive;
     Sound soundUronShield = Gdx.audio.newSound(Gdx.files.internal("Sounds/uron.mp3"));
 
 
     public Hero(GameRepository repo, Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, float worldWidth, float worldHeight) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
         this.gameRepository = repo;
-        heroLive = true;
         weapon = new Knife(WeaponType.knife, this);
         exp = 0;
         level = 1;
@@ -255,8 +250,8 @@ public class Hero extends Friendly {
             gameRepository.addCoins(((int) GameScreen.coinForGame));
             ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(3, gameRepository));
 
-            ShaderManager.radiusView1 = 0.2f;
-            ShaderManager.radiusView3 = 0.15f;
+            GameScreen.endCode = 3;
+            GameScreen.endForHero = true;
 
         }
 
@@ -286,12 +281,8 @@ public class Hero extends Friendly {
                     MainMenuScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/door_open.png"));
                     MainMenuScreen.idAchivs = 4;
                 }
-
-
-                ShaderManager.radiusView1 = 0.2f;
-                ShaderManager.radiusView3 = 0.15f;
-
-               heroLive = false;
+                GameScreen.endCode = 2;
+                GameScreen.endForHero = true;
             } else {
                 this.health++;
                 safeInDeadDamage = false;

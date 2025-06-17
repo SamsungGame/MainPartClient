@@ -25,6 +25,7 @@ import end.team.center.Center;
 import end.team.center.ProgramSetting.Config;
 import end.team.center.ProgramSetting.LocalDB.GameData;
 import end.team.center.ProgramSetting.LocalDB.GameRepository;
+import end.team.center.Screens.Game.GameScreen;
 
 public class SkinsScreen implements Screen {
     private final SpriteBatch batch = new SpriteBatch();
@@ -133,7 +134,7 @@ public class SkinsScreen implements Screen {
                         Config.skinIsCyber = true;
                     }
                 }
-                ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(0, repo));
+                ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(GameScreen.endCode, repo));
 
             }
         });

@@ -45,7 +45,7 @@ public class SpawnItem {
             @Override
             public void run() {
                 // Проверяем состояние героя и экрана перед запуском цикла
-                if (hero.heroLive && !GameScreen.STOP) { // Изменил || на &&, так как цикл должен работать пока герой жив и игра не остановлена
+                if (!GameScreen.endForHero || !GameScreen.STOP) {
                     while (isSpawn) {
                         try {
                             poster.post(spawn()); // Отправляем сгенерированный предмет

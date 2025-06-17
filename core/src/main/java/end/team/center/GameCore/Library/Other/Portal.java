@@ -44,8 +44,8 @@ public class Portal extends StaticObject {
         if (hero.getBound().overlaps(bound)) {
             gameRepository.addCoins(((int) GameScreen.coinForGame * 2));
 
-
-            hero.heroLive = false;
+            GameScreen.endCode = 1;
+            GameScreen.endForHero = true;
 
             if (!MainMenuScreen.gameRepository.getAchievements().get(1)) {
                 MainMenuScreen.showAchivs = true;

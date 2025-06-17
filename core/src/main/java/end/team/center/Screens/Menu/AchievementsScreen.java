@@ -26,6 +26,7 @@ import end.team.center.Center;
 import end.team.center.ProgramSetting.Achievement;
 import end.team.center.ProgramSetting.LocalDB.GameData;
 import end.team.center.ProgramSetting.LocalDB.GameRepository;
+import end.team.center.Screens.Game.GameScreen;
 
 public class AchievementsScreen implements Screen {
     private final SpriteBatch batch = new SpriteBatch();
@@ -81,7 +82,7 @@ public class AchievementsScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(0, repo));
+                ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(GameScreen.endCode, repo));
             }
         });
 
