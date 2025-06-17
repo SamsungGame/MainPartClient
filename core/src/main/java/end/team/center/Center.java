@@ -19,9 +19,9 @@ public class Center extends Game {
 
     public Center() {
         prices.add("0");
-        prices.add("50");
-        prices.add("100");
-        prices.add("150");
+        prices.add("200");
+        prices.add("400");
+        prices.add("500");
     }
 
     public void setGameRepository(GameRepository repo) {

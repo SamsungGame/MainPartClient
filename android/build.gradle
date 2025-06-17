@@ -32,8 +32,8 @@ android {
   }
   defaultConfig {
     applicationId 'end.team.center'
-    minSdkVersion 19
-    targetSdkVersion 35
+    minSdkVersion 24
+    targetSdkVersion 34
     versionCode 1
     versionName "1.0"
     multiDexEnabled true
@@ -45,9 +45,9 @@ android {
   }
   buildTypes {
     release {
-      minifyEnabled true
-      shrinkResources true
-      debuggable false
+//      minifyEnabled true
+//      shrinkResources true
+//      debuggable false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
       signingConfig signingConfigs.debug
     }

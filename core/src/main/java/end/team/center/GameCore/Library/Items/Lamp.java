@@ -23,8 +23,6 @@ public class Lamp extends Drops {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
     }
-
-    @SuppressWarnings("NewApi")
     @Override
     public void act(float delta) {
         super.act(delta);

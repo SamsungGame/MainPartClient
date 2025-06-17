@@ -140,7 +140,6 @@ public class GameScreen implements Screen {
     public static ImageButton pauseButton;
 
 
-    @SuppressWarnings("NewApi")
     public GameScreen(GameRepository repo) {
 
         this.gameRepository = repo;
@@ -494,10 +493,50 @@ public class GameScreen implements Screen {
                 int x = (int) (Math.random() * WORLD_WIDTH / 5);
                 int y = (int) (Math.random() * WORLD_HEIGHT / 5);
 
-                float spawnX = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_WIDTH - x), (int) (WORLD_WIDTH - Entity.BOUNDARY_PADDING - 200))
-                    : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), x);
-                float spawnY = Math.random() * 100 > 50 ? random.nextInt((int) (WORLD_HEIGHT - y), (int) (WORLD_HEIGHT - Entity.BOUNDARY_PADDING - 200))
-                    : random.nextInt((int) (Entity.BOUNDARY_PADDING + 200), y);
+                float minSpawnX, maxSpawnX;
+                if (Math.random() * 100 > 50) {
+                    minSpawnX = WORLD_WIDTH - x;
+                    maxSpawnX = WORLD_WIDTH - Entity.BOUNDARY_PADDING - 200;
+                } else {
+                    minSpawnX = Entity.BOUNDARY_PADDING + 200;
+                    maxSpawnX = x;
+                }
+
+                if (minSpawnX > maxSpawnX) {
+                    float temp = minSpawnX;
+                    minSpawnX = maxSpawnX;
+                    maxSpawnX = temp;
+                }
+
+                float spawnX;
+                if ((int)(maxSpawnX - minSpawnX + 1) <= 0) {
+                    spawnX = minSpawnX;
+                } else {
+                    spawnX = random.nextInt((int)(maxSpawnX - minSpawnX + 1)) + minSpawnX;
+                }
+
+
+                float minSpawnY, maxSpawnY;
+                if (Math.random() * 100 > 50) {
+                    minSpawnY = WORLD_HEIGHT - y;
+                    maxSpawnY = WORLD_HEIGHT - Entity.BOUNDARY_PADDING - 200;
+                } else {
+                    minSpawnY = Entity.BOUNDARY_PADDING + 200;
+                    maxSpawnY = y;
+                }
+
+                if (minSpawnY > maxSpawnY) {
+                    float temp = minSpawnY;
+                    minSpawnY = maxSpawnY;
+                    maxSpawnY = temp;
+                }
+
+                float spawnY;
+                if ((int)(maxSpawnY - minSpawnY + 1) <= 0) {
+                    spawnY = minSpawnY;
+                } else {
+                    spawnY = random.nextInt((int)(maxSpawnY - minSpawnY + 1)) + minSpawnY;
+                }
 
                 portal = new Portal(
                     repo,
@@ -683,7 +722,7 @@ public class GameScreen implements Screen {
         coinForTime += delta / 20;
 
 
-        if (timeForAch >= 10 && !gameRepository.getAchievements().get(3) && !start) {
+        if (timeForAch >= 600 && !gameRepository.getAchievements().get(3) && !start) {
             showAchivs = true;
             imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/time_open.png"));
             idAchivs = 3;
@@ -909,10 +948,9 @@ public class GameScreen implements Screen {
         hero.heroLive = true;
         isTimeGo = false;
         STOP = false;
-
-//        coinForEnemyValue = 0;
-//        coinForTime = 0;
-//        coinForGame = 0;
+        coinForEnemyValue = 0;
+        coinForTime = 0;
+        coinForGame = 0;
 //        totalTime = 0f;
 //        TIME = 0f;
     }
@@ -1012,7 +1050,6 @@ public class GameScreen implements Screen {
 //        if (wait != null) wait.clear();
     }
 
-    @SuppressWarnings("NewApi")
     public void showPowerDialog(float delta) {
         uiStage.getRoot().removeActor(touchpadMove);
         uiStage.getRoot().removeActor(touchpadAttack);

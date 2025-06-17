@@ -63,7 +63,7 @@ public class SpawnMob {
                         System.out.println("Отправка мобов: " + Arrays.toString(enemies));
 
                         try {
-                            Thread.sleep((long) (timeSpawn * 1000L));
+                            Thread.sleep((long) (timeSpawn * 2000L));
                         } catch (InterruptedException ignore) {}
                     }
                 }

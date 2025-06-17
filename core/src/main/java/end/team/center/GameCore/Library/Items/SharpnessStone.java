@@ -12,12 +12,17 @@ import end.team.center.GameCore.Objects.OnMap.Hero;
 import end.team.center.Screens.Game.GameScreen;
 
 public class SharpnessStone extends Drops {
+
+    private final Random random; // Объявляем Random как поле класса
+
     public SharpnessStone(Texture texture, Vector2 vector, Hero hero, int width, int height) {
         super(texture, vector, hero, width, height);
+        this.random = new Random(); // Инициализируем Random один раз в конструкторе
     }
 
     public SharpnessStone(ItemType type, Vector2 vector, Hero hero) {
         super(type.getTexture(), vector, hero, type.getWidth(), type.getHeight());
+        this.random = new Random(); // Инициализируем Random один раз в конструкторе
     }
 
     @Override
@@ -25,15 +30,15 @@ public class SharpnessStone extends Drops {
         super.draw(batch, parentAlpha);
     }
 
-    @SuppressWarnings("NewApi")
     @Override
     public void act(float delta) {
         super.act(delta);
 
         if (bound.overlaps(hero.getBound())) {
-            Random random = new Random();
-
-            hero.addExpWeapon(random.nextInt(3, 10));
+            // Исправленная строка: генерация числа от 3 до 10 включительно
+            // random.nextInt(max - min + 1) + min
+            // random.nextInt(10 - 3 + 1) + 3 = random.nextInt(8) + 3
+            hero.addExpWeapon(random.nextInt(6) + 3);
 
             GameScreen.isPickupItem = true;
 

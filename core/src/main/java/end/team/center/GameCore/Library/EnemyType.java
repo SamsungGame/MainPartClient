@@ -1,5 +1,7 @@
 package end.team.center.GameCore.Library;
 
+import static com.badlogic.gdx.math.MathUtils.random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -7,15 +9,12 @@ import java.util.Random;
 
 public enum EnemyType {
     // Типы существующих врагов
-    @SuppressWarnings("NewApi")
-    Owl(CharacterAnimation.Owl, 120, 140, 6, 0, 1, new Random().nextInt(2, 4), 140f),
-    @SuppressWarnings("NewApi")
-    Ghost(CharacterAnimation.Ghost, 144, 126, 5, 0, 1, new Random().nextInt(3, 6), 160f),
-    @SuppressWarnings("NewApi")
-    Rabbit(CharacterAnimation.Rabbit, 96, 90, 8, 0, 1, new Random().nextInt(1, 3), 180f);
+    Owl(CharacterAnimation.Owl, 120, 140, 6, 0, 1, random.nextInt(3) + 2, 140f),
+    Ghost(CharacterAnimation.Ghost, 144, 126, 5, 0, 1, random.nextInt(4) + 3, 160f),
+    Rabbit(CharacterAnimation.Rabbit, 96, 90, 8, 0, 1, random.nextInt(3) + 1, 180f);
 
     private final CharacterAnimation anim;
-    private final int health, defense, damage, exp; // Базовые
+    private final int health, defense, damage, exp;
     private final float speed, height, width;
 
     EnemyType(CharacterAnimation anim, float height, float width, int health, int defense, int damage, int exp, float speed) {
@@ -44,7 +43,6 @@ public enum EnemyType {
     public float getSpeed() {
         return speed;
     }
-
 
     public CharacterAnimation getAnim() {
         return anim;
