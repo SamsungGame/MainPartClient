@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import end.team.center.Center;
 import end.team.center.GameCore.UIElements.Fon;
-import end.team.center.ProgramSetting.LocalDB.GameData;
+import end.team.center.ProgramSetting.LocalDB.GameData; // Не используется, можно удалить импорт
 import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Screens.Game.GameScreen;
 
@@ -42,7 +42,6 @@ public class MainMenuScreen implements Screen {
         new Texture(Gdx.files.internal("UI/GameUI/Hero/GhostLeft/heroGhostLeft.png")),
         new Texture(Gdx.files.internal("UI/GameUI/Hero/KnightLeft/heroNighLeft.png")),
         new Texture(Gdx.files.internal("UI/GameUI/Hero/CyberLeft/cyberLeft.png"))
-
     };
 
     public int timeShowNewAch = 4; // sec
@@ -54,6 +53,8 @@ public class MainMenuScreen implements Screen {
         "Не это сделало их такими... \n         Поражение..."
     };
 
+    // Добавляем объявление для Label предупреждения
+    private Label warningLabel;
 
 
     public MainMenuScreen(int code, GameRepository repo) {
@@ -79,7 +80,6 @@ public class MainMenuScreen implements Screen {
         activeSkin.setPosition(Gdx.graphics.getWidth() - activeSkin.getWidth() - 50, (float) Gdx.graphics.getHeight() / 2 - activeSkin.getHeight() / 2 - 20);
 
         // Текст результата
-
         String str = (code >= 0 && code < texts.length) ? texts[code] : texts[0];
         Skin labelSkin = new Skin(Gdx.files.internal("UI/AboutGame/label.json"));
 
@@ -122,7 +122,6 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new SkinsScreen(repo));
-
             }
         });
         buttonSkin.setSize(140, 140);
@@ -155,20 +154,25 @@ public class MainMenuScreen implements Screen {
         mainTable.center();
 
         mainTable.add(conclusionText).padBottom(50).row();
-
         mainTable.add(buttonStart).width(500).height(250);
 
-        // Добавляем на stage сначала фон, затем таблицы
+        // --- Добавление предупреждающей надписи ---
+        // Используем тот же skin, что и для conclusionText, чтобы получить базовый стиль
+        warningLabel = new Label("Может работать некорректно \n на некоторых версиях Android", labelSkin);
+        // Установите размер шрифта здесь. Например:
+        warningLabel.setFontScale(1.2f); // Настройте это значение по своему усмотрению (0.5f, 1.0f, 1.5f и т.д.)
+        // Позиционируем в верхнем левом углу
+        warningLabel.setPosition(30, Gdx.graphics.getHeight() - warningLabel.getHeight() - 35);
+
+
+        // Добавляем на stage сначала фон, затем таблицы и элементы
         stage.addActor(background);
         stage.addActor(mainTable);
         stage.addActor(coinsTable);
         stage.addActor(activeSkin);
         stage.addActor(buttonAch);
         stage.addActor(buttonSkin);
-
-
-        // Музыка
-
+        stage.addActor(warningLabel); // Добавляем предупреждающую надпись на сцену
     }
 
     private void updateCoinsDisplay() {
@@ -193,8 +197,21 @@ public class MainMenuScreen implements Screen {
     @Override public void hide() {}
     @Override public void dispose() {
         stage.dispose();
-        skin.dispose();
-        backgroundMusic.dispose();
+        // skin.dispose(); // Если skin используется в разных местах, убедитесь, что он не dispose'ится несколько раз
+        // Или если это новый скин, убедитесь, что он dispose'ится
+        if (skin != null) { // Безопасное освобождение skin
+            skin.dispose();
+        }
+        if (backgroundMusic != null) { // Проверка на null перед dispose, так как может быть уже dispose'нут в clicked
+            backgroundMusic.dispose();
+            backgroundMusic = null; // Обнуляем ссылку после dispose
+        }
+        // Освобождение текстур, если они не управляются AssetManager
+        for (Texture texture : images) {
+            if (texture != null) {
+                texture.dispose();
+            }
+        }
     }
 
     public void showNewAchivs() {
@@ -211,15 +228,26 @@ public class MainMenuScreen implements Screen {
             public void run() {
                 try {
                     Thread.sleep(timeShowNewAch * 1000);
-                } catch (InterruptedException ignored) {}
+                } catch (InterruptedException ignored) {
+                    Thread.currentThread().interrupt(); // Восстанавливаем флаг прерывания
+                }
 
-                showAchivs = false;
-                start = false;
+                // Это взаимодействие с UI из фонового потока, что может вызвать проблемы.
+                // Операции с LibGDX (удаление актеров, изменение состояния stage/UI) должны выполняться в основном потоке.
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        showAchivs = false;
+                        start = false;
 
-                imageAchivs.remove();
+                        if (imageAchivs != null) { // Проверяем на null перед удалением
+                            imageAchivs.remove();
+                        }
 
-                gameRepository.unlockAchievement(idAchivs);
-                idAchivs = -1;
+                        gameRepository.unlockAchievement(idAchivs);
+                        idAchivs = -1;
+                    }
+                });
             }
         }).start();
     }
