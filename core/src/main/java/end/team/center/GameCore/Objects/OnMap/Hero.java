@@ -250,6 +250,12 @@ public class Hero extends Friendly {
             gameRepository.addCoins(((int) GameScreen.coinForGame));
             ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(3, gameRepository));
 
+            if (GMath.checkVectorDistance(getCenterVector(), GameScreen.portal.getCenterVector(), 800, 800) && !GameScreen.gameRepository.getAchievements().get(4)) {
+                MainMenuScreen.showAchivs = true;
+                MainMenuScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/door_open.png"));
+                MainMenuScreen.idAchivs = 4;
+            }
+
             GameScreen.endCode = 3;
             GameScreen.endForHero = true;
 

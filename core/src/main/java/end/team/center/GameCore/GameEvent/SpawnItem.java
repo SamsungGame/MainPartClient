@@ -48,7 +48,7 @@ public class SpawnItem {
                 if (!GameScreen.endForHero || !GameScreen.STOP) {
                     while (isSpawn) {
                         try {
-                            poster.post(spawn()); // Отправляем сгенерированный предмет
+//                            poster.post(spawn()); // Отправляем сгенерированный предмет
 
                             Thread.sleep((long) (timeSpawn * 1000L));
                         } catch (InterruptedException e) {
