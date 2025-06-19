@@ -474,8 +474,7 @@ public class GameScreen implements Screen {
 
                     try {
                         Thread.sleep(1000);
-                    } catch (InterruptedException ignore) {
-                    }
+                    } catch (InterruptedException ignore) {}
                 }
             }
         }).start();
@@ -803,13 +802,12 @@ public class GameScreen implements Screen {
 
                     if (hero.getLevelSheild() == 0) {
                         e.attack(hero);
-                    }
-                    else if (hero.returnDamage && hero.getLevelSheild() == 0) {
-                        e.die();
-                    }else if (!hero.getIsInvulnerability()) {
+                    } else if (!hero.getIsInvulnerability()) {
                         hero.setSheildLevel(hero.getLevelSheild() - 1);
                         hero.frameInvulnerability(2);
                     }
+
+                    if (hero.returnDamage) e.die();
 
                     if (hero.getActiveSheild()) hero.offShield();
                 }
@@ -840,11 +838,11 @@ public class GameScreen implements Screen {
 
             int l = hero.getRadiationLevel();
             radiationValue.setText(hero.getRadiationLevel());
-            if (l == 1) radiationValue.setColor(1f, 1f, 1f, 1f);
+            if (l == 1)      radiationValue.setColor(1f, 1f,   1f,   1f);
             else if (l == 2) radiationValue.setColor(1f, 0.8f, 0.8f, 1f);
             else if (l == 3) radiationValue.setColor(1f, 0.5f, 0.5f, 1f);
             else if (l == 4) radiationValue.setColor(1f, 0.3f, 0.3f, 1f);
-            else if (l == 5) radiationValue.setColor(1f, 0, 0, 1f);
+            else if (l == 5) radiationValue.setColor(1f, 0,    0,    1f);
 
             hearts.updateAnimation(delta);
             hearts.setCurrentHealth(hero.getHealth());
@@ -865,17 +863,18 @@ public class GameScreen implements Screen {
             backgroundTiledRenderer.render(batch, gameCamera.getCamera());
 
             // Сцена с героями, врагами и т.п.
-                worldStage.act(delta);
-                worldStage.draw();
-
+            worldStage.act(delta);
+            worldStage.draw();
 
 
             hero.getChunk().act(delta);
             hero.getChunk().draw();
+
             if (noAct != null) {
                 noAct.act(delta);
                 noAct.draw();
             }
+
             batch.end();
             frameBuffer.end();
         }
