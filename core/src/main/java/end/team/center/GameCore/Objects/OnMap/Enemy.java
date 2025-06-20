@@ -75,10 +75,16 @@ public abstract class Enemy extends Entity {
 
                 for (Tree t : hero.getChunk().getTrees()) {
                     if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
-                        if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y, width, height)))
+                        if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y, width, height))) {
                             deltaX = 0;
-                        if (t.getBound().overlaps(new Rectangle(vector.x, vector.y + deltaY, width, height)))
+                            if (hero.getVector().y > vector.y) deltaY = speed * delta;
+                            else                               deltaY = -(speed * delta);
+                        }
+                        if (t.getBound().overlaps(new Rectangle(vector.x, vector.y + deltaY, width, height))) {
                             deltaY = 0;
+                            if (hero.getVector().x > vector.x) deltaX = speed * delta;
+                            else                               deltaX = -(speed * delta);
+                        }
                         isTreeTouch = true;
                     }
                 }
