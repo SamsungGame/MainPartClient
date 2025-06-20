@@ -93,7 +93,7 @@ public abstract class Enemy extends Entity {
                     if (treeBound.overlaps(new Rectangle(currentX + deltaX, currentY, width, height))) {
                         deltaX = 0; // Отменяем движение по X
                         // Пробуем двигаться только по Y, если герой находится выше или ниже врага
-                        if (hero.getVector().y > currentY) deltaY = speed * delta;
+                        if (hero.getVector().y > vector.y) deltaY = speed * delta;
                         else                               deltaY = -(speed * delta);
                         isTreeTouch = true;
                     }
@@ -102,7 +102,7 @@ public abstract class Enemy extends Entity {
                     if (treeBound.overlaps(new Rectangle(currentX, currentY + deltaY, width, height))) {
                         deltaY = 0; // Отменяем движение по Y
                         // Пробуем двигаться только по X, если герой находится правее или левее врага
-                        if (hero.getVector().x > currentX) deltaX = speed * delta;
+                        if (hero.getVector().x > vector.x) deltaX = speed * delta;
                         else                               deltaX = -(speed * delta);
                         isTreeTouch = true;
                     }

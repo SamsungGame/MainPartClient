@@ -44,52 +44,69 @@ public abstract class Friendly extends Entity {
         // Ограничиваем позицию границами мира
         newX = Math.max(BOUNDARY_PADDING, Math.min(newX, worldWidth - BOUNDARY_PADDING - width));
 
-        Rectangle nextXBound = new Rectangle(newX, tempY, width, height); // Проверяем только изменение X
-        boolean collidedX = false;
+        // Проверяем, в дереве ли игрок
 
-        if (nowChunk != null) {
+        boolean inTree = false;
+        for (Tree t: nowChunk.getTrees()) {
+            if (bound.overlaps(t.getBound())) inTree = true;
+        }
+
+        if (!inTree) {
+            Rectangle nextXBound = new Rectangle(newX, tempY, width, height); // Проверяем только изменение X
+            boolean collidedX = false;
+
+            if (nowChunk != null) {
+                for (Tree t : nowChunk.getTrees()) {
+                    Rectangle treeBound = t.getBound();
+                    if (nextXBound.overlaps(treeBound)) {
+                        collidedX = true;
+                        // Если произошло столкновение по X, корректируем позицию X
+                        if (actualMoveX > 0) { // Движение вправо
+                            newX = vector.x; // Прижимаем к левой границе дерева
+                        } else if (actualMoveX < 0) { // Движение влево
+                            newX = vector.x; // Прижимаем к правой границе дерева
+                        }
+                        nextXBound.x = newX; // Обновляем для дальнейших проверок
+                        break; // Столкновение найдено, выходим из цикла
+                    }
+                }
+            }
+            tempX = newX; // Применяем скорректированный X
+
+            // === Проверка и перемещение по Y ===
+            float newY = tempY + actualMoveY;
+            // Ограничиваем позицию границами мира
+            newY = Math.max(BOUNDARY_PADDING, Math.min(newY, worldHeight - BOUNDARY_PADDING - height));
+
+            Rectangle nextYBound = new Rectangle(tempX, newY, width, height); // Проверяем изменение Y, учитывая уже скорректированный X
+            boolean collidedY = false;
+
+            if (nowChunk != null) {
+                for (Tree t : nowChunk.getTrees()) {
+                    Rectangle treeBound = t.getBound();
+                    if (nextYBound.overlaps(treeBound)) {
+                        collidedY = true;
+                        // Если произошло столкновение по Y, корректируем позицию Y
+                        if (actualMoveY > 0) { // Движение вверх
+                            newY = vector.y; // Прижимаем к нижней границе дерева
+                        } else if (actualMoveY < 0) { // Движение вниз
+                            newY = vector.y; // Прижимаем к верхней границе дерева
+                        }
+                        nextYBound.y = newY; // Обновляем для дальнейших проверок
+                        break; // Столкновение найдено, выходим из цикла
+                    }
+                }
+            }
+            tempY = newY; // Применяем скорректированный Y
+        } else {
             for (Tree t : nowChunk.getTrees()) {
                 Rectangle treeBound = t.getBound();
-                if (nextXBound.overlaps(treeBound)) {
-                    collidedX = true;
-                    // Если произошло столкновение по X, корректируем позицию X
-                    if (actualMoveX > 0) { // Движение вправо
-                        newX = treeBound.x - width; // Прижимаем к левой границе дерева
-                    } else if (actualMoveX < 0) { // Движение влево
-                        newX = treeBound.x + treeBound.width; // Прижимаем к правой границе дерева
-                    }
-                    nextXBound.x = newX; // Обновляем для дальнейших проверок
-                    break; // Столкновение найдено, выходим из цикла
+                if (bound.overlaps(treeBound)) {
+                    vector.x = t.getX() - getWidth();
+                    vector.y = t.getY() - getHeight();
                 }
             }
         }
-        tempX = newX; // Применяем скорректированный X
-
-        // === Проверка и перемещение по Y ===
-        float newY = tempY + actualMoveY;
-        // Ограничиваем позицию границами мира
-        newY = Math.max(BOUNDARY_PADDING, Math.min(newY, worldHeight - BOUNDARY_PADDING - height));
-
-        Rectangle nextYBound = new Rectangle(tempX, newY, width, height); // Проверяем изменение Y, учитывая уже скорректированный X
-        boolean collidedY = false;
-
-        if (nowChunk != null) {
-            for (Tree t : nowChunk.getTrees()) {
-                Rectangle treeBound = t.getBound();
-                if (nextYBound.overlaps(treeBound)) {
-                    collidedY = true;
-                    // Если произошло столкновение по Y, корректируем позицию Y
-                    if (actualMoveY > 0) { // Движение вверх
-                        newY = treeBound.y - height; // Прижимаем к нижней границе дерева
-                    } else if (actualMoveY < 0) { // Движение вниз
-                        newY = treeBound.y + treeBound.height; // Прижимаем к верхней границе дерева
-                    }
-                    nextYBound.y = newY; // Обновляем для дальнейших проверок
-                    break; // Столкновение найдено, выходим из цикла
-                }
-            }
-        }
-        tempY = newY; // Применяем скорректированный Y
 
         // Обновляем позицию объекта, используя централизованный метод
         // Теперь vector, Actor.x/y и bound будут гарантированно синхронизированы
