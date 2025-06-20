@@ -1,0 +1,34 @@
+
+abilityGhostrHero.png
+size: 512, 512
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pixil-frame-0 (60)
+  rotate: false
+  xy: 1, 1
+  size: 171, 171
+  orig: 171, 171
+  offset: 0, 0
+  index: -1
+pixil-frame-0 (61)
+  rotate: false
+  xy: 1, 174
+  size: 171, 171
+  orig: 171, 171
+  offset: 0, 0
+  index: -1
+pixil-frame-0 (62)
+  rotate: false
+  xy: 174, 1
+  size: 171, 171
+  orig: 171, 171
+  offset: 0, 0
+  index: -1
+pixil-frame-0 (63)
+  rotate: false
+  xy: 174, 174
+  size: 171, 171
+  orig: 171, 171
+  offset: 0, 0
+  index: -1

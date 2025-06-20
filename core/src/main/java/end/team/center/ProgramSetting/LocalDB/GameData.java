@@ -19,9 +19,10 @@ public class GameData {
     // Информация о скинах
     public static final List<SkinData> SKINS = Arrays.asList(
         new SkinData(1, "Обычный"),
+        new SkinData(4, "Призрак"),
         new SkinData(2, "Рыцарь"),
-        new SkinData(3, "Кибер"),
-        new SkinData(4, "Призрак")
+        new SkinData(3, "Кибер")
+
     );
 
     public static AchievementData getAchievementById(int id) {

@@ -29,6 +29,7 @@ public class TouchpadClass extends Touchpad {
     private int pointer = -1;
 
     private final Rectangle pauseButtonBounds = new Rectangle(10, Gdx.graphics.getHeight() - 325, 100, 125);
+    private final Rectangle abilityButton = new Rectangle(Gdx.graphics.getWidth() - 400, 40, 200, 200);
 
     // Keep a reference to the skin to dispose of it later
     private static Skin touchpadSkin;
@@ -89,7 +90,7 @@ public class TouchpadClass extends Touchpad {
             float touchY = touch.y;
 
 
-            if (pauseButtonBounds.contains(touchX, touchY)) {
+            if (pauseButtonBounds.contains(touchX, touchY) || abilityButton.contains(touchX, touchY)) {
                 continue;
             }
 

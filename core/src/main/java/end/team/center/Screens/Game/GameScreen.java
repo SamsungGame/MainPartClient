@@ -1,5 +1,7 @@
 package end.team.center.Screens.Game;
 
+import static end.team.center.GameCore.Objects.OnMap.Hero.HeroClassType.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -48,6 +50,7 @@ import end.team.center.GameCore.Objects.Map.Zone;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
 import end.team.center.GameCore.Objects.OnMap.Entity;
 import end.team.center.GameCore.Objects.OnMap.Hero;
+import end.team.center.GameCore.Objects.OnMap.Hero.HeroClassType.*;
 import end.team.center.GameCore.UIElements.Power;
 import end.team.center.GameCore.UIElements.UIGameScreenElements.Heart;
 import end.team.center.GameCore.UIElements.UIGameScreenElements.TouchpadClass;
@@ -139,6 +142,9 @@ public class GameScreen implements Screen {
 
     public ArrayList<Chunk> chunks;
     public static ImageButton pauseButton;
+    private Hero.HeroClassType heroClassType;
+    private ImageButton abilityButton;
+
 
 
     public GameScreen(GameRepository repo) {
@@ -205,25 +211,30 @@ public class GameScreen implements Screen {
         Texture heroImage;
 
         switch (selectedSkinId) {
-            case 1:
+            case 0:
                 characterAnimation = CharacterAnimation.Hero;
                 heroImage = MainMenuScreen.images[0];
+                heroClassType = STALKER_HERO;
+                break;
+            case 1:
+                characterAnimation = CharacterAnimation.GhostHero;
+                heroImage = MainMenuScreen.images[1];
+                heroClassType = GHOST_HERO;
                 break;
             case 2:
                 characterAnimation = CharacterAnimation.Knight;
-                heroImage = MainMenuScreen.images[1];
+                heroImage = MainMenuScreen.images[2];
+                heroClassType = STALKER_HERO;
                 break;
             case 3:
                 characterAnimation = CharacterAnimation.Cyber;
-                heroImage = MainMenuScreen.images[2];
-                break;
-            case 4:
-                characterAnimation = CharacterAnimation.GhostHero;
                 heroImage = MainMenuScreen.images[3];
+                heroClassType = GHOST_HERO;
                 break;
             default:
                 characterAnimation = CharacterAnimation.Hero;
                 heroImage = MainMenuScreen.images[0];
+                heroClassType = STALKER_HERO;
                 break;
         }
 
@@ -231,12 +242,35 @@ public class GameScreen implements Screen {
             repo,
             heroImage,
             characterAnimation,
+            heroClassType,
             new Vector2(WORLD_WIDTH / 2f - 70, WORLD_HEIGHT / 2f - 80),
             140, 120, 3,
             1, 0, 300f,
             WORLD_WIDTH, WORLD_HEIGHT
         );
         worldStage.addActor(hero);
+
+        Skin abilitySkin = null;
+
+        if(heroClassType == STALKER_HERO) {
+            abilitySkin = new Skin(Gdx.files.internal("UI/GameUI/Direction/abilityStalkerHero.json"));
+        }
+        else if(heroClassType == GHOST_HERO) {
+            abilitySkin = new Skin(Gdx.files.internal("UI/GameUI/Direction/abilityGhostrHero.json"));
+        }
+
+        abilityButton = new ImageButton(abilitySkin);
+        abilityButton.setSize(200, 200);
+        abilityButton.setPosition(Gdx.graphics.getWidth() - 400, 40);
+
+        abilityButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                hero.activateUniqueAbility();
+            }
+        });
+
+        uiStage.addActor(abilityButton);
 
 
         Texture heartFull = new Texture("UI/GameUI/OtherGameItems/heart_full.png");
