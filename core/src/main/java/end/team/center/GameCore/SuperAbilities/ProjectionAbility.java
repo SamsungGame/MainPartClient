@@ -11,6 +11,7 @@ public class ProjectionAbility  implements HeroAbility {
     private float duration = 3.0f;
     private float elapsedTime = 0;
     private float cooldown = 0;
+    private final float MAX_COOLDOWN = 5f;
     private float beforeSpeed;
     private float afterSpeed;
 
@@ -33,7 +34,7 @@ public class ProjectionAbility  implements HeroAbility {
 
     @Override
     public void deactivate() {
-        cooldown = 5f;
+        cooldown = MAX_COOLDOWN;
         hero.setSpeed(beforeSpeed);
         active = false;
     }

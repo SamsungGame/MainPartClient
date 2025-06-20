@@ -20,6 +20,7 @@ import end.team.center.GameCore.Objects.Map.Zone;
 import end.team.center.GameCore.SuperAbilities.ChargeRecoveryAbility;
 import end.team.center.GameCore.SuperAbilities.HeroAbility;
 import end.team.center.GameCore.SuperAbilities.ProjectionAbility;
+import end.team.center.GameCore.SuperAbilities.TeleportAbility;
 import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Screens.Game.GameScreen;
 import end.team.center.Screens.Menu.MainMenuScreen;
@@ -38,7 +39,8 @@ public class Hero extends Friendly {
     public boolean isAbilityActive = false;
     public enum HeroClassType {
         STALKER_HERO,
-        GHOST_HERO
+        GHOST_HERO,
+        CYBER_HERO
     }
     private HeroClassType heroClassType;
     protected float expBonus = 1, damageBonus = 0;
@@ -47,6 +49,9 @@ public class Hero extends Friendly {
     public boolean newLevelFlag = false, shyne = false, safeInDeadDamage = false, returnDamage = false;
     private int duration = 30;
     private float elapsedTime = 0;
+    public boolean disableMovement = false;
+    private float disableMovementTimer = 0;
+    private final float DISABLE_MOVEMENT_DURATION = 0.1f;
     private Texture activeSheild, sheild1, sheild2, sheild3;
     Sound soundUronShield = Gdx.audio.newSound(Gdx.files.internal("Sounds/uron.mp3"));
 
@@ -73,6 +78,9 @@ public class Hero extends Friendly {
             case GHOST_HERO:
                 this.uniqueAbility = new ProjectionAbility(this);
                 break;
+            case CYBER_HERO:
+                this.uniqueAbility = new TeleportAbility(this);
+                break;
             default:
                 this.uniqueAbility = new ChargeRecoveryAbility(this);;
                 break;
@@ -82,6 +90,12 @@ public class Hero extends Friendly {
         if (uniqueAbility != null) {
             uniqueAbility.activate();
             isAbilityActive = uniqueAbility.isActive();
+        }
+    }
+    public void setDisableMovement(boolean disable) {
+        this.disableMovement = disable;
+        if (disable) {
+            this.disableMovementTimer = 0;
         }
     }
 
@@ -271,6 +285,15 @@ public class Hero extends Friendly {
     @Override
     public void act(float delta) {
         super.act(delta);
+
+        if (disableMovement) {
+            disableMovementTimer += delta;
+            if (disableMovementTimer >= DISABLE_MOVEMENT_DURATION) {
+                disableMovement = false;
+                disableMovementTimer = 0;
+                Gdx.app.log("Hero", "Movement ENABLED again."); // Лог для отладки
+            }
+        }
 
         if (uniqueAbility != null) {
             uniqueAbility.update(delta);

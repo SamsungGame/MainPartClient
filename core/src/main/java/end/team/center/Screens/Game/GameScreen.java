@@ -229,7 +229,7 @@ public class GameScreen implements Screen {
             case 3:
                 characterAnimation = CharacterAnimation.Cyber;
                 heroImage = MainMenuScreen.images[3];
-                heroClassType = GHOST_HERO;
+                heroClassType = CYBER_HERO;
                 break;
             default:
                 characterAnimation = CharacterAnimation.Hero;
@@ -256,6 +256,9 @@ public class GameScreen implements Screen {
             abilitySkin = new Skin(Gdx.files.internal("UI/GameUI/Direction/abilityStalkerHero.json"));
         }
         else if(heroClassType == GHOST_HERO) {
+            abilitySkin = new Skin(Gdx.files.internal("UI/GameUI/Direction/abilityGhostrHero.json"));
+        }
+        else if(heroClassType == CYBER_HERO) {
             abilitySkin = new Skin(Gdx.files.internal("UI/GameUI/Direction/abilityGhostrHero.json"));
         }
 
@@ -785,8 +788,14 @@ public class GameScreen implements Screen {
         float moveX = touchpadMove.getKnobPercentX();
         float moveY = touchpadMove.getKnobPercentY();
 
+        if (hero.disableMovement) {
+            moveX = 0;
+            moveY = 0;
+        }
 
-        hero.move(moveX, moveY, delta);
+        if (!hero.disableMovement) {
+            hero.move(moveX, moveY, delta);
+        }
         float deadZone = 0.1f; // минимальное отклонение от центра
 
         if (touchpadAttack.isTouchpadActive()) {
@@ -830,9 +839,9 @@ public class GameScreen implements Screen {
         // Урон от врагов
 
         // Рендер в буфер
-        if (worldStage != null || !STOP) {
+        if (!STOP) {
             for (Enemy e : enemies) {
-                if (e.getBound().overlaps(hero.getBound())) {
+                if (e.getBound().overlaps(hero.getBound()) && !(heroClassType == GHOST_HERO && hero.isAbilityActive)) {
 
                     if (hero.getLevelSheild() == 0) {
                         e.attack(hero);

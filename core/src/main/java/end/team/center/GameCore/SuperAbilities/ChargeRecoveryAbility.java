@@ -9,6 +9,7 @@ public class ChargeRecoveryAbility implements HeroAbility {
     private float duration = 5.0f; // Длительность восстановления (например, 5 секунд)
     private float recoveryAmountPerSecond = 5.0f; // Сколько восстанавливается в секунду
     private float cooldown = 0; // Перезарядка
+    private final float MAX_COOLDOWN = 5f;
     private float elapsedTime = 0;
 
     public ChargeRecoveryAbility(Hero hero) {
@@ -29,7 +30,7 @@ public class ChargeRecoveryAbility implements HeroAbility {
 
     @Override
     public void deactivate() {
-        cooldown = 5f;
+        cooldown = MAX_COOLDOWN;
         active = false;
     }
 

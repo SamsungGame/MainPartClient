@@ -73,26 +73,48 @@ public abstract class Enemy extends Entity {
                     mRight = false;
                 }
 
+                // Временные переменные для новой позиции, основываемся на текущем положении
+                // Теперь vector всегда актуален благодаря updatePosition в GameObject
+                float currentX = vector.x;
+                float currentY = vector.y;
+
+                // Рассчитываем предполагаемую новую позицию
+                float nextX = currentX + deltaX;
+                float nextY = currentY + deltaY;
+
+                // === Логика столкновений с деревьями ===
+                // Важно: эта логика работает с deltaX/deltaY,
+                // а затем корректирует их, чтобы предотвратить проход сквозь дерево.
+                // После корректировки мы будем использовать новые deltaX/deltaY для updatePosition.
                 for (Tree t : hero.getChunk().getTrees()) {
-                    if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y + deltaY, width, height))) {
-                        if (t.getBound().overlaps(new Rectangle(vector.x + deltaX, vector.y, width, height))) {
-                            deltaX = 0;
-                            if (hero.getVector().y > vector.y) deltaY = speed * delta;
-                            else                               deltaY = -(speed * delta);
-                        }
-                        if (t.getBound().overlaps(new Rectangle(vector.x, vector.y + deltaY, width, height))) {
-                            deltaY = 0;
-                            if (hero.getVector().x > vector.x) deltaX = speed * delta;
-                            else                               deltaX = -(speed * delta);
-                        }
+                    Rectangle treeBound = t.getBound();
+
+                    // Проверка столкновения по X
+                    if (treeBound.overlaps(new Rectangle(currentX + deltaX, currentY, width, height))) {
+                        deltaX = 0; // Отменяем движение по X
+                        // Пробуем двигаться только по Y, если герой находится выше или ниже врага
+                        if (hero.getVector().y > currentY) deltaY = speed * delta;
+                        else                               deltaY = -(speed * delta);
+                        isTreeTouch = true;
+                    }
+
+                    // Проверка столкновения по Y (после возможной корректировки по X)
+                    if (treeBound.overlaps(new Rectangle(currentX, currentY + deltaY, width, height))) {
+                        deltaY = 0; // Отменяем движение по Y
+                        // Пробуем двигаться только по X, если герой находится правее или левее врага
+                        if (hero.getVector().x > currentX) deltaX = speed * delta;
+                        else                               deltaX = -(speed * delta);
                         isTreeTouch = true;
                     }
                 }
 
-                vector.add(new Vector2(deltaX, deltaY));
-                setPosition(vector.x, vector.y);
+                // После всех корректировок, вычисляем финальную новую позицию
+                float finalX = currentX + deltaX;
+                float finalY = currentY + deltaY;
 
-                updateBound();
+                // Обновляем позицию объекта, используя централизованный метод
+                // Теперь vector, Actor.x/y и bound будут гарантированно синхронизированы
+                updatePosition(finalX, finalY); // <-- ВОТ ГЛАВНОЕ ИЗМЕНЕНИЕ!
 
                 stateTime += delta;
             }

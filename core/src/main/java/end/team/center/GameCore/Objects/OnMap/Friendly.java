@@ -16,6 +16,10 @@ public abstract class Friendly extends Entity {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
     }
 
+    // В классе Friendly.java
+
+// ... (остальные поля и методы Friendly) ...
+
     public void move(float deltaX, float deltaY, float delta) {
         isMoving = deltaX != 0 || deltaY != 0;
 
@@ -30,12 +34,14 @@ public abstract class Friendly extends Entity {
             mRight = false;
         }
 
-        // Временные переменные для новой позиции
+        // Временные переменные для новой позиции, инициализируем текущей позицией
+        // Теперь current vector.x/y всегда актуален, благодаря updatePosition в GameObject
         float tempX = vector.x;
         float tempY = vector.y;
 
         // === Проверка и перемещение по X ===
         float newX = tempX + actualMoveX;
+        // Ограничиваем позицию границами мира
         newX = Math.max(BOUNDARY_PADDING, Math.min(newX, worldWidth - BOUNDARY_PADDING - width));
 
         Rectangle nextXBound = new Rectangle(newX, tempY, width, height); // Проверяем только изменение X
@@ -52,8 +58,7 @@ public abstract class Friendly extends Entity {
                     } else if (actualMoveX < 0) { // Движение влево
                         newX = treeBound.x + treeBound.width; // Прижимаем к правой границе дерева
                     }
-                    // Устанавливаем nextXBound на скорректированную позицию для дальнейших проверок (хотя здесь это не критично)
-                    nextXBound.x = newX;
+                    nextXBound.x = newX; // Обновляем для дальнейших проверок
                     break; // Столкновение найдено, выходим из цикла
                 }
             }
@@ -62,6 +67,7 @@ public abstract class Friendly extends Entity {
 
         // === Проверка и перемещение по Y ===
         float newY = tempY + actualMoveY;
+        // Ограничиваем позицию границами мира
         newY = Math.max(BOUNDARY_PADDING, Math.min(newY, worldHeight - BOUNDARY_PADDING - height));
 
         Rectangle nextYBound = new Rectangle(tempX, newY, width, height); // Проверяем изменение Y, учитывая уже скорректированный X
@@ -78,20 +84,20 @@ public abstract class Friendly extends Entity {
                     } else if (actualMoveY < 0) { // Движение вниз
                         newY = treeBound.y + treeBound.height; // Прижимаем к верхней границе дерева
                     }
-                    nextYBound.y = newY; // Устанавливаем nextYBound на скорректированную позицию
+                    nextYBound.y = newY; // Обновляем для дальнейших проверок
                     break; // Столкновение найдено, выходим из цикла
                 }
             }
         }
         tempY = newY; // Применяем скорректированный Y
 
-        // Обновляем позицию объекта на основе скорректированных временных переменных
-        vector.set(tempX, tempY);
-        setPosition(vector.x, vector.y);
-        updateBound();
+        // Обновляем позицию объекта, используя централизованный метод
+        // Теперь vector, Actor.x/y и bound будут гарантированно синхронизированы
+        updatePosition(tempX, tempY);
 
         stateTime += delta;
     }
+
 
     @Override
     public void setHealth(int health) {
