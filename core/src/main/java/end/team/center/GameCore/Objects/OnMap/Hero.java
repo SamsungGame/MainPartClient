@@ -17,6 +17,9 @@ import end.team.center.GameCore.Logic.GMath;
 import end.team.center.GameCore.Logic.ShaderManager;
 import end.team.center.GameCore.Objects.InInventary.Weapon;
 import end.team.center.GameCore.Objects.Map.Zone;
+import end.team.center.GameCore.SuperAbilities.ChargeRecoveryAbility;
+import end.team.center.GameCore.SuperAbilities.HeroAbility;
+import end.team.center.GameCore.SuperAbilities.ProjectionAbility;
 import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Screens.Game.GameScreen;
 import end.team.center.Screens.Menu.MainMenuScreen;
@@ -31,6 +34,13 @@ public class Hero extends Friendly {
     public Rectangle deathZone;
     protected int expWeapon = 0, levelWeapon = 0;
     protected int exp, level, maxHP;
+    private HeroAbility uniqueAbility;
+    public boolean isAbilityActive = false;
+    public enum HeroClassType {
+        STALKER_HERO,
+        GHOST_HERO
+    }
+    private HeroClassType heroClassType;
     protected float expBonus = 1, damageBonus = 0;
     protected boolean vampirism = false, activeBaffShield = false, collectEnergy = false;
     protected int maxExp, sheildLevel;
@@ -41,7 +51,7 @@ public class Hero extends Friendly {
     Sound soundUronShield = Gdx.audio.newSound(Gdx.files.internal("Sounds/uron.mp3"));
 
 
-    public Hero(GameRepository repo, Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, float worldWidth, float worldHeight) {
+    public Hero(GameRepository repo, Texture texture, CharacterAnimation anim, HeroClassType heroClassType, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, float worldWidth, float worldHeight) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
         this.gameRepository = repo;
         weapon = new Knife(WeaponType.knife, this);
@@ -51,10 +61,28 @@ public class Hero extends Friendly {
         sheildLevel = 0;
         maxHP = 3;
         deathZone = new Rectangle(vector.x - 50, vector.y - 40, 220, 220);
-
+        this.heroClassType = heroClassType;
         sheild1 = new Texture(Gdx.files.internal("UI/GameUI/SelectPowerUI/shield1.png"));
         sheild2 = new Texture(Gdx.files.internal("UI/GameUI/SelectPowerUI/shield2.png"));
         sheild3 = new Texture(Gdx.files.internal("UI/GameUI/SelectPowerUI/shield3.png"));
+
+        switch (heroClassType) {
+            case STALKER_HERO:
+                this.uniqueAbility = new ChargeRecoveryAbility(this);
+                break;
+            case GHOST_HERO:
+                this.uniqueAbility = new ProjectionAbility(this);
+                break;
+            default:
+                this.uniqueAbility = new ChargeRecoveryAbility(this);;
+                break;
+        }
+    }
+    public void activateUniqueAbility() {
+        if (uniqueAbility != null) {
+            uniqueAbility.activate();
+            isAbilityActive = uniqueAbility.isActive();
+        }
     }
 
     public void activeBuffShield() {
@@ -244,6 +272,11 @@ public class Hero extends Friendly {
     public void act(float delta) {
         super.act(delta);
 
+        if (uniqueAbility != null) {
+            uniqueAbility.update(delta);
+            isAbilityActive = uniqueAbility.isActive(); // Обновляем состояние активации
+        }
+
         setRadiationLevel();
         antiRadiationCostumePower -= (float) (((radiationLevel * 0.2) / radiationProtect) * delta);
         if (antiRadiationCostumePower < 0) {
@@ -344,12 +377,12 @@ public class Hero extends Friendly {
 
     @Override
     public void setHealth(int health) {
-        super.setHealth(health);
+            super.setHealth(health);
 
-        if (health > maxHP) {
-            health = maxHP;
-        }
-        this.health = health;
+            if (health > maxHP) {
+                health = maxHP;
+            }
+            this.health = health;
     }
 
     public void frameInvulnerability(float sec) {

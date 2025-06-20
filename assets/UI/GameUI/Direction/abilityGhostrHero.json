@@ -1,0 +1,8 @@
+{
+com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
+	default: {
+		imageUp: pixil-frame-0 (63)
+		imageDisabled: pixil-frame-0 (62)
+	}
+}
+}
