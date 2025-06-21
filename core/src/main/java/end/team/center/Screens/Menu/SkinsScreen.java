@@ -91,7 +91,7 @@ public class SkinsScreen implements Screen {
 
         font.getData().setScale(4.0f);
 
-        String skinsText = "Скины";
+        String skinsText = "Персонажи";
         layout.setText(font, skinsText);
         layoutX = (Gdx.graphics.getWidth() - layout.width) / 2;
         layoutY = Gdx.graphics.getHeight() - layout.height;
@@ -151,17 +151,17 @@ public class SkinsScreen implements Screen {
         buyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (currentIndex == 1 && repo.getCoins() >= 0 && !repo.getSkins().get(currentIndex + 1)) {
+                if (currentIndex == 1 && repo.getCoins() >= 200 && !repo.getSkins().get(currentIndex + 1)) {
                     repo.unlockSkin(currentIndex + 1);
-                    repo.spendCoins(10);
+                    repo.spendCoins(200);
                 }
-                if (currentIndex == 2 && repo.getCoins() >= 0 && !repo.getSkins().get(currentIndex + 1)) {
+                if (currentIndex == 2 && repo.getCoins() >= 400 && !repo.getSkins().get(currentIndex + 1)) {
                     repo.unlockSkin(currentIndex + 1);
-                    repo.spendCoins(10);
+                    repo.spendCoins(400);
                 }
-                if (currentIndex == 3 && repo.getCoins() >= 0 && !repo.getSkins().get(currentIndex + 1)) {
+                if (currentIndex == 3 && repo.getCoins() >= 500 && !repo.getSkins().get(currentIndex + 1)) {
                     repo.unlockSkin(currentIndex + 1);
-                    repo.spendCoins(10);
+                    repo.spendCoins(500);
                 }
             }
         });

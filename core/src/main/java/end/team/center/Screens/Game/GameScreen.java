@@ -256,13 +256,13 @@ public class GameScreen implements Screen {
             abilitySkin = new Skin(Gdx.files.internal("UI/GameUI/Direction/abilityStalkerHero.json"));
         }
         else if(heroClassType == GHOST_HERO) {
-            abilitySkin = new Skin(Gdx.files.internal("UI/GameUI/Direction/abilityGhostrHero.json"));
+            abilitySkin = new Skin(Gdx.files.internal("UI/GameUI/Direction/abilityStalkerHero.json"));
         }
         else if(heroClassType == KNIGHT_HERO) {
-            abilitySkin = new Skin(Gdx.files.internal("UI/GameUI/Direction/abilityGhostrHero.json"));
+            abilitySkin = new Skin(Gdx.files.internal("UI/GameUI/Direction/abilityStalkerHero.json"));
         }
         else if(heroClassType == CYBER_HERO) {
-            abilitySkin = new Skin(Gdx.files.internal("UI/GameUI/Direction/abilityGhostrHero.json"));
+            abilitySkin = new Skin(Gdx.files.internal("UI/GameUI/Direction/abilityStalkerHero.json"));
         }
 
         abilityButton = new ImageButton(abilitySkin);
