@@ -83,7 +83,7 @@ public class AchievementsScreen implements Screen {
         layoutAchievementsX = (Gdx.graphics.getWidth() - layoutAchievements.width) / 2;
         layoutAchievementsY = Gdx.graphics.getHeight() - layoutAchievements.height;
 
-        fontDescription.getData().setScale(1.0f);
+        fontDescription.getData().setScale(1.5f);
         layoutDescription.setText(fontDescription, "");
 
         TextButton backButton = new TextButton("Назад", skin);

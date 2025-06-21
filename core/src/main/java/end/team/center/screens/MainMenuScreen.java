@@ -30,8 +30,10 @@ public class MainMenuScreen implements Screen {
     private final Skin skin;
     private final Skin skinsButtonSkin;
     private final Texture backgroundTexture = new Texture(Gdx.files.internal("background.png"));
-    private final Texture skinTexture = new Texture(Gdx.files.internal("skins/heroLeft.png"));
+    private final Texture heroSkinTexture = new Texture(Gdx.files.internal("skins/heroLeft.png"));
+    private final Texture ghostSkinTexture = new Texture(Gdx.files.internal("skins/heroGhostLeft.png"));
     private final Texture nightSkinTexture = new Texture(Gdx.files.internal("skins/heroNightLeft.png"));
+    private final Texture cyberSkinTexture = new Texture(Gdx.files.internal("skins/heroCyberLeft.png"));
 
     public MainMenuScreen(MyGame game) {
         stage = new Stage(new ScreenViewport());
@@ -74,13 +76,21 @@ public class MainMenuScreen implements Screen {
         skinsButton.setSize(100, 100);
         skinsButton.setPosition(Gdx.graphics.getWidth() - skinsButton.getWidth() * 2, 50);
 
-        Image skinImage = new Image(skinTexture);
-        skinImage.setSize(200, 200);
-        skinImage.setPosition(skinsButton.getX() - skinsButton.getWidth() / 2, skinsButton.getY() + skinsButton.getHeight() + 40);
+        Image heroSkinImage = new Image(heroSkinTexture);
+        heroSkinImage.setSize(200, 200);
+        heroSkinImage.setPosition(skinsButton.getX() - skinsButton.getWidth() / 2, skinsButton.getY() + skinsButton.getHeight() + 40);
+
+        Image ghostSkinImage = new Image(ghostSkinTexture);
+        ghostSkinImage.setSize(200, 200);
+        ghostSkinImage.setPosition(skinsButton.getX() - skinsButton.getWidth() / 2, skinsButton.getY() + skinsButton.getHeight() + 40);
 
         Image nightSkinImage = new Image(nightSkinTexture);
         nightSkinImage.setSize(200, 200);
         nightSkinImage.setPosition(skinsButton.getX() - skinsButton.getWidth() / 2, skinsButton.getY() + skinsButton.getHeight() + 40);
+
+        Image cyberSkinImage = new Image(cyberSkinTexture);
+        cyberSkinImage.setSize(200, 200);
+        cyberSkinImage.setPosition(skinsButton.getX() - skinsButton.getWidth() / 2, skinsButton.getY() + skinsButton.getHeight() + 40);
 
         newGameButton.addListener(new ChangeListener() {
             @Override
@@ -122,11 +132,19 @@ public class MainMenuScreen implements Screen {
         stage.addActor(settingsButton);
         stage.addActor(aboutUsButton);
         stage.addActor(skinsButton);
-        if (currentSkin == 1) {
-            stage.addActor(skinImage);
-        }
-        else {
-            stage.addActor(nightSkinImage);
+        switch (currentSkin) {
+            case (1):
+                stage.addActor(heroSkinImage);
+                break;
+            case (2):
+                stage.addActor(ghostSkinImage);
+                break;
+            case (3):
+                stage.addActor(nightSkinImage);
+                break;
+            case (4):
+                stage.addActor(cyberSkinImage);
+                break;
         }
     }
 
@@ -178,7 +196,9 @@ public class MainMenuScreen implements Screen {
         skin.dispose();
         skinsButtonSkin.dispose();
         backgroundTexture.dispose();
-        skinTexture.dispose();
+        heroSkinTexture.dispose();
+        ghostSkinTexture.dispose();
         nightSkinTexture.dispose();
+        cyberSkinTexture.dispose();
     }
 }

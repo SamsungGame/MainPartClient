@@ -32,7 +32,7 @@ public class AboutUsScreen implements Screen {
 
         skin = new Skin(Gdx.files.internal("buttonStyle/buttonStyle.json"));
 
-        font.getData().setScale(1.0f);
+        font.getData().setScale(1.5f);
         String aboutUsText = "Над игрой работали: \n\nПчельников Сергей \nБаранов Елисей \nАнаньин Данил";
         layout.setText(font, aboutUsText);
         layoutX = (Gdx.graphics.getWidth() - layout.width) / 2;

@@ -27,5 +27,7 @@ field/radiation.png
 field/tree.png
 music/gameMusic.mp3
 music/mainMenuMusic.mp3
+skins/heroCyberLeft.png
+skins/heroGhostLeft.png
 skins/heroLeft.png
 skins/heroNightLeft.png
