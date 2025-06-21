@@ -126,7 +126,7 @@ public class SpawnItem {
     public ArrayList<Drops> startDropSet() {
         ArrayList<Drops> dropsStart = new ArrayList<>();
 
-        for(int i = 0; i < 900; i++) {
+        for(int i = 0; i < 2000; i++) {
             dropsStart.add(spawn());
         }
 
