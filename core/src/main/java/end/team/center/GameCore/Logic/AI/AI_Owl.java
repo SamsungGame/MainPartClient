@@ -1,122 +1,115 @@
 package end.team.center.GameCore.Logic.AI;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 import end.team.center.GameCore.Library.Mobs.Owl;
 import end.team.center.GameCore.Logic.GMath;
 import end.team.center.GameCore.Objects.OnMap.Hero;
+import end.team.center.GameCore.Objects.OnMap.Enemy; // Импортируем Enemy, если еще не импортирован
 
 public class AI_Owl extends AI {
 
-    // Флаги состояния атаки совы (сохраняем старые названия для совместимости с Owl)
-    public boolean isDiveAttacking = false; // Сова начала пикировать (идет к lockAttack)
-    public boolean isAttaking = false;      // Сова находится в активной фазе атаки (после задержки перед пикированием)
-    public boolean isTimeGo = false;        // Флаг для перезарядки (старое название timeToReloadDive)
+    public boolean isDiveAttacking = false;
+    public boolean isAttaking = false;
+    public boolean isTimeGo = false;
 
-    // Целевая точка для пикирования
     public Vector2 lockAttack;
 
-    // Таймеры и параметры пикирования (сохраняем старые названия для совместимости с Owl)
-    public float timeToDive = 1.0f; // Задержка перед началом пикирования (сова зависает)
-    private float currentDiveDelayTimer = 0; // Внутренний таймер для timeToDive
+    public float timeToDive = 1.0f;
+    private float currentDiveDelayTimer = 0;
 
-    public float timeToReloadDive = 5.0f; // Длительность перезарядки пикирования
-    private float currentReloadTimer = 0;  // Внутренний таймер для timeToReloadDive
+    public float timeToReloadDive = 5.0f;
+    private float currentReloadTimer = 0;
 
-    // Скорости
-    private float normalSpeedMultiplier = 1.0f; // Множитель скорости для обычного движения
-    private float diveSpeedMultiplier = 6.0f;   // Множитель скорости для пикирования (увеличиваем скорость)
+    private float normalSpeedMultiplier = 1.0f;
+    private float diveSpeedMultiplier = 6.0f;
 
     public AI_Owl(Hero hero) {
         super(hero);
     }
 
+    // НОВОЕ: Перегруженный конструктор, который принимает Enemy owner
+    public AI_Owl(Hero hero, Enemy owner) {
+        super(hero, owner); // Вызываем новый конструктор родительского класса AI
+    }
+
+
     @Override
     public Vector2 MoveToPlayer(Vector2 target, Vector2 position, float speed, float delta) {
-        // Логика таймеров и состояний должна быть в MoveToPlayer или отдельном методе updateAI
-        // чтобы избежать использования Thread.sleep()
+        // Убедитесь, что aiOwner не null, прежде чем использовать его
+        if (aiOwner == null || !(aiOwner instanceof Owl)) {
+            // Это должно быть инициализировано в конструкторе или методе init
+            // Для временного решения, если AI создан без владельца, можно его получить
+            // Но лучше, чтобы Owl сам передавал себя при создании AI.
+            Gdx.app.error("AI_Owl", "aiOwner is null or not an Owl!");
+            return new Vector2(0,0); // Возвращаем нулевой вектор, чтобы избежать NRE
+        }
+
+        ((Owl)aiOwner).setAttackingOverrideRepulsion(false);
+
 
         // 1. Обработка перезарядки
-        if (isTimeGo) { // Соответствует timeToReloadDive > 0 в старом коде
+        if (isTimeGo) {
             currentReloadTimer -= delta;
             if (currentReloadTimer <= 0) {
                 isTimeGo = false;
-                timeToReloadDive = 0; // Сбрасываем внешний флаг для Owl
-                currentReloadTimer = 0; // Сбрасываем внутренний таймер
+                currentReloadTimer = 0;
             }
-            // Во время перезарядки сова движется к герою с обычной скоростью
             return super.MoveToPlayer(hero.getVector(), position, speed * normalSpeedMultiplier, delta);
         }
 
         // 2. Обработка задержки перед пикированием
-        if (isDiveAttacking && !isAttaking) { // isAttaking = false означает, что еще идет задержка
+        if (isDiveAttacking && !isAttaking) {
             currentDiveDelayTimer += delta;
             if (currentDiveDelayTimer >= timeToDive) {
-                isAttaking = true; // Переход в фазу активной атаки
-                currentDiveDelayTimer = 0; // Сброс таймера задержки
+                isAttaking = true;
+                currentDiveDelayTimer = 0;
+                Gdx.app.log("AI_Owl", "Dive active! Moving to: " + lockAttack);
             }
-            // Во время задержки сова не двигается сама
+            ((Owl)aiOwner).setAttackingOverrideRepulsion(true);
             return new Vector2(0, 0);
         }
 
         // 3. Обработка активной фазы пикирования
         if (isDiveAttacking && isAttaking) {
-            // Проверяем, достигнута ли точка пикирования
-            if (!GMath.checkVectorDistance(position, lockAttack, 50, 50)) { // 50 - пороговое расстояние для завершения пикирования
-                // Сова еще не достигла цели, движемся к lockAttack с усиленной скоростью
+            ((Owl)aiOwner).setAttackingOverrideRepulsion(true);
+
+            if (!GMath.checkVectorDistance(position, lockAttack, 10, 10)) {
                 return super.MoveToPlayer(lockAttack, position, speed * diveSpeedMultiplier, delta);
             } else {
-                // Цель пикирования достигнута, сбрасываем состояние
+                Gdx.app.log("AI_Owl", "Dive attack completed! Resetting state.");
                 lockAttack = null;
-                isAttaking = false;      // Отключаем активную фазу
-                isDiveAttacking = false; // Отключаем флаг пикирования
-                isTimeGo = true;         // Включаем перезарядку
-                currentReloadTimer = timeToReloadDive; // Устанавливаем таймер перезарядки
-                // Продолжаем движение к герою с обычной скоростью
+                isAttaking = false;
+                isDiveAttacking = false;
+                isTimeGo = true;
+                currentReloadTimer = timeToReloadDive;
+
+                ((Owl)aiOwner).setAttackingOverrideRepulsion(false);
+
                 return super.MoveToPlayer(hero.getVector(), position, speed * normalSpeedMultiplier, delta);
             }
         }
 
         // 4. Обычное поведение: сова движется к герою
-        // Этот блок будет выполнен, если ни одно из вышеперечисленных условий не активно
         return super.MoveToPlayer(hero.getVector(), position, speed * normalSpeedMultiplier, delta);
     }
 
-    /**
-     * Попытка начать пикирующую атаку совы.
-     * Вызывается из метода act() класса Owl.
-     * @param owl Текущий объект совы, для доступа к ее кругам атаки.
-     */
     public void diveAttack(Owl owl) {
-        // Условия для начала пикирования:
-        // 1. Герой находится в пределах начального круга атаки совы.
-        // 2. Герой не находится в пределах конечного круга атаки совы (чтобы сова не пикировала, если герой уже под ней).
-        // 3. Сова не находится в процессе пикирования (isDiveAttacking == false).
-        // 4. Сова не находится на перезарядке (isTimeGo == false).
+        // Убедитесь, что aiOwner уже установлен или установите его здесь, если AI создается без owner
+        if (this.aiOwner == null) { // Если AI был создан без owner, устанавливаем его
+            this.aiOwner = owl;
+        }
+
         if (GMath.circleRectangleOverlap(owl.getStartCircle(), hero.getBound()) &&
             !GMath.circleRectangleOverlap(owl.getEndCircle(), hero.getBound()) &&
             !isDiveAttacking && !isTimeGo) {
 
-            isDiveAttacking = true; // Начинаем подготовку к пикированию
-            isAttaking = false;      // Пока не активная фаза пикирования (идет задержка)
-            currentDiveDelayTimer = 0; // Сброс таймера задержки
-            lockAttack = new Vector2(hero.getVector().x, hero.getVector().y); // Захватываем текущую позицию героя
-
-            // Gdx.app.log("AI_Owl", "Owl initiating dive attack towards: " + lockAttack); // Для отладки
+            isDiveAttacking = true;
+            isAttaking = false;
+            currentDiveDelayTimer = 0;
+            lockAttack = new Vector2(hero.getVector().x, hero.getVector().y);
+            Gdx.app.log("AI_Owl", "Owl initiating dive attack towards: " + lockAttack);
         }
     }
-
-    // Этот метод теперь не нужен, так как вся логика перезагрузки управляется внутренними таймерами AI_Owl
-    // и флагом isTimeGo.
-    /*
-    public void handleReloadTimer(float delta) {
-        if (isTimeGo) {
-            currentReloadTimer -= delta;
-            if (currentReloadTimer <= 0) {
-                isTimeGo = false;
-                timeToReloadDive = 0; // Сбрасываем, чтобы Owl знал, что перезарядка окончена
-            }
-        }
-    }
-    */
 }

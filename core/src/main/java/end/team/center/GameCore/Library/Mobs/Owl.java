@@ -1,5 +1,7 @@
 package end.team.center.GameCore.Library.Mobs;
 
+import static end.team.center.Screens.Game.GameScreen.hero;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -32,7 +34,7 @@ public class Owl extends Enemy {
         startAttack = new Circle(vector.x + width / 2, vector.y + height / 2, 1000);
         endAttack = new Circle(vector.x + width / 2, vector.y + height / 2, 400);
 
-        lDiveTexture = new TextureRegion(this.texture); // this.texture
+        lDiveTexture = new TextureRegion(this.texture);
         rDiveTexture = new TextureRegion(this.texture);
         rDiveTexture.flip(true, false);
 
@@ -63,7 +65,6 @@ public class Owl extends Enemy {
             float camBottom = camera.position.y - camera.viewportHeight / 2 * camera.zoom;
             float camTop = camera.position.y + camera.viewportHeight / 2 * camera.zoom;
 
-            // Рисуем только если дерево в зоне видимости камеры
             if (getX() + getWidth() < camLeft || getX() > camRight ||
                 getY() + getHeight() < camBottom || getY() > camTop) {
                 return;
@@ -71,15 +72,23 @@ public class Owl extends Enemy {
 
             TextureRegion currentFrame;
 
-            if (isMoving && !((AI_Owl) ai).isAttaking) {
-                currentFrame = mRight
-                    ? firstTypeAnimation.getKeyFrame(stateTime, true) // Хотьба направо
-                    : secondTypeAnimation.getKeyFrame(stateTime, true); // Хотьба налево
-            } else if (((AI_Owl) ai).isAttaking) {
-                currentFrame = mRight
-                    ? therdTypeAnimation.getKeyFrame(stateTime, true) // Пикирование направо
-                    : fourthTypeAnimation.getKeyFrame(stateTime, true); // Пикирование налево
-            } else currentFrame = firstTypeAnimation.getKeyFrame(stateTime, true);
+            // Убедитесь, что ai является экземпляром AI_Owl, прежде чем приводить тип
+            if (ai instanceof AI_Owl) {
+                AI_Owl owlAI = (AI_Owl) ai;
+                if (isMoving && !owlAI.isAttaking) {
+                    currentFrame = mRight
+                        ? firstTypeAnimation.getKeyFrame(stateTime, true)
+                        : secondTypeAnimation.getKeyFrame(stateTime, true);
+                } else if (owlAI.isAttaking) {
+                    currentFrame = mRight
+                        ? therdTypeAnimation.getKeyFrame(stateTime, true)
+                        : fourthTypeAnimation.getKeyFrame(stateTime, true);
+                } else {
+                    currentFrame = firstTypeAnimation.getKeyFrame(stateTime, true);
+                }
+            } else {
+                currentFrame = firstTypeAnimation.getKeyFrame(stateTime, true); // Fallback
+            }
 
             batch.draw(currentFrame, vector.x, vector.y, getWidth(), getHeight());
         }
@@ -90,21 +99,21 @@ public class Owl extends Enemy {
         super.act(delta);
         updateCircle();
 
-        ((AI_Owl) ai).diveAttack(this);
-
         if (ai instanceof AI_Owl) {
-            Vector2 v = ((AI_Owl) ai).MoveToPlayer(null, vector, speed, delta);
+            AI_Owl owlAI = (AI_Owl) ai;
+            owlAI.diveAttack(this); // Вызываем логику начала пикирования
 
+            Vector2 v = owlAI.MoveToPlayer(null, vector, speed, delta); // AI определяет движение
+            move(v.x, v.y, delta); // Применяем движение
+
+            // !!! УДАЛЕН ИЛИ ИЗМЕНЕН ЭТОТ БЛОК:
+            // if (((AI_Owl) ai).isAttaking) { ... }
+            // Теперь логика завершения атаки и перезарядки полностью управляется в AI_Owl.MoveToPlayer
+            // и не должна быть здесь.
+        } else {
+            // Если AI не AI_Owl, можно оставить стандартное движение или другую логику
+            Vector2 v = ai.MoveToPlayer(hero.getVector(), vector, speed, delta);
             move(v.x, v.y, delta);
-        }
-
-        if (isTreeTouch && ((AI_Owl) ai).isAttaking) {
-            ((AI_Owl) ai).isAttaking = false;
-
-            ((AI_Owl) ai).lockAttack = null;
-            ((AI_Owl) ai).isAttaking = false;
-            ((AI_Owl) ai).isDiveAttacking = false;
-            ((AI_Owl) ai).timeToReloadDive = 5;
         }
     }
 

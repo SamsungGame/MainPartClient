@@ -28,7 +28,7 @@ public abstract class Enemy extends Entity {
 
     protected AI ai;
     protected int level;
-    protected boolean stan = false, isTreeTouch = false;
+    protected boolean stan = false;
     protected float timeToReload = 0;
     protected float timePlayerInvulnerability = 1f;
     protected int damage, exp;
@@ -41,12 +41,14 @@ public abstract class Enemy extends Entity {
     private float pushDuration = 0.15f;
     private float currentPushTime = 0;
 
-    // --- НОВОЕ/ИЗМЕНЕНО: Переменные для отталкивания от других врагов ---
-    private float enemyRepulsionForce = 200f; // Сила отталкивания от других врагов (меньше, чем pushSpeed)
-    private float enemyRepulsionDuration = 0.05f; // Длительность отталкивания от других врагов
+    // --- Переменные для отталкивания от других врагов ---
+    private float enemyRepulsionForce = 200f;
+    private float enemyRepulsionDuration = 0.05f;
     private float currentEnemyRepulsionTime = 0;
     private boolean isBeingRepelledByOtherEnemy = false;
-    // --- КОНЕЦ НОВОГО/ИЗМЕНЕНО ---
+
+    // --- НОВОЕ: Флаг для игнорирования отталкивания от других врагов ---
+    protected boolean isAttackingOverrideRepulsion = false;
 
 
     public Enemy(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, int level, int exp, float worldHeight, float worldWidth, AI ai) {
@@ -79,30 +81,28 @@ public abstract class Enemy extends Entity {
     }
 
 
-    // Метод для отталкивания от щита
     public void push(Vector2 direction) {
-        // Если уже отталкиваемся от другого врага, отменяем это
         isBeingRepelledByOtherEnemy = false;
         currentEnemyRepulsionTime = 0;
 
         isBeingPushed = true;
         pushDirection.set(direction).nor();
         currentPushTime = pushDuration;
-        // Стан при отталкивании щитом сохраняем, так как это более сильный эффект
         stan((int) (pushDuration * 1000L));
         Gdx.app.log("Enemy", "Enemy Pushed by Shield! Direction: " + pushDirection.x + ", " + pushDirection.y);
     }
 
-    // --- НОВОЕ: Метод для отталкивания от других врагов ---
     public void repelFromEnemy(Vector2 direction) {
-        // Отталкиваемся, только если не находимся в сильном "пуше" от щита
-        if (!isBeingPushed) {
+        if (!isBeingPushed && !isAttackingOverrideRepulsion) { // Не отталкиваемся, если атакуем или пушимся щитом
             isBeingRepelledByOtherEnemy = true;
-            pushDirection.set(direction).nor(); // Переиспользуем pushDirection
+            pushDirection.set(direction).nor();
             currentEnemyRepulsionTime = enemyRepulsionDuration;
-            // Можно добавить очень короткий стан, если нужно полностью остановить движение
-            // stan((int) (enemyRepulsionDuration * 1000L));
         }
+    }
+
+    // --- НОВОЕ: Геттер и сеттер для флага игнорирования отталкивания ---
+    public void setAttackingOverrideRepulsion(boolean override) {
+        this.isAttackingOverrideRepulsion = override;
     }
     // --- КОНЕЦ НОВОГО ---
 
@@ -112,7 +112,6 @@ public abstract class Enemy extends Entity {
             return;
         }
 
-        // Определяем полигон врага для столкновений
         float[] enemyVertices = {0, 0, width, 0, width, height, 0, height};
         Polygon enemyPolygon = new Polygon(enemyVertices);
         enemyPolygon.setOrigin(width / 2, height / 2);
@@ -122,17 +121,14 @@ public abstract class Enemy extends Entity {
             shieldPolygon = ((ShieldAbility) hero.uniqueAbility).getShieldPolygon();
         }
 
-
         // Обработка отталкивания от щита
         if (isBeingPushed) {
             float pushMoveX = pushDirection.x * pushSpeed * delta;
             float pushMoveY = pushDirection.y * pushSpeed * delta;
 
-            // Проверяем столкновения для движения от щита
-            if (!checkCollisionAt(vector.x + pushMoveX, vector.y + pushMoveY, enemyPolygon, shieldPolygon, false)) { // Передаем false, чтобы не вызывать push рекурсивно
+            if (!checkCollisionAt(vector.x + pushMoveX, vector.y + pushMoveY, enemyPolygon, shieldPolygon, false)) {
                 updatePosition(vector.x + pushMoveX, vector.y + pushMoveY);
             } else {
-                // Если заблокировано, останавливаем push
                 currentPushTime = 0;
             }
 
@@ -140,7 +136,7 @@ public abstract class Enemy extends Entity {
             if (currentPushTime <= 0) {
                 isBeingPushed = false;
             }
-            return; // Не двигаемся в других направлениях, пока отталкиваемся щитом
+            return;
         }
 
         // Обработка отталкивания от других врагов
@@ -148,11 +144,9 @@ public abstract class Enemy extends Entity {
             float repelMoveX = pushDirection.x * enemyRepulsionForce * delta;
             float repelMoveY = pushDirection.y * enemyRepulsionForce * delta;
 
-            // Проверяем столкновения для движения от других врагов
-            if (!checkCollisionAt(vector.x + repelMoveX, vector.y + repelMoveY, enemyPolygon, shieldPolygon, false)) { // Передаем false
+            if (!checkCollisionAt(vector.x + repelMoveX, vector.y + repelMoveY, enemyPolygon, shieldPolygon, false)) {
                 updatePosition(vector.x + repelMoveX, vector.y + repelMoveY);
             } else {
-                // Если заблокировано, останавливаем отталкивание
                 currentEnemyRepulsionTime = 0;
             }
 
@@ -160,16 +154,22 @@ public abstract class Enemy extends Entity {
             if (currentEnemyRepulsionTime <= 0) {
                 isBeingRepelledByOtherEnemy = false;
             }
-            return;
+            // Здесь мы НЕ делаем return; чтобы позволить врагу двигаться по своему AI,
+            // если его движение не полностью заблокировано отталкиванием.
+            // Однако, если вы хотите, чтобы отталкивание полностью перехватывало контроль,
+            // верните return;
+            // Для совы, которая должна пикировать, нам нужно, чтобы она могла продолжать движение,
+            // даже если ее немного оттолкнуло, поэтому пока оставим без return.
+            // Если ее оттолкнуло в дерево, currentEnemyRepulsionTime уже будет сброшен.
+            // Продолжаем к AI-движению ниже.
         }
 
 
-        // Стан полностью останавливает моба, если STAN_IS_STOP_MOB = true
         if (stan && STAN_IS_STOP_MOB) {
             return;
         }
 
-        isTreeTouch = false;
+        // isTreeTouch = false; // Эта строка не нужна, так как isTreeTouch устанавливается в checkCollisionAt
         isMoving = targetDeltaX != 0 || targetDeltaY != 0;
 
         if (targetDeltaX >= 0) {
@@ -184,14 +184,15 @@ public abstract class Enemy extends Entity {
         float actualDeltaX = targetDeltaX;
         float actualDeltaY = targetDeltaY;
 
-        enemyPolygon.setPosition(currentX, currentY); // Устанавливаем текущую позицию
+        enemyPolygon.setPosition(currentX, currentY);
 
 
         // --- ОТТАЛКИВАНИЕ ОТ ДРУГИХ ВРАГОВ НА ОСНОВЕ СТОЛКНОВЕНИЙ ---
-        if (GameScreen.enemies != null) {
+        // Этот блок теперь будет запускать отталкивание, только если isAttackingOverrideRepulsion = false
+        if (GameScreen.enemies != null && !isAttackingOverrideRepulsion) {
             for (Enemy otherEnemy : GameScreen.enemies) {
                 if (otherEnemy != this && otherEnemy.isLive()) {
-                    Polygon otherEnemyPolygon = new Polygon(enemyVertices); // Создаем полигон для другого врага
+                    Polygon otherEnemyPolygon = new Polygon(enemyVertices);
                     otherEnemyPolygon.setOrigin(otherEnemy.width / 2, otherEnemy.height / 2);
                     otherEnemyPolygon.setPosition(otherEnemy.vector.x, otherEnemy.vector.y);
 
@@ -200,9 +201,10 @@ public abstract class Enemy extends Entity {
                         Vector2 otherCenter = otherEnemy.getCenterVector();
                         Vector2 repulsionDir = thisCenter.cpy().sub(otherCenter).nor();
                         repelFromEnemy(repulsionDir);
-                        // Поскольку мы начали отталкивание, в текущем кадре не даем врагу двигаться
-                        // по своему AI, чтобы избежать застревания.
-                        return;
+                        // Здесь мы не используем return; так как `repelFromEnemy` устанавливает флаг
+                        // `isBeingRepelledByOtherEnemy`, который обрабатывается в начале метода.
+                        // Это позволяет отталкиванию быть более "мягким" и не прерывать сразу AI-движение,
+                        // если оно не полностью заблокировано.
                     }
                 }
             }
@@ -213,20 +215,20 @@ public abstract class Enemy extends Entity {
         // ПРОВЕРКА СТОЛКНОВЕНИЙ ДЛЯ AI ДВИЖЕНИЯ
         // Сначала проверяем потенциальное движение по X
         float potentialX = currentX + actualDeltaX;
-        if (checkCollisionAt(potentialX, currentY, enemyPolygon, shieldPolygon, true)) { // Передаем true, чтобы вызывать push для щита
+        if (checkCollisionAt(potentialX, currentY, enemyPolygon, shieldPolygon, true)) {
             actualDeltaX = 0;
         }
 
         // Затем проверяем потенциальное движение по Y
         float potentialY = currentY + actualDeltaY;
-        if (checkCollisionAt(currentX, potentialY, enemyPolygon, shieldPolygon, true)) { // Передаем true
+        if (checkCollisionAt(currentX, potentialY, enemyPolygon, shieldPolygon, true)) {
             actualDeltaY = 0;
         }
 
         // Если движение было заблокировано по одной из осей, но не по другой,
         // проверяем движение по диагонали еще раз
         if (actualDeltaX != 0 && actualDeltaY != 0) {
-            if (checkCollisionAt(currentX + actualDeltaX, currentY + actualDeltaY, enemyPolygon, shieldPolygon, true)) { // Передаем true
+            if (checkCollisionAt(currentX + actualDeltaX, currentY + actualDeltaY, enemyPolygon, shieldPolygon, true)) {
                 actualDeltaX = 0;
                 actualDeltaY = 0;
             }
@@ -245,12 +247,12 @@ public abstract class Enemy extends Entity {
         Rectangle enemyRectForTreeCheck = new Rectangle(nextX, nextY, width, height);
         for (Tree t : hero.getChunk().getTrees()) {
             if (t.getBound().overlaps(enemyRectForTreeCheck)) {
-//                isTreeTouch = true;
-                return true; // Столкновение с деревом обнаружено
+                // isTreeTouch = true; // Эта строка не нужна, так как isTreeTouch нигде не используется после этого.
+                return true;
             }
         }
 
-        if (shieldPolygon != null && canPushByShield) { // Проверяем флаг canPushByShield
+        if (shieldPolygon != null && canPushByShield) {
             enemyPolygon.setPosition(nextX, nextY);
             if (Intersector.overlapConvexPolygons(enemyPolygon, shieldPolygon)) {
                 Vector2 shieldCenter = new Vector2();
@@ -260,11 +262,11 @@ public abstract class Enemy extends Entity {
                 enemyPolygon.getBoundingRectangle().getCenter(enemyCenter);
 
                 Vector2 pushDirection = enemyCenter.cpy().sub(shieldCenter);
-                push(pushDirection); // Вызываем push, только если canPushByShield == true
-                return true; // Столкновение со щитом обнаружено
+                push(pushDirection);
+                return true;
             }
         }
-        return false; // Столкновений не обнаружено
+        return false;
     }
 
 
@@ -273,11 +275,12 @@ public abstract class Enemy extends Entity {
         if (isLive) {
             super.act(delta);
 
-            if (!GMath.checkVectorDistance(ai.getHero().getCenterVector(), getCenterVector(), 800, 800)) {
-                speed = runSpeed;
-            } else {
-                speed = runSpeed / 8;
-            }
+            // Убрал этот блок из-за совы, она регулирует скорость через свой AI
+            // if (!GMath.checkVectorDistance(ai.getHero().getCenterVector(), getCenterVector(), 800, 800)) {
+            //     speed = runSpeed;
+            // } else {
+            //     speed = runSpeed / 8;
+            // }
         }
     }
 
@@ -305,7 +308,7 @@ public abstract class Enemy extends Entity {
         return isLive;
     }
 
-    public void stan(int ms) { // Изменил параметр на миллисекунды, чтобы быть более точным
+    public void stan(int ms) {
         if (!stan) {
             stan = true;
 
