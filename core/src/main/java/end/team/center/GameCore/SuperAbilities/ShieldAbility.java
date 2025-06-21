@@ -80,9 +80,7 @@ public class ShieldAbility implements HeroAbility {
             if (Math.abs(inputX) > deadZone || Math.abs(inputY) > deadZone) {
                 float angleRad = MathUtils.atan2(inputY, inputX);
                 currentAngle = angleRad * MathUtils.radiansToDegrees;
-                // Не забудьте про возможную корректировку currentAngle,
-                // если текстура щита нарисована не так, как ожидается по умолчанию.
-                // Например, currentAngle -= 90;
+
             }
 
             // --- ОБНОВЛЕНИЕ ПОЛИГОНА ЩИТА ЗДЕСЬ ---
@@ -121,9 +119,6 @@ public class ShieldAbility implements HeroAbility {
     @Override
     public void draw(Batch batch) {
         if (active) {
-            // Координаты для отрисовки берутся из shieldPolygon, но для batch.draw
-            // нам нужны те же расчеты, что и для setPosition Polygon.
-            // Эти переменные уже рассчитаны в update, но можно пересчитать для clarity
             float heroCenterX = hero.getX() + hero.getWidth() / 2f;
             float heroCenterY = hero.getY() + hero.getHeight() / 2f;
             float shieldCenterX = heroCenterX + rotationRadius * MathUtils.cosDeg(currentAngle);

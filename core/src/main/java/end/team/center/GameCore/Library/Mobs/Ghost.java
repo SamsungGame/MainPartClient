@@ -39,7 +39,7 @@ public class Ghost extends Enemy {
     }
 
     protected void initialization() {
-        stop = new Rectangle(getCenterVector().x - 900, getCenterVector().y - 900, 1800, 1800);
+        stop = new Rectangle(getCenterVector().x - 600, getCenterVector().y - 600, 1200, 1200);
 
         r = new TextureRegion(texture);
         l = new TextureRegion(texture);

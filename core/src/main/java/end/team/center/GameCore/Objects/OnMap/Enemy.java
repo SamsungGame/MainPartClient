@@ -155,14 +155,6 @@ public abstract class Enemy extends Entity {
             if (currentEnemyRepulsionTime <= 0) {
                 isBeingRepelledByOtherEnemy = false;
             }
-            // Здесь мы НЕ делаем return; чтобы позволить врагу двигаться по своему AI,
-            // если его движение не полностью заблокировано отталкиванием.
-            // Однако, если вы хотите, чтобы отталкивание полностью перехватывало контроль,
-            // верните return;
-            // Для совы, которая должна пикировать, нам нужно, чтобы она могла продолжать движение,
-            // даже если ее немного оттолкнуло, поэтому пока оставим без return.
-            // Если ее оттолкнуло в дерево, currentEnemyRepulsionTime уже будет сброшен.
-            // Продолжаем к AI-движению ниже.
         }
 
 
@@ -248,7 +240,12 @@ public abstract class Enemy extends Entity {
         Rectangle enemyRectForTreeCheck = new Rectangle(nextX, nextY, width, height);
         for (Tree t : hero.getChunk().getTrees()) {
             if (t.getBound().overlaps(enemyRectForTreeCheck)) {
-                // isTreeTouch = true; // Эта строка не нужна, так как isTreeTouch нигде не используется после этого.
+                if (this.ai instanceof AI_Owl) {
+                    AI_Owl owlAI = (AI_Owl) this.ai;
+                    if (owlAI.isDiveAttacking) { // Проверяем, находится ли сова в режиме пикирования
+                        owlAI.resetDiveState(); // Сбрасываем состояние пикирования
+                    }
+                }
                 return true;
             }
         }
@@ -268,7 +265,6 @@ public abstract class Enemy extends Entity {
                     AI_Owl owlAI = (AI_Owl) this.ai;
                     if (owlAI.isDiveAttacking) { // Проверяем, находится ли сова в режиме пикирования
                         owlAI.resetDiveState(); // Сбрасываем состояние пикирования
-                        Gdx.app.log("Enemy", "Owl dive attack interrupted by shield!");
                     }
                 }
                 return true;
