@@ -106,12 +106,7 @@ public class Owl extends Enemy {
             Vector2 v = owlAI.MoveToPlayer(null, vector, speed, delta); // AI определяет движение
             move(v.x, v.y, delta); // Применяем движение
 
-            // !!! УДАЛЕН ИЛИ ИЗМЕНЕН ЭТОТ БЛОК:
-            // if (((AI_Owl) ai).isAttaking) { ... }
-            // Теперь логика завершения атаки и перезарядки полностью управляется в AI_Owl.MoveToPlayer
-            // и не должна быть здесь.
         } else {
-            // Если AI не AI_Owl, можно оставить стандартное движение или другую логику
             Vector2 v = ai.MoveToPlayer(hero.getVector(), vector, speed, delta);
             move(v.x, v.y, delta);
         }

@@ -17,6 +17,7 @@ import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.Library.ItemType;
 import end.team.center.GameCore.Library.Items.Experience;
 import end.team.center.GameCore.Logic.AI.AI;
+import end.team.center.GameCore.Logic.AI.AI_Owl;
 import end.team.center.GameCore.Logic.GMath;
 import end.team.center.GameCore.Objects.Effects.Death;
 import end.team.center.GameCore.Objects.Map.Tree;
@@ -235,8 +236,8 @@ public abstract class Enemy extends Entity {
         }
 
         // Обновляем позицию только после всех проверок
-        float finalX = currentX + actualDeltaX;
         float finalY = currentY + actualDeltaY;
+        float finalX = currentX + actualDeltaX;
 
         updatePosition(finalX, finalY);
         stateTime += delta;
@@ -263,6 +264,13 @@ public abstract class Enemy extends Entity {
 
                 Vector2 pushDirection = enemyCenter.cpy().sub(shieldCenter);
                 push(pushDirection);
+                if (this.ai instanceof AI_Owl) {
+                    AI_Owl owlAI = (AI_Owl) this.ai;
+                    if (owlAI.isDiveAttacking) { // Проверяем, находится ли сова в режиме пикирования
+                        owlAI.resetDiveState(); // Сбрасываем состояние пикирования
+                        Gdx.app.log("Enemy", "Owl dive attack interrupted by shield!");
+                    }
+                }
                 return true;
             }
         }
@@ -274,13 +282,6 @@ public abstract class Enemy extends Entity {
     public void act(float delta) {
         if (isLive) {
             super.act(delta);
-
-            // Убрал этот блок из-за совы, она регулирует скорость через свой AI
-            // if (!GMath.checkVectorDistance(ai.getHero().getCenterVector(), getCenterVector(), 800, 800)) {
-            //     speed = runSpeed;
-            // } else {
-            //     speed = runSpeed / 8;
-            // }
         }
     }
 
