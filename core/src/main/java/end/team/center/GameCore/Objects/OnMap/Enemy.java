@@ -245,7 +245,7 @@ public abstract class Enemy extends Entity {
         Rectangle enemyRectForTreeCheck = new Rectangle(nextX, nextY, width, height);
         for (Tree t : hero.getChunk().getTrees()) {
             if (t.getBound().overlaps(enemyRectForTreeCheck)) {
-                isTreeTouch = true;
+//                isTreeTouch = true;
                 return true; // Столкновение с деревом обнаружено
             }
         }
