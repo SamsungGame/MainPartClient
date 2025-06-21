@@ -1,9 +1,8 @@
 package end.team.center.screens;
 
-import static end.team.center.MyGame.currentSkin;
 import static end.team.center.MyGame.currentWeapon;
-import static end.team.center.MyGame.isBoughtSkins;
-import static end.team.center.MyGame.pricesOfSkins;
+import static end.team.center.MyGame.isBoughtWeapons;
+import static end.team.center.MyGame.pricesOfWeapons;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -25,16 +24,16 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import end.team.center.MyGame;
 
-public class SkinsScreen implements Screen {
+public class WeaponsScreen implements Screen {
     private final SpriteBatch batch = new SpriteBatch();
-    private final BitmapFont fontSkins = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
+    private final BitmapFont fontWeapons = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
     private final BitmapFont fontName = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
     private final BitmapFont fontDescription = new BitmapFont(Gdx.files.internal("buttonStyle/pixel_font.fnt"));
-    private final GlyphLayout layoutSkins = new GlyphLayout();
+    private final GlyphLayout layoutWeapons = new GlyphLayout();
     private final GlyphLayout layoutName = new GlyphLayout();
     private final GlyphLayout layoutDescription = new GlyphLayout();
-    public final float layoutSkinsX;
-    public final float layoutSkinsY;
+    public final float layoutWeaponsX;
+    public final float layoutWeaponsY;
     public float layoutNameX;
     public float layoutNameY;
     public float layoutDescriptionX;
@@ -48,26 +47,23 @@ public class SkinsScreen implements Screen {
     private float touchStartX;
     private final Texture backgroundTexture = new Texture(Gdx.files.internal("background.png"));
     private final Texture[] images = new Texture[] {
-        new Texture(Gdx.files.internal("skins/heroLeft.png")),
-        new Texture(Gdx.files.internal("skins/heroGhostLeft.png")),
-        new Texture(Gdx.files.internal("skins/heroNightLeft.png")),
-        new Texture(Gdx.files.internal("skins/heroCyberLeft.png"))
+        new Texture(Gdx.files.internal("weapons/knife.png")),
+        new Texture(Gdx.files.internal("weapons/knife.png")),
+        new Texture(Gdx.files.internal("weapons/knife.png"))
     };
     private final String[] names = new String[] {
-        "Сталкер",
-        "Призрак",
-        "Рыцарь",
-        "Кибер-рыцарь"
+        "Нож",
+        "Лук",
+        "Булава"
     };
     private final String[] descriptions = new String[] {
-        "Дефолтный сигма",
-        "Дух предшественника",
-        "Классический воин",
-        "Будущий герой"
+        "Начальный друг",
+        "Зоркий помощник",
+        "Тяжёлый устранитель"
     };
     private final TextButton buyButton;
 
-    public SkinsScreen(MyGame game) {
+    public WeaponsScreen(MyGame game) {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
@@ -118,11 +114,11 @@ public class SkinsScreen implements Screen {
         rightButtonStyle.imageUp = rightButtonSkin.getDrawable("button_up");
         rightButtonStyle.imageDown = rightButtonSkin.getDrawable("button_down");
 
-        fontSkins.getData().setScale(4.0f);
-        String skinsText = "Скины";
-        layoutSkins.setText(fontSkins, skinsText);
-        layoutSkinsX = (Gdx.graphics.getWidth() - layoutSkins.width) / 2;
-        layoutSkinsY = Gdx.graphics.getHeight() - layoutSkins.height;
+        fontWeapons.getData().setScale(4.0f);
+        String weaponsText = "Оружие";
+        layoutWeapons.setText(fontWeapons, weaponsText);
+        layoutWeaponsX = (Gdx.graphics.getWidth() - layoutWeapons.width) / 2;
+        layoutWeaponsY = Gdx.graphics.getHeight() - layoutWeapons.height;
 
         fontName.getData().setScale(2.0f);
 
@@ -139,10 +135,10 @@ public class SkinsScreen implements Screen {
             }
         });
 
-        currentIndex = currentSkin - 1;
+        currentIndex = currentWeapon - 1;
 
         currentImage = new Image(new TextureRegionDrawable(images[currentIndex]));
-        currentImage.setSize(140, 160);
+        currentImage.setSize(30, 130);
         currentImage.setPosition(Gdx.graphics.getWidth() / 4 - currentImage.getWidth() / 2, Gdx.graphics.getHeight() / 2 - currentImage.getHeight() / 2);
 
         ImageButton leftButton = new ImageButton(leftButtonStyle);
@@ -174,9 +170,9 @@ public class SkinsScreen implements Screen {
         buyButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                isBoughtSkins.remove(currentIndex);
-                isBoughtSkins.add(currentIndex, true);
-                currentSkin = currentIndex + 1;
+                isBoughtWeapons.remove(currentIndex);
+                isBoughtWeapons.add(currentIndex, true);
+                currentWeapon = currentIndex + 1;
             }
         });
 
@@ -199,11 +195,11 @@ public class SkinsScreen implements Screen {
         batch.begin();
         batch.setColor(0.5f, 0.5f, 0.5f, 1f);
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        fontSkins.draw(batch, layoutSkins, layoutSkinsX, layoutSkinsY);
+        fontWeapons.draw(batch, layoutWeapons, layoutWeaponsX, layoutWeaponsY);
         String name = names[currentIndex];
         layoutName.setText(fontName, name);
         layoutNameX = Gdx.graphics.getWidth() * 3 / 4 - layoutName.width / 2;
-        layoutNameY = layoutSkinsY - layoutName.height - 150;
+        layoutNameY = layoutWeaponsY - layoutName.height - 150;
         fontName.draw(batch, layoutName, layoutNameX, layoutNameY);
         String description = descriptions[currentIndex];
         layoutDescription.setText(fontDescription, description);
@@ -212,13 +208,14 @@ public class SkinsScreen implements Screen {
         fontDescription.draw(batch, layoutDescription, layoutDescriptionX, layoutDescriptionY);
         batch.end();
 
-        buyButton.setText(pricesOfSkins.get(currentIndex));
-        if (!isBoughtSkins.get(currentIndex)) {
+        buyButton.setText(pricesOfWeapons.get(currentIndex));
+        if (!isBoughtWeapons.get(currentIndex)) {
             stage.addActor(buyButton);
         }
         else {
             buyButton.remove();
         }
+
         stage.act();
         stage.draw();
     }
@@ -245,11 +242,8 @@ public class SkinsScreen implements Screen {
 
     @Override
     public void dispose() {
-        for (Texture texture : images) {
-            texture.dispose();
-        }
         batch.dispose();
-        fontSkins.dispose();
+        fontWeapons.dispose();
         fontName.dispose();
         fontDescription.dispose();
         stage.dispose();
@@ -271,8 +265,8 @@ public class SkinsScreen implements Screen {
 
     private void updateImage() {
         currentImage.setDrawable(new TextureRegionDrawable(images[currentIndex]));
-        if (isBoughtSkins.get(currentIndex)) {
-            currentSkin = currentIndex + 1;
+        if (isBoughtWeapons.get(currentIndex)) {
+            currentWeapon = currentIndex + 1;
         }
     }
 }

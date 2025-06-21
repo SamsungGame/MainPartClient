@@ -1,6 +1,7 @@
 package end.team.center.screens;
 
 import static end.team.center.MyGame.currentSkin;
+import static end.team.center.MyGame.currentWeapon;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -34,6 +35,9 @@ public class MainMenuScreen implements Screen {
     private final Texture ghostSkinTexture = new Texture(Gdx.files.internal("skins/heroGhostLeft.png"));
     private final Texture nightSkinTexture = new Texture(Gdx.files.internal("skins/heroNightLeft.png"));
     private final Texture cyberSkinTexture = new Texture(Gdx.files.internal("skins/heroCyberLeft.png"));
+    private final Texture knifeWeaponTexture = new Texture(Gdx.files.internal("weapons/knife.png"));
+    private final Texture bowWeaponTexture = new Texture(Gdx.files.internal("weapons/knife.png"));
+    private final Texture maceWeaponTexture = new Texture(Gdx.files.internal("weapons/knife.png"));
 
     public MainMenuScreen(MyGame game) {
         stage = new Stage(new ScreenViewport());
@@ -68,29 +72,41 @@ public class MainMenuScreen implements Screen {
         settingsButton.setPosition(Gdx.graphics.getWidth() / 2 - settingsButton.getWidth() / 2,
             achievementsButton.getY() - achievementsButton.getHeight() / 2 - 15);
 
-        TextButton aboutUsButton = new TextButton("О нас", skin);
-        aboutUsButton.setSize(200, 150);
-        aboutUsButton.setPosition(50, 0);
+        ImageButton weaponsButton = new ImageButton(skinsButtonStyle);
+        weaponsButton.setSize(100, 100);
+        weaponsButton.setPosition(weaponsButton.getWidth(), 50);
 
         ImageButton skinsButton = new ImageButton(skinsButtonStyle);
         skinsButton.setSize(100, 100);
         skinsButton.setPosition(Gdx.graphics.getWidth() - skinsButton.getWidth() * 2, 50);
 
         Image heroSkinImage = new Image(heroSkinTexture);
-        heroSkinImage.setSize(200, 200);
-        heroSkinImage.setPosition(skinsButton.getX() - skinsButton.getWidth() / 2, skinsButton.getY() + skinsButton.getHeight() + 40);
+        heroSkinImage.setSize(140, 160);
+        heroSkinImage.setPosition(skinsButton.getX() + skinsButton.getWidth() / 2 - heroSkinImage.getWidth() / 2, skinsButton.getY() + skinsButton.getHeight() + 40);
 
         Image ghostSkinImage = new Image(ghostSkinTexture);
-        ghostSkinImage.setSize(200, 200);
-        ghostSkinImage.setPosition(skinsButton.getX() - skinsButton.getWidth() / 2, skinsButton.getY() + skinsButton.getHeight() + 40);
+        ghostSkinImage.setSize(140, 160);
+        ghostSkinImage.setPosition(skinsButton.getX() + skinsButton.getWidth() / 2 - ghostSkinImage.getWidth() / 2, skinsButton.getY() + skinsButton.getHeight() + 40);
 
         Image nightSkinImage = new Image(nightSkinTexture);
-        nightSkinImage.setSize(200, 200);
-        nightSkinImage.setPosition(skinsButton.getX() - skinsButton.getWidth() / 2, skinsButton.getY() + skinsButton.getHeight() + 40);
+        nightSkinImage.setSize(140, 160);
+        nightSkinImage.setPosition(skinsButton.getX() + skinsButton.getWidth() / 2 - nightSkinImage.getWidth() / 2, skinsButton.getY() + skinsButton.getHeight() + 40);
 
         Image cyberSkinImage = new Image(cyberSkinTexture);
-        cyberSkinImage.setSize(200, 200);
-        cyberSkinImage.setPosition(skinsButton.getX() - skinsButton.getWidth() / 2, skinsButton.getY() + skinsButton.getHeight() + 40);
+        cyberSkinImage.setSize(140, 160);
+        cyberSkinImage.setPosition(skinsButton.getX() + skinsButton.getWidth() / 2 - cyberSkinImage.getWidth() / 2, skinsButton.getY() + skinsButton.getHeight() + 40);
+
+        Image knifeWeaponImage = new Image(knifeWeaponTexture);
+        knifeWeaponImage.setSize(30, 130);
+        knifeWeaponImage.setPosition(weaponsButton.getX() + weaponsButton.getWidth() / 2 - knifeWeaponImage.getWidth() / 2, weaponsButton.getY() + weaponsButton.getHeight() + 40);
+
+        Image bowWeaponImage = new Image(bowWeaponTexture);
+        bowWeaponImage.setSize(30, 130);
+        bowWeaponImage.setPosition(weaponsButton.getX() + weaponsButton.getWidth() / 2 - bowWeaponImage.getWidth() / 2, weaponsButton.getY() + weaponsButton.getHeight() + 40);
+
+        Image maceWeaponImage = new Image(maceWeaponTexture);
+        maceWeaponImage.setSize(30, 130);
+        maceWeaponImage.setPosition(weaponsButton.getX() + weaponsButton.getWidth() / 2 - maceWeaponImage.getWidth() / 2, weaponsButton.getY() + weaponsButton.getHeight() + 40);
 
         newGameButton.addListener(new ChangeListener() {
             @Override
@@ -113,10 +129,10 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        aboutUsButton.addListener(new ChangeListener() {
+        weaponsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new AboutUsScreen(game));
+                game.setScreen(new WeaponsScreen(game));
             }
         });
 
@@ -130,8 +146,19 @@ public class MainMenuScreen implements Screen {
         stage.addActor(newGameButton);
         stage.addActor(achievementsButton);
         stage.addActor(settingsButton);
-        stage.addActor(aboutUsButton);
+        stage.addActor(weaponsButton);
         stage.addActor(skinsButton);
+        switch (currentWeapon) {
+            case (1):
+                stage.addActor(knifeWeaponImage);
+                break;
+            case (2):
+                stage.addActor(bowWeaponImage);
+                break;
+            case (3):
+                stage.addActor(maceWeaponImage);
+                break;
+        }
         switch (currentSkin) {
             case (1):
                 stage.addActor(heroSkinImage);
@@ -200,5 +227,8 @@ public class MainMenuScreen implements Screen {
         ghostSkinTexture.dispose();
         nightSkinTexture.dispose();
         cyberSkinTexture.dispose();
+        knifeWeaponTexture.dispose();
+        bowWeaponTexture.dispose();
+        maceWeaponTexture.dispose();
     }
 }

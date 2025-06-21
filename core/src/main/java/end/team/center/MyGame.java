@@ -11,20 +11,29 @@ import end.team.center.screens.MainMenuScreen;
 public class MyGame extends Game {
     public static Music mainMenuMusic;
     public static float currentVolume = 0.5f;
+    public static int currentWeapon = 1;
     public static int currentSkin = 1;
-    public static ArrayList<String> prices = new ArrayList<>();
-    public static ArrayList<Boolean> isBought = new ArrayList<>();
+    public static ArrayList<String> pricesOfSkins = new ArrayList<>();
+    public static ArrayList<Boolean> isBoughtSkins = new ArrayList<>();
+    public static ArrayList<String> pricesOfWeapons = new ArrayList<>();
+    public static ArrayList<Boolean> isBoughtWeapons = new ArrayList<>();
 
     @Override
     public void create() {
-        prices.add("0");
-        prices.add("50");
-        prices.add("100");
-        prices.add("150");
-        isBought.add(true);
-        isBought.add(false);
-        isBought.add(false);
-        isBought.add(false);
+        pricesOfSkins.add("0");
+        pricesOfSkins.add("50");
+        pricesOfSkins.add("100");
+        pricesOfSkins.add("150");
+        isBoughtSkins.add(true);
+        isBoughtSkins.add(false);
+        isBoughtSkins.add(false);
+        isBoughtSkins.add(false);
+        pricesOfWeapons.add("0");
+        pricesOfWeapons.add("50");
+        pricesOfWeapons.add("100");
+        isBoughtWeapons.add(true);
+        isBoughtWeapons.add(false);
+        isBoughtWeapons.add(false);
 
         mainMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/mainMenuMusic.mp3"));
         mainMenuMusic.setLooping(true);

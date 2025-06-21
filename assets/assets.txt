@@ -31,3 +31,4 @@ skins/heroCyberLeft.png
 skins/heroGhostLeft.png
 skins/heroLeft.png
 skins/heroNightLeft.png
+weapons/knife.png
