@@ -36,8 +36,8 @@ public class SkinsScreen implements Screen {
     private final Skin skin;
     private final Skin leftButtonSkin;
     private final Skin rightButtonSkin;
-    private final Texture[] images; // Массив из 2 изображений
-    private final Image currentImage; // Отображаемый Image
+    private final Texture[] images;
+    private final Image currentImage;
     private int currentIndex;
     private float touchStartX;
     private final Texture backgroundTexture = new Texture(Gdx.files.internal("background.png"));
@@ -48,28 +48,35 @@ public class SkinsScreen implements Screen {
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                touchStartX = screenX;
+                if (screenX < Gdx.graphics.getWidth() / 2) {
+                    touchStartX = screenX;
+                }
                 return stage.touchDown(screenX, screenY, pointer, button);
             }
 
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-                float deltaX = screenX - touchStartX;
-                if (Math.abs(deltaX) > 50) {
-                    if (deltaX > 0) {
-                        showPreviousImage();
+                if (screenX < Gdx.graphics.getWidth() / 2) {
+                    float deltaX = screenX - touchStartX;
+                    if (Math.abs(deltaX) > 50) {
+                        if (deltaX > 0) {
+                            showPreviousImage();
+                        }
+                        else {
+                            showNextImage();
+                        }
+                        return true;
                     }
-                    else {
-                        showNextImage();
-                    }
-                    return true;
                 }
                 return stage.touchUp(screenX, screenY, pointer, button);
             }
 
             @Override
             public boolean touchDragged(int screenX, int screenY, int pointer) {
-                return stage.touchDragged(screenX, screenY, pointer);
+                if (screenX < Gdx.graphics.getWidth() / 2) {
+                    return stage.touchDragged(screenX, screenY, pointer);
+                }
+                return false;
             }
         });
 
@@ -97,20 +104,31 @@ public class SkinsScreen implements Screen {
         backButton.setSize(200, 150);
         backButton.setPosition(50,  Gdx.graphics.getHeight() - backButton.getHeight());
 
-        ImageButton leftButton = new ImageButton(leftButtonStyle);
-        leftButton.setSize(100, 100);
-        leftButton.setPosition(100, Gdx.graphics.getHeight() / 2 - leftButton.getHeight() / 2);
-
-        ImageButton rightButton = new ImageButton(rightButtonStyle);
-        rightButton.setSize(100, 100);
-        rightButton.setPosition(Gdx.graphics.getWidth() - rightButton.getWidth() - 100, Gdx.graphics.getHeight() / 2 - rightButton.getHeight() / 2);
-
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new MainMenuScreen(game));
             }
         });
+
+        images = new Texture[] {
+            new Texture(Gdx.files.internal("skins/heroLeft.png")),
+            new Texture(Gdx.files.internal("skins/heroNightLeft.png"))
+        };
+
+        currentIndex = currentSkin - 1;
+
+        currentImage = new Image(new TextureRegionDrawable(images[currentIndex]));
+        currentImage.setSize(200, 200);
+        currentImage.setPosition(300, Gdx.graphics.getHeight() / 2 - currentImage.getHeight() / 2);
+
+        ImageButton leftButton = new ImageButton(leftButtonStyle);
+        leftButton.setSize(100, 100);
+        leftButton.setPosition(currentImage.getX() - currentImage.getWidth(), Gdx.graphics.getHeight() / 2 - leftButton.getHeight() / 2);
+
+        ImageButton rightButton = new ImageButton(rightButtonStyle);
+        rightButton.setSize(100, 100);
+        rightButton.setPosition(currentImage.getX() + currentImage.getWidth() + 100, Gdx.graphics.getHeight() / 2 - rightButton.getHeight() / 2);
 
         leftButton.addListener(new ChangeListener() {
             @Override
@@ -126,23 +144,9 @@ public class SkinsScreen implements Screen {
             }
         });
 
-        // Загружаем 2 изображения
-        images = new Texture[] {
-            new Texture(Gdx.files.internal("skins/heroLeft.png")),
-            new Texture(Gdx.files.internal("skins/heroNightLeft.png"))
-        };
-
-        currentIndex = currentSkin - 1; // Начинаем с первого изображения
-
-        // Создаём Image для отображения текущего изображения
-        currentImage = new Image(new TextureRegionDrawable(images[currentIndex]));
-        currentImage.setSize(200, 200);
-        currentImage.setPosition(Gdx.graphics.getWidth() / 2 - currentImage.getWidth() / 2,
-                Gdx.graphics.getHeight() / 2 - currentImage.getHeight() / 2);
-
         buyButton = new TextButton("", skin);
         buyButton.setSize(200, 150);
-        buyButton.setPosition(Gdx.graphics.getWidth() / 2 - buyButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - currentImage.getY());
+        buyButton.setPosition(currentImage.getX(), Gdx.graphics.getHeight() / 2 - currentImage.getY());
 
         buyButton.addListener(new ChangeListener() {
             @Override
@@ -159,12 +163,12 @@ public class SkinsScreen implements Screen {
     }
 
     private void showNextImage() {
-        currentIndex = (currentIndex + 1) % images.length; // Циклический переход
+        currentIndex = (currentIndex + 1) % images.length;
         updateImage();
     }
 
     private void showPreviousImage() {
-        currentIndex = (currentIndex - 1 + images.length) % images.length; // Циклический переход назад
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
         updateImage();
     }
 

@@ -18,8 +18,12 @@ public class MyGame extends Game {
     @Override
     public void create() {
         prices.add("0");
+        prices.add("50");
         prices.add("100");
+        prices.add("150");
         isBought.add(true);
+        isBought.add(false);
+        isBought.add(false);
         isBought.add(false);
 
         mainMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/mainMenuMusic.mp3"));
