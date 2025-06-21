@@ -2,6 +2,7 @@ package end.team.center.Screens.Game;
 
 import static end.team.center.GameCore.Objects.OnMap.Hero.HeroClassType.*;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -49,6 +50,7 @@ import end.team.center.GameCore.Objects.Map.Tree;
 import end.team.center.GameCore.Objects.Map.Zone;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
 import end.team.center.GameCore.Objects.OnMap.Entity;
+import end.team.center.GameCore.Objects.OnMap.GameObject;
 import end.team.center.GameCore.Objects.OnMap.Hero;
 import end.team.center.GameCore.Objects.OnMap.Hero.HeroClassType.*;
 import end.team.center.GameCore.UIElements.Power;
@@ -1219,6 +1221,11 @@ public class GameScreen implements Screen {
                     worldStage.addActor((Actor) wait.get(i));
                 } else if (wait.get(i) instanceof Drops && drop.size() < maxDropSpawn) {
                     drop.add((Drops) wait.get(i));
+
+                    for (Chunk c: chunks) {
+                        if (c.getBound().overlaps(((Drops) wait.get(i)).getBound())) c.addActor(((Drops) wait.get(i)));
+                    }
+                    if (noAct != null) noAct.addActor(((Drops) wait.get(i)));
                 }
             }
         }
