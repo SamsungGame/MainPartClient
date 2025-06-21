@@ -65,7 +65,7 @@ public class GameScreen implements Screen {
     public static GameRepository gameRepository;
     public static boolean endForHero = false;
     public static int endCode = 0;
-    private TouchpadClass touchpadMove, touchpadAttack;
+    public static TouchpadClass touchpadMove, touchpadAttack;
     public static Hero hero;
     private Stage worldStage, noAct;
     private Stage uiStage;
@@ -81,7 +81,7 @@ public class GameScreen implements Screen {
     public static float coinForTime = 0;
     public static float coinForGame = 0;
 
-    public int maxDropSpawn = 400;
+    public int maxDropSpawn = 1000;
 
     private static SpawnMob spawner;
     public static ArrayList<Enemy> enemies;
@@ -224,7 +224,7 @@ public class GameScreen implements Screen {
             case 2:
                 characterAnimation = CharacterAnimation.Knight;
                 heroImage = MainMenuScreen.images[2];
-                heroClassType = STALKER_HERO;
+                heroClassType = KNIGHT_HERO;
                 break;
             case 3:
                 characterAnimation = CharacterAnimation.Cyber;
@@ -256,6 +256,9 @@ public class GameScreen implements Screen {
             abilitySkin = new Skin(Gdx.files.internal("UI/GameUI/Direction/abilityStalkerHero.json"));
         }
         else if(heroClassType == GHOST_HERO) {
+            abilitySkin = new Skin(Gdx.files.internal("UI/GameUI/Direction/abilityGhostrHero.json"));
+        }
+        else if(heroClassType == KNIGHT_HERO) {
             abilitySkin = new Skin(Gdx.files.internal("UI/GameUI/Direction/abilityGhostrHero.json"));
         }
         else if(heroClassType == CYBER_HERO) {
@@ -785,6 +788,8 @@ public class GameScreen implements Screen {
 
         // Получаем значения от джойстиков
 
+        float deadZone = 0.1f; // минимальное отклонение от центра
+
         float moveX = touchpadMove.getKnobPercentX();
         float moveY = touchpadMove.getKnobPercentY();
 
@@ -796,7 +801,11 @@ public class GameScreen implements Screen {
         if (!hero.disableMovement) {
             hero.move(moveX, moveY, delta);
         }
-        float deadZone = 0.1f; // минимальное отклонение от центра
+        if (hero.uniqueAbility!= null) {
+            hero.uniqueAbility.update(delta); // Это обновит shieldPolygon до его актуальной позиции
+        }
+
+
 
         if (touchpadAttack.isTouchpadActive()) {
             float normalizedX = (touchpadAttack.getKnobPercentX() + 1) / 2;
@@ -807,12 +816,13 @@ public class GameScreen implements Screen {
             if (Math.abs(dx) > deadZone || Math.abs(dy) > deadZone) {
                 hero.useWeapon(dx, dy);
             }
+
         } else if (hero.getWep().getShow() && hero.getWep().isCanAttack()) {
             hero.startAttackAnim();
             for (Enemy e : enemies) {
                 if (hero.getWep().checkTouchRectangle(e.getBound())) {
                     e.setHealth(e.getHealth() - hero.getWep().getDamage());
-                    e.stan(1);
+                    e.stan(1000);
 
                     if (Math.random() * 100 > 90 && hero.getHealth() < 3 && hero.getVampirism()) {
                         hero.setHealth(hero.getHealth() + 1);

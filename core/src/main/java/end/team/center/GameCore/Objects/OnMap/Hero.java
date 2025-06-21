@@ -20,6 +20,8 @@ import end.team.center.GameCore.Objects.Map.Zone;
 import end.team.center.GameCore.SuperAbilities.ChargeRecoveryAbility;
 import end.team.center.GameCore.SuperAbilities.HeroAbility;
 import end.team.center.GameCore.SuperAbilities.ProjectionAbility;
+//import end.team.center.GameCore.SuperAbilities.ShieldAbility;
+import end.team.center.GameCore.SuperAbilities.ShieldAbility;
 import end.team.center.GameCore.SuperAbilities.TeleportAbility;
 import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Screens.Game.GameScreen;
@@ -35,11 +37,12 @@ public class Hero extends Friendly {
     public Rectangle deathZone;
     protected int expWeapon = 0, levelWeapon = 0;
     protected int exp, level, maxHP;
-    private HeroAbility uniqueAbility;
+    public HeroAbility uniqueAbility;
     public boolean isAbilityActive = false;
     public enum HeroClassType {
         STALKER_HERO,
         GHOST_HERO,
+        KNIGHT_HERO,
         CYBER_HERO
     }
     private HeroClassType heroClassType;
@@ -78,6 +81,9 @@ public class Hero extends Friendly {
             case GHOST_HERO:
                 this.uniqueAbility = new ProjectionAbility(this);
                 break;
+            case KNIGHT_HERO:
+                this.uniqueAbility = new ShieldAbility(this);
+                break;
             case CYBER_HERO:
                 this.uniqueAbility = new TeleportAbility(this);
                 break;
@@ -86,6 +92,7 @@ public class Hero extends Friendly {
                 break;
         }
     }
+
     public void activateUniqueAbility() {
         if (uniqueAbility != null) {
             uniqueAbility.activate();
@@ -390,6 +397,9 @@ public class Hero extends Friendly {
         if (activeSheild != null) {
             int size = (int) Math.max(getWidth(), getHeight()) + 100;
             batch.draw(activeSheild, vector.x - 50, vector.y - 50, size, size);
+        }
+        if (uniqueAbility != null) {
+            uniqueAbility.draw(batch); // Вызываем метод draw у способности
         }
     }
 

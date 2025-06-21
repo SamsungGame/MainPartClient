@@ -1,6 +1,8 @@
 package end.team.center.GameCore.SuperAbilities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
+
 import end.team.center.GameCore.Objects.OnMap.Hero;
 import end.team.center.Screens.Game.GameScreen;
 
@@ -56,5 +58,10 @@ public class ProjectionAbility  implements HeroAbility {
     @Override
     public boolean isActive() {
         return active;
+    }
+
+    @Override
+    public void draw(Batch batch) {
+
     }
 }

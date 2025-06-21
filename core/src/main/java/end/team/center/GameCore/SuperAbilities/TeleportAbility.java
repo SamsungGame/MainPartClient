@@ -1,6 +1,7 @@
 package end.team.center.GameCore.SuperAbilities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList; // Не забудьте импортировать ArrayList
@@ -72,6 +73,11 @@ public class TeleportAbility implements HeroAbility {
     @Override
     public boolean isActive() {
         return active;
+    }
+
+    @Override
+    public void draw(Batch batch) {
+
     }
 
     public float getCooldown() {

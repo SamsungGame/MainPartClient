@@ -1,6 +1,8 @@
 package end.team.center.GameCore.SuperAbilities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
+
 import end.team.center.GameCore.Objects.OnMap.Hero;
 
 public class ChargeRecoveryAbility implements HeroAbility {
@@ -49,5 +51,10 @@ public class ChargeRecoveryAbility implements HeroAbility {
     @Override
     public boolean isActive() {
         return active;
+    }
+
+    @Override
+    public void draw(Batch batch) {
+
     }
 }

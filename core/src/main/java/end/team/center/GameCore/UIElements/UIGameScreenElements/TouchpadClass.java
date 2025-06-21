@@ -35,7 +35,7 @@ public class TouchpadClass extends Touchpad {
     private static Skin touchpadSkin;
 
     public TouchpadClass(float x, float y, boolean isTouchpadActive, String type) {
-        super(5, createTouchpadStyle());
+        super(0.1f, createTouchpadStyle());
         setBounds(x, y, touchSize, touchSize);
         this.x = x + touchSize / 2;
         this.y = y + touchSize / 2;
