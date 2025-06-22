@@ -397,6 +397,7 @@ public class GameScreen implements Screen {
             textItem.setText("");
         }
 
+
         // <><><><><><><><><><> Обработка логики <><><><><><><><><><>
         if (!STOP) {
             for (Enemy e : enemies) {

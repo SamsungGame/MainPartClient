@@ -30,7 +30,6 @@ public class ProjectionAbility  implements HeroAbility {
         if (!active && cooldown <= 0) {
             active = true;
             elapsedTime = 0;
-
         }
     }
 
@@ -39,6 +38,7 @@ public class ProjectionAbility  implements HeroAbility {
         cooldown = MAX_COOLDOWN;
         hero.setSpeed(beforeSpeed);
         active = false;
+        GameScreen.abilityButton.setDisabled(true);
     }
 
     @Override
@@ -51,6 +51,7 @@ public class ProjectionAbility  implements HeroAbility {
                 deactivate();
             }
         }else cooldown -= delta;
+        if(cooldown <= 0) GameScreen.abilityButton.setDisabled(false);
 
 
     }

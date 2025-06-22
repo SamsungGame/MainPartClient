@@ -65,7 +65,7 @@ public class ShieldAbility implements HeroAbility {
     public void deactivate() {
         cooldown = MAX_COOLDOWN;
         active = false;
-        Gdx.app.log("ShieldAbility", "Щит деактивирован!");
+        GameScreen.abilityButton.setDisabled(true);
     }
 
     @Override
@@ -109,6 +109,7 @@ public class ShieldAbility implements HeroAbility {
                 }
             }
         }
+        if(cooldown <= 0) GameScreen.abilityButton.setDisabled(false);
     }
 
     @Override

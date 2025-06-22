@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import end.team.center.GameCore.Objects.OnMap.Hero;
+import end.team.center.Screens.Game.GameScreen;
 
 public class ChargeRecoveryAbility implements HeroAbility {
     private Hero hero;
@@ -34,6 +35,7 @@ public class ChargeRecoveryAbility implements HeroAbility {
     public void deactivate() {
         cooldown = MAX_COOLDOWN;
         active = false;
+        GameScreen.abilityButton.setDisabled(true);
     }
 
     @Override
@@ -46,6 +48,7 @@ public class ChargeRecoveryAbility implements HeroAbility {
                 deactivate();
             }
         } else cooldown -= delta;
+        if(cooldown <= 0) GameScreen.abilityButton.setDisabled(false);
     }
 
     @Override
