@@ -42,7 +42,7 @@ public class SharpnessStone extends Drops {
             int aForText = random.nextInt(6) + 3;
             hero.addExpWeapon(aForText);
 
-            GameScreen.textItemFun("Урон +" + String.valueOf(aForText));
+            GameScreen.textItemFun("Урон +" + aForText);
             GameScreen.isPickupItem = true;
 
 

@@ -120,6 +120,152 @@ public class GameScreen implements Screen {
 
     public GameScreen(GameRepository repo) {
         gameRepository = repo;
+
+        // <><><><><><><><><><> Создание сцен, камер, экранов <><><><><><><><><><>
+        gameCamera    = new GameCamera(WORLD_WIDTH, WORLD_HEIGHT);
+        worldViewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCamera.getCamera());
+        uiViewport    = new ScreenViewport();
+
+        noAct      = new Stage(worldViewport);
+        pauseStage = new Stage(uiViewport);
+        worldStage = new Stage(worldViewport);
+        uiStage    = new Stage(uiViewport);
+        infoStage = new Stage(uiViewport);
+
+        zone    = new ArrayList<>();
+        wait    = new ArrayList<>();
+        drop    = new ArrayList<>();
+        enemies = new ArrayList<>();
+
+        batch  = new SpriteBatch();
+        powers = new ArrayList<>();
+
+        Gdx.input.setInputProcessor(uiStage);
+
+        // <><><><><><><><><><> Создание игрока <><><><><><><><><><>
+        GameLauncher gLauncher = new GameLauncher();
+        hero = gLauncher.loadHero(gameRepository);
+        worldStage.addActor(hero);
+
+        // <><><><><><><><><><> Создание интерфейса <><><><><><><><><><>
+        ArrayList<Actor> ac = gLauncher.generationUI();
+
+        textItem = new Label("", label);
+        textItem.setPosition((float)  10,
+            (float) Gdx.graphics.getHeight() - 430);
+
+        for (Actor a: ac) {
+            uiStage.addActor(a);
+        }
+        uiStage.addActor(touchpadMove);
+        uiStage.addActor(radiationValue);
+        uiStage.addActor(energyValue);
+        uiStage.addActor(touchpadAttack);
+        uiStage.addActor(abilityButton);
+        uiStage.addActor(pauseButton);
+        uiStage.addActor(hearts);
+        uiStage.addActor(expBar);
+        textItem.setFontScale(2.1f);
+        infoStage.addActor(textItem);
+
+        // <><><><><><><><><><> Настройки спавна мобов <><><><><><><><><><>
+        spawner = new SpawnMob(new Post() {
+            @Override
+            public void post(Enemy[] enemy) {
+                setSpawnMob(enemy);
+            }
+            @Override
+            public void post(Drops drops) {
+
+            }
+        }, hero);
+
+        // <><><><><><><><><><> Настройка шейдеров <><><><><><><><><><>
+        frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+        hardMaskBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+
+        // Шейдеры из ShaderManager
+        maskShader = ShaderManager.maskShader;
+        hardMaskShader = ShaderManager.hardMaskShader;
+        dimmingShader = ShaderManager.dimmingShader;
+
+        float aspectRatio = (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
+        maskShader.bind();
+        maskShader.setUniformf("u_aspectRatio", aspectRatio);
+        hardMaskShader.bind();
+        hardMaskShader.setUniformf("u_aspectRatio", aspectRatio);
+        dimmingShader.bind();
+        dimmingShader.setUniformf("u_aspectRatio", aspectRatio);
+
+        // <><><><><><><><><><> Добавление существующих усилений <><><><><><><><><><>
+        powers.addAll(gLauncher.generatePowers());
+
+        // <><><><><><><><><><> Запуск музыки <><><><><><><><><><>
+        gLauncher.loadMusic();
+
+        // <><><><><><><><><><> Генерация структур на карте и предметов <><><><><><><><><><>
+        MapLauncher launcer = new MapLauncher();
+
+        backgroundTiledRenderer = launcer.generationBrick();
+
+        trees = launcer.generationTree();
+        for (Tree t: trees) {
+            noAct.addActor(t);
+        }
+
+        portal = launcer.generationPortal(gameRepository); // не трогай
+        worldStage.addActor(portal);
+
+        wait.addAll(launcer.generationItems());
+
+        launcer.generateZone();
+
+        // <><><><><><><><><><> Генерация тумана на карте <><><><><><><><><><>
+        cloud = new NebulaCloud(450);
+        cloud.addToStage(worldStage);
+
+        // <><><><><><><><><><> Запуск спавнера мобов <><><><><><><><><><>
+        spawner.startWork();
+
+        // <><><><><><><><><><> Создание меню <><><><><><><><><><>
+        Table pauseTable = new Table();
+        pauseTable.setFillParent(true);  // Таблица занимает весь экран
+        pauseTable.center();              // Выравнивание всей таблицы по центру
+
+        Skin buttonSkin = new Skin(Gdx.files.internal("UI/AboutGame/pauseStyle.json"));
+
+        TextButton backToMainMenuScreenButton = new TextButton("В главное меню", buttonSkin);
+        TextButton continueButton = new TextButton("Продолжить игру", buttonSkin);
+
+        backToMainMenuScreenButton.getLabel().setFontScale(3f);
+        continueButton.getLabel().setFontScale(3f);
+
+        backToMainMenuScreenButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                GameScreen.endCode = 0;
+                GameScreen.endForHero = true;
+            }
+        });
+
+        continueButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                togglePause(false);
+            }
+        });
+
+        // Чтобы текст внутри кнопок был по центру:
+        backToMainMenuScreenButton.getLabel().setAlignment(Align.center);
+        continueButton.getLabel().setAlignment(Align.center);
+
+        pauseTable.defaults().pad(50).expandX().fillX();
+        pauseTable.padTop(50);
+
+        pauseTable.add(backToMainMenuScreenButton).row();
+        pauseTable.add(continueButton);
+
+        pauseStage.addActor(pauseTable);
     }
 
     // <><><><><><><><><><> <><><><><><><><><><> <><><><><><><><><><> <><><><><><><><><><> <><><><><><><><><><>
@@ -422,151 +568,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        // <><><><><><><><><><> Создание сцен, камер, экранов <><><><><><><><><><>
-        gameCamera    = new GameCamera(WORLD_WIDTH, WORLD_HEIGHT);
-        worldViewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCamera.getCamera());
-        uiViewport    = new ScreenViewport();
 
-        noAct      = new Stage(worldViewport);
-        pauseStage = new Stage(uiViewport);
-        worldStage = new Stage(worldViewport);
-        uiStage    = new Stage(uiViewport);
-        infoStage = new Stage(uiViewport);
-
-        zone    = new ArrayList<>();
-        wait    = new ArrayList<>();
-        drop    = new ArrayList<>();
-        enemies = new ArrayList<>();
-
-        batch  = new SpriteBatch();
-        powers = new ArrayList<>();
-
-        Gdx.input.setInputProcessor(uiStage);
-
-        // <><><><><><><><><><> Создание игрока <><><><><><><><><><>
-        GameLauncher gLauncher = new GameLauncher();
-        hero = gLauncher.loadHero(gameRepository);
-        worldStage.addActor(hero);
-
-        // <><><><><><><><><><> Создание интерфейса <><><><><><><><><><>
-        ArrayList<Actor> ac = gLauncher.generationUI();
-
-        textItem = new Label("", label);
-        textItem.setPosition((float)  10,
-            (float) Gdx.graphics.getHeight() - 430);
-
-        for (Actor a: ac) {
-            uiStage.addActor(a);
-        }
-        uiStage.addActor(touchpadMove);
-        uiStage.addActor(radiationValue);
-        uiStage.addActor(energyValue);
-        uiStage.addActor(touchpadAttack);
-        uiStage.addActor(abilityButton);
-        uiStage.addActor(pauseButton);
-        uiStage.addActor(hearts);
-        uiStage.addActor(expBar);
-        textItem.setFontScale(2.1f);
-        infoStage.addActor(textItem);
-
-        // <><><><><><><><><><> Настройки спавна мобов <><><><><><><><><><>
-        spawner = new SpawnMob(new Post() {
-            @Override
-            public void post(Enemy[] enemy) {
-                setSpawnMob(enemy);
-            }
-            @Override
-            public void post(Drops drops) {
-
-            }
-        }, hero);
-
-        // <><><><><><><><><><> Настройка шейдеров <><><><><><><><><><>
-        frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
-        hardMaskBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
-
-        // Шейдеры из ShaderManager
-        maskShader = ShaderManager.maskShader;
-        hardMaskShader = ShaderManager.hardMaskShader;
-        dimmingShader = ShaderManager.dimmingShader;
-
-        float aspectRatio = (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
-        maskShader.bind();
-        maskShader.setUniformf("u_aspectRatio", aspectRatio);
-        hardMaskShader.bind();
-        hardMaskShader.setUniformf("u_aspectRatio", aspectRatio);
-        dimmingShader.bind();
-        dimmingShader.setUniformf("u_aspectRatio", aspectRatio);
-
-        // <><><><><><><><><><> Добавление существующих усилений <><><><><><><><><><>
-        powers.addAll(gLauncher.generatePowers());
-
-        // <><><><><><><><><><> Запуск музыки <><><><><><><><><><>
-        gLauncher.loadMusic();
-
-        // <><><><><><><><><><> Генерация структур на карте и предметов <><><><><><><><><><>
-        MapLauncher launcer = new MapLauncher();
-
-        backgroundTiledRenderer = launcer.generationBrick();
-
-        trees = launcer.generationTree();
-        for (Tree t: trees) {
-            noAct.addActor(t);
-        }
-
-        portal = launcer.generationPortal(gameRepository); // не трогай
-        worldStage.addActor(portal);
-
-        wait.addAll(launcer.generationItems());
-
-        launcer.generateZone();
-
-        // <><><><><><><><><><> Генерация тумана на карте <><><><><><><><><><>
-        cloud = new NebulaCloud(450);
-        cloud.addToStage(worldStage);
-
-        // <><><><><><><><><><> Запуск спавнера мобов <><><><><><><><><><>
-        spawner.startWork();
-
-        // <><><><><><><><><><> Создание меню <><><><><><><><><><>
-        Table pauseTable = new Table();
-        pauseTable.setFillParent(true);  // Таблица занимает весь экран
-        pauseTable.center();              // Выравнивание всей таблицы по центру
-
-        Skin buttonSkin = new Skin(Gdx.files.internal("UI/AboutGame/pauseStyle.json"));
-
-        TextButton backToMainMenuScreenButton = new TextButton("В главное меню", buttonSkin);
-        TextButton continueButton = new TextButton("Продолжить игру", buttonSkin);
-
-        backToMainMenuScreenButton.getLabel().setFontScale(3f);
-        continueButton.getLabel().setFontScale(3f);
-
-        backToMainMenuScreenButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                GameScreen.endCode = 0;
-                GameScreen.endForHero = true;
-            }
-        });
-
-        continueButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                togglePause(false);
-            }
-        });
-
-        // Чтобы текст внутри кнопок был по центру:
-        backToMainMenuScreenButton.getLabel().setAlignment(Align.center);
-        continueButton.getLabel().setAlignment(Align.center);
-
-        pauseTable.defaults().pad(50).expandX().fillX();
-        pauseTable.padTop(50);
-
-        pauseTable.add(backToMainMenuScreenButton).row();
-        pauseTable.add(continueButton);
-
-        pauseStage.addActor(pauseTable);
     }
     @Override public void pause() {}
     @Override public void resume() {}

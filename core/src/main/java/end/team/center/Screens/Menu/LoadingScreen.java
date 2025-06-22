@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
@@ -16,16 +18,17 @@ import end.team.center.ProgramSetting.LocalDB.GameRepository;
 import end.team.center.Screens.Game.GameScreen;
 
 public class LoadingScreen implements Screen {
-    public static GameRepository gameRepository;
     private final SpriteBatch batch = new SpriteBatch();
     private final BitmapFont font = new BitmapFont(Gdx.files.internal("UI/AboutGame/pixel_font.fnt"));
     private final GlyphLayout layout = new GlyphLayout();
     public final float layoutX;
     public final float layoutY;
-    private final Texture backgroundTexture = new Texture(Gdx.files.internal("UI/MainMenu/fon.png"));
+    private final Texture backgroundTexture = new Texture(Gdx.files.internal("UI/MainMenu/fon.jpg"));
     private GameScreen fieldScreen;
+    private ProgressBar bar;
+    private float progress;
 
-    public LoadingScreen() {
+    public LoadingScreen(GameRepository repo) {
         font.getData().setScale(2.0f);
         String loadingText = "Подождите, идёт загрузка...";
         layout.setText(font, loadingText);
@@ -35,7 +38,7 @@ public class LoadingScreen implements Screen {
         Timer.schedule(new Task() {
             @Override
             public void run() {
-                fieldScreen = new GameScreen(gameRepository);
+                fieldScreen = new GameScreen(repo);
             }
         }, 1);
 
@@ -45,6 +48,10 @@ public class LoadingScreen implements Screen {
                 ((Center) Gdx.app.getApplicationListener()).setScreen(fieldScreen);
             }
         }, 10);
+
+        bar = new ProgressBar(0, 10000, 1, false, new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/expProgress.json")));
+        bar.setSize(bar.getWidth() * 5, bar.getHeight());
+        bar.setPosition((float) Gdx.graphics.getWidth() / 2 - bar.getWidth() / 2, (float) Gdx.graphics.getHeight() / 5);
     }
 
     @Override
@@ -61,6 +68,10 @@ public class LoadingScreen implements Screen {
         batch.setColor(0.5f, 0.5f, 0.5f, 1f);
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         font.draw(batch, layout, layoutX, layoutY);
+
+        progress += delta * 1000;
+        bar.setValue(Math.min(progress, 9950));
+        bar.draw(batch, 1f);
         batch.end();
     }
 
