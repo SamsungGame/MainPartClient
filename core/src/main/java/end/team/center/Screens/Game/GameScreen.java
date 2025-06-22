@@ -569,6 +569,7 @@ public class GameScreen implements Screen {
         endForHero = false;
         isTimeGo = false;
         STOP = false;
+        isPause = false;
         ShaderManager.radiusView1 = 0.2f;
         ShaderManager.radiusView3 = 0.15f;
         coinForEnemyValue = 0;
@@ -717,12 +718,12 @@ public class GameScreen implements Screen {
             STOP = true;
             isPause = true;
             Gdx.input.setInputProcessor(pauseStage);
-            uiStage.getRoot().removeActor(touchpadMove);
-            uiStage.getRoot().removeActor(touchpadAttack);
+//            uiStage.getRoot().removeActor(touchpadMove);
+//            uiStage.getRoot().removeActor(touchpadAttack);
         }
         else {
-            uiStage.addActor(touchpadMove);
-            uiStage.addActor(touchpadAttack);
+//            uiStage.addActor(touchpadMove);
+//            uiStage.addActor(touchpadAttack);
             STOP = false;
             isPause = false;
             Gdx.input.setInputProcessor(uiStage);
