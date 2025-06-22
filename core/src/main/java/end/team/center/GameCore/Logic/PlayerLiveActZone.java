@@ -22,8 +22,6 @@ public class PlayerLiveActZone {
 
         bound = new Rectangle((int) (h.getX() - size / 2), (int) (h.getY() - size / 2), size, size);
         actors = new ArrayList<>();
-
-        update();
     }
 
     public void update() {

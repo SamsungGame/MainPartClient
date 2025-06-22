@@ -136,6 +136,8 @@ public class GameScreen implements Screen {
         if (isFirstRender) {
             isFirstRender = false;
 
+            hero.PLAZ.update();
+
             delta = 0;
         }
 
