@@ -33,8 +33,12 @@ public class Lamp extends Drops {
                 ShaderManager.radiusView2 *= 1.1f;
                 ShaderManager.radiusView3 *= 1.1f;
 
+                GameScreen.textItemFun("Лампа\nполучена");
+
                 hero.startShyne();
             }
+
+            else GameScreen.textItemFun("Лампа\nвосполнена");
             GameScreen.isPickupItem = true;
 
             remove();

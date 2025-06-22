@@ -30,6 +30,10 @@ public class Bandage extends Drops {
         super.act(delta);
 
         if (bound.overlaps(hero.getBound())) {
+
+            if (hero.getHealth() < hero.getMaxHealth())GameScreen.textItemFun("Сердца +" + 1);
+            else if (hero.getHealth() == hero.getMaxHealth())GameScreen.textItemFun("Сердца\nполные");
+
             hero.setHealth(hero.getHealth() + 1);
 
             GameScreen.isPickupItem = true;

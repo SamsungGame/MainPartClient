@@ -38,7 +38,15 @@ public class Acumulattor extends Drops {
             // Исправленная строка: генерация числа от 10 до 30 включительно
             // random.nextInt(max - min + 1) + min
             // random.nextInt(30 - 10 + 1) + 10 = random.nextInt(21) + 10
-            hero.addCostumePower(random.nextInt(21) + 10);
+
+            int aForText = random.nextInt(21) + 10;
+
+            if(hero.getAntiRadiationCostumePower() + aForText < 100) GameScreen.textItemFun("Заряд +" + String.valueOf(aForText));
+            else if(hero.getAntiRadiationCostumePower() + aForText > 100) GameScreen.textItemFun("Заряд +" + (int)(100-hero.getAntiRadiationCostumePower()));
+
+
+            hero.addCostumePower(aForText);
+
 
             GameScreen.isPickupItem = true;
 

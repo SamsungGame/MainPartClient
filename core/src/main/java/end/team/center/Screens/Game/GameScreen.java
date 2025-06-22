@@ -69,7 +69,7 @@ import end.team.center.Screens.Menu.MainMenuScreen;
 public class GameScreen implements Screen {
     // <><><><><><><><><> Высшие классы <><><><><><><><><>
     public static GameRepository gameRepository;
-    public static Stage worldStage, noAct, uiStage, pauseStage;
+    public static Stage worldStage, noAct, uiStage, pauseStage, infoStage;
     protected static PowerSelectScreen PSC;
     public static Viewport worldViewport, uiViewport;
     public static GameCamera gameCamera;
@@ -121,11 +121,15 @@ public class GameScreen implements Screen {
     public static float coinForEnemyValue = 0, coinForTime = 0, coinForGame = 0, totalTime = 0f, TIME = 0f, elapsedTime;
     public float timeForAch = 0f;
 
-    public static int idAchivs, endCode = 0, maxMobSpawn = 120, maxDropSpawn = 300;
-    public int timeShowNewAch = 4; // sec
+    public static int idAchivs, endCode = 0, maxMobSpawn = 120, maxDropSpawn = 900;
+    public int timeShowNewAch = 4;
+    public static float infoTime = 2;
 
     public static boolean endForHero = false, isPause = false, STOP = false, isShow = false, isTimeGo = true, showAchivs = false, isPickupItem = false, isKill = false;
+    public static Skin label = new Skin(Gdx.files.internal("UI/AboutGame/label.json"));
     public boolean start = false;
+    static Label textItem;
+
 
     public GameScreen(GameRepository repo) {
         gameRepository = repo;
@@ -139,6 +143,7 @@ public class GameScreen implements Screen {
         pauseStage = new Stage(uiViewport);
         worldStage = new Stage(worldViewport);
         uiStage    = new Stage(uiViewport);
+        infoStage = new Stage(uiViewport);
 
         chunks  = new ArrayList<>();
         zone    = new ArrayList<>();
@@ -159,6 +164,10 @@ public class GameScreen implements Screen {
         // <><><><><><><><><><> Создание интерфейса <><><><><><><><><><>
         ArrayList<Actor> ac = gLauncher.generationUI();
 
+        textItem = new Label("", label);
+        textItem.setPosition((float)  10,
+            (float) Gdx.graphics.getHeight() - 430);
+
         for (Actor a: ac) {
             uiStage.addActor(a);
         }
@@ -170,6 +179,8 @@ public class GameScreen implements Screen {
         uiStage.addActor(pauseButton);
         uiStage.addActor(hearts);
         uiStage.addActor(expBar);
+        textItem.setFontScale(2.1f);
+        infoStage.addActor(textItem);
 
         // <><><><><><><><><><> Настройки спавна мобов <><><><><><><><><><>
         spawner = new SpawnMob(new Post() {
@@ -411,6 +422,12 @@ public class GameScreen implements Screen {
             hero.unUseWeapon();
         }
 
+        infoTime -= delta;
+
+        if (infoTime <= 0) {
+            textItem.setText("");
+        }
+
         // <><><><><><><><><><> Обработка логики <><><><><><><><><><>
         if (!STOP) {
             for (Enemy e : enemies) {
@@ -549,6 +566,8 @@ public class GameScreen implements Screen {
         }
 
         // <><><><><><><><><><> Отрисовка UI <><><><><><><><><><>
+        infoStage.act(delta);
+        infoStage.draw();
         uiStage.act(delta);
         uiStage.draw();
     }
@@ -813,6 +832,11 @@ public class GameScreen implements Screen {
             }
         }).start();
     }
+    public static void textItemFun(String textItemParam) {
+        infoTime = 2;
+        textItem.setText(textItemParam);
+    }
+
     public void endGame() {
         if(endForHero) {
             endForStaticParams();

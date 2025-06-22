@@ -18,14 +18,7 @@ public abstract class AI {
         this.aiOwner = aiOwner;
     }
 
-    /**
-     * Вычисляет вектор движения к цели.
-     * @param target Целевая позиция.
-     * @param position Текущая позиция управляемого объекта.
-     * @param speed Скорость движения.
-     * @param delta Время, прошедшее с последнего кадра.
-     * @return Вектор движения, который нужно применить к позиции.
-     */
+
     public Vector2 MoveToPlayer(Vector2 target, Vector2 position, float speed, float delta) {
         Vector2 fixTarget   = new Vector2(target.x, target.y);
         Vector2 fixPosition = new Vector2(position.x, position.y);

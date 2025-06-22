@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Polygon; // Импортируем Polygon
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Intersector; // Импортируем Intersector
+import com.badlogic.gdx.math.Intersector;
 
 import java.util.Objects;
 
@@ -23,13 +23,15 @@ public class Ammo extends OneSpriteEffect {
     protected TextureRegion r;
     protected Hero hero;
     protected Enemy enemy;
-    protected Rectangle bound; // Bound для прямоугольного столкновения снаряда
-    protected Vector2 position, target;
+    protected Rectangle bound;
+    protected Vector2 position;
     protected Death die;
 
-    // Добавляем Polygon для точного столкновения со снарядом, если он не круглый
+    // НОВОЕ: Вектор, хранящий ИСХОДНОЕ направление движения снаряда
+    protected Vector2 initialDirection;
+
     private Polygon ammoPolygon;
-    private float[] ammoVertices; // Вершины для полигона снаряда
+    private float[] ammoVertices;
 
     public Ammo(Texture texture, TextureRegion r, Death die, Enemy enemy, Hero hero, int width, int height, float speed) {
         super(texture, width, height, speed);
@@ -40,20 +42,25 @@ public class Ammo extends OneSpriteEffect {
 
         position = new Vector2(enemy.getCenterVector());
         bound = new Rectangle(position.x, position.y, width, height);
-        target = new Vector2(hero.getCenterVector().x, hero.getCenterVector().y);
+        Vector2 target = new Vector2(hero.getCenterVector().x, hero.getCenterVector().y);
 
-        // Инициализируем вершины для полигона снаряда
+        initialDirection = new Vector2(target).sub(position);
+        if (initialDirection.len() > 0) { // Нормализуем, чтобы получить единичный вектор направления
+            initialDirection.nor();
+        } else {
+
+            initialDirection.set(0, 1);
+        }
+
         ammoVertices = new float[]{0, 0, width, 0, width, height, 0, height};
         ammoPolygon = new Polygon(ammoVertices);
-        // Устанавливаем опорную точку для вращения, если снаряд может вращаться
-        ammoPolygon.setOrigin(width / 2, height / 2);
+        ammoPolygon.setOrigin(width / 2, height / 2); // Центр для вращения
     }
 
     protected void updateBound() {
-        // Обновляем позицию прямоугольного bound
+
         bound.x = getX();
         bound.y = getY();
-        // Обновляем позицию полигона
         ammoPolygon.setPosition(getX(), getY());
     }
 
@@ -66,51 +73,45 @@ public class Ammo extends OneSpriteEffect {
     @Override
     public void act(float delta) {
         super.act(delta);
-        updateBound(); // Обновляем и прямоугольный bound, и ammoPolygon
-
-        // Проверка выхода за границы мира
-        if (position.y >= GameScreen.WORLD_HEIGHT || position.y <= 0 || position.x >= GameScreen.WORLD_WIDTH || position.x <= 0) {
-            remove();
-            return; // Важно выйти, чтобы не выполнять дальнейшую логику для удаленного снаряда
-        }
-
-        // Движение снаряда к цели
-        Vector2 fixTarget = new Vector2(target.x, target.y);
-        Vector2 fixPosition = new Vector2(position.x, position.y);
-
-        Vector2 direction = fixTarget.sub(fixPosition);
-
-        if (direction.len() > 0) direction.nor();
-
-        position.add(direction.scl(speed * delta));
+        updateBound();
+        position.add(initialDirection.x * speed * delta, initialDirection.y * speed * delta);
         setPosition(position.x, position.y);
 
-        // Проверка столкновения с героем
-        if (bound.overlaps(hero.getBound())) {
-            hero.setHealth(hero.getHealth() - enemy.getDamage());
-            die.whoDie(this); // Вызываем эффект смерти/исчезновения снаряда
-            remove(); // Удаляем снаряд из сцены
-            return; // Выходим после обработки столкновения
+
+        float margin = Math.max(getWidth(), getHeight());
+        if (position.y >= GameScreen.WORLD_HEIGHT + margin || position.y <= -margin ||
+            position.x >= GameScreen.WORLD_WIDTH + margin || position.x <= -margin) {
+            remove();
+            return;
         }
 
-        // --- НОВОЕ: Проверка столкновения со щитом ---
+        // --- Проверка столкновения с героем и щитом ---
+
+        // Получаем Polygon щита. Он может быть null, если щит неактивен.
         Polygon shieldPolygon = null;
         if (hero.uniqueAbility instanceof ShieldAbility) {
             shieldPolygon = ((ShieldAbility) hero.uniqueAbility).getShieldPolygon();
         }
 
-        if (shieldPolygon != null) { // Убедимся, что щит существует
-            // Используем Intersector.overlapConvexPolygons для точной проверки
-            if (Intersector.overlapConvexPolygons(ammoPolygon, shieldPolygon)) {
-                die.whoDie(this); // Вызываем эффект смерти/исчезновения снаряда
-                remove(); // Удаляем снаряд из сцены
-                return;
-            }
+        // Проверяем столкновение сначала со щитом, если он есть и активен
+        if (shieldPolygon != null && Intersector.overlapConvexPolygons(ammoPolygon, shieldPolygon)) {
+            die.whoDie(this);
+            remove();
+            return;
+        }
+
+        // если герой тоже Rectangle. Если герой - Polygon, то использовать Intersector.overlapConvexPolygons)
+        if (bound.overlaps(hero.getBound())) {
+            hero.setHealth(hero.getHealth() - enemy.getDamage());
+            die.whoDie(this);
+            remove();
         }
     }
 
     @Override
     public void dispose() {
         super.dispose();
+        // Здесь можно добавить dispose для текстуры снаряда, если она уникальна для каждого Ammo
+        // r.getTexture().dispose(); // Если текстура управляется здесь
     }
 }

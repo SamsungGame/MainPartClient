@@ -126,7 +126,6 @@ public class GameLauncher {
         Texture heartFullBit = new Texture("UI/GameUI/OtherGameItems/heart_full_bit.png");
         hearts = new Heart(heartFull, heartEmpty, heartFullBit, hero.getHealth());
 
-
         // Создание шкалы энергии
         Texture EnergyValue = new Texture("UI/GameUI/OtherGameItems/energy.png");
         Image EnergyValueImg = new Image(EnergyValue);
@@ -134,9 +133,9 @@ public class GameLauncher {
         EnergyValueImg.setPosition((float) Gdx.graphics.getWidth() - 100, Gdx.graphics.getHeight() - 130);
         a.add(EnergyValueImg);
         // Текст
-        Skin energySkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/energyText.json"));
-        energyValue = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), energySkin);
-        energyValue.setFontScale(5f);
+//        Skin energySkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/energyText.json"));
+        energyValue = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), GameScreen.label);
+        energyValue.setFontScale(2.5f);
         energyValue.setPosition(Gdx.graphics.getWidth() - (EnergyValueImg.getWidth() + energyValue.getWidth() + 150),
             Gdx.graphics.getHeight() - (energyValue.getHeight() + EnergyValueImg.getHeight() / 2 + 30));
 
@@ -147,9 +146,9 @@ public class GameLauncher {
         radiationLevelImg.setPosition((float) Gdx.graphics.getWidth() - 120, Gdx.graphics.getHeight() - (130 + EnergyValueImg.getHeight()));
         a.add(radiationLevelImg);
         // Текст
-        Skin radiationSkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/energyText.json"));
-        radiationValue = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), radiationSkin);
-        radiationValue.setFontScale(5f);
+//        Skin radiationSkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/energyText.json"));
+        radiationValue = new Label(String.valueOf(hero.getAntiRadiationCostumePower()), GameScreen.label);
+        radiationValue.setFontScale(2.5f);
         radiationValue.setPosition(Gdx.graphics.getWidth() - radiationLevelImg.getWidth() - radiationValue.getWidth() - 30,
             Gdx.graphics.getHeight() - (energyValue.getHeight() + EnergyValueImg.getHeight() + radiationLevelImg.getHeight() / 2 + 50));
 

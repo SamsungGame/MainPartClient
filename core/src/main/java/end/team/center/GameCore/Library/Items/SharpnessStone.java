@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.Random;
 
 import end.team.center.GameCore.Library.ItemType;
+import end.team.center.GameCore.Logic.GameLauncher;
 import end.team.center.GameCore.Objects.InInventary.Drops;
 import end.team.center.GameCore.Objects.OnMap.Hero;
 import end.team.center.Screens.Game.GameScreen;
@@ -38,9 +39,12 @@ public class SharpnessStone extends Drops {
             // Исправленная строка: генерация числа от 3 до 10 включительно
             // random.nextInt(max - min + 1) + min
             // random.nextInt(10 - 3 + 1) + 3 = random.nextInt(8) + 3
-            hero.addExpWeapon(random.nextInt(6) + 3);
+            int aForText = random.nextInt(6) + 3;
+            hero.addExpWeapon(aForText);
 
+            GameScreen.textItemFun("Урон +" + String.valueOf(aForText));
             GameScreen.isPickupItem = true;
+
 
             remove();
             GameScreen.drop.remove(this);

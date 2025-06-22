@@ -194,10 +194,7 @@ public abstract class Enemy extends Entity {
                         Vector2 otherCenter = otherEnemy.getCenterVector();
                         Vector2 repulsionDir = thisCenter.cpy().sub(otherCenter).nor();
                         repelFromEnemy(repulsionDir);
-                        // Здесь мы не используем return; так как `repelFromEnemy` устанавливает флаг
-                        // `isBeingRepelledByOtherEnemy`, который обрабатывается в начале метода.
-                        // Это позволяет отталкиванию быть более "мягким" и не прерывать сразу AI-движение,
-                        // если оно не полностью заблокировано.
+
                     }
                 }
             }
@@ -276,9 +273,16 @@ public abstract class Enemy extends Entity {
 
     @Override
     public void act(float delta) {
-        if (isLive) {
-            super.act(delta);
+        Vector2 heroCenter = hero.getCenterVector();
+        Vector2 enemyCenter = getCenterVector();
+        float distance = heroCenter.dst(enemyCenter);
+
+        if (distance > 800 && this.isLive) { // Если враг дальше 800 пикселей
+            speed = runSpeed;
+        } else { // Если враг ближе или равен 800 пикселям
+            speed = runSpeed / 8; // Используем обычную (пониженную) скорость
         }
+
     }
 
     @Override
