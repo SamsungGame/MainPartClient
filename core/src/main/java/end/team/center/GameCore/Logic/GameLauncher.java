@@ -129,7 +129,7 @@ public class GameLauncher {
         // Создание шкалы энергии
         Texture EnergyValue = new Texture("UI/GameUI/OtherGameItems/energy.png");
         Image EnergyValueImg = new Image(EnergyValue);
-        EnergyValueImg.setSize(70, 98);
+        EnergyValueImg.setSize((float) (Gdx.graphics.getWidth()/33), (float) Gdx.graphics.getHeight() /11);
         EnergyValueImg.setPosition((float) Gdx.graphics.getWidth() - 100, Gdx.graphics.getHeight() - 130);
         a.add(EnergyValueImg);
         // Текст
@@ -142,7 +142,7 @@ public class GameLauncher {
         // Создание шкалы радиации
         Texture radiationLevel = new Texture("UI/GameUI/OtherGameItems/warning.png");
         Image radiationLevelImg = new Image(radiationLevel);
-        radiationLevelImg.setSize(90, 78);
+        radiationLevelImg.setSize((float) (Gdx.graphics.getWidth()/25.63), (float) (Gdx.graphics.getHeight()/15.42));
         radiationLevelImg.setPosition((float) Gdx.graphics.getWidth() - 120, Gdx.graphics.getHeight() - (130 + EnergyValueImg.getHeight()));
         a.add(radiationLevelImg);
         // Текст
@@ -154,25 +154,25 @@ public class GameLauncher {
 
         Texture ExpTexture1 = new Texture("UI/GameUI/OtherGameItems/expBorderLeft.png");
         Image image = new Image(ExpTexture1);
-        image.setSize(20, 20);
+        image.setSize((float) Gdx.graphics.getHeight() /54, (float) Gdx.graphics.getHeight() /54);
         image.setPosition((float) Gdx.graphics.getWidth() / 2 - 420, Gdx.graphics.getHeight() - 110);
         a.add(image);
 
         Skin skin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/expProgress.json"));
         expBar = new ProgressBar(0, hero.getMaxExp(), 1, false, skin);
-        expBar.setSize(800, 60);
+        expBar.setSize((float) ((float) Gdx.graphics.getWidth() /2.88), (float) Gdx.graphics.getHeight() /18);
         expBar.setPosition((float) Gdx.graphics.getWidth() / 2 - 400, Gdx.graphics.getHeight() - 130);
 
         Texture ExpTexture2 = new Texture("UI/GameUI/OtherGameItems/expBorderRight.png");
         Image image2 = new Image(ExpTexture2);
-        image2.setSize(20, 20);
+        image2.setSize((float) Gdx.graphics.getHeight() /54, (float) Gdx.graphics.getHeight() /54);
         image2.setPosition((float) Gdx.graphics.getWidth() / 2 + 400, Gdx.graphics.getHeight() - 110);
         a.add(image2);
 
 
         Skin pauseSkin = new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/pauseSkin.json"));
         pauseButton = new ImageButton(pauseSkin);
-        pauseButton.setSize(75, 94);
+        pauseButton.setSize((float) (Gdx.graphics.getWidth()/30.76), (float) (Gdx.graphics.getHeight()/11.49));
         pauseButton.setPosition(10, Gdx.graphics.getHeight() - pauseButton.getHeight() - 200);
 
         pauseButton.addListener(new ChangeListener() {
@@ -322,4 +322,5 @@ public class GameLauncher {
         GameScreen.backgroundMusic.setVolume(0.1f);
         GameScreen.backgroundMusic.play();
     }
+
 }

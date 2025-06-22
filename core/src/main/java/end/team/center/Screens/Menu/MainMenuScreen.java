@@ -58,6 +58,7 @@ public class MainMenuScreen implements Screen {
 
 
     public MainMenuScreen(int code, GameRepository repo) {
+
         activeSkin = new Image(new TextureRegionDrawable(MainMenuScreen.images[repo.getCurrentSelectedSkinId()]));
         this.gameRepository = repo;
 
@@ -123,6 +124,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new SkinsScreen(repo));
+                Gdx.app.log("W_H", Gdx.graphics.getWidth() + " " + Gdx.graphics.getHeight());
             }
         });
         buttonSkin.setSize(140, 140);

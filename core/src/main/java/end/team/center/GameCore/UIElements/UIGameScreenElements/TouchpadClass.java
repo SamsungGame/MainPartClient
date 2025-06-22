@@ -21,7 +21,7 @@ import java.util.List;
 public class TouchpadClass extends Touchpad {
 
     public static List<TouchpadClass> touchpads = new ArrayList<>();
-    public float touchSize = 300;
+    public float touchSize = (float) (Gdx.graphics.getHeight()/3.6);
     public float x = 0;
     public float y = 0;
     public boolean isTouchpadActive;

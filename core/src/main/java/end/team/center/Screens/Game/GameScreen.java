@@ -119,6 +119,7 @@ public class GameScreen implements Screen {
 
 
     public GameScreen(GameRepository repo) {
+
         gameRepository = repo;
 
         // <><><><><><><><><><> Создание сцен, камер, экранов <><><><><><><><><><>
@@ -749,12 +750,14 @@ public class GameScreen implements Screen {
             STOP = true;
             isPause = true;
             Gdx.input.setInputProcessor(pauseStage);
-//            uiStage.getRoot().removeActor(touchpadMove);
-//            uiStage.getRoot().removeActor(touchpadAttack);
+            uiStage.getRoot().removeActor(touchpadMove);
+            uiStage.getRoot().removeActor(touchpadAttack);
+            uiStage.getRoot().removeActor(abilityButton);
         }
         else {
-//            uiStage.addActor(touchpadMove);
-//            uiStage.addActor(touchpadAttack);
+            uiStage.addActor(touchpadMove);
+            uiStage.addActor(touchpadAttack);
+            uiStage.addActor(abilityButton);
             STOP = false;
             isPause = false;
             Gdx.input.setInputProcessor(uiStage);
