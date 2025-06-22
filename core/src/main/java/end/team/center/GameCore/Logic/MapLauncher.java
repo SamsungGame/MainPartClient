@@ -96,7 +96,7 @@ public class MapLauncher {
         float distance, minDistance = 400;
 
         Vector2 size;
-        if (key != -1) size = new Vector2(trees[key].getWidth(), trees[key].getHeight());
+        if (key != -1) size = new Vector2(trees[key].getWidth() * 10, trees[key].getHeight() * 10);
         else           size = new Vector2(189, 171);
 
         boolean correctPos;

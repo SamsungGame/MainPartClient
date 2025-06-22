@@ -167,6 +167,7 @@ public class GameScreen implements Screen {
         uiStage.addActor(energyValue);
         uiStage.addActor(touchpadAttack);
         uiStage.addActor(abilityButton);
+        uiStage.addActor(pauseButton);
         uiStage.addActor(hearts);
         uiStage.addActor(expBar);
 
