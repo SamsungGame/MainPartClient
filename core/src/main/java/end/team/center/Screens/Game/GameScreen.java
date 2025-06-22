@@ -121,7 +121,7 @@ public class GameScreen implements Screen {
     public static float coinForEnemyValue = 0, coinForTime = 0, coinForGame = 0, totalTime = 0f, TIME = 0f, elapsedTime;
     public float timeForAch = 0f;
 
-    public static int idAchivs, endCode = 0, maxMobSpawn = 120, maxDropSpawn = 1000;
+    public static int idAchivs, endCode = 0, maxMobSpawn = 120, maxDropSpawn = 300;
     public int timeShowNewAch = 4; // sec
 
     public static boolean endForHero = false, isPause = false, STOP = false, isShow = false, isTimeGo = true, showAchivs = false, isPickupItem = false, isKill = false;
