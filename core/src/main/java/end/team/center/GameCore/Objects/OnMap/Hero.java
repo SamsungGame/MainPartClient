@@ -328,6 +328,7 @@ public class Hero extends Friendly {
                 MainMenuScreen.showAchivs = true;
                 MainMenuScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/door_open.png"));
                 MainMenuScreen.idAchivs = 4;
+                gameRepository.unlockAchievement(4);
             }
 
             GameScreen.endCode = 3;
@@ -359,6 +360,7 @@ public class Hero extends Friendly {
                     MainMenuScreen.showAchivs = true;
                     MainMenuScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/door_open.png"));
                     MainMenuScreen.idAchivs = 4;
+                    gameRepository.unlockAchievement(4);
                 }
                 GameScreen.endCode = 2;
                 GameScreen.toggleDeath(true);

@@ -357,6 +357,7 @@ public class GameScreen implements Screen {
             showAchivs = true;
             imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/time_open.png"));
             idAchivs = 3;
+            gameRepository.unlockAchievement(3);
         }
 
         // <><><><><><><><><><> Зачисление монет и обновление <><><><><><><><><><>
@@ -853,7 +854,6 @@ public class GameScreen implements Screen {
 
                 imageAchivs.remove();
 
-                gameRepository.unlockAchievement(idAchivs);
                 idAchivs = -1;
             }
         }).start();

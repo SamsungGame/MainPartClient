@@ -51,19 +51,23 @@ public class Portal extends StaticObject {
                 MainMenuScreen.showAchivs = true;
                 MainMenuScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/exit_open.png"));
                 MainMenuScreen.idAchivs = 1;
+                gameRepository.unlockAchievement(1);
             } else if (!MainMenuScreen.gameRepository.getAchievements().get(2) && !GameScreen.isPickupItem) {
                 MainMenuScreen.showAchivs = true;
                 MainMenuScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/knife_open.png"));
                 MainMenuScreen.idAchivs = 2;
+                gameRepository.unlockAchievement(2);
             } else if (!MainMenuScreen.gameRepository.getAchievements().get(5) && !GameScreen.isKill) {
                 MainMenuScreen.showAchivs = true;
                 MainMenuScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/clear_open.png"));
                 MainMenuScreen.idAchivs = 5;
+                gameRepository.unlockAchievement(5);
             }
             else if (!MainMenuScreen.gameRepository.getAchievements().get(4) && !GameScreen.isKill) {
                 MainMenuScreen.showAchivs = true;
                 MainMenuScreen.imageAchivs = new Image(new Texture("UI/GameUI/Achievements/open/clear_open.png"));
                 MainMenuScreen.idAchivs = 5;
+                gameRepository.unlockAchievement(5);
             }
 
 
