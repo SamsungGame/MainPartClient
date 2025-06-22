@@ -39,7 +39,7 @@ public class SharpnessStone extends Drops {
             // Исправленная строка: генерация числа от 3 до 10 включительно
             // random.nextInt(max - min + 1) + min
             // random.nextInt(10 - 3 + 1) + 3 = random.nextInt(8) + 3
-            int aForText = random.nextInt(6) + 3;
+            int aForText = random.nextInt(4) + 2;
             hero.addExpWeapon(aForText);
 
             GameScreen.textItemFun("Урон +" + aForText);

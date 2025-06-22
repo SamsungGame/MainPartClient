@@ -106,7 +106,7 @@ public class GameScreen implements Screen {
     public static float coinForEnemyValue = 0, coinForTime = 0, coinForGame = 0, totalTime = 0f, TIME = 0f, elapsedTime;
     public float timeForAch = 0f;
 
-    public static int idAchivs, endCode = 0, maxMobSpawn = 120, maxDropSpawn = 900;
+    public static int idAchivs, endCode = 0, maxMobSpawn = 120, maxDropSpawn = 250;
     public int timeShowNewAch = 4;
     public static float infoTime = 2;
 
@@ -154,7 +154,7 @@ public class GameScreen implements Screen {
 
         textItem = new Label("", label);
         textItem.setPosition((float)  10,
-            (float) Gdx.graphics.getHeight() - 430);
+            (float) Gdx.graphics.getHeight() - 400);
 
         for (Actor a: ac) {
             uiStage.addActor(a);

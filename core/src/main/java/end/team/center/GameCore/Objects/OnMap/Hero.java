@@ -58,6 +58,7 @@ public class Hero extends Friendly {
     private final float DISABLE_MOVEMENT_DURATION = 0.1f;
     private Texture activeSheild, sheild1, sheild2, sheild3;
     Sound soundUronShield = Gdx.audio.newSound(Gdx.files.internal("Sounds/uron.mp3"));
+    Sound soundAbility = Gdx.audio.newSound(Gdx.files.internal("Sounds/abilitySound.mp3"));
     public PlayerLiveActZone PLAZ;
     public float stateTime = 0, time = 5;
 
@@ -102,6 +103,9 @@ public class Hero extends Friendly {
         if (uniqueAbility != null) {
             uniqueAbility.activate();
             isAbilityActive = uniqueAbility.isActive();
+
+            long id = soundAbility.play();
+            soundAbility.setVolume(id, 0.7f);
         }
     }
     public void setDisableMovement(boolean disable) {
