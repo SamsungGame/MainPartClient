@@ -1,16 +1,20 @@
 package end.team.center.GameCore.Objects.OnMap;
 
+import static end.team.center.Screens.Game.GameScreen.hero;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+
+import java.util.ArrayList;
 
 import end.team.center.GameCore.Library.CharacterAnimation;
-import end.team.center.GameCore.Logic.Chunk;
 import end.team.center.GameCore.Objects.Map.Tree;
+import end.team.center.Screens.Game.GameScreen;
 
 public abstract class Friendly extends Entity {
-    private Chunk nowChunk;
 
     public Friendly(Texture texture, CharacterAnimation anim, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, float worldHeight, float worldWidth) {
         super(texture, anim, vector, height, width, health, damage, defence, speed, worldHeight, worldWidth);
@@ -44,10 +48,15 @@ public abstract class Friendly extends Entity {
         // Ограничиваем позицию границами мира
         newX = Math.max(BOUNDARY_PADDING, Math.min(newX, worldWidth - BOUNDARY_PADDING - width));
 
-        // Проверяем, в дереве ли игрок
+        ArrayList<Tree> tt = new ArrayList<>();
+        ArrayList<Actor> a = hero.PLAZ.actors;
+
+        for (Actor aa: a) {
+            if (aa instanceof Tree) tt.add((Tree) aa);
+        }
 
         boolean inTree = false;
-        for (Tree t: nowChunk.getTrees()) {
+        for (Tree t: tt) {
             if (bound.overlaps(t.getBound())) inTree = true;
         }
 
@@ -55,8 +64,8 @@ public abstract class Friendly extends Entity {
             Rectangle nextXBound = new Rectangle(newX, tempY, width, height); // Проверяем только изменение X
             boolean collidedX = false;
 
-            if (nowChunk != null) {
-                for (Tree t : nowChunk.getTrees()) {
+            if (true) {
+                for (Tree t : tt) {
                     Rectangle treeBound = t.getBound();
                     if (nextXBound.overlaps(treeBound)) {
                         collidedX = true;
@@ -81,8 +90,8 @@ public abstract class Friendly extends Entity {
             Rectangle nextYBound = new Rectangle(tempX, newY, width, height); // Проверяем изменение Y, учитывая уже скорректированный X
             boolean collidedY = false;
 
-            if (nowChunk != null) {
-                for (Tree t : nowChunk.getTrees()) {
+            if (true) {
+                for (Tree t : tt) {
                     Rectangle treeBound = t.getBound();
                     if (nextYBound.overlaps(treeBound)) {
                         collidedY = true;
@@ -99,11 +108,11 @@ public abstract class Friendly extends Entity {
             }
             tempY = newY; // Применяем скорректированный Y
         } else {
-            for (Tree t : nowChunk.getTrees()) {
+            for (Tree t : tt) {
                 Rectangle treeBound = t.getBound();
                 if (bound.overlaps(treeBound)) {
-                    vector.x = t.getX() - getWidth();
-                    vector.y = t.getY() - getHeight();
+                    vector.x = t.getX() - getWidth() - 5;
+                    vector.y = t.getY() - getHeight() - 5;
                 }
             }
         }
@@ -134,13 +143,5 @@ public abstract class Friendly extends Entity {
     @Override
     public void dispose() {
         super.dispose();
-    }
-
-    public Chunk getChunk() {
-        return nowChunk;
-    }
-
-    public void setChunk(Chunk c) {
-        nowChunk = c;
     }
 }

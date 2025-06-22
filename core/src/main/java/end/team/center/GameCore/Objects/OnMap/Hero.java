@@ -14,6 +14,7 @@ import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.Library.Items.Knife;
 import end.team.center.GameCore.Library.WeaponType;
 import end.team.center.GameCore.Logic.GMath;
+import end.team.center.GameCore.Logic.PlayerLiveActZone;
 import end.team.center.GameCore.Logic.ShaderManager;
 import end.team.center.GameCore.Objects.InInventary.Weapon;
 import end.team.center.GameCore.Objects.Map.Zone;
@@ -57,6 +58,8 @@ public class Hero extends Friendly {
     private final float DISABLE_MOVEMENT_DURATION = 0.1f;
     private Texture activeSheild, sheild1, sheild2, sheild3;
     Sound soundUronShield = Gdx.audio.newSound(Gdx.files.internal("Sounds/uron.mp3"));
+    public PlayerLiveActZone PLAZ;
+    public float stateTime = 0, time = 5;
 
 
     public Hero(GameRepository repo, Texture texture, CharacterAnimation anim, HeroClassType heroClassType, Vector2 vector, float height, float width, int health, int damage, int defence, float speed, float worldWidth, float worldHeight) {
@@ -91,6 +94,8 @@ public class Hero extends Friendly {
                 this.uniqueAbility = new ChargeRecoveryAbility(this);;
                 break;
         }
+
+        PLAZ = new PlayerLiveActZone(this);
     }
 
     public void activateUniqueAbility() {
@@ -292,6 +297,12 @@ public class Hero extends Friendly {
     @Override
     public void act(float delta) {
         super.act(delta);
+
+        stateTime += delta;
+        if (stateTime >= time) {
+            PLAZ.update();
+            stateTime = 0;
+        }
 
         if (disableMovement) {
             disableMovementTimer += delta;

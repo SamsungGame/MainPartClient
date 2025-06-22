@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.ArrayList;
 
@@ -235,7 +236,15 @@ public abstract class Enemy extends Entity {
 
     private boolean checkCollisionAt(float nextX, float nextY, Polygon enemyPolygon, Polygon shieldPolygon, boolean canPushByShield) {
         Rectangle enemyRectForTreeCheck = new Rectangle(nextX, nextY, width, height);
-        for (Tree t : hero.getChunk().getTrees()) {
+
+        ArrayList<Tree> tt = new ArrayList<>();
+        ArrayList<Actor> a = hero.PLAZ.actors;
+
+        for (Actor aa: a) {
+            if (aa instanceof Tree) tt.add((Tree) aa);
+        }
+
+        for (Tree t : tt) {
             if (t.getBound().overlaps(enemyRectForTreeCheck)) {
                 if (this.ai instanceof AI_Owl) {
                     AI_Owl owlAI = (AI_Owl) this.ai;

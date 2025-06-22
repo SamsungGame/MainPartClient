@@ -2,7 +2,6 @@ package end.team.center.Screens.Game;
 
 import static end.team.center.GameCore.Objects.OnMap.Hero.HeroClassType.*;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -10,7 +9,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
@@ -24,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -32,17 +29,13 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import end.team.center.Center;
-import end.team.center.GameCore.GameEvent.SpawnItem;
-import end.team.center.GameCore.Library.CharacterAnimation;
 import end.team.center.GameCore.GameEvent.Post;
 import end.team.center.GameCore.GameEvent.SpawnMob;
 import end.team.center.GameCore.Library.ItemType;
 import end.team.center.GameCore.Library.Items.Experience;
 import end.team.center.GameCore.Library.Other.Portal;
-import end.team.center.GameCore.Logic.Chunk;
 import end.team.center.GameCore.Logic.GameLauncher;
 import end.team.center.GameCore.Logic.MapLauncher;
 import end.team.center.GameCore.Objects.InInventary.Drops;
@@ -51,19 +44,13 @@ import end.team.center.GameCore.Objects.Map.NebulaCloud;
 import end.team.center.GameCore.Objects.Map.Tree;
 import end.team.center.GameCore.Objects.Map.Zone;
 import end.team.center.GameCore.Objects.OnMap.Enemy;
-import end.team.center.GameCore.Objects.OnMap.Entity;
-import end.team.center.GameCore.Objects.OnMap.GameObject;
 import end.team.center.GameCore.Objects.OnMap.Hero;
-import end.team.center.GameCore.Objects.OnMap.Hero.HeroClassType.*;
-import end.team.center.GameCore.UIElements.AbilityButton;
 import end.team.center.GameCore.UIElements.Power;
 import end.team.center.GameCore.UIElements.UIGameScreenElements.Heart;
 import end.team.center.GameCore.UIElements.UIGameScreenElements.TouchpadClass;
 import end.team.center.GameCore.Logic.GameCamera;
 import end.team.center.GameCore.Logic.ShaderManager;
-import end.team.center.ProgramSetting.Config;
 import end.team.center.ProgramSetting.LocalDB.GameRepository;
-import end.team.center.Redact.SystemOut.Console;
 import end.team.center.Screens.Menu.MainMenuScreen;
 
 public class GameScreen implements Screen {
@@ -105,7 +92,6 @@ public class GameScreen implements Screen {
 
     // <><><><><><><><><> Низшие классы абстрактых обьектов <><><><><><><><><>
     private static SpawnMob spawner;
-    private SpawnItem spawnItem;
 
     // <><><><><><><><><> Низшие классы массивов <><><><><><><><><>
     private ArrayList<Object> wait;
@@ -113,8 +99,7 @@ public class GameScreen implements Screen {
     public static ArrayList<Zone> zone;
     public static ArrayList<Enemy> enemies;
     public static ArrayList<Drops> drop;
-    public ArrayList<Tree> trees;
-    public static ArrayList<Chunk> chunks;
+    public static ArrayList<Tree> trees;
 
     // <><><><><><><><><> Низшие типы данных <><><><><><><><><>
     public static final float WORLD_WIDTH = 30000, WORLD_HEIGHT = 30000;
@@ -125,7 +110,9 @@ public class GameScreen implements Screen {
     public int timeShowNewAch = 4;
     public static float infoTime = 2;
 
-    public static boolean endForHero = false, isPause = false, STOP = false, isShow = false, isTimeGo = true, showAchivs = false, isPickupItem = false, isKill = false;
+    public static boolean endForHero = false, isPause = false, STOP = false, isShow = false, isTimeGo = true, showAchivs = false, isPickupItem = false, isKill = false, isFirstRender = true;
+
+    // <><><><><><><><><> Фигня которую Сергей не может рассортировать <><><><><><><><><>
     public static Skin label = new Skin(Gdx.files.internal("UI/AboutGame/label.json"));
     public boolean start = false;
     static Label textItem;
@@ -133,171 +120,6 @@ public class GameScreen implements Screen {
 
     public GameScreen(GameRepository repo) {
         gameRepository = repo;
-
-        // <><><><><><><><><><> Создание сцен, камер, экранов <><><><><><><><><><>
-        gameCamera    = new GameCamera(WORLD_WIDTH, WORLD_HEIGHT);
-        worldViewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCamera.getCamera());
-        uiViewport    = new ScreenViewport();
-
-        noAct      = new Stage(worldViewport);
-        pauseStage = new Stage(uiViewport);
-        worldStage = new Stage(worldViewport);
-        uiStage    = new Stage(uiViewport);
-        infoStage = new Stage(uiViewport);
-
-        chunks  = new ArrayList<>();
-        zone    = new ArrayList<>();
-        wait    = new ArrayList<>();
-        drop    = new ArrayList<>();
-        enemies = new ArrayList<>();
-
-        batch  = new SpriteBatch();
-        powers = new ArrayList<>();
-
-        Gdx.input.setInputProcessor(uiStage);
-
-        // <><><><><><><><><><> Создание игрока <><><><><><><><><><>
-        GameLauncher gLauncher = new GameLauncher();
-        hero = gLauncher.loadHero(repo);
-        worldStage.addActor(hero);
-
-        // <><><><><><><><><><> Создание интерфейса <><><><><><><><><><>
-        ArrayList<Actor> ac = gLauncher.generationUI();
-
-        textItem = new Label("", label);
-        textItem.setPosition((float)  10,
-            (float) Gdx.graphics.getHeight() - 430);
-
-        for (Actor a: ac) {
-            uiStage.addActor(a);
-        }
-        uiStage.addActor(touchpadMove);
-        uiStage.addActor(radiationValue);
-        uiStage.addActor(energyValue);
-        uiStage.addActor(touchpadAttack);
-        uiStage.addActor(abilityButton);
-        uiStage.addActor(pauseButton);
-        uiStage.addActor(hearts);
-        uiStage.addActor(expBar);
-        textItem.setFontScale(2.1f);
-        infoStage.addActor(textItem);
-
-        // <><><><><><><><><><> Настройки спавна мобов <><><><><><><><><><>
-        spawner = new SpawnMob(new Post() {
-            @Override
-            public void post(Enemy[] enemy) {
-                setSpawnMob(enemy);
-            }
-            @Override
-            public void post(Drops drops) {
-
-            }
-        }, hero);
-        spawnItem = new SpawnItem(new Post() {
-            @Override
-            public void post(Enemy[] enemy) {
-
-            }
-            @Override
-            public void post(Drops drops) {
-                setSpawnItem(drops);
-            }
-        }, hero);
-
-        // <><><><><><><><><><> Настройка шейдеров <><><><><><><><><><>
-        frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
-        hardMaskBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
-
-        // Шейдеры из ShaderManager
-        maskShader = ShaderManager.maskShader;
-        hardMaskShader = ShaderManager.hardMaskShader;
-        dimmingShader = ShaderManager.dimmingShader;
-
-        float aspectRatio = (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
-        maskShader.bind();
-        maskShader.setUniformf("u_aspectRatio", aspectRatio);
-        hardMaskShader.bind();
-        hardMaskShader.setUniformf("u_aspectRatio", aspectRatio);
-        dimmingShader.bind();
-        dimmingShader.setUniformf("u_aspectRatio", aspectRatio);
-
-        // <><><><><><><><><><> Добавление существующих усилений <><><><><><><><><><>
-        powers.addAll(gLauncher.generatePowers());
-
-        // <><><><><><><><><><> Запуск музыки <><><><><><><><><><>
-        gLauncher.loadMusic();
-
-        // <><><><><><><><><><> Добавление стартового лута <><><><><><><><><><>
-        wait.addAll(spawnItem.startDropSet());
-
-        // <><><><><><><><><><> Генерация структур на карте <><><><><><><><><><>
-        MapLauncher launcer = new MapLauncher();
-        launcer.generateChunk();
-
-        backgroundTiledRenderer = launcer.generationBrick();
-
-        trees = launcer.generationTree();
-        for (Tree t: trees) {
-            for (Chunk c: chunks) {
-                if (c.getBound().overlaps(t.getBound())) {
-                    c.addActor(t);
-                }
-            }
-        }
-        for (Tree t: trees) {
-            worldStage.addActor(t);
-        }
-
-        portal = launcer.generationPortal(repo); // не трогай
-        worldStage.addActor(portal);
-        launcer.generateZone();
-
-        // <><><><><><><><><><> Генерация тумана на карте <><><><><><><><><><>
-        cloud = new NebulaCloud(450);
-        cloud.addToStage(worldStage);
-
-        // <><><><><><><><><><> Запуск спавнера мобов <><><><><><><><><><>
-        spawner.startWork();
-
-        // <><><><><><><><><><> Создание меню <><><><><><><><><><>
-        Table pauseTable = new Table();
-        pauseTable.setFillParent(true);  // Таблица занимает весь экран
-        pauseTable.center();              // Выравнивание всей таблицы по центру
-
-        Skin buttonSkin = new Skin(Gdx.files.internal("UI/AboutGame/pauseStyle.json"));
-
-        TextButton backToMainMenuScreenButton = new TextButton("В главное меню", buttonSkin);
-        TextButton continueButton = new TextButton("Продолжить игру", buttonSkin);
-
-        backToMainMenuScreenButton.getLabel().setFontScale(3f);
-        continueButton.getLabel().setFontScale(3f);
-
-        backToMainMenuScreenButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                GameScreen.endCode = 0;
-                GameScreen.endForHero = true;
-            }
-        });
-
-        continueButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                togglePause(false);
-            }
-        });
-
-        // Чтобы текст внутри кнопок был по центру:
-        backToMainMenuScreenButton.getLabel().setAlignment(Align.center);
-        continueButton.getLabel().setAlignment(Align.center);
-
-        pauseTable.defaults().pad(50).expandX().fillX();
-        pauseTable.padTop(50);
-
-        pauseTable.add(backToMainMenuScreenButton).row();
-        pauseTable.add(continueButton);
-
-        pauseStage.addActor(pauseTable);
     }
 
     // <><><><><><><><><><> <><><><><><><><><><> <><><><><><><><><><> <><><><><><><><><><> <><><><><><><><><><>
@@ -311,6 +133,12 @@ public class GameScreen implements Screen {
             return;
         }
 
+        if (isFirstRender) {
+            isFirstRender = false;
+
+            delta = 0;
+        }
+
         // <><><><><><><><><><> Обновление глобального времени <><><><><><><><><><>
         elapsedTime += delta;
         if (elapsedTime >= 1) {
@@ -322,13 +150,6 @@ public class GameScreen implements Screen {
         if (hero.newLevelFlag && !powers.isEmpty()) {
             showPowerDialog(delta);
             return;
-        }
-
-        // <><><><><><><><><><> Обновление чанка игрока <><><><><><><><><><>
-        for (Chunk c : chunks) {
-            if (c.getBound().overlaps(hero.getBound())) {
-                hero.setChunk(c);
-            }
         }
 
         // <><><><><><><><><><> Прочее <><><><><><><><><><>
@@ -497,15 +318,14 @@ public class GameScreen implements Screen {
             backgroundTiledRenderer.render(batch, gameCamera.getCamera());
 
             // Сцена с героями, врагами и т.п.
+            hero.PLAZ.act(delta);
+
             worldStage.act(delta);
             worldStage.draw();
 
             // <><><><><><><><><><> Отрисовка чанков <><><><><><><><><><>
-            hero.getChunk().act(delta);
-            hero.getChunk().draw();
 
             if (noAct != null) {
-                noAct.act(delta);
                 noAct.draw();
             }
 
@@ -580,8 +400,7 @@ public class GameScreen implements Screen {
 
     // <><><><><><><><><><> <><><><><><><><><><> <><><><><><><><><><> <><><><><><><><><><> <><><><><><><><><><>
     @Override
-    public void dispose() {
-    }
+    public void dispose() {}
 
     // <><><><><><><><><><> <><><><><><><><><><> <><><><><><><><><><> <><><><><><><><><><> <><><><><><><><><><>
     public static void endForStaticParams() {
@@ -599,13 +418,159 @@ public class GameScreen implements Screen {
         TIME = 0f;
     }
 
+    @Override
+    public void show() {
+        // <><><><><><><><><><> Создание сцен, камер, экранов <><><><><><><><><><>
+        gameCamera    = new GameCamera(WORLD_WIDTH, WORLD_HEIGHT);
+        worldViewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), gameCamera.getCamera());
+        uiViewport    = new ScreenViewport();
 
-    @Override public void show() {
+        noAct      = new Stage(worldViewport);
+        pauseStage = new Stage(uiViewport);
+        worldStage = new Stage(worldViewport);
+        uiStage    = new Stage(uiViewport);
+        infoStage = new Stage(uiViewport);
 
+        zone    = new ArrayList<>();
+        wait    = new ArrayList<>();
+        drop    = new ArrayList<>();
+        enemies = new ArrayList<>();
+
+        batch  = new SpriteBatch();
+        powers = new ArrayList<>();
+
+        Gdx.input.setInputProcessor(uiStage);
+
+        // <><><><><><><><><><> Создание игрока <><><><><><><><><><>
+        GameLauncher gLauncher = new GameLauncher();
+        hero = gLauncher.loadHero(gameRepository);
+        worldStage.addActor(hero);
+
+        // <><><><><><><><><><> Создание интерфейса <><><><><><><><><><>
+        ArrayList<Actor> ac = gLauncher.generationUI();
+
+        textItem = new Label("", label);
+        textItem.setPosition((float)  10,
+            (float) Gdx.graphics.getHeight() - 430);
+
+        for (Actor a: ac) {
+            uiStage.addActor(a);
+        }
+        uiStage.addActor(touchpadMove);
+        uiStage.addActor(radiationValue);
+        uiStage.addActor(energyValue);
+        uiStage.addActor(touchpadAttack);
+        uiStage.addActor(abilityButton);
+        uiStage.addActor(pauseButton);
+        uiStage.addActor(hearts);
+        uiStage.addActor(expBar);
+        textItem.setFontScale(2.1f);
+        infoStage.addActor(textItem);
+
+        // <><><><><><><><><><> Настройки спавна мобов <><><><><><><><><><>
+        spawner = new SpawnMob(new Post() {
+            @Override
+            public void post(Enemy[] enemy) {
+                setSpawnMob(enemy);
+            }
+            @Override
+            public void post(Drops drops) {
+
+            }
+        }, hero);
+
+        // <><><><><><><><><><> Настройка шейдеров <><><><><><><><><><>
+        frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+        hardMaskBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+
+        // Шейдеры из ShaderManager
+        maskShader = ShaderManager.maskShader;
+        hardMaskShader = ShaderManager.hardMaskShader;
+        dimmingShader = ShaderManager.dimmingShader;
+
+        float aspectRatio = (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
+        maskShader.bind();
+        maskShader.setUniformf("u_aspectRatio", aspectRatio);
+        hardMaskShader.bind();
+        hardMaskShader.setUniformf("u_aspectRatio", aspectRatio);
+        dimmingShader.bind();
+        dimmingShader.setUniformf("u_aspectRatio", aspectRatio);
+
+        // <><><><><><><><><><> Добавление существующих усилений <><><><><><><><><><>
+        powers.addAll(gLauncher.generatePowers());
+
+        // <><><><><><><><><><> Запуск музыки <><><><><><><><><><>
+        gLauncher.loadMusic();
+
+        // <><><><><><><><><><> Генерация структур на карте и предметов <><><><><><><><><><>
+        MapLauncher launcer = new MapLauncher();
+
+        backgroundTiledRenderer = launcer.generationBrick();
+
+        trees = launcer.generationTree();
+        for (Tree t: trees) {
+            noAct.addActor(t);
+        }
+
+        portal = launcer.generationPortal(gameRepository); // не трогай
+        worldStage.addActor(portal);
+
+        wait.addAll(launcer.generationItems());
+
+        launcer.generateZone();
+
+        // <><><><><><><><><><> Генерация тумана на карте <><><><><><><><><><>
+        cloud = new NebulaCloud(450);
+        cloud.addToStage(worldStage);
+
+        // <><><><><><><><><><> Запуск спавнера мобов <><><><><><><><><><>
+        spawner.startWork();
+
+        // <><><><><><><><><><> Создание меню <><><><><><><><><><>
+        Table pauseTable = new Table();
+        pauseTable.setFillParent(true);  // Таблица занимает весь экран
+        pauseTable.center();              // Выравнивание всей таблицы по центру
+
+        Skin buttonSkin = new Skin(Gdx.files.internal("UI/AboutGame/pauseStyle.json"));
+
+        TextButton backToMainMenuScreenButton = new TextButton("В главное меню", buttonSkin);
+        TextButton continueButton = new TextButton("Продолжить игру", buttonSkin);
+
+        backToMainMenuScreenButton.getLabel().setFontScale(3f);
+        continueButton.getLabel().setFontScale(3f);
+
+        backToMainMenuScreenButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                GameScreen.endCode = 0;
+                GameScreen.endForHero = true;
+            }
+        });
+
+        continueButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                togglePause(false);
+            }
+        });
+
+        // Чтобы текст внутри кнопок был по центру:
+        backToMainMenuScreenButton.getLabel().setAlignment(Align.center);
+        continueButton.getLabel().setAlignment(Align.center);
+
+        pauseTable.defaults().pad(50).expandX().fillX();
+        pauseTable.padTop(50);
+
+        pauseTable.add(backToMainMenuScreenButton).row();
+        pauseTable.add(continueButton);
+
+        pauseStage.addActor(pauseTable);
     }
     @Override public void pause() {}
     @Override public void resume() {}
-    @Override public void hide() {
+
+    @Override
+    public void hide() {
 
         timeForAch = 0;
 
@@ -647,11 +612,6 @@ public class GameScreen implements Screen {
             backgroundMusicInstrumental = null;
         }
 
-        if (spawnItem != null) {
-            spawnItem.dispose();
-            spawnItem = null;
-        }
-
         if (PSC != null) {
             PSC.dispose();
             PSC = null;
@@ -680,7 +640,6 @@ public class GameScreen implements Screen {
         if (drop != null) drop.clear();
         if (zone != null) zone.clear();
         if (trees != null) trees.clear();
-        if (chunks != null) chunks.clear();
         if (powers != null) powers.clear();
         if (wait != null) wait.clear();
     }
@@ -778,15 +737,6 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void setSpawnItem(Drops d) {
-        wait.add(d);
-
-        for (Chunk c: chunks) {
-            if (c.getBound().overlaps(d.getBound())) c.addActor(d);
-        }
-        if (noAct != null) noAct.addActor(d);
-    }
-
     public void addToList() {
         for(int i = 0; i < wait.size(); i++) {
             if (wait.get(i) != null) {
@@ -796,9 +746,6 @@ public class GameScreen implements Screen {
                 } else if (wait.get(i) instanceof Drops && drop.size() < maxDropSpawn) {
                     drop.add((Drops) wait.get(i));
 
-                    for (Chunk c: chunks) {
-                        if (c.getBound().overlaps(((Drops) wait.get(i)).getBound())) c.addActor(((Drops) wait.get(i)));
-                    }
                     if (noAct != null) noAct.addActor(((Drops) wait.get(i)));
                 }
             }
@@ -841,6 +788,7 @@ public class GameScreen implements Screen {
         if(endForHero) {
             endForStaticParams();
             ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(endCode, gameRepository));
+            dispose();
         }
     }
 }
