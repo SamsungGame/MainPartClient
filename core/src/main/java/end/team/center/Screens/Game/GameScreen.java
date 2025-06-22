@@ -56,7 +56,7 @@ import end.team.center.Screens.Menu.MainMenuScreen;
 public class GameScreen implements Screen {
     // <><><><><><><><><> Высшие классы <><><><><><><><><>
     public static GameRepository gameRepository;
-    public static Stage worldStage, noAct, uiStage, pauseStage, infoStage;
+    public static Stage worldStage, noAct, uiStage, pauseStage, deathStage, infoStage;
     protected static PowerSelectScreen PSC;
     public static Viewport worldViewport, uiViewport;
     public static GameCamera gameCamera;
@@ -110,7 +110,7 @@ public class GameScreen implements Screen {
     public int timeShowNewAch = 4;
     public static float infoTime = 2;
 
-    public static boolean endForHero = false, isPause = false, STOP = false, isShow = false, isTimeGo = true, showAchivs = false, isPickupItem = false, isKill = false, isFirstRender = true;
+    public static boolean endForHero = false, isPause = false, isDeath = false, STOP = false, isShow = false, isTimeGo = true, showAchivs = false, isPickupItem = false, isKill = false, isFirstRender = true;
 
     // <><><><><><><><><> Фигня которую Сергей не может рассортировать <><><><><><><><><>
     public static Skin label = new Skin(Gdx.files.internal("UI/AboutGame/label.json"));
@@ -128,6 +128,7 @@ public class GameScreen implements Screen {
 
         noAct      = new Stage(worldViewport);
         pauseStage = new Stage(uiViewport);
+        deathStage = new Stage(uiViewport);
         worldStage = new Stage(worldViewport);
         uiStage    = new Stage(uiViewport);
         infoStage = new Stage(uiViewport);
@@ -266,6 +267,43 @@ public class GameScreen implements Screen {
         pauseTable.add(continueButton);
 
         pauseStage.addActor(pauseTable);
+
+        Table DeathTable = new Table();
+        DeathTable.setFillParent(true);
+        DeathTable.center();
+
+        TextButton backToMainMenuScreenButtonAfterDeath = new TextButton("В главное меню", buttonSkin);
+        TextButton revivalButton = new TextButton("возродиться: 50", buttonSkin);
+
+        backToMainMenuScreenButtonAfterDeath.getLabel().setFontScale(3f);
+        revivalButton.getLabel().setFontScale(3.3f);
+
+        backToMainMenuScreenButtonAfterDeath.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                GameScreen.endCode = 0;
+                GameScreen.endForHero = true;
+            }
+        });
+
+        revivalButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                toggleDeath(false);
+            }
+        });
+
+        // Чтобы текст внутри кнопок был по центру:
+        backToMainMenuScreenButtonAfterDeath.getLabel().setAlignment(Align.center);
+        revivalButton.getLabel().setAlignment(Align.center);
+
+        DeathTable.defaults().pad(50).expandX().fillX();
+        DeathTable.padTop(70);
+
+        DeathTable.add(backToMainMenuScreenButtonAfterDeath).row();
+        if(gameRepository.getCoins()>50) DeathTable.add(revivalButton);
+
+        deathStage.addActor(DeathTable);
     }
 
     // <><><><><><><><><><> <><><><><><><><><><> <><><><><><><><><><> <><><><><><><><><><> <><><><><><><><><><>
@@ -326,7 +364,7 @@ public class GameScreen implements Screen {
         coinForGame = coinForEnemyValue + coinForTime;
 
         // <><><><><><><><><><> Отрисовка UI <><><><><><><><><><>
-        if (!isPause) {
+        if (!isPause && !isDeath) {
             uiStage.act(delta);
             uiStage.draw();
 
@@ -534,6 +572,11 @@ public class GameScreen implements Screen {
             pauseStage.draw();
         }
 
+        if (isDeath) {
+            deathStage.act(delta);
+            deathStage.draw();
+        }
+
         // <><><><><><><><><><> Отрисовка UI <><><><><><><><><><>
         infoStage.act(delta);
         infoStage.draw();
@@ -557,6 +600,7 @@ public class GameScreen implements Screen {
         isTimeGo = false;
         STOP = false;
         isPause = false;
+        isDeath = false;
         ShaderManager.radiusView1 = 0.2f;
         ShaderManager.radiusView3 = 0.15f;
         coinForEnemyValue = 0;
@@ -590,6 +634,10 @@ public class GameScreen implements Screen {
         if (pauseStage != null) {
             pauseStage.dispose();
             pauseStage = null;
+        }
+        if (deathStage != null) {
+            deathStage.dispose();
+            deathStage = null;
         }
         if (noAct != null) {
             noAct.dispose();
@@ -709,6 +757,29 @@ public class GameScreen implements Screen {
 //            uiStage.addActor(touchpadAttack);
             STOP = false;
             isPause = false;
+            Gdx.input.setInputProcessor(uiStage);
+        }
+    }
+    public static void toggleDeath(boolean pause) {
+
+        if (pause) {
+            STOP = true;
+            isDeath = true;
+            Gdx.input.setInputProcessor(deathStage);
+            uiStage.getRoot().removeActor(touchpadMove);
+            uiStage.getRoot().removeActor(touchpadAttack);
+            uiStage.getRoot().removeActor(abilityButton);
+        }
+        else {
+            gameRepository.spendCoins(50);
+            uiStage.addActor(touchpadMove);
+            uiStage.addActor(touchpadAttack);
+            uiStage.addActor(abilityButton);
+            hero.setHealth(hero.getMaxHealth());
+            hero.addCostumePower(100f);
+            hero.setSheildLevel(1);
+            STOP = false;
+            isDeath = false;
             Gdx.input.setInputProcessor(uiStage);
         }
     }

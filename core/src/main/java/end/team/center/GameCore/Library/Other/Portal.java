@@ -45,7 +45,7 @@ public class Portal extends StaticObject {
             gameRepository.addCoins(((int) GameScreen.coinForGame * 2));
 
             GameScreen.endCode = 1;
-            GameScreen.endForHero = true;
+            GameScreen.toggleDeath(true);
 
             if (!MainMenuScreen.gameRepository.getAchievements().get(1)) {
                 MainMenuScreen.showAchivs = true;

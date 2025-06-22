@@ -331,8 +331,7 @@ public class Hero extends Friendly {
             }
 
             GameScreen.endCode = 3;
-            GameScreen.endForHero = true;
-
+            GameScreen.toggleDeath(true);
         }
 
         ((Knife) weapon).act(delta);
@@ -362,7 +361,7 @@ public class Hero extends Friendly {
                     MainMenuScreen.idAchivs = 4;
                 }
                 GameScreen.endCode = 2;
-                GameScreen.endForHero = true;
+                GameScreen.toggleDeath(true);
             } else {
                 this.health++;
                 safeInDeadDamage = false;
