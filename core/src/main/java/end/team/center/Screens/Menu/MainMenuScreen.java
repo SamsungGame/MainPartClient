@@ -112,6 +112,7 @@ public class MainMenuScreen implements Screen {
                 backgroundMusic.dispose();
                 backgroundMusic = null;
                 ((Center) Gdx.app.getApplicationListener()).setScreen(new LoadingScreen(repo));
+                buttonStart.clearListeners();
             }
         });
 
