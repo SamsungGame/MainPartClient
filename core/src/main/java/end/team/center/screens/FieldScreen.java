@@ -1,6 +1,7 @@
 package end.team.center.screens;
 
 import static end.team.center.MyGame.currentVolume;
+import static end.team.center.MyGame.isFieldScreenLoaded;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -67,6 +68,8 @@ public class FieldScreen implements Screen {
         this.mainMenuMusic = MyGame.mainMenuMusic;
 
         generateZones();
+
+        isFieldScreenLoaded = true;
     }
 
     @Override

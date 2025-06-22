@@ -10,9 +10,10 @@ import end.team.center.screens.MainMenuScreen;
 
 public class MyGame extends Game {
     public static Music mainMenuMusic;
-    public static float currentVolume = 0.5f;
     public static int currentWeapon = 1;
     public static int currentSkin = 1;
+    public static float currentVolume = 0.5f;
+    public static boolean isFieldScreenLoaded = false;
     public static ArrayList<String> pricesOfSkins = new ArrayList<>();
     public static ArrayList<Boolean> isBoughtSkins = new ArrayList<>();
     public static ArrayList<String> pricesOfWeapons = new ArrayList<>();

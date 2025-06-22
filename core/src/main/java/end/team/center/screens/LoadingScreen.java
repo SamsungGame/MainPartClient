@@ -1,5 +1,7 @@
 package end.team.center.screens;
 
+import static end.team.center.MyGame.isFieldScreenLoaded;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -7,9 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task;
 
 import end.team.center.MyGame;
 
@@ -19,29 +19,27 @@ public class LoadingScreen implements Screen {
     private final GlyphLayout layout = new GlyphLayout();
     public final float layoutX;
     public final float layoutY;
+    private boolean isFieldScreenCreated = false;
     private final Texture backgroundTexture = new Texture(Gdx.files.internal("background.png"));
     private FieldScreen fieldScreen;
+    private final MyGame game;
 
     public LoadingScreen(MyGame game) {
+        this.game = game;
+
         font.getData().setScale(2.0f);
         String loadingText = "Подождите, идёт загрузка...";
         layout.setText(font, loadingText);
         layoutX = (Gdx.graphics.getWidth() - layout.width) / 2;
         layoutY = (Gdx.graphics.getHeight() - layout.height) / 2;
 
-        Timer.schedule(new Task() {
+        Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
                 fieldScreen = new FieldScreen(game);
+                isFieldScreenCreated = true;
             }
         }, 1);
-
-        Timer.schedule(new Task() {
-            @Override
-            public void run() {
-                game.setScreen(fieldScreen);
-            }
-        }, 10);
     }
 
     @Override
@@ -59,6 +57,14 @@ public class LoadingScreen implements Screen {
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         font.draw(batch, layout, layoutX, layoutY);
         batch.end();
+
+        if (isFieldScreenCreated) {
+            fieldScreen.show();
+            isFieldScreenCreated = false;
+        }
+        if (isFieldScreenLoaded) {
+            game.setScreen(fieldScreen);
+        }
     }
 
     @Override
