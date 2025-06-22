@@ -279,6 +279,8 @@ public class GameScreen implements Screen {
             return;
         }
 
+        addToList();
+
         if (isFirstRender) {
             isFirstRender = false;
 
@@ -449,8 +451,6 @@ public class GameScreen implements Screen {
 
             hearts.updateAnimation(delta);
             hearts.setCurrentHealth(hero.getHealth());
-
-            addToList();
 
             // <><><><><><><><><><> Обновление камеры <><><><><><><><><><>
             gameCamera.updateCameraPosition(hero.getX(), hero.getY(), hero.getWidth(), hero.getHeight());

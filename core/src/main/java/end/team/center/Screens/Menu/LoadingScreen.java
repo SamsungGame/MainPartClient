@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Timer;
@@ -27,6 +28,7 @@ public class LoadingScreen implements Screen {
     private GameScreen fieldScreen;
     private ProgressBar bar;
     private float progress;
+    Image right, left;
 
     public LoadingScreen(GameRepository repo) {
         font.getData().setScale(2.0f);
@@ -52,6 +54,12 @@ public class LoadingScreen implements Screen {
         bar = new ProgressBar(0, 10000, 1, false, new Skin(Gdx.files.internal("UI/GameUI/OtherGameItems/expProgress.json")));
         bar.setSize(bar.getWidth() * 5, bar.getHeight());
         bar.setPosition((float) Gdx.graphics.getWidth() / 2 - bar.getWidth() / 2, (float) Gdx.graphics.getHeight() / 5);
+
+        right = new Image(new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/expBorderRight.png")));
+        left  = new Image(new Texture(Gdx.files.internal("UI/GameUI/OtherGameItems/expBorderLeft.png")));
+
+        right.setPosition(bar.getX() + bar.getWidth(), bar.getY() + right.getHeight());
+        left .setPosition(bar.getX() - right.getWidth(), bar.getY() + right.getHeight());
     }
 
     @Override
@@ -72,6 +80,10 @@ public class LoadingScreen implements Screen {
         progress += delta * 1000;
         bar.setValue(Math.min(progress, 9950));
         bar.draw(batch, 1f);
+
+        left .draw(batch, 1f);
+        right.draw(batch, 1f);
+
         batch.end();
     }
 
