@@ -15,7 +15,7 @@ public class ShieldAbility implements HeroAbility {
     private boolean active;
     private float duration = 15.0f; // Длительность действия щита
     private float cooldown = 0; // Перезарядка способности
-    private final float MAX_COOLDOWN = 10f; // Максимальное время перезарядки
+    private final float MAX_COOLDOWN = 15f; // Максимальное время перезарядки
     private float elapsedTime = 0; // Время, прошедшее с активации
 
     // Параметры отрисовки щита

@@ -331,7 +331,7 @@ public class Hero extends Friendly {
             }
 
             GameScreen.endCode = 3;
-            GameScreen.toggleDeath(true);
+            GameScreen.endForHero = true;
 
         }
 
@@ -362,7 +362,7 @@ public class Hero extends Friendly {
                     MainMenuScreen.idAchivs = 4;
                 }
                 GameScreen.endCode = 2;
-                GameScreen.toggleDeath(true);
+                GameScreen.endForHero = true;
             } else {
                 this.health++;
                 safeInDeadDamage = false;

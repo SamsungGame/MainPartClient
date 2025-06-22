@@ -13,7 +13,7 @@ public class ProjectionAbility  implements HeroAbility {
     private float duration = 3.0f;
     private float elapsedTime = 0;
     private float cooldown = 0;
-    private final float MAX_COOLDOWN = 5f;
+    private final float MAX_COOLDOWN = 20f;
     private float beforeSpeed;
     private float afterSpeed;
 
