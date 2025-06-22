@@ -109,10 +109,9 @@ public abstract class Friendly extends Entity {
             tempY = newY; // Применяем скорректированный Y
         } else {
             for (Tree t : tt) {
-                Rectangle treeBound = t.getBound();
-                if (bound.overlaps(treeBound)) {
-                    vector.x = t.getX() - getWidth() - 5;
-                    vector.y = t.getY() - getHeight() - 5;
+                if (bound.overlaps(t.getBound())) {
+                    tempX = t.getX() - getWidth() - 5;
+                    tempY = t.getY() - getHeight() - 5;
                 }
             }
         }
