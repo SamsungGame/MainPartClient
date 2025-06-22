@@ -1,7 +1,5 @@
 package end.team.center.GameCore.Logic;
 
-import static end.team.center.Screens.Game.GameScreen.hero;
-
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -17,8 +15,11 @@ public class PlayerLiveActZone {
     public int size = 5500;
 
     public ArrayList<Actor> actors;
+    private Hero hero;
 
     public PlayerLiveActZone(Hero h) {
+        this.hero = h;
+
         bound = new Rectangle((int) (h.getX() - size / 2), (int) (h.getY() - size / 2), size, size);
         actors = new ArrayList<>();
 
