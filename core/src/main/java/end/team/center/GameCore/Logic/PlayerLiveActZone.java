@@ -44,8 +44,12 @@ public class PlayerLiveActZone {
     }
 
     public void act(float delta) {
-        for (Actor a: actors) {
-            a.act(delta);
+        try {
+            for (int i = 0; i < actors.size(); i++) {
+                actors.get(i).act(delta);
+            }
+        } catch (Exception e) {
+            System.out.println("Принудительная остановка перебора массива, видимо был подобран предмет!");
         }
     }
 }
