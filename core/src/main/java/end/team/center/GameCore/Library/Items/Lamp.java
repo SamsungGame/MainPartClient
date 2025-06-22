@@ -43,6 +43,7 @@ public class Lamp extends Drops {
 
             remove();
             GameScreen.drop.remove(this);
+            hero.PLAZ.actors.remove(this);
         }
     }
 
