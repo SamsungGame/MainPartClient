@@ -42,7 +42,7 @@ public class Portal extends StaticObject {
         super.act(delta);
 
         if (hero.getBound().overlaps(bound)) {
-            gameRepository.addCoins(((int) GameScreen.coinForGame * 2));
+            gameRepository.addCoins(((int) GameScreen.coinForGame));
 
             GameScreen.endCode = 1;
             GameScreen.endForHero = true;

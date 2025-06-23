@@ -869,6 +869,7 @@ public class GameScreen implements Screen {
 
     public void endGame() {
         if(endForHero) {
+            gameRepository.addCoins(((int) GameScreen.coinForGame));
             endForStaticParams();
             ((Center) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(endCode, gameRepository));
             dispose();
