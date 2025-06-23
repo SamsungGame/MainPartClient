@@ -261,8 +261,8 @@ public class GameScreen implements Screen {
         backToMainMenuScreenButton.getLabel().setAlignment(Align.center);
         continueButton.getLabel().setAlignment(Align.center);
 
-        pauseTable.defaults().pad(50).expandX().fillX();
-        pauseTable.padTop(50);
+        pauseTable.defaults().pad(150).expandX().fillX();
+        pauseTable.padTop(0);
 
         pauseTable.add(backToMainMenuScreenButton).row();
         pauseTable.add(continueButton);
@@ -298,8 +298,8 @@ public class GameScreen implements Screen {
         backToMainMenuScreenButtonAfterDeath.getLabel().setAlignment(Align.center);
         revivalButton.getLabel().setAlignment(Align.center);
 
-        DeathTable.defaults().pad(50).expandX().fillX();
-        DeathTable.padTop(70);
+        DeathTable.defaults().pad(150).expandX().fillX();
+        DeathTable.padTop(0);
 
         DeathTable.add(backToMainMenuScreenButtonAfterDeath).row();
         if(gameRepository.getCoins()>50) DeathTable.add(revivalButton);
