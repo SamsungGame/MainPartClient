@@ -282,7 +282,6 @@ public class GameScreen implements Screen {
         backToMainMenuScreenButtonAfterDeath.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                GameScreen.endCode = 0;
                 GameScreen.endForHero = true;
             }
         });
