@@ -116,6 +116,8 @@ public class GameScreen implements Screen {
     public static Skin label = new Skin(Gdx.files.internal("UI/AboutGame/label.json"));
     public boolean start = false;
     static Label textItem;
+    TextButton revivalButton;
+
 
 
     public GameScreen(GameRepository repo) {
@@ -274,7 +276,7 @@ public class GameScreen implements Screen {
         DeathTable.center();
 
         TextButton backToMainMenuScreenButtonAfterDeath = new TextButton("В главное меню", buttonSkin);
-        TextButton revivalButton = new TextButton("возродиться: 50", buttonSkin);
+        revivalButton = new TextButton("", buttonSkin);
 
         backToMainMenuScreenButtonAfterDeath.getLabel().setFontScale(3f);
         revivalButton.getLabel().setFontScale(3.3f);
@@ -289,7 +291,8 @@ public class GameScreen implements Screen {
         revivalButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                toggleDeath(false);
+                if(gameRepository.getCoins()>=50)
+                    toggleDeath(false);
             }
         });
 
@@ -301,7 +304,7 @@ public class GameScreen implements Screen {
         DeathTable.padTop(0);
 
         DeathTable.add(backToMainMenuScreenButtonAfterDeath).row();
-        if(gameRepository.getCoins()>50) DeathTable.add(revivalButton);
+        DeathTable.add(revivalButton);
 
         deathStage.addActor(DeathTable);
     }
@@ -316,6 +319,8 @@ public class GameScreen implements Screen {
             endGame();
             return;
         }
+        if(gameRepository.getCoins()>=50) revivalButton.setText("Возрождние: 50");
+        else revivalButton.setText("");
 
         addToList();
 
